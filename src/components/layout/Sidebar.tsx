@@ -1,35 +1,78 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard,
+  User,
+  Building2,
   TrendingUp,
-  Landmark,
-  ShieldCheck,
+  Settings2,
   Settings,
+  ShieldCheck,
+  ChevronDown,
+  ChevronRight,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/lib/constants";
-import { Badge } from "@/components/ui/badge";
 import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 
 const ICONS: Record<string, LucideIcon> = {
-  LayoutDashboard,
+  User,
+  Building2,
   TrendingUp,
-  Landmark,
-  ShieldCheck,
+  Settings2,
 };
+
+function isChildActive(item: (typeof NAV_ITEMS)[0], pathname: string): boolean {
+  if (item.sections) {
+    return item.sections.some((section) =>
+      section.items.some(
+        (sub) => pathname === sub.href || pathname.startsWith(sub.href + "/")
+      )
+    );
+  }
+  return false;
+}
 
 export function Sidebar() {
   const pathname = usePathname();
+
+  const [openItems, setOpenItems] = useState<Set<string>>(() => {
+    const open = new Set<string>();
+    for (const item of NAV_ITEMS) {
+      if (item.sections && isChildActive(item, pathname)) {
+        open.add(item.label);
+      }
+    }
+    return open;
+  });
+
+  useEffect(() => {
+    for (const item of NAV_ITEMS) {
+      if (item.sections && isChildActive(item, pathname)) {
+        setOpenItems((prev) => new Set([...prev, item.label]));
+      }
+    }
+  }, [pathname]);
+
+  const toggle = (label: string) => {
+    setOpenItems((prev) => {
+      const next = new Set(prev);
+      if (next.has(label)) next.delete(label);
+      else next.add(label);
+      return next;
+    });
+  };
 
   return (
     <aside className="flex h-screen w-60 shrink-0 flex-col border-r border-border bg-surface">
       {/* Logo */}
       <div className="flex h-16 items-center border-b border-border px-5">
-        <BankingLabLogo size="md" />
+        <Link href="/dashboard">
+          <BankingLabLogo size="md" />
+        </Link>
       </div>
 
       {/* Navigation */}
@@ -37,60 +80,84 @@ export function Sidebar() {
         <p className="mb-2 px-2 text-[11px] font-medium uppercase tracking-wider text-text-secondary">
           Module
         </p>
-        <ul className="flex flex-col gap-1">
+        <ul className="flex flex-col gap-0.5">
           {NAV_ITEMS.map((item) => {
             const Icon = ICONS[item.icon];
-            const isActive =
-              pathname === item.href || pathname.startsWith(item.href + "/");
+            const isOpen = openItems.has(item.label);
+            const hasActivChild = isChildActive(item, pathname);
+            const isDirectlyActive =
+              item.href &&
+              (pathname === item.href || pathname.startsWith(item.href + "/"));
+
+            if (item.sections) {
+              return (
+                <li key={item.label}>
+                  <button
+                    onClick={() => toggle(item.label)}
+                    className={cn(
+                      "flex w-full items-center gap-3 rounded-pill px-3 py-2 text-sm transition-colors",
+                      hasActivChild
+                        ? "bg-text-primary font-medium text-white"
+                        : "text-text-secondary hover:bg-gray-100 hover:text-text-primary"
+                    )}
+                  >
+                    {Icon && <Icon size={16} />}
+                    <span className="flex-1 text-left">{item.label}</span>
+                    {isOpen ? (
+                      <ChevronDown size={13} className="shrink-0 opacity-70" />
+                    ) : (
+                      <ChevronRight size={13} className="shrink-0 opacity-70" />
+                    )}
+                  </button>
+
+                  {isOpen && (
+                    <div className="ml-3 mt-0.5 border-l-2 border-border pl-3">
+                      {item.sections.map((section) => (
+                        <div key={section.label} className="mb-2 mt-1">
+                          <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
+                            {section.label}
+                          </p>
+                          {section.items.map((sub) => {
+                            const subActive =
+                              pathname === sub.href ||
+                              pathname.startsWith(sub.href + "/");
+                            return (
+                              <Link
+                                key={sub.href}
+                                href={sub.href}
+                                className={cn(
+                                  "flex items-center rounded-pill px-2 py-1.5 text-xs transition-colors",
+                                  subActive
+                                    ? "bg-gray-100 font-medium text-text-primary"
+                                    : "text-text-secondary hover:bg-gray-50 hover:text-text-primary"
+                                )}
+                              >
+                                {sub.label}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </li>
+              );
+            }
+
             return (
-              <li key={item.href}>
+              <li key={item.label}>
                 <Link
-                  href={item.href}
+                  href={item.href!}
                   className={cn(
                     "flex items-center gap-3 rounded-pill px-3 py-2 text-sm transition-colors",
-                    isActive
+                    isDirectlyActive
                       ? "bg-text-primary font-medium text-white"
                       : "text-text-secondary hover:bg-gray-100 hover:text-text-primary"
                   )}
                 >
                   {Icon && <Icon size={16} />}
                   <span className="flex-1">{item.label}</span>
-                  {item.badge && !isActive && (
-                    <Badge variant="orange">{item.badge}</Badge>
-                  )}
                 </Link>
-
-                {/* Subnavigation — shown when parent is active */}
-                {isActive && item.sections && (
-                  <div className="ml-3 mt-1 border-l-2 border-border pl-3">
-                    {item.sections.map((section) => (
-                      <div key={section.label} className="mb-2">
-                        <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
-                          {section.label}
-                        </p>
-                        {section.items.map((sub) => {
-                          const subActive =
-                            pathname === sub.href ||
-                            pathname.startsWith(sub.href + "/");
-                          return (
-                            <Link
-                              key={sub.href}
-                              href={sub.href}
-                              className={cn(
-                                "flex items-center rounded-pill px-2 py-1.5 text-xs transition-colors",
-                                subActive
-                                  ? "bg-gray-100 font-medium text-text-primary"
-                                  : "text-text-secondary hover:bg-gray-50 hover:text-text-primary"
-                              )}
-                            >
-                              {sub.label}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    ))}
-                  </div>
-                )}
               </li>
             );
           })}
@@ -99,6 +166,18 @@ export function Sidebar() {
 
       {/* Footer */}
       <div className="border-t border-border px-3 py-3">
+        <Link
+          href="/banking-operations/kyc"
+          className={cn(
+            "flex items-center gap-3 rounded-pill px-3 py-2 text-sm transition-colors",
+            pathname.startsWith("/banking-operations/kyc")
+              ? "bg-text-primary font-medium text-white"
+              : "text-text-secondary hover:bg-gray-100 hover:text-text-primary"
+          )}
+        >
+          <ShieldCheck size={16} />
+          KYC / Compliance
+        </Link>
         <Link
           href="/settings"
           className="flex items-center gap-3 rounded-pill px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-gray-100 hover:text-text-primary"
@@ -111,9 +190,7 @@ export function Sidebar() {
             ML
           </div>
           <div className="min-w-0">
-            <p className="truncate text-xs font-medium text-text-primary">
-              Max Lernender
-            </p>
+            <p className="truncate text-xs font-medium text-text-primary">Max Lernender</p>
             <p className="truncate text-[11px] text-text-secondary">Lehrjahr 2</p>
           </div>
         </div>

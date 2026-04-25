@@ -14,6 +14,7 @@ interface Props {
   phase1Score: Score;
   phase2Score: Score;
   nextScenarioId?: string;
+  basePath?: string;
   onRetry: () => void;
 }
 
@@ -35,6 +36,7 @@ export function FeedbackCard({
   phase1Score,
   phase2Score,
   nextScenarioId,
+  basePath = "/banking-operations/kontoeröffnungen",
   onRetry,
 }: Props) {
   const totalCorrect = phase1Score.correct + phase2Score.correct;
@@ -93,7 +95,7 @@ export function FeedbackCard({
             {nextScenarioId ? (
               <Button asChild>
                 <Link
-                  href={`/banking-operations/kontoeröffnungen/${nextScenarioId}`}
+                  href={`${basePath}/${nextScenarioId}`}
                 >
                   Nächstes Szenario
                   <ChevronRight size={14} />
@@ -101,7 +103,7 @@ export function FeedbackCard({
               </Button>
             ) : (
               <Button asChild>
-                <Link href="/banking-operations/kontoeröffnungen">
+                <Link href={basePath}>
                   Zurück zur Übersicht
                 </Link>
               </Button>

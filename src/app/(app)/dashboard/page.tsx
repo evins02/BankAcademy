@@ -1,38 +1,44 @@
-import { TrendingUp, Landmark, ShieldCheck } from "lucide-react";
+import { User, Building2, TrendingUp, Settings2 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { ModuleCard } from "@/components/modules/ModuleCard";
 import { Card, CardContent } from "@/components/ui/card";
 
 const MODULES = [
   {
-    title: "Kreditgeschäfte",
-    description:
-      "Kreditvergabe, Hypotheken und Risikobeurteilung aus drei Perspektiven.",
-    href: "/kreditgeschaefte",
-    icon: TrendingUp,
+    title: "Privatkunde",
+    description: "Basis- und Individualprodukte aus Beratersicht.",
+    href: "/privatkunde/basis/zahlungsverkehr",
+    icon: User,
     status: "active" as const,
     completedScenarios: 1,
-    totalScenarios: 8,
+    totalScenarios: 7,
   },
   {
-    title: "Banking Operations",
-    description:
-      "Kontoeröffnungen, Zahlungsverkehr, Mahnwesen und Settlement.",
-    href: "/banking-operations",
-    icon: Landmark,
+    title: "Firmenkunde",
+    description: "Coming soon",
+    href: "/firmenkunde",
+    icon: Building2,
     status: "idle" as const,
     completedScenarios: 0,
-    totalScenarios: 6,
+    totalScenarios: 0,
   },
   {
-    title: "KYC / Compliance",
-    description:
-      "Kundendaten, Beneficial Owners und Geldwäschereibekämpfung.",
-    href: "/kyc",
-    icon: ShieldCheck,
-    status: "done" as const,
-    completedScenarios: 5,
-    totalScenarios: 5,
+    title: "Anlagekunde",
+    description: "Coming soon",
+    href: "/anlagekunde",
+    icon: TrendingUp,
+    status: "idle" as const,
+    completedScenarios: 0,
+    totalScenarios: 0,
+  },
+  {
+    title: "Credit Operations",
+    description: "Coming soon",
+    href: "/credit-operations",
+    icon: Settings2,
+    status: "idle" as const,
+    completedScenarios: 0,
+    totalScenarios: 0,
   },
 ];
 
@@ -50,7 +56,6 @@ export default function DashboardPage() {
         subtitle="Willkommen zurück, Max — mach weiter, wo du aufgehört hast."
       />
       <div className="flex-1 overflow-y-auto p-6">
-        {/* Stats row */}
         <div className="mb-8 grid grid-cols-3 gap-4">
           {STATS.map((s) => (
             <Card key={s.label}>
@@ -62,11 +67,10 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Module cards */}
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
           Module
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {MODULES.map((m) => (
             <ModuleCard key={m.title} {...m} />
           ))}

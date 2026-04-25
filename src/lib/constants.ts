@@ -1,32 +1,44 @@
 import type { NavItem, Scenario } from "@/types";
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: "Dashboard", href: "/dashboard", icon: "LayoutDashboard" },
   {
-    label: "Kreditgeschäfte",
-    href: "/kreditgeschaefte",
-    icon: "TrendingUp",
+    label: "Privatkunde",
+    icon: "User",
     sections: [
       {
-        label: "Privatkunde",
+        label: "Basis",
         items: [
-          { label: "Front-Office", href: "/kreditgeschaefte/privatkunde/front-office" },
+          { label: "Zahlungsverkehr", href: "/privatkunde/basis/zahlungsverkehr" },
+          { label: "Sparen & Konto", href: "/privatkunde/basis/konto" },
+          { label: "3a / Vorsorge", href: "/privatkunde/basis/3a-vorsorge" },
+          { label: "Fonds", href: "/privatkunde/basis/fonds" },
         ],
       },
       {
-        label: "Firmenkunde",
+        label: "Individual",
         items: [
-          { label: "Front-Office", href: "/kreditgeschaefte/firmenkunde/front-office" },
+          { label: "Hypotheken", href: "/privatkunde/individual/hypotheken" },
+          { label: "Konsumkredit", href: "/privatkunde/individual/konsumkredit" },
+          { label: "Blankokredit", href: "/privatkunde/individual/blankokredit" },
         ],
       },
     ],
   },
   {
-    label: "Banking Operations",
-    href: "/banking-operations",
-    icon: "Landmark",
+    label: "Firmenkunde",
+    icon: "Building2",
+    href: "/firmenkunde",
   },
-  { label: "KYC / Compliance", href: "/kyc", icon: "ShieldCheck" },
+  {
+    label: "Anlagekunde",
+    icon: "TrendingUp",
+    href: "/anlagekunde",
+  },
+  {
+    label: "Credit Operations",
+    icon: "Settings2",
+    href: "/credit-operations",
+  },
 ];
 
 export const SAMPLE_SCENARIOS: Scenario[] = [

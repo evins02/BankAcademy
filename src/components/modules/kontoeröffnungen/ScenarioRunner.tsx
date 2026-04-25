@@ -14,9 +14,10 @@ interface Score {
 
 interface Props {
   scenario: KontoScenario;
+  basePath?: string;
 }
 
-export function ScenarioRunner({ scenario }: Props) {
+export function ScenarioRunner({ scenario, basePath }: Props) {
   const [phase, setPhase] = useState<1 | 2 | 3>(1);
   const [phase1Score, setPhase1Score] = useState<Score | null>(null);
   const [phase2Score, setPhase2Score] = useState<Score | null>(null);
@@ -66,6 +67,7 @@ export function ScenarioRunner({ scenario }: Props) {
             phase1Score={phase1Score}
             phase2Score={phase2Score}
             nextScenarioId={nextScenario?.id}
+            basePath={basePath}
             onRetry={handleRetry}
           />
         )}

@@ -41,8 +41,8 @@ export interface NavSection {
 
 export interface NavItem {
   label: string;
-  href: string;
   icon: string;
+  href?: string;
   badge?: number;
   sections?: NavSection[];
 }
