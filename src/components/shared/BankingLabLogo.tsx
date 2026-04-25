@@ -16,7 +16,7 @@ export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) 
 
   return (
     <Image
-      src="/logo-light.png"
+      src="/BankingLab Logo.png"
       alt="Banking Lab"
       height={height}
       width={0}
