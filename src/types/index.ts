@@ -46,3 +46,8 @@ export interface NavItem {
   badge?: number;
   sections?: NavSection[];
 }
+
+export interface NavGroup {
+  label: string;
+  items: NavItem[];
+}

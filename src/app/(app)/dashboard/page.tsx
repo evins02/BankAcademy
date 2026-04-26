@@ -1,9 +1,9 @@
-import { User, Building2, TrendingUp, Settings2 } from "lucide-react";
+import { User, Building2, TrendingUp, Settings2, Landmark } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { ModuleCard } from "@/components/modules/ModuleCard";
 import { Card, CardContent } from "@/components/ui/card";
 
-const MODULES = [
+const FRONT_OFFICE_MODULES = [
   {
     title: "Privatkunde",
     description: "Basis- und Individualprodukte aus Beratersicht.",
@@ -31,10 +31,22 @@ const MODULES = [
     completedScenarios: 0,
     totalScenarios: 0,
   },
+];
+
+const BACK_OFFICE_MODULES = [
+  {
+    title: "Banking Operations",
+    description: "Kontoeröffnungen, Zahlungsverkehr, KYC und Mahnwesen.",
+    href: "/backoffice/banking-operations/kontoeröffnungen",
+    icon: Landmark,
+    status: "active" as const,
+    completedScenarios: 0,
+    totalScenarios: 4,
+  },
   {
     title: "Credit Operations",
     description: "Coming soon",
-    href: "/credit-operations",
+    href: "/backoffice/credit-operations",
     icon: Settings2,
     status: "idle" as const,
     completedScenarios: 0,
@@ -68,10 +80,19 @@ export default function DashboardPage() {
         </div>
 
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-          Module
+          Front Office
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {MODULES.map((m) => (
+        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {FRONT_OFFICE_MODULES.map((m) => (
+            <ModuleCard key={m.title} {...m} />
+          ))}
+        </div>
+
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
+          Back Office
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {BACK_OFFICE_MODULES.map((m) => (
             <ModuleCard key={m.title} {...m} />
           ))}
         </div>

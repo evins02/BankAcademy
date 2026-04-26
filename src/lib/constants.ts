@@ -1,44 +1,56 @@
-import type { NavItem, Scenario } from "@/types";
+import type { NavGroup, Scenario } from "@/types";
 
-export const NAV_ITEMS: NavItem[] = [
+export const NAV_GROUPS: NavGroup[] = [
   {
-    label: "Privatkunde",
-    icon: "User",
-    sections: [
+    label: "Front Office",
+    items: [
       {
-        label: "Basis",
-        items: [
-          { label: "Zahlungsverkehr", href: "/privatkunde/basis/zahlungsverkehr" },
-          { label: "Sparen & Konto", href: "/privatkunde/basis/konto" },
-          { label: "3a / Vorsorge", href: "/privatkunde/basis/3a-vorsorge" },
-          { label: "Fonds", href: "/privatkunde/basis/fonds" },
-          { label: "KYC / Compliance", href: "/privatkunde/basis/kyc" },
+        label: "Privatkunde",
+        icon: "User",
+        sections: [
+          {
+            label: "Basis",
+            items: [
+              { label: "Sparen & Konto", href: "/privatkunde/basis/sparen-konto" },
+              { label: "Zahlungsverkehr", href: "/privatkunde/basis/zahlungsverkehr" },
+              { label: "3a / Vorsorge", href: "/privatkunde/basis/vorsorge" },
+              { label: "Fonds", href: "/privatkunde/basis/fonds" },
+            ],
+          },
+          {
+            label: "Individual",
+            items: [
+              { label: "Hypotheken", href: "/privatkunde/individual/hypotheken" },
+              { label: "Konsumkredit", href: "/privatkunde/individual/konsumkredit" },
+              { label: "Blankokredit", href: "/privatkunde/individual/blankokredit" },
+            ],
+          },
         ],
       },
-      {
-        label: "Individual",
-        items: [
-          { label: "Hypotheken", href: "/privatkunde/individual/hypotheken" },
-          { label: "Konsumkredit", href: "/privatkunde/individual/konsumkredit" },
-          { label: "Blankokredit", href: "/privatkunde/individual/blankokredit" },
-        ],
-      },
+      { label: "Firmenkunde", icon: "Building2", href: "/firmenkunde" },
+      { label: "Anlagekunde", icon: "TrendingUp", href: "/anlagekunde" },
     ],
   },
   {
-    label: "Firmenkunde",
-    icon: "Building2",
-    href: "/firmenkunde",
-  },
-  {
-    label: "Anlagekunde",
-    icon: "TrendingUp",
-    href: "/anlagekunde",
-  },
-  {
-    label: "Credit Operations",
-    icon: "Settings2",
-    href: "/credit-operations",
+    label: "Back Office",
+    items: [
+      {
+        label: "Banking Operations",
+        icon: "Landmark",
+        sections: [
+          {
+            label: "",
+            items: [
+              { label: "Kontoeröffnungen", href: "/backoffice/banking-operations/kontoeröffnungen" },
+              { label: "Zahlungsverkehr", href: "/backoffice/banking-operations/zahlungsverkehr" },
+              { label: "KYC / Compliance", href: "/backoffice/banking-operations/kyc" },
+              { label: "Mahnwesen", href: "/backoffice/banking-operations/mahnwesen" },
+            ],
+          },
+        ],
+      },
+      { label: "Credit Operations", icon: "Settings2", href: "/backoffice/credit-operations" },
+    ],
   },
 ];
 
