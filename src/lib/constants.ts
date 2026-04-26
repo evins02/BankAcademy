@@ -11,6 +11,7 @@ export const NAV_GROUPS: NavGroup[] = [
           {
             label: "Basis",
             items: [
+              { label: "Kontoeröffnung", href: "/privatkunde/basis/kontoeröffnung" },
               { label: "Sparen & Konto", href: "/privatkunde/basis/sparen-konto" },
               { label: "Zahlungsverkehr", href: "/privatkunde/basis/zahlungsverkehr" },
               { label: "3a / Vorsorge", href: "/privatkunde/basis/vorsorge" },
@@ -28,7 +29,19 @@ export const NAV_GROUPS: NavGroup[] = [
           },
         ],
       },
-      { label: "Firmenkunde", icon: "Building2", href: "/firmenkunde" },
+      {
+        label: "Firmenkunde",
+        icon: "Building2",
+        sections: [
+          {
+            label: "",
+            items: [
+              { label: "Kontoeröffnung Firma", href: "/firmenkunde/kontoeröffnung-firma" },
+              { label: "Kontoeröffnung Sitzgesellschaft", href: "/firmenkunde/kontoeröffnung-sitzgesellschaft" },
+            ],
+          },
+        ],
+      },
       { label: "Anlagekunde", icon: "TrendingUp", href: "/anlagekunde" },
     ],
   },
@@ -42,7 +55,6 @@ export const NAV_GROUPS: NavGroup[] = [
           {
             label: "",
             items: [
-              { label: "Kontoeröffnungen", href: "/backoffice/banking-operations/kontoeröffnungen" },
               { label: "Zahlungsverkehr", href: "/backoffice/banking-operations/zahlungsverkehr" },
               { label: "KYC / Compliance", href: "/backoffice/banking-operations/kyc" },
               { label: "Mahnwesen", href: "/backoffice/banking-operations/mahnwesen" },
