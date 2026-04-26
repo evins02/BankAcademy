@@ -51,7 +51,11 @@ export function Sidebar() {
   useEffect(() => {
     for (const item of NAV_ITEMS) {
       if (item.sections && isChildActive(item, pathname)) {
-        setOpenItems((prev) => new Set([...prev, item.label]));
+        setOpenItems((prev) => {
+          const next = new Set(prev);
+          next.add(item.label);
+          return next;
+        });
       }
     }
   }, [pathname]);
