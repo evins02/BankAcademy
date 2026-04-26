@@ -15,6 +15,7 @@ export const NAV_GROUPS: NavGroup[] = [
               { label: "Zahlungsverkehr", href: "/privatkunde/basis/zahlungsverkehr" },
               { label: "3a / Vorsorge", href: "/privatkunde/basis/vorsorge" },
               { label: "Fonds", href: "/privatkunde/basis/fonds" },
+              { label: "Simulation: Kontoeröffnung", href: "/privatkunde/basis/simulation-kontoeröffnung" },
             ],
           },
           {
