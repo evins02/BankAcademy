@@ -1,6 +1,6 @@
 "use client";
 
-import { Phone, Mic, Video } from "lucide-react";
+import { Phone, Mic, Video, CheckCircle2, XCircle, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type Mood = "positive" | "neutral" | "negative";
@@ -16,6 +16,13 @@ interface VideoCallUIProps {
   mood: Mood;
   onSelectOption: (key: string) => void;
   onEndCall: () => void;
+  // Reaction mode
+  isReacting?: boolean;
+  feedbackCorrect?: boolean;
+  onNext?: () => void;
+  // Progress
+  stepIndex?: number;
+  totalSteps?: number;
 }
 
 const MOOD_CONFIG: Record<Mood, { icon: string; label: string; color: string }> = {
@@ -30,6 +37,11 @@ export function VideoCallUI({
   mood,
   onSelectOption,
   onEndCall,
+  isReacting = false,
+  feedbackCorrect,
+  onNext,
+  stepIndex,
+  totalSteps,
 }: VideoCallUIProps) {
   const moodConfig = MOOD_CONFIG[mood];
 
@@ -43,12 +55,20 @@ export function VideoCallUI({
         </span>
       </div>
 
+      {/* Step progress – top right */}
+      {stepIndex !== undefined && totalSteps !== undefined && (
+        <div className="absolute right-4 top-4 z-10 flex items-center gap-1 rounded-full bg-white/10 px-3 py-1.5 backdrop-blur-sm">
+          <span className="text-xs font-medium text-gray-300">
+            Schritt {stepIndex + 1} / {totalSteps}
+          </span>
+        </div>
+      )}
+
       {/* Main area: speech bubble + customer avatar */}
       <div className="flex flex-1 flex-col items-center justify-center gap-6 pb-36 pt-16">
         {/* Speech bubble */}
         <div className="relative z-10 max-w-sm rounded-2xl bg-white px-5 py-3 text-gray-900 shadow-lg">
           <p className="text-sm leading-relaxed">{customerSpeech}</p>
-          {/* Arrow pointing down toward avatar */}
           <span className="absolute -bottom-2.5 left-1/2 h-5 w-5 -translate-x-1/2 rotate-45 bg-white shadow-md" />
         </div>
 
@@ -64,22 +84,53 @@ export function VideoCallUI({
         </div>
       </div>
 
-      {/* Response options – above bottom bar */}
+      {/* Bottom interactive area – above control bar */}
       <div className="absolute bottom-20 left-1/2 z-10 w-full max-w-2xl -translate-x-1/2 px-4">
-        <div className="grid grid-cols-2 gap-2">
-          {options.map((opt) => (
-            <button
-              key={opt.key}
-              onClick={() => onSelectOption(opt.key)}
-              className="flex items-start gap-2 rounded-xl bg-white/95 p-3 text-left text-gray-900 shadow-lg transition-all hover:scale-[1.02] hover:bg-white hover:shadow-xl active:scale-[0.99]"
+        {isReacting ? (
+          /* Reaction mode: feedback banner + Weiter button */
+          <div className="flex flex-col gap-3">
+            <div
+              className={cn(
+                "flex items-center gap-3 rounded-xl p-4 shadow-lg",
+                feedbackCorrect
+                  ? "bg-green-600/90 text-white"
+                  : "bg-red-600/90 text-white"
+              )}
             >
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gray-200 text-[11px] font-bold text-gray-700">
-                {opt.key}
+              {feedbackCorrect ? (
+                <CheckCircle2 size={20} className="shrink-0" />
+              ) : (
+                <XCircle size={20} className="shrink-0" />
+              )}
+              <span className="font-semibold">
+                {feedbackCorrect ? "Richtig!" : "Nicht optimal"}
               </span>
-              <span className="text-xs leading-snug">{opt.text}</span>
+            </div>
+            <button
+              onClick={onNext}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-white/95 py-3 text-sm font-semibold text-gray-900 shadow-lg transition-all hover:bg-white hover:shadow-xl active:scale-[0.99]"
+            >
+              Weiter
+              <ChevronRight size={16} />
             </button>
-          ))}
-        </div>
+          </div>
+        ) : (
+          /* Question mode: response option grid */
+          <div className="grid grid-cols-2 gap-2">
+            {options.map((opt) => (
+              <button
+                key={opt.key}
+                onClick={() => onSelectOption(opt.key)}
+                className="flex items-start gap-2 rounded-xl bg-white/95 p-3 text-left text-gray-900 shadow-lg transition-all hover:scale-[1.02] hover:bg-white hover:shadow-xl active:scale-[0.99]"
+              >
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gray-200 text-[11px] font-bold text-gray-700">
+                  {opt.key}
+                </span>
+                <span className="text-xs leading-snug">{opt.text}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Self-view – bottom right */}
