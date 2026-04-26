@@ -12,6 +12,7 @@ export const NAV_ITEMS: NavItem[] = [
           { label: "Sparen & Konto", href: "/privatkunde/basis/konto" },
           { label: "3a / Vorsorge", href: "/privatkunde/basis/3a-vorsorge" },
           { label: "Fonds", href: "/privatkunde/basis/fonds" },
+          { label: "KYC / Compliance", href: "/privatkunde/basis/kyc" },
         ],
       },
       {

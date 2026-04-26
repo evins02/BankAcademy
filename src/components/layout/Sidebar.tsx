@@ -9,7 +9,6 @@ import {
   TrendingUp,
   Settings2,
   Settings,
-  ShieldCheck,
   ChevronDown,
   ChevronRight,
   type LucideIcon,
@@ -166,18 +165,6 @@ export function Sidebar() {
 
       {/* Footer */}
       <div className="border-t border-border px-3 py-3">
-        <Link
-          href="/banking-operations/kyc"
-          className={cn(
-            "flex items-center gap-3 rounded-pill px-3 py-2 text-sm transition-colors",
-            pathname.startsWith("/banking-operations/kyc")
-              ? "bg-text-primary font-medium text-white"
-              : "text-text-secondary hover:bg-gray-100 hover:text-text-primary"
-          )}
-        >
-          <ShieldCheck size={16} />
-          KYC / Compliance
-        </Link>
         <Link
           href="/settings"
           className="flex items-center gap-3 rounded-pill px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-gray-100 hover:text-text-primary"
