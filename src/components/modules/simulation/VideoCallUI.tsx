@@ -23,6 +23,12 @@ interface VideoCallUIProps {
   // Progress
   stepIndex?: number;
   totalSteps?: number;
+  // Customer identity
+  customerInitials?: string;
+  customerName?: string;
+  customerSubtitle?: string;
+  // Extra content inside speech bubble (e.g. calculation card)
+  speechExtra?: React.ReactNode;
 }
 
 const MOOD_CONFIG: Record<Mood, { icon: string; label: string; color: string }> = {
@@ -42,6 +48,10 @@ export function VideoCallUI({
   onNext,
   stepIndex,
   totalSteps,
+  customerInitials = "TK",
+  customerName = "Thomas Kowalski",
+  customerSubtitle = "Neukunde – Kontoeröffnung",
+  speechExtra,
 }: VideoCallUIProps) {
   const moodConfig = MOOD_CONFIG[mood];
 
@@ -67,19 +77,25 @@ export function VideoCallUI({
       {/* Main area: speech bubble + customer avatar */}
       <div className="flex flex-1 flex-col items-center justify-center gap-6 pb-36 pt-16">
         {/* Speech bubble */}
-        <div className="relative z-10 max-w-sm rounded-2xl bg-white px-5 py-3 text-gray-900 shadow-lg">
+        <div className={cn(
+          "relative z-10 rounded-2xl bg-white px-5 py-3 text-gray-900 shadow-lg",
+          speechExtra ? "max-w-md" : "max-w-sm"
+        )}>
           <p className="text-sm leading-relaxed">{customerSpeech}</p>
+          {speechExtra && (
+            <div className="mt-3 border-t border-gray-200 pt-3">{speechExtra}</div>
+          )}
           <span className="absolute -bottom-2.5 left-1/2 h-5 w-5 -translate-x-1/2 rotate-45 bg-white shadow-md" />
         </div>
 
         {/* Customer avatar */}
         <div className="flex flex-col items-center gap-3">
           <div className="flex h-28 w-28 items-center justify-center rounded-full bg-gray-600 text-3xl font-bold text-white shadow-2xl ring-4 ring-white/10">
-            TK
+            {customerInitials}
           </div>
           <div className="text-center">
-            <p className="text-lg font-semibold text-white">Thomas Kowalski</p>
-            <p className="text-sm text-gray-400">Neukunde – Kontoeröffnung</p>
+            <p className="text-lg font-semibold text-white">{customerName}</p>
+            <p className="text-sm text-gray-400">{customerSubtitle}</p>
           </div>
         </div>
       </div>

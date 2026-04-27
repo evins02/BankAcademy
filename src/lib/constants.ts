@@ -25,6 +25,7 @@ export const NAV_GROUPS: NavGroup[] = [
               { label: "Hypotheken", href: "/privatkunde/individual/hypotheken" },
               { label: "Konsumkredit", href: "/privatkunde/individual/konsumkredit" },
               { label: "Blankokredit", href: "/privatkunde/individual/blankokredit" },
+              { label: "Simulation: Hypothek", href: "/privatkunde/individual/simulation-hypothek" },
             ],
           },
         ],
