@@ -1,13 +1,13 @@
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { KycRunner } from "@/components/modules/kyc/KycRunner";
+import { BkoKycRunner } from "@/components/modules/backoffice-kyc/BkoKycRunner";
 
-export default function KycPage() {
+export default function BackofficeKycPage() {
   return (
     <>
       <Header
         title="KYC / Compliance"
-        subtitle="Kundendaten, Beneficial Owner und Geldwäschereibekämpfung"
+        subtitle="Erstkontrolle – Neueröffnungen prüfen und freigeben"
       />
       <Breadcrumb
         items={[
@@ -17,7 +17,7 @@ export default function KycPage() {
           { label: "KYC / Compliance" },
         ]}
       />
-      <KycRunner />
+      <BkoKycRunner />
     </>
   );
 }
