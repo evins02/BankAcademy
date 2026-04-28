@@ -53,7 +53,18 @@ export const NAV_GROUPS: NavGroup[] = [
           },
         ],
       },
-      { label: "Anlagekunde", icon: "TrendingUp", href: "/anlagekunde" },
+      {
+        label: "Anlagekunde",
+        icon: "TrendingUp",
+        sections: [
+          {
+            label: "Anlageberatung",
+            items: [
+              { label: "Anlegerprofil", href: "/anlagekunde/anlegerprofil" },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
