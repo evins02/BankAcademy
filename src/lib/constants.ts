@@ -41,6 +41,16 @@ export const NAV_GROUPS: NavGroup[] = [
               { label: "Kontoeröffnung Sitzgesellschaft", href: "/firmenkunde/kontoeröffnung-sitzgesellschaft" },
             ],
           },
+          {
+            label: "Tragbarkeit",
+            items: [
+              { label: "Übersicht", href: "/firmenkunde/tragbarkeit" },
+              { label: "Renditeobjekte", href: "/firmenkunde/tragbarkeit/renditeobjekt" },
+              { label: "Gesamtengagement", href: "/firmenkunde/tragbarkeit/gesamtengagement" },
+              { label: "Belastungsgrenze & ETP", href: "/firmenkunde/tragbarkeit/etp" },
+              { label: "Selbstgenutzte Gewerbeliegenschaft", href: "/firmenkunde/tragbarkeit/gewerbe" },
+            ],
+          },
         ],
       },
       { label: "Anlagekunde", icon: "TrendingUp", href: "/anlagekunde" },
