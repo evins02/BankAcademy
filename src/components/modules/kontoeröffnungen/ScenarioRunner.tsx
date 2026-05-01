@@ -14,10 +14,11 @@ interface Score {
 
 interface Props {
   scenario: KontoScenario;
+  scenarios?: KontoScenario[];
   basePath?: string;
 }
 
-export function ScenarioRunner({ scenario, basePath }: Props) {
+export function ScenarioRunner({ scenario, scenarios, basePath }: Props) {
   const [phase, setPhase] = useState<1 | 2 | 3>(1);
   const [phase1Score, setPhase1Score] = useState<Score | null>(null);
   const [phase2Score, setPhase2Score] = useState<Score | null>(null);
@@ -41,7 +42,7 @@ export function ScenarioRunner({ scenario, basePath }: Props) {
     setRunKey((k) => k + 1);
   }, []);
 
-  const allScenarios = KONTO_SCENARIOS;
+  const allScenarios = scenarios ?? KONTO_SCENARIOS;
   const currentIndex = allScenarios.findIndex((s) => s.id === scenario.id);
   const nextScenario = allScenarios[currentIndex + 1];
 

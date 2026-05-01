@@ -2,14 +2,14 @@ import { notFound } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { ScenarioRunner } from "@/components/modules/kontoeröffnungen/ScenarioRunner";
-import { PRIVATKUNDE_KONTO_SCENARIOS } from "@/lib/kontoeröffnungen";
+import { FIRMENKUNDE_KONTO_SCENARIOS } from "@/lib/kontoeröffnungen";
 
-export default function KontoScenarioPage({
+export default function KontoeröffnungFirmaScenarioPage({
   params,
 }: {
   params: { scenarioId: string };
 }) {
-  const scenario = PRIVATKUNDE_KONTO_SCENARIOS.find((s) => s.id === params.scenarioId);
+  const scenario = FIRMENKUNDE_KONTO_SCENARIOS.find((s) => s.id === params.scenarioId);
   if (!scenario) notFound();
 
   return (
@@ -18,21 +18,20 @@ export default function KontoScenarioPage({
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
-          { label: "Privatkunde" },
-          { label: "Basis" },
-          { label: "Kontoeröffnung", href: "/privatkunde/basis/kontoeröffnung" },
+          { label: "Firmenkunde" },
+          { label: "Kontoeröffnung Firma", href: "/firmenkunde/kontoeröffnung-firma" },
           { label: scenario.customerType },
         ]}
       />
       <ScenarioRunner
         scenario={scenario}
-        scenarios={PRIVATKUNDE_KONTO_SCENARIOS}
-        basePath="/privatkunde/basis/kontoeröffnung"
+        scenarios={FIRMENKUNDE_KONTO_SCENARIOS}
+        basePath="/firmenkunde/kontoeröffnung-firma"
       />
     </>
   );
 }
 
 export function generateStaticParams() {
-  return PRIVATKUNDE_KONTO_SCENARIOS.map((s) => ({ scenarioId: s.id }));
+  return FIRMENKUNDE_KONTO_SCENARIOS.map((s) => ({ scenarioId: s.id }));
 }

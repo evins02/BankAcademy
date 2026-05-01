@@ -143,3 +143,11 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     ],
   },
 ];
+
+export const PRIVATKUNDE_KONTO_SCENARIOS = KONTO_SCENARIOS.filter(
+  (s) => s.id === "privatkunde"
+);
+
+export const FIRMENKUNDE_KONTO_SCENARIOS = KONTO_SCENARIOS.filter(
+  (s) => s.id === "firmenkunde-ag" || s.id === "sitzgesellschaft"
+);

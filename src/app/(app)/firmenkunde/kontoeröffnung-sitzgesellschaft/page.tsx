@@ -1,11 +1,14 @@
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { EmptyState } from "@/components/ui/empty-state";
+import { ScenarioRunner } from "@/components/modules/kontoeröffnungen/ScenarioRunner";
+import { KONTO_SCENARIOS } from "@/lib/kontoeröffnungen";
+
+const scenario = KONTO_SCENARIOS.find((s) => s.id === "sitzgesellschaft")!;
 
 export default function KontoeröffnungSitzgesellschaftPage() {
   return (
     <>
-      <Header title="Kontoeröffnung Sitzgesellschaft" subtitle="Firmenkunde" />
+      <Header title={scenario.title} subtitle={scenario.customerType} />
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
@@ -13,12 +16,7 @@ export default function KontoeröffnungSitzgesellschaftPage() {
           { label: "Kontoeröffnung Sitzgesellschaft" },
         ]}
       />
-      <div className="flex-1 overflow-y-auto p-6">
-        <EmptyState
-          title="Inhalt folgt in Kürze"
-          subtitle="Dieses Modul wird gerade aufgebaut"
-        />
-      </div>
+      <ScenarioRunner scenario={scenario} />
     </>
   );
 }

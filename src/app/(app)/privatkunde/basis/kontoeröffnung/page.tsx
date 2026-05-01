@@ -5,7 +5,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { KONTO_SCENARIOS, type Difficulty } from "@/lib/kontoeröffnungen";
+import { PRIVATKUNDE_KONTO_SCENARIOS, type Difficulty } from "@/lib/kontoeröffnungen";
 
 const DIFFICULTY_BADGE: Record<Difficulty, { label: string; variant: "green" | "orange" | "red" }> = {
   einfach: { label: "Einfach", variant: "green" },
@@ -30,7 +30,7 @@ export default function KontoeröffnungPage() {
       />
       <div className="flex-1 overflow-y-auto p-6">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {KONTO_SCENARIOS.map((scenario) => {
+          {PRIVATKUNDE_KONTO_SCENARIOS.map((scenario) => {
             const diff = DIFFICULTY_BADGE[scenario.difficulty];
             return (
               <Card key={scenario.id} className="flex flex-col">
