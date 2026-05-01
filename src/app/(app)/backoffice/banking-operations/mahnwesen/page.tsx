@@ -1,6 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { EmptyState } from "@/components/ui/empty-state";
+import { MahnwesenRunner } from "@/components/modules/mahnwesen/MahnwesenRunner";
 
 export default function MahnwesenPage() {
   return (
@@ -14,12 +14,7 @@ export default function MahnwesenPage() {
           { label: "Mahnwesen" },
         ]}
       />
-      <div className="flex-1 overflow-y-auto p-6">
-        <EmptyState
-          title="Inhalt folgt in Kürze"
-          subtitle="Dieses Modul wird gerade aufgebaut"
-        />
-      </div>
+      <MahnwesenRunner />
     </>
   );
 }
