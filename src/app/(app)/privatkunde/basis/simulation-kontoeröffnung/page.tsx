@@ -1,6 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { SimulationPage } from "@/components/modules/simulation/SimulationPage";
+import { AiSimulationPage } from "@/components/modules/simulation/AiSimulationPage";
 
 export default function SimulationKontoeröffnungPage() {
   return (
@@ -17,7 +17,7 @@ export default function SimulationKontoeröffnungPage() {
           { label: "Simulation: Kontoeröffnung" },
         ]}
       />
-      <SimulationPage />
+      <AiSimulationPage />
     </>
   );
 }
