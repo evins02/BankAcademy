@@ -1,11 +1,14 @@
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { EmptyState } from "@/components/ui/empty-state";
+import { VorsorgeRunner } from "@/components/modules/vorsorge/VorsorgeRunner";
 
 export default function VorsorgePage() {
   return (
     <>
-      <Header title="3a / Vorsorge" subtitle="Privatkunde – Basis" />
+      <Header
+        title="3a / Vorsorge"
+        subtitle="Die 3 Säulen kennen – Kunden optimal beraten"
+      />
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
@@ -14,12 +17,7 @@ export default function VorsorgePage() {
           { label: "3a / Vorsorge" },
         ]}
       />
-      <div className="flex-1 overflow-y-auto p-6">
-        <EmptyState
-          title="Inhalt folgt in Kürze"
-          subtitle="Dieses Modul wird gerade aufgebaut"
-        />
-      </div>
+      <VorsorgeRunner />
     </>
   );
 }
