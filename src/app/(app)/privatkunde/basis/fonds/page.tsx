@@ -1,11 +1,14 @@
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { EmptyState } from "@/components/ui/empty-state";
+import { FondsRunner } from "@/components/modules/fonds/FondsRunner";
 
 export default function FondsPage() {
   return (
     <>
-      <Header title="Fonds" subtitle="Privatkunde – Basis" />
+      <Header
+        title="Fonds"
+        subtitle="Anlagestrategien verstehen – Kunden optimal beraten"
+      />
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
@@ -14,12 +17,7 @@ export default function FondsPage() {
           { label: "Fonds" },
         ]}
       />
-      <div className="flex-1 overflow-y-auto p-6">
-        <EmptyState
-          title="Inhalt folgt in Kürze"
-          subtitle="Dieses Modul wird gerade aufgebaut"
-        />
-      </div>
+      <FondsRunner />
     </>
   );
 }
