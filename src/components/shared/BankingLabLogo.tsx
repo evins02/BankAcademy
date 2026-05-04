@@ -1,9 +1,10 @@
 import Image from "next/image";
 
+// Logo is a 1254×1254 square PNG
 const SIZE_MAP = {
-  sm: 28,
-  md: 40,
-  lg: 56,
+  sm: 32,
+  md: 48,
+  lg: 64,
 } as const;
 
 interface BankingLabLogoProps {
@@ -12,16 +13,17 @@ interface BankingLabLogoProps {
 }
 
 export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) {
-  const height = SIZE_MAP[size];
+  const px = SIZE_MAP[size];
 
   return (
     <Image
       src="/BankingLab Logo.png"
       alt="Banking Lab"
-      height={height}
-      width={0}
-      style={{ height, width: "auto" }}
+      width={px}
+      height={px}
+      quality={95}
       priority
+      style={{ objectFit: "contain" }}
       className={className}
     />
   );
