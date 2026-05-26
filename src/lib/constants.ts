@@ -2,6 +2,23 @@ import type { NavGroup, Scenario } from "@/types";
 
 export const NAV_GROUPS: NavGroup[] = [
   {
+    label: "Mein Lernen",
+    items: [
+      { label: "Dashboard", icon: "LayoutDashboard", href: "/dashboard" },
+      { label: "Statistiken", icon: "BarChart2", href: "/statistiken" },
+      { label: "Badges", icon: "Award", href: "/badges" },
+      { label: "Fehler Übersicht", icon: "AlertCircle", href: "/fehler-uebersicht" },
+    ],
+  },
+  {
+    label: "Community",
+    items: [
+      { label: "Leaderboard", icon: "Trophy", href: "/leaderboard" },
+      { label: "Forum", icon: "MessageSquare", href: "/community" },
+    ],
+  },
+
+  {
     label: "Front Office",
     items: [
       {
