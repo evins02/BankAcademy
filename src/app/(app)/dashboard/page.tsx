@@ -75,19 +75,15 @@ function statusFromProgress(p: ModuleProgress | undefined, total: number) {
 
 function StreakCard({ streak }: { streak: StreakData }) {
   return (
-    <Card className="border-0 bg-text-primary text-white">
+    <Card>
       <CardContent className="pt-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-2xl">
-            🔥
-          </div>
-          <div>
-            <p className="text-3xl font-bold leading-none">{streak.current}</p>
-            <p className="mt-0.5 text-sm text-white/70">Tage Streak</p>
-          </div>
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-2xl">
+          🔥
         </div>
+        <p className="mt-3 text-3xl font-bold text-text-primary">{streak.current}</p>
+        <p className="mt-0.5 text-sm text-text-secondary">Tage Streak</p>
         {streak.longest > streak.current && (
-          <p className="mt-3 text-xs text-white/50">
+          <p className="mt-1 text-xs text-accent">
             Rekord: {streak.longest} Tage
           </p>
         )}
@@ -163,7 +159,8 @@ export default function DashboardPage() {
     );
   })();
 
-  const greeting = profile.name ? `Willkommen zurück, ${profile.name.split(" ")[0]}` : "Willkommen zurück";
+  const firstName = profile.name?.trim().split(" ")[0];
+  const greeting = firstName ? `Willkommen zurück, ${firstName}!` : "Willkommen zurück!";
 
   const frontModules = FRONT_OFFICE_MODULES.map((m) => ({
     ...m,
@@ -179,7 +176,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      <Header title="Dashboard" subtitle={`${greeting} — mach weiter, wo du aufgehört hast.`} />
+      <Header title="Dashboard" subtitle={greeting} />
       <div className="flex-1 overflow-y-auto p-6">
 
         {/* Stats row */}

@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 const SIZE_MAP = {
   sm: 32,
-  md: 48,
+  md: 40,
   lg: 64,
 } as const;
 
@@ -23,7 +23,7 @@ export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) 
         alt="Banking Lab"
         width={px}
         height={px}
-        quality={95}
+        quality={100}
         priority
         style={{ objectFit: "contain" }}
         className={cn("dark:hidden", className)}
@@ -34,7 +34,7 @@ export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) 
         alt="Banking Lab"
         width={px}
         height={px}
-        quality={95}
+        quality={100}
         priority
         style={{ objectFit: "contain" }}
         className={cn("hidden dark:block", className)}
