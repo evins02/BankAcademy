@@ -20,11 +20,13 @@ import {
   MessageSquare,
   Search,
   X,
+  BookOpen,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_GROUPS } from "@/lib/constants";
 import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
+import { useGlossar } from "@/context/GlossarContext";
 import type { NavItem } from "@/types";
 
 const ICONS: Record<string, LucideIcon> = {
@@ -87,6 +89,7 @@ function flatNavLinks(): { label: string; href: string }[] {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { open: openGlossar } = useGlossar();
   const [profile, setProfile] = useState<UserProfile>({});
   const [search, setSearch] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
@@ -197,6 +200,17 @@ export function Sidebar() {
               {group.label}
             </p>
             <ul className="flex flex-col gap-0.5">
+              {group.label === "Mein Lernen" && (
+                <li>
+                  <button
+                    onClick={openGlossar}
+                    className="flex w-full items-center gap-3 rounded-pill px-3 py-2 text-sm font-semibold text-text-primary transition-colors hover:bg-gray-100"
+                  >
+                    <BookOpen size={16} />
+                    <span className="flex-1 text-left">Glossar</span>
+                  </button>
+                </li>
+              )}
               {group.items.map((item) => {
                 const Icon = ICONS[item.icon];
                 const isOpen = openItems.has(item.label);
