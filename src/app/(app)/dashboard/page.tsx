@@ -159,8 +159,9 @@ export default function DashboardPage() {
     );
   })();
 
-  const firstName = profile.name?.trim().split(" ")[0];
-  const greeting = firstName ? `Willkommen zurück, ${firstName}!` : "Willkommen zurück!";
+  const greeting = profile.name?.trim()
+    ? `Willkommen zurück, ${profile.name.trim()}!`
+    : "Willkommen zurück!";
 
   const frontModules = FRONT_OFFICE_MODULES.map((m) => ({
     ...m,
