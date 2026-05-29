@@ -5,10 +5,14 @@ import { LevelSelector } from "./LevelSelector";
 import { LernblockCard } from "./LernblockCard";
 import { CaseCard } from "./CaseCard";
 import { FeedbackPanel } from "./FeedbackPanel";
-import { LevelComplete, type CaseResult } from "./LevelComplete";
+import { type CaseResult } from "./LevelComplete";
 import { ZV_LEVELS, type LevelNum, type OptionKey } from "@/lib/zahlungsverkehr";
+import { LevelCelebration } from "@/components/shared/LevelCelebration";
+import { ModuleComplete } from "@/components/shared/ModuleComplete";
 
-type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
+type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
+
+const MAX_LEVEL = 3 as LevelNum;
 
 export function ZahlungsverkehrRunner() {
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
@@ -74,9 +78,17 @@ export function ZahlungsverkehrRunner() {
     setView("lernblock");
   }, []);
 
-  const handleGoToSelector = useCallback(() => {
-    setView("selector");
-  }, []);
+  const handleLevelNext = useCallback(() => {
+    if (activeLevel < MAX_LEVEL) {
+      setActiveLevel((l) => (l + 1) as LevelNum);
+      setCaseIndex(0);
+      setSelectedOption(null);
+      setSessionResults([]);
+      setView("lernblock");
+    } else {
+      setView("module-complete");
+    }
+  }, [activeLevel]);
 
   return (
     <div className="flex-1 overflow-y-auto p-6">
@@ -115,11 +127,29 @@ export function ZahlungsverkehrRunner() {
       )}
 
       {view === "level-complete" && (
-        <LevelComplete
-          level={activeLevel}
-          results={sessionResults}
-          onNext={handleGoToSelector}
+        <LevelCelebration
+          levelNum={activeLevel}
+          levelLabel={levelConfig.label}
+          results={sessionResults.map((r, i) => ({
+            correct: r.correct,
+            label: `Fall ${i + 1}`,
+          }))}
+          isLastLevel={activeLevel === MAX_LEVEL}
+          onNext={handleLevelNext}
           onRetry={handleRetry}
+          onBack={() => setView("selector")}
+        />
+      )}
+
+      {view === "module-complete" && (
+        <ModuleComplete
+          moduleName="Zahlungsverkehr"
+          onRestart={() => {
+            setCompletedLevels(new Set());
+            setLevelScores({});
+            setView("selector");
+          }}
+          onBack={() => setView("selector")}
         />
       )}
     </div>

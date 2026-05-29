@@ -1,10 +1,10 @@
 "use client";
 
-import { CheckCircle2, XCircle, ChevronRight } from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { FONDS_LEVELS, type FondsCase } from "@/lib/fonds";
+import { WeiterButton } from "@/components/shared/WeiterButton";
 
 interface FeedbackCardProps {
   fondsCase: FondsCase;
@@ -101,10 +101,11 @@ export function FeedbackCard({
           <p className="text-sm leading-relaxed text-text-primary">{fondsCase.feedback}</p>
         </div>
 
-        <Button onClick={onNext} className="w-full">
-          {isLastCase ? "Level abschliessen" : "Nächster Fall"}
-          <ChevronRight size={14} />
-        </Button>
+        <WeiterButton
+          onNext={onNext}
+          label={isLastCase ? "Level abschliessen" : "Nächster Fall"}
+          className="w-full"
+        />
       </div>
     </div>
   );

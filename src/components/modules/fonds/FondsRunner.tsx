@@ -5,10 +5,14 @@ import { LevelSelector } from "./LevelSelector";
 import { LernblockCards } from "./LernblockCards";
 import { CaseCard } from "./CaseCard";
 import { FeedbackCard } from "./FeedbackCard";
-import { LevelComplete, type CaseResult } from "./LevelComplete";
+import { type CaseResult } from "./LevelComplete";
 import { FONDS_LEVELS, type LevelNum } from "@/lib/fonds";
+import { LevelCelebration } from "@/components/shared/LevelCelebration";
+import { ModuleComplete } from "@/components/shared/ModuleComplete";
 
-type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
+type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
+
+const MAX_LEVEL = 3 as LevelNum;
 
 export function FondsRunner() {
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
@@ -69,13 +73,17 @@ export function FondsRunner() {
     setView("lernblock");
   }, []);
 
-  const handleNextLevel = useCallback(() => {
-    setActiveLevel((l) => (l + 1) as LevelNum);
-    setCaseIndex(0);
-    setSelectedOption(null);
-    setSessionResults([]);
-    setView("lernblock");
-  }, []);
+  const handleLevelNext = useCallback(() => {
+    if (activeLevel < MAX_LEVEL) {
+      setActiveLevel((l) => (l + 1) as LevelNum);
+      setCaseIndex(0);
+      setSelectedOption(null);
+      setSessionResults([]);
+      setView("lernblock");
+    } else {
+      setView("module-complete");
+    }
+  }, [activeLevel]);
 
   return (
     <div className="flex-1 overflow-y-auto p-6">
@@ -108,11 +116,28 @@ export function FondsRunner() {
         />
       )}
       {view === "level-complete" && (
-        <LevelComplete
-          level={activeLevel}
-          results={sessionResults}
-          onNext={handleNextLevel}
+        <LevelCelebration
+          levelNum={activeLevel}
+          levelLabel={levelConfig.label}
+          results={sessionResults.map((r, i) => ({
+            correct: r.correct,
+            label: levelConfig.cases[i]?.title ?? `Fall ${i + 1}`,
+          }))}
+          isLastLevel={activeLevel === MAX_LEVEL}
+          onNext={handleLevelNext}
           onRetry={handleRetry}
+          onBack={() => setView("selector")}
+        />
+      )}
+      {view === "module-complete" && (
+        <ModuleComplete
+          moduleName="Fonds"
+          onRestart={() => {
+            setCompletedLevels(new Set());
+            setLevelScores({});
+            setView("selector");
+          }}
+          onBack={() => setView("selector")}
         />
       )}
     </div>

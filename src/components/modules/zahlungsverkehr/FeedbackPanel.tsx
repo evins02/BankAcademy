@@ -1,10 +1,10 @@
 "use client";
 
-import { CheckCircle2, XCircle, ChevronRight } from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ZV_LEVELS, type ZvCase, type OptionKey } from "@/lib/zahlungsverkehr";
+import { WeiterButton } from "@/components/shared/WeiterButton";
 
 interface FeedbackPanelProps {
   zvCase: ZvCase;
@@ -101,10 +101,11 @@ export function FeedbackPanel({
           <p className="text-sm leading-relaxed text-text-primary">{zvCase.feedback}</p>
         </div>
 
-        <Button onClick={onNext} className="w-full">
-          {isLastCase ? "Level abschliessen" : "Nächster Fall"}
-          <ChevronRight size={14} />
-        </Button>
+        <WeiterButton
+          onNext={onNext}
+          label={isLastCase ? "Level abschliessen" : "Nächster Fall"}
+          className="w-full"
+        />
       </div>
     </div>
   );
