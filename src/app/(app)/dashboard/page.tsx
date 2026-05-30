@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { SkeletonStatCard, SkeletonModuleCard } from "@/components/ui/skeleton";
 import { useCountUp } from "@/hooks/useCountUp";
+import { DailyChallenge } from "@/components/shared/DailyChallenge";
+import { OnboardingModal } from "@/components/shared/OnboardingModal";
 import {
   getProgress,
   getStreak,
@@ -123,18 +125,44 @@ export default function DashboardPage() {
   const [progress, setProgress] = useState<Record<string, ModuleProgress>>({});
   const [streak, setStreak] = useState<StreakData>({ current: 0, longest: 0, lastActivity: "" });
   const [loaded, setLoaded] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showInactivity, setShowInactivity] = useState(false);
 
   useEffect(() => {
     seedMockDataIfEmpty();
     try {
       const raw = localStorage.getItem("user-profile");
-      if (raw) setProfile(JSON.parse(raw));
+      if (raw) {
+        const p = JSON.parse(raw);
+        setProfile(p);
+        if (!p.name?.trim() && !localStorage.getItem("onboarding-complete")) {
+          setShowOnboarding(true);
+        }
+      } else if (!localStorage.getItem("onboarding-complete")) {
+        setShowOnboarding(true);
+      }
     } catch {}
     setProgress(getProgress());
-    setStreak(getStreak());
+    const str = getStreak();
+    setStreak(str);
+    // Check 5-day inactivity
+    if (str.lastActivity) {
+      const daysSince = Math.floor(
+        (Date.now() - new Date(str.lastActivity).getTime()) / 86400000
+      );
+      if (daysSince >= 5) setShowInactivity(true);
+    }
     const t = setTimeout(() => setLoaded(true), 300);
     return () => clearTimeout(t);
   }, []);
+
+  function handleOnboardingComplete(name: string, role: string) {
+    const updated = { ...profile, name, role };
+    localStorage.setItem("user-profile", JSON.stringify(updated));
+    localStorage.setItem("onboarding-complete", "true");
+    setProfile(updated);
+    setShowOnboarding(false);
+  }
 
   const allModules = [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES];
   const totalCompleted = allModules.reduce((s, m) => s + (progress[m.moduleId]?.completed ?? 0), 0);
@@ -166,9 +194,29 @@ export default function DashboardPage() {
   return (
     <>
       <Header title="Dashboard" />
+      {showOnboarding && <OnboardingModal onComplete={handleOnboardingComplete} />}
       <div className="flex-1 overflow-y-auto p-6">
 
         <HeroBanner name={profile.name?.trim()} />
+
+        {/* Inactivity banner */}
+        {showInactivity && (
+          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-primary/30 bg-primary-light p-4">
+            <span className="text-xl">👋</span>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-primary">Willkommen zurück!</p>
+              <p className="text-xs text-text-secondary">
+                Dein Streak läuft noch – starte jetzt und lerne weiter!
+              </p>
+            </div>
+            <button
+              onClick={() => setShowInactivity(false)}
+              className="text-text-secondary hover:text-text-primary text-xs"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* Stats row */}
         <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -230,6 +278,8 @@ export default function DashboardPage() {
         </div>
 
         <WeakModulesSection progress={progress} />
+
+        {loaded && <DailyChallenge />}
 
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
           Front Office

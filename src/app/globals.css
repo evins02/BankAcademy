@@ -49,9 +49,40 @@ body {
   animation: scale-in 0.2s ease-out forwards;
 }
 
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes progress-sweep {
+  from { transform: scaleX(0); transform-origin: left; }
+  to { transform: scaleX(1); transform-origin: left; }
+}
+
+.animate-fade-in {
+  animation: fade-in 200ms ease-out;
+}
+
+.animate-progress {
+  animation: progress-sweep 350ms ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-shake,
-  .animate-scale-in {
+  .animate-scale-in,
+  .animate-fade-in,
+  .animate-progress {
     animation: none;
   }
+}
+
+/* Dark mode tokens */
+.dark {
+  --background: #111827;
+  --surface: #1F2937;
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --border: #374151;
+  --primary-light: #052e16;
+  --accent-light: #431407;
 }

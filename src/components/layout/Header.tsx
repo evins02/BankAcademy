@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 import { NotificationBell } from "@/components/layout/NotificationBell";
 import { NAV_GROUPS } from "@/lib/constants";
-import { getStreak, getProgress } from "@/lib/progressData";
+import { getStreak } from "@/lib/progressData";
+import { getXP, getXPLevel, getXPProgress } from "@/lib/xpData";
 
 interface HeaderProps {
   title: string;
@@ -41,15 +42,19 @@ export function Header({ title, subtitle }: HeaderProps) {
   const searchRef = useRef<HTMLDivElement>(null);
   const [streak, setStreak] = useState(0);
   const [xp, setXp] = useState(0);
+  const [xpProgress, setXpProgress] = useState(0);
+  const [xpLevelTitle, setXpLevelTitle] = useState("");
   const [initials, setInitials] = useState("");
+  const [avatarColor, setAvatarColor] = useState("#0D1B4B");
 
   useEffect(() => {
     try {
       const str = getStreak();
       setStreak(str.current);
-      const prog = getProgress();
-      const completed = Object.values(prog).reduce((s, m) => s + m.completed, 0);
-      setXp(completed * 10 + str.current * 5);
+      const totalXP = getXP();
+      setXp(totalXP);
+      setXpProgress(getXPProgress(totalXP));
+      setXpLevelTitle(getXPLevel(totalXP).title);
       const raw = localStorage.getItem("user-profile");
       if (raw) {
         const profile = JSON.parse(raw);
@@ -59,6 +64,7 @@ export function Header({ title, subtitle }: HeaderProps) {
             name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase()
           );
         }
+        if (profile.avatarColor) setAvatarColor(profile.avatarColor);
       }
     } catch {}
   }, []);
@@ -119,12 +125,24 @@ export function Header({ title, subtitle }: HeaderProps) {
           </div>
         )}
         {xp > 0 && (
-          <div className="hidden items-center gap-1 rounded-full bg-primary-light px-2.5 py-1 text-xs font-semibold text-primary sm:flex">
-            ⚡ {xp} XP
+          <div className="hidden flex-col items-end sm:flex">
+            <div className="flex items-center gap-1 text-xs font-semibold text-primary">
+              ⚡ {xp} XP
+              <span className="font-normal text-text-secondary">· {xpLevelTitle}</span>
+            </div>
+            <div className="mt-0.5 h-1 w-20 overflow-hidden rounded-full bg-gray-200">
+              <div
+                className="h-full rounded-full bg-primary transition-all"
+                style={{ width: `${xpProgress}%` }}
+              />
+            </div>
           </div>
         )}
         {initials && (
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0D1B4B] text-xs font-bold text-white">
+          <div
+            className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white"
+            style={{ background: avatarColor }}
+          >
             {initials}
           </div>
         )}

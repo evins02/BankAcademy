@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { StickyNote } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FONDS_LEVELS, type FondsCase } from "@/lib/fonds";
+import { ScenarioTimer } from "@/components/shared/ScenarioTimer";
+import { getNotes } from "@/lib/notesData";
 
 const STRATEGY_MINI = [
   { emoji: "🔥", label: "Aggressiv", stocks: "~100% Aktien" },
@@ -15,9 +18,9 @@ const STRATEGY_MINI = [
 ];
 
 const DIFFICULTY = {
-  1: { emoji: "🟢", label: "Einsteiger", xp: 10, time: "~2 min" },
-  2: { emoji: "🟡", label: "Fortgeschritten", xp: 20, time: "~3 min" },
-  3: { emoji: "🔴", label: "LAP-Niveau", xp: 30, time: "~4 min" },
+  1: { emoji: "🟢", label: "Einsteiger", xp: 100, time: "~2 min" },
+  2: { emoji: "🟡", label: "Fortgeschritten", xp: 100, time: "~3 min" },
+  3: { emoji: "🔴", label: "LAP-Niveau", xp: 100, time: "~4 min" },
 } as const;
 
 interface CaseCardProps {
@@ -27,6 +30,8 @@ interface CaseCardProps {
   selectedOption: string | null;
   onSelect: (key: string) => void;
   onSubmit: () => void;
+  onOpenNote: () => void;
+  levelStartTime?: number;
 }
 
 export function CaseCard({
@@ -36,14 +41,19 @@ export function CaseCard({
   selectedOption,
   onSelect,
   onSubmit,
+  onOpenNote,
+  levelStartTime,
 }: CaseCardProps) {
   const levelConfig = FONDS_LEVELS.find((l) => l.level === fondsCase.level)!;
   const difficulty = DIFFICULTY[fondsCase.level as 1 | 2 | 3];
   const [showHint, setShowHint] = useState(false);
+  const [hasNote, setHasNote] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem("kb-hint-seen")) setShowHint(true);
-  }, []);
+    const notes = getNotes();
+    setHasNote(!!notes[`fonds-${fondsCase.id}`]?.content?.trim());
+  }, [fondsCase.id]);
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -80,9 +90,25 @@ export function CaseCard({
           <Badge variant={levelConfig.badgeVariant}>
             Level {fondsCase.level} – {levelConfig.label}
           </Badge>
-          <span className="text-xs text-text-secondary">
-            Fall {caseIndex + 1} von {total}
-          </span>
+          <div className="flex items-center gap-2">
+            {levelStartTime && <ScenarioTimer startTime={levelStartTime} />}
+            <button
+              onClick={onOpenNote}
+              className={cn(
+                "flex items-center gap-1 rounded-lg border px-2 py-1 text-xs transition-colors",
+                hasNote
+                  ? "border-amber-300 bg-amber-50 text-amber-700"
+                  : "border-border text-text-secondary hover:border-primary/40 hover:text-primary"
+              )}
+              title="Notiz zu diesem Fall"
+            >
+              <StickyNote size={11} />
+              {hasNote ? "Notiz" : "📝"}
+            </button>
+            <span className="text-xs text-text-secondary">
+              Fall {caseIndex + 1} von {total}
+            </span>
+          </div>
         </div>
 
         {/* Difficulty meta */}
@@ -101,7 +127,7 @@ export function CaseCard({
           <p className="text-sm leading-relaxed text-text-primary">{fondsCase.situation}</p>
         </div>
 
-        {/* Mini strategy ladder reference */}
+        {/* Mini strategy ladder */}
         <div className="mb-5 flex items-center gap-2 overflow-x-auto rounded-DEFAULT border border-border bg-gray-50 px-3 py-2">
           {STRATEGY_MINI.map((s, i) => (
             <div key={s.label} className="flex shrink-0 items-center gap-1.5">
@@ -132,9 +158,7 @@ export function CaseCard({
               <span
                 className={cn(
                   "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold",
-                  selectedOption === opt.key
-                    ? "bg-primary text-white"
-                    : "bg-gray-100 text-text-secondary"
+                  selectedOption === opt.key ? "bg-primary text-white" : "bg-gray-100 text-text-secondary"
                 )}
               >
                 {opt.key}
@@ -147,7 +171,7 @@ export function CaseCard({
 
         {showHint && (
           <div className="mb-3 flex items-center justify-between rounded-lg border border-border bg-gray-50 px-3 py-2 text-xs text-text-secondary">
-            <span>⌨️ Tastenkürzel: <strong>1–4</strong> auswählen · <strong>↑↓</strong> navigieren · <strong>↵</strong> bestätigen</span>
+            <span>⌨️ <strong>1–4</strong> auswählen · <strong>↑↓</strong> navigieren · <strong>↵</strong> bestätigen</span>
             <button onClick={dismissHint} className="ml-2 shrink-0 hover:text-text-primary">✕</button>
           </div>
         )}

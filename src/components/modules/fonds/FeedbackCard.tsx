@@ -8,8 +8,7 @@ import { FONDS_LEVELS, type FondsCase } from "@/lib/fonds";
 import { WeiterButton } from "@/components/shared/WeiterButton";
 import { Confetti } from "@/components/shared/Confetti";
 import { useGlossar } from "@/context/GlossarContext";
-
-const LEVEL_XP: Record<number, number> = { 1: 10, 2: 20, 3: 30 };
+import { addXP } from "@/lib/xpData";
 
 interface FeedbackCardProps {
   fondsCase: FondsCase;
@@ -30,15 +29,17 @@ export function FeedbackCard({
 }: FeedbackCardProps) {
   const isCorrect = selectedOption === fondsCase.correct;
   const levelConfig = FONDS_LEVELS.find((l) => l.level === fondsCase.level)!;
-  const xp = LEVEL_XP[fondsCase.level] ?? 10;
+  const xp = isCorrect ? 100 : 10;
   const { open: openGlossar } = useGlossar();
   const [showConfetti, setShowConfetti] = useState(isCorrect);
 
   useEffect(() => {
+    addXP(xp);
     if (!isCorrect) return;
     const t = setTimeout(() => setShowConfetti(false), 1500);
     return () => clearTimeout(t);
-  }, [isCorrect]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

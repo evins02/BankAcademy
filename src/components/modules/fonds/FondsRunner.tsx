@@ -10,7 +10,11 @@ import { FONDS_LEVELS, type LevelNum } from "@/lib/fonds";
 import { LevelCelebration } from "@/components/shared/LevelCelebration";
 import { ModuleComplete } from "@/components/shared/ModuleComplete";
 import { FirstTimeTutorial } from "@/components/shared/FirstTimeTutorial";
+import { SmartTipBanner } from "@/components/shared/SmartTipBanner";
+import { NoteModal } from "@/components/shared/NoteModal";
 import { getProgress, saveProgress } from "@/lib/progressData";
+import { useGlossar } from "@/context/GlossarContext";
+import { getSettings } from "@/lib/settingsData";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
 
@@ -26,6 +30,15 @@ export function FondsRunner() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [sessionResults, setSessionResults] = useState<CaseResult[]>([]);
 
+  const [wrongStreak, setWrongStreak] = useState(0);
+  const [showSmartTip, setShowSmartTip] = useState(false);
+  const [levelStartTime, setLevelStartTime] = useState(Date.now());
+  const [levelElapsed, setLevelElapsed] = useState<number | undefined>(undefined);
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [moduleAccuracy, setModuleAccuracy] = useState<number | undefined>(undefined);
+
+  const { open: openGlossar } = useGlossar();
+
   const levelConfig = FONDS_LEVELS.find((l) => l.level === activeLevel)!;
   const currentCase = levelConfig.cases[caseIndex];
   const total = levelConfig.cases.length;
@@ -36,15 +49,23 @@ export function FondsRunner() {
     setCaseIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
+    setWrongStreak(0);
+    setShowSmartTip(false);
     setView("lernblock");
   }, []);
 
-  const handleLernblockDone = useCallback(() => setView("playing"), []);
+  const handleLernblockDone = useCallback(() => {
+    setLevelStartTime(Date.now());
+    setView("playing");
+  }, []);
 
-  const handleSubmit = useCallback(() => setView("feedback"), []);
+  const handleSubmit = useCallback(() => {
+    setView("feedback");
+  }, []);
 
   const handleNext = useCallback(() => {
     if (!selectedOption) return;
+
     const isCorrect = selectedOption === currentCase.correct;
     const newResults: CaseResult[] = [
       ...sessionResults,
@@ -52,8 +73,19 @@ export function FondsRunner() {
     ];
     setSessionResults(newResults);
 
+    if (isCorrect) {
+      setWrongStreak(0);
+    } else {
+      const newStreak = wrongStreak + 1;
+      setWrongStreak(newStreak);
+      if (newStreak >= 3) setShowSmartTip(true);
+    }
+
     if (isLastCase) {
       const score = newResults.filter((r) => r.correct).length;
+      const elapsed = Math.round((Date.now() - levelStartTime) / 1000);
+      setLevelElapsed(elapsed);
+
       setCompletedLevels((prev) => {
         const next = new Set(prev);
         next.add(activeLevel);
@@ -88,12 +120,14 @@ export function FondsRunner() {
       setSelectedOption(null);
       setView("playing");
     }
-  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel]);
+  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, wrongStreak, levelStartTime]);
 
   const handleRetry = useCallback(() => {
     setCaseIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
+    setWrongStreak(0);
+    setShowSmartTip(false);
     setView("lernblock");
   }, []);
 
@@ -103,11 +137,21 @@ export function FondsRunner() {
       setCaseIndex(0);
       setSelectedOption(null);
       setSessionResults([]);
+      setWrongStreak(0);
+      setShowSmartTip(false);
+      setLevelElapsed(undefined);
       setView("lernblock");
     } else {
+      // Compute overall accuracy for module
+      const allScores = { ...levelScores };
+      const totalCorrect = Object.values(allScores).reduce((s, sc) => s + (sc ?? 0), 0);
+      const totalCases = FONDS_LEVELS.reduce((s, l) => s + l.cases.length, 0);
+      setModuleAccuracy(Math.round((totalCorrect / totalCases) * 100));
       setView("module-complete");
     }
-  }, [activeLevel]);
+  }, [activeLevel, levelScores]);
+
+  const timerEnabled = typeof window !== "undefined" ? getSettings().timerEnabled : true;
 
   return (
     <div className="flex-1 overflow-y-auto p-6">
@@ -118,9 +162,22 @@ export function FondsRunner() {
           onSelectLevel={handleSelectLevel}
         />
       )}
-      {view === "lernblock" && <LernblockCards onContinue={handleLernblockDone} />}
+
+      {view === "lernblock" && (
+        <LernblockCards onContinue={handleLernblockDone} />
+      )}
+
       {view === "playing" && <FirstTimeTutorial />}
-      {view === "playing" && (
+
+      {view === "playing" && showSmartTip && (
+        <SmartTipBanner
+          topic="Fonds"
+          onDismiss={() => setShowSmartTip(false)}
+          onOpenGlossar={openGlossar}
+        />
+      )}
+
+      {view === "playing" && currentCase && (
         <CaseCard
           fondsCase={currentCase}
           caseIndex={caseIndex}
@@ -128,9 +185,12 @@ export function FondsRunner() {
           selectedOption={selectedOption}
           onSelect={setSelectedOption}
           onSubmit={handleSubmit}
+          onOpenNote={() => setNoteOpen(true)}
+          levelStartTime={timerEnabled ? levelStartTime : undefined}
         />
       )}
-      {view === "feedback" && selectedOption && (
+
+      {view === "feedback" && currentCase && selectedOption && (
         <FeedbackCard
           fondsCase={currentCase}
           selectedOption={selectedOption}
@@ -140,6 +200,7 @@ export function FondsRunner() {
           onNext={handleNext}
         />
       )}
+
       {view === "level-complete" && (
         <LevelCelebration
           levelNum={activeLevel}
@@ -149,20 +210,33 @@ export function FondsRunner() {
             label: levelConfig.cases[i]?.title ?? `Fall ${i + 1}`,
           }))}
           isLastLevel={activeLevel === MAX_LEVEL}
+          timeSeconds={levelElapsed}
           onNext={handleLevelNext}
           onRetry={handleRetry}
           onBack={() => setView("selector")}
         />
       )}
+
       {view === "module-complete" && (
         <ModuleComplete
           moduleName="Fonds"
+          accuracy={moduleAccuracy}
           onRestart={() => {
             setCompletedLevels(new Set());
             setLevelScores({});
+            setModuleAccuracy(undefined);
             setView("selector");
           }}
           onBack={() => setView("selector")}
+        />
+      )}
+
+      {noteOpen && currentCase && (
+        <NoteModal
+          scenarioId={`fonds-${currentCase.id}`}
+          moduleId="privatkunde-fonds"
+          moduleName="Fonds"
+          onClose={() => setNoteOpen(false)}
         />
       )}
     </div>

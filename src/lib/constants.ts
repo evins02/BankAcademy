@@ -8,6 +8,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { label: "Statistiken", icon: "BarChart2", href: "/statistiken" },
       { label: "Badges", icon: "Award", href: "/badges" },
       { label: "Fehler Übersicht", icon: "AlertCircle", href: "/fehler-uebersicht" },
+      { label: "Notizen", icon: "FileText", href: "/notizen" },
     ],
   },
   {

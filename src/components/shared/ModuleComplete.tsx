@@ -7,9 +7,11 @@ import { Button } from "@/components/ui/button";
 import { CertificateModal } from "./CertificateModal";
 import { Confetti } from "./Confetti";
 import { getProgress } from "@/lib/progressData";
+import { addXP } from "@/lib/xpData";
 
 interface ModuleCompleteProps {
   moduleName: string;
+  accuracy?: number;
   onRestart: () => void;
   onBack: () => void;
 }
@@ -37,13 +39,15 @@ function getRecommendations(skipModuleIds: string[]) {
   return [...notStarted, ...lowScore].slice(0, 2);
 }
 
-export function ModuleComplete({ moduleName, onRestart, onBack }: ModuleCompleteProps) {
+export function ModuleComplete({ moduleName, accuracy, onRestart, onBack }: ModuleCompleteProps) {
   const [showCert, setShowCert] = useState(false);
   const [confetti, setConfetti] = useState(true);
   const [userName, setUserName] = useState("Lernender");
   const [recommendations, setRecommendations] = useState<typeof NEXT_MODULES>([]);
 
   useEffect(() => {
+    addXP(500);
+
     try {
       const raw = localStorage.getItem("user-profile");
       if (raw) {
@@ -79,9 +83,27 @@ export function ModuleComplete({ moduleName, onRestart, onBack }: ModuleComplete
                 Herzlichen Glückwunsch, {userName}!
               </p>
               <p className="mt-1 text-sm text-text-secondary">
-                Du hast alle Level erfolgreich abgeschlossen.
+                Du hast alle Level erfolgreich abgeschlossen.{" "}
+                <span className="font-semibold text-primary">+500 XP</span>
               </p>
             </div>
+
+            {accuracy !== undefined && accuracy < 70 && (
+              <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-left">
+                <p className="text-sm font-semibold text-amber-900">
+                  📚 Du hast Mühe mit {moduleName}
+                </p>
+                <p className="mt-1 text-xs text-amber-700">
+                  Deine Genauigkeit war {accuracy}%. Wir empfehlen eine Wiederholung.
+                </p>
+                <button
+                  onClick={onRestart}
+                  className="mt-2 text-xs font-semibold text-amber-800 hover:underline"
+                >
+                  Nochmals üben →
+                </button>
+              </div>
+            )}
 
             <div className="space-y-2">
               <Button onClick={() => setShowCert(true)} className="w-full gap-2">

@@ -21,6 +21,7 @@ import {
   Search,
   X,
   BookOpen,
+  FileText,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -41,6 +42,7 @@ const ICONS: Record<string, LucideIcon> = {
   AlertCircle,
   Trophy,
   MessageSquare,
+  FileText,
 };
 
 interface UserProfile {
@@ -302,7 +304,7 @@ export function Sidebar() {
       {/* Footer */}
       <div className="border-t border-border px-3 py-3">
         <Link
-          href="/settings"
+          href="/einstellungen"
           className="flex items-center gap-3 rounded-pill px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-gray-100 hover:text-text-primary"
         >
           <Settings size={16} />
