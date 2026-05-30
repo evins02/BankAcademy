@@ -9,6 +9,8 @@ import { ModuleCard } from "@/components/modules/ModuleCard";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ProgressBar } from "@/components/ui/progress-bar";
+import { SkeletonStatCard, SkeletonModuleCard } from "@/components/ui/skeleton";
+import { useCountUp } from "@/hooks/useCountUp";
 import {
   getProgress,
   getStreak,
@@ -74,24 +76,6 @@ function statusFromProgress(p: ModuleProgress | undefined, total: number) {
   return "active" as const;
 }
 
-function StreakCard({ streak }: { streak: StreakData }) {
-  return (
-    <Card>
-      <CardContent className="pt-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-2xl">
-          🔥
-        </div>
-        <p className="mt-3 text-3xl font-bold text-text-primary">{streak.current}</p>
-        <p className="mt-0.5 text-sm text-text-secondary">Tage Streak</p>
-        {streak.longest > streak.current && (
-          <p className="mt-1 text-xs text-accent">
-            Rekord: {streak.longest} Tage
-          </p>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
 
 function WeakModulesSection({ progress }: { progress: Record<string, ModuleProgress> }) {
   const weakModules = [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES].filter((m) => {
@@ -138,6 +122,7 @@ export default function DashboardPage() {
   const [profile, setProfile] = useState<UserProfile>({});
   const [progress, setProgress] = useState<Record<string, ModuleProgress>>({});
   const [streak, setStreak] = useState<StreakData>({ current: 0, longest: 0, lastActivity: "" });
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     seedMockDataIfEmpty();
@@ -147,6 +132,8 @@ export default function DashboardPage() {
     } catch {}
     setProgress(getProgress());
     setStreak(getStreak());
+    const t = setTimeout(() => setLoaded(true), 300);
+    return () => clearTimeout(t);
   }, []);
 
   const allModules = [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES];
@@ -172,6 +159,10 @@ export default function DashboardPage() {
     completedScenarios: progress[m.moduleId]?.completed ?? 0,
   }));
 
+  const countStreak = useCountUp(loaded ? streak.current : 0);
+  const countCompleted = useCountUp(loaded ? totalCompleted : 0);
+  const countAccuracy = useCountUp(loaded ? avgAccuracy : 0);
+
   return (
     <>
       <Header title="Dashboard" />
@@ -181,39 +172,61 @@ export default function DashboardPage() {
 
         {/* Stats row */}
         <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <StreakCard streak={streak} />
+          {!loaded ? (
+            <>
+              <SkeletonStatCard />
+              <SkeletonStatCard />
+              <SkeletonStatCard />
+              <SkeletonStatCard />
+            </>
+          ) : (
+            <>
+              <Card>
+                <CardContent className="pt-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-2xl">
+                    🔥
+                  </div>
+                  <p className="mt-3 text-3xl font-bold text-text-primary">{countStreak}</p>
+                  <p className="mt-0.5 text-sm text-text-secondary">Tage Streak</p>
+                  {streak.longest > streak.current && (
+                    <p className="mt-1 text-xs text-accent">Rekord: {streak.longest} Tage</p>
+                  )}
+                </CardContent>
+              </Card>
 
-          <Card>
-            <CardContent className="pt-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-light">
-                <CheckCircle2 size={22} className="text-primary" />
-              </div>
-              <p className="mt-3 text-3xl font-bold text-text-primary">{totalCompleted}</p>
-              <p className="mt-0.5 text-sm text-text-secondary">Abgeschlossen</p>
-            </CardContent>
-          </Card>
+              <Card>
+                <CardContent className="pt-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-light">
+                    <CheckCircle2 size={22} className="text-primary" />
+                  </div>
+                  <p className="mt-3 text-3xl font-bold text-text-primary">{countCompleted}</p>
+                  <p className="mt-0.5 text-sm text-text-secondary">Abgeschlossen</p>
+                </CardContent>
+              </Card>
 
-          <Card>
-            <CardContent className="pt-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-light">
-                <Target size={22} className="text-accent" />
-              </div>
-              <p className="mt-3 text-3xl font-bold text-text-primary">{avgAccuracy}%</p>
-              <p className="mt-0.5 text-sm text-text-secondary">Genauigkeit</p>
-            </CardContent>
-          </Card>
+              <Card>
+                <CardContent className="pt-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-light">
+                    <Target size={22} className="text-accent" />
+                  </div>
+                  <p className="mt-3 text-3xl font-bold text-text-primary">{countAccuracy}%</p>
+                  <p className="mt-0.5 text-sm text-text-secondary">Genauigkeit</p>
+                </CardContent>
+              </Card>
 
-          <Card>
-            <CardContent className="pt-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-light">
-                <Flame size={22} className="text-primary" />
-              </div>
-              <p className="mt-3 text-3xl font-bold text-text-primary">
-                {totalCompleted}/{totalScenarios}
-              </p>
-              <p className="mt-0.5 text-sm text-text-secondary">Szenarien total</p>
-            </CardContent>
-          </Card>
+              <Card>
+                <CardContent className="pt-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-light">
+                    <Flame size={22} className="text-primary" />
+                  </div>
+                  <p className="mt-3 text-3xl font-bold text-text-primary">
+                    {totalCompleted}/{totalScenarios}
+                  </p>
+                  <p className="mt-0.5 text-sm text-text-secondary">Szenarien total</p>
+                </CardContent>
+              </Card>
+            </>
+          )}
         </div>
 
         <WeakModulesSection progress={progress} />
@@ -222,18 +235,18 @@ export default function DashboardPage() {
           Front Office
         </h2>
         <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {frontModules.map((m) => (
-            <ModuleCard key={m.title} {...m} />
-          ))}
+          {!loaded
+            ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
+            : frontModules.map((m) => <ModuleCard key={m.title} {...m} />)}
         </div>
 
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
           Back Office
         </h2>
         <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {backModules.map((m) => (
-            <ModuleCard key={m.title} {...m} />
-          ))}
+          {!loaded
+            ? Array.from({ length: 2 }).map((_, i) => <SkeletonModuleCard key={i} />)
+            : backModules.map((m) => <ModuleCard key={m.title} {...m} />)}
         </div>
 
         {/* Quick links */}

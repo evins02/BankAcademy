@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 import { NotificationBell } from "@/components/layout/NotificationBell";
 import { NAV_GROUPS } from "@/lib/constants";
+import { getStreak, getProgress } from "@/lib/progressData";
 
 interface HeaderProps {
   title: string;
@@ -38,6 +39,29 @@ export function Header({ title, subtitle }: HeaderProps) {
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+  const [streak, setStreak] = useState(0);
+  const [xp, setXp] = useState(0);
+  const [initials, setInitials] = useState("");
+
+  useEffect(() => {
+    try {
+      const str = getStreak();
+      setStreak(str.current);
+      const prog = getProgress();
+      const completed = Object.values(prog).reduce((s, m) => s + m.completed, 0);
+      setXp(completed * 10 + str.current * 5);
+      const raw = localStorage.getItem("user-profile");
+      if (raw) {
+        const profile = JSON.parse(raw);
+        const name = profile.name?.trim();
+        if (name) {
+          setInitials(
+            name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase()
+          );
+        }
+      }
+    } catch {}
+  }, []);
 
   const results = query.trim()
     ? ALL_LINKS.filter((l) => l.label.toLowerCase().includes(query.toLowerCase()))
@@ -89,6 +113,21 @@ export function Header({ title, subtitle }: HeaderProps) {
         </div>
       </div>
       <div className="flex items-center gap-2">
+        {streak > 0 && (
+          <div className="hidden items-center gap-1 rounded-full bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-600 sm:flex">
+            🔥 {streak}
+          </div>
+        )}
+        {xp > 0 && (
+          <div className="hidden items-center gap-1 rounded-full bg-primary-light px-2.5 py-1 text-xs font-semibold text-primary sm:flex">
+            ⚡ {xp} XP
+          </div>
+        )}
+        {initials && (
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0D1B4B] text-xs font-bold text-white">
+            {initials}
+          </div>
+        )}
         {/* Search */}
         <div ref={searchRef} className="relative">
           <Button

@@ -10,6 +10,7 @@ import { FONDS_LEVELS, type LevelNum } from "@/lib/fonds";
 import { LevelCelebration } from "@/components/shared/LevelCelebration";
 import { ModuleComplete } from "@/components/shared/ModuleComplete";
 import { FirstTimeTutorial } from "@/components/shared/FirstTimeTutorial";
+import { getProgress, saveProgress } from "@/lib/progressData";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
 
@@ -59,6 +60,28 @@ export function FondsRunner() {
         return next;
       });
       setLevelScores((prev) => ({ ...prev, [activeLevel]: score }));
+
+      // Persist progress
+      const lvlConfig = FONDS_LEVELS.find((l) => l.level === activeLevel)!;
+      const totalFondsCases = FONDS_LEVELS.reduce((s, l) => s + l.cases.length, 0);
+      const prog = getProgress();
+      const prev = prog["privatkunde-fonds"];
+      const prevCompleted = prev?.completed ?? 0;
+      const prevCorrect = prev ? Math.round((prev.accuracy / 100) * prevCompleted) : 0;
+      const newCompleted = Math.min(prevCompleted + lvlConfig.cases.length, totalFondsCases);
+      const newAccuracy = Math.round(((prevCorrect + score) / newCompleted) * 100);
+      saveProgress({
+        ...prog,
+        "privatkunde-fonds": {
+          moduleId: "privatkunde-fonds",
+          completed: newCompleted,
+          total: totalFondsCases,
+          accuracy: Math.min(100, newAccuracy),
+          lastAttempt: new Date().toISOString(),
+          errors: prev?.errors ?? [],
+        },
+      });
+
       setView("level-complete");
     } else {
       setCaseIndex((i) => i + 1);

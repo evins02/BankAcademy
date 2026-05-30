@@ -10,6 +10,7 @@ import { ZV_LEVELS, type LevelNum, type OptionKey } from "@/lib/zahlungsverkehr"
 import { LevelCelebration } from "@/components/shared/LevelCelebration";
 import { ModuleComplete } from "@/components/shared/ModuleComplete";
 import { FirstTimeTutorial } from "@/components/shared/FirstTimeTutorial";
+import { getProgress, saveProgress } from "@/lib/progressData";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
 
@@ -64,6 +65,28 @@ export function ZahlungsverkehrRunner() {
         return next;
       });
       setLevelScores((prev) => ({ ...prev, [activeLevel]: score }));
+
+      // Persist progress
+      const lvlConfig = ZV_LEVELS.find((l) => l.level === activeLevel)!;
+      const totalZvCases = ZV_LEVELS.reduce((s, l) => s + l.cases.length, 0);
+      const prog = getProgress();
+      const prev = prog["banking-operations-zahlungsverkehr"];
+      const prevCompleted = prev?.completed ?? 0;
+      const prevCorrect = prev ? Math.round((prev.accuracy / 100) * prevCompleted) : 0;
+      const newCompleted = Math.min(prevCompleted + lvlConfig.cases.length, totalZvCases);
+      const newAccuracy = Math.round(((prevCorrect + score) / newCompleted) * 100);
+      saveProgress({
+        ...prog,
+        "banking-operations-zahlungsverkehr": {
+          moduleId: "banking-operations-zahlungsverkehr",
+          completed: newCompleted,
+          total: totalZvCases,
+          accuracy: Math.min(100, newAccuracy),
+          lastAttempt: new Date().toISOString(),
+          errors: prev?.errors ?? [],
+        },
+      });
+
       setView("level-complete");
     } else {
       setCaseIndex((i) => i + 1);

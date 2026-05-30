@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { computeBadges, type Badge } from "@/lib/progressData";
+import { EmptyState } from "@/components/ui/empty-state";
 
 function BadgeCard({ badge }: { badge: Badge }) {
   const earned = !!badge.earnedAt;
@@ -90,10 +91,7 @@ export default function BadgesPage() {
         )}
 
         {badges.length === 0 && (
-          <div className="py-20 text-center">
-            <p className="text-4xl">🏆</p>
-            <p className="mt-4 text-lg font-semibold text-text-primary">Badges werden geladen…</p>
-          </div>
+          <EmptyState variant="no-badges" />
         )}
       </div>
     </>

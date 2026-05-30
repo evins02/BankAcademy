@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { AlertCircle, ChevronRight } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { getErrors, type ErrorEntry } from "@/lib/progressData";
+import { EmptyState } from "@/components/ui/empty-state";
 
 function relativeTime(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -56,22 +56,11 @@ export default function FehlerUebersichtPage() {
       />
       <div className="flex-1 overflow-y-auto p-6">
         {errors.length === 0 ? (
-          <div className="py-20 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-light">
-              <AlertCircle size={28} className="text-primary" />
-            </div>
-            <h3 className="text-lg font-semibold text-text-primary">Keine Fehler aufgezeichnet</h3>
-            <p className="mt-2 text-sm text-text-secondary">
-              Fehler werden beim Lernen automatisch gespeichert.
-            </p>
-            <Link
-              href="/dashboard"
-              className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-            >
-              Zurück zum Dashboard
-              <ChevronRight size={14} />
-            </Link>
-          </div>
+          <EmptyState
+            variant="no-errors"
+            title="Keine Fehler aufgezeichnet"
+            subtitle="Fehler werden beim Lernen automatisch gespeichert. Weiter so!"
+          />
         ) : (
           <div className="space-y-6">
             {moduleIds.map((moduleId) => {
