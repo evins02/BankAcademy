@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { User, Building2, TrendingUp, Settings2, Landmark, Flame, Target, CheckCircle2, AlertTriangle } from "lucide-react";
 import { Header } from "@/components/layout/Header";
+import { HeroBanner } from "@/components/shared/HeroBanner";
 import { ModuleCard } from "@/components/modules/ModuleCard";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,7 @@ const FRONT_OFFICE_MODULES = [
   {
     title: "Privatkunde",
     description: "Basis- und Individualprodukte aus Beratersicht.",
-    href: "/privatkunde/basis/zahlungsverkehr",
+    href: "/privatkunde",
     icon: User,
     moduleId: "privatkunde",
     totalScenarios: 10,
@@ -52,7 +53,7 @@ const BACK_OFFICE_MODULES = [
   {
     title: "Banking Operations",
     description: "Kontoeröffnungen, Zahlungsverkehr, KYC und Mahnwesen.",
-    href: "/backoffice/banking-operations/kontoeröffnungen",
+    href: "/backoffice",
     icon: Landmark,
     moduleId: "banking-operations",
     totalScenarios: 4,
@@ -159,10 +160,6 @@ export default function DashboardPage() {
     );
   })();
 
-  const greeting = profile.name?.trim()
-    ? `Willkommen zurück, ${profile.name.trim()}!`
-    : "Willkommen zurück!";
-
   const frontModules = FRONT_OFFICE_MODULES.map((m) => ({
     ...m,
     status: statusFromProgress(progress[m.moduleId], m.totalScenarios),
@@ -177,8 +174,10 @@ export default function DashboardPage() {
 
   return (
     <>
-      <Header title="Dashboard" subtitle={greeting} />
+      <Header title="Dashboard" />
       <div className="flex-1 overflow-y-auto p-6">
+
+        <HeroBanner name={profile.name?.trim()} />
 
         {/* Stats row */}
         <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">

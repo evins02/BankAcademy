@@ -9,6 +9,7 @@ import { type CaseResult } from "./LevelComplete";
 import { ZV_LEVELS, type LevelNum, type OptionKey } from "@/lib/zahlungsverkehr";
 import { LevelCelebration } from "@/components/shared/LevelCelebration";
 import { ModuleComplete } from "@/components/shared/ModuleComplete";
+import { FirstTimeTutorial } from "@/components/shared/FirstTimeTutorial";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
 
@@ -104,6 +105,7 @@ export function ZahlungsverkehrRunner() {
         <LernblockCard level={activeLevel} onContinue={handleLernblockDone} />
       )}
 
+      {view === "playing" && <FirstTimeTutorial />}
       {view === "playing" && currentCase && (
         <CaseCard
           zvCase={currentCase}

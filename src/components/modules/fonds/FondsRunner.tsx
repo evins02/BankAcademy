@@ -9,6 +9,7 @@ import { type CaseResult } from "./LevelComplete";
 import { FONDS_LEVELS, type LevelNum } from "@/lib/fonds";
 import { LevelCelebration } from "@/components/shared/LevelCelebration";
 import { ModuleComplete } from "@/components/shared/ModuleComplete";
+import { FirstTimeTutorial } from "@/components/shared/FirstTimeTutorial";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
 
@@ -95,6 +96,7 @@ export function FondsRunner() {
         />
       )}
       {view === "lernblock" && <LernblockCards onContinue={handleLernblockDone} />}
+      {view === "playing" && <FirstTimeTutorial />}
       {view === "playing" && (
         <CaseCard
           fondsCase={currentCase}
