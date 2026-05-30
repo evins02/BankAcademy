@@ -9,6 +9,7 @@ import { WeiterButton } from "@/components/shared/WeiterButton";
 import { Confetti } from "@/components/shared/Confetti";
 import { useGlossar } from "@/context/GlossarContext";
 import { addXP } from "@/lib/xpData";
+import { InlineRating } from "@/components/shared/StarRating";
 
 interface FeedbackCardProps {
   fondsCase: FondsCase;
@@ -120,7 +121,7 @@ export function FeedbackCard({
             <p className="text-sm leading-relaxed text-text-primary">{fondsCase.feedback}</p>
           </div>
 
-          <div className="mb-4 flex justify-start">
+          <div className="mb-4 flex items-center justify-between">
             <button
               onClick={openGlossar}
               className="flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
@@ -128,6 +129,7 @@ export function FeedbackCard({
               <BookOpen size={13} />
               Glossar öffnen
             </button>
+            <InlineRating scenarioId={`fonds-${fondsCase.id}`} label="Szenario bewerten:" />
           </div>
 
           <WeiterButton

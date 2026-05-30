@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { StickyNote } from "lucide-react";
+import { StickyNote, Bookmark } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ZV_LEVELS, type ZvCase, type OptionKey } from "@/lib/zahlungsverkehr";
 import { ScenarioTimer } from "@/components/shared/ScenarioTimer";
 import { getNotes } from "@/lib/notesData";
+import { toggleBookmark, isBookmarked } from "@/lib/bookmarksData";
 
 const DIFFICULTY = {
   1: { emoji: "🟢", label: "Einsteiger", xp: 100, time: "~2 min" },
@@ -40,12 +41,25 @@ export function CaseCard({
   const difficulty = DIFFICULTY[zvCase.level as 1 | 2 | 3];
   const [showHint, setShowHint] = useState(false);
   const [hasNote, setHasNote] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem("kb-hint-seen")) setShowHint(true);
     const notes = getNotes();
     setHasNote(!!notes[`zv-${zvCase.id}`]?.content?.trim());
+    setBookmarked(isBookmarked(`zv-${zvCase.id}`));
   }, [zvCase.id]);
+
+  function handleBookmark() {
+    const next = toggleBookmark({
+      scenarioId: `zv-${zvCase.id}`,
+      moduleId: "zahlungsverkehr",
+      moduleName: "Zahlungsverkehr",
+      title: zvCase.briefing.slice(0, 60),
+      savedAt: "",
+    });
+    setBookmarked(next);
+  }
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -85,6 +99,19 @@ export function CaseCard({
           <div className="flex items-center gap-2">
             {levelStartTime && <ScenarioTimer startTime={levelStartTime} />}
             <button
+              onClick={handleBookmark}
+              className={cn(
+                "rounded-lg border p-1.5 text-xs transition-colors",
+                bookmarked
+                  ? "border-primary bg-primary-light text-primary"
+                  : "border-border text-text-secondary hover:border-primary/40 hover:text-primary"
+              )}
+              title={bookmarked ? "Lesezeichen entfernen" : "Lesezeichen setzen"}
+              aria-label={bookmarked ? "Lesezeichen entfernen" : "Lesezeichen setzen"}
+            >
+              <Bookmark size={12} className={bookmarked ? "fill-current" : ""} />
+            </button>
+            <button
               onClick={onOpenNote}
               className={cn(
                 "flex items-center gap-1 rounded-lg border px-2 py-1 text-xs transition-colors",
@@ -93,6 +120,7 @@ export function CaseCard({
                   : "border-border text-text-secondary hover:border-primary/40 hover:text-primary"
               )}
               title="Notiz zu diesem Fall"
+              aria-label="Notiz öffnen"
             >
               <StickyNote size={11} />
               {hasNote ? "Notiz" : "📝"}

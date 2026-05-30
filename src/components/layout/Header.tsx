@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Search, Maximize2, Minimize2 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { NotificationBell } from "@/components/layout/NotificationBell";
 import { NAV_GROUPS } from "@/lib/constants";
 import { getStreak } from "@/lib/progressData";
 import { getXP, getXPLevel, getXPProgress } from "@/lib/xpData";
+import { useFocusMode } from "@/context/FocusModeContext";
 
 interface HeaderProps {
   title: string;
@@ -36,6 +37,7 @@ const ALL_LINKS = flatLinks();
 
 export function Header({ title, subtitle }: HeaderProps) {
   const router = useRouter();
+  const { focusMode, toggleFocusMode } = useFocusMode();
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -191,6 +193,15 @@ export function Header({ title, subtitle }: HeaderProps) {
           )}
         </div>
 
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={focusMode ? "Fokus-Modus beenden" : "Fokus-Modus"}
+          onClick={toggleFocusMode}
+          title={focusMode ? "Fokus-Modus beenden (ESC)" : "Fokus-Modus"}
+        >
+          {focusMode ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+        </Button>
         <NotificationBell />
       </div>
     </header>

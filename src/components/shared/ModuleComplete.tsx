@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Award, RefreshCw, ArrowLeft, ChevronRight } from "lucide-react";
+import { Award, RefreshCw, ArrowLeft, ChevronRight, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CertificateModal } from "./CertificateModal";
+import { ShareCard } from "./ShareCard";
 import { Confetti } from "./Confetti";
 import { getProgress } from "@/lib/progressData";
 import { addXP } from "@/lib/xpData";
@@ -41,6 +42,7 @@ function getRecommendations(skipModuleIds: string[]) {
 
 export function ModuleComplete({ moduleName, accuracy, onRestart, onBack }: ModuleCompleteProps) {
   const [showCert, setShowCert] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   const [confetti, setConfetti] = useState(true);
   const [userName, setUserName] = useState("Lernender");
   const [recommendations, setRecommendations] = useState<typeof NEXT_MODULES>([]);
@@ -110,6 +112,10 @@ export function ModuleComplete({ moduleName, accuracy, onRestart, onBack }: Modu
                 <Award size={16} />
                 Zertifikat anzeigen
               </Button>
+              <Button variant="secondary" onClick={() => setShowShare(true)} className="w-full gap-2">
+                <Share2 size={14} />
+                Ergebnis teilen
+              </Button>
               <Button variant="secondary" onClick={onRestart} className="w-full">
                 <RefreshCw size={14} />
                 Nochmals absolvieren
@@ -157,6 +163,15 @@ export function ModuleComplete({ moduleName, accuracy, onRestart, onBack }: Modu
         onClose={() => setShowCert(false)}
         moduleName={moduleName}
         userName={userName}
+      />
+      <ShareCard
+        open={showShare}
+        onClose={() => setShowShare(false)}
+        title={moduleName}
+        score={accuracy ?? 100}
+        total={100}
+        moduleName={moduleName}
+        xpEarned={500}
       />
     </>
   );

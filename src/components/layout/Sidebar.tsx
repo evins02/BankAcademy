@@ -22,6 +22,8 @@ import {
   X,
   BookOpen,
   FileText,
+  Bookmark,
+  GraduationCap,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -43,6 +45,8 @@ const ICONS: Record<string, LucideIcon> = {
   Trophy,
   MessageSquare,
   FileText,
+  Bookmark,
+  GraduationCap,
 };
 
 interface UserProfile {

@@ -9,6 +9,7 @@ import { WeiterButton } from "@/components/shared/WeiterButton";
 import { Confetti } from "@/components/shared/Confetti";
 import { useGlossar } from "@/context/GlossarContext";
 import { addXP } from "@/lib/xpData";
+import { InlineRating } from "@/components/shared/StarRating";
 
 interface FeedbackPanelProps {
   zvCase: ZvCase;
@@ -120,7 +121,7 @@ export function FeedbackPanel({
             <p className="text-sm leading-relaxed text-text-primary">{zvCase.feedback}</p>
           </div>
 
-          <div className="mb-4 flex justify-start">
+          <div className="mb-4 flex items-center justify-between">
             <button
               onClick={openGlossar}
               className="flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
@@ -128,6 +129,7 @@ export function FeedbackPanel({
               <BookOpen size={13} />
               Glossar öffnen
             </button>
+            <InlineRating scenarioId={`zv-${zvCase.id}`} label="Szenario bewerten:" />
           </div>
 
           <WeiterButton

@@ -13,6 +13,7 @@ import { SkeletonStatCard, SkeletonModuleCard } from "@/components/ui/skeleton";
 import { useCountUp } from "@/hooks/useCountUp";
 import { DailyChallenge } from "@/components/shared/DailyChallenge";
 import { OnboardingModal } from "@/components/shared/OnboardingModal";
+import { WeeklyReportModal, shouldShowWeeklyReport } from "@/components/shared/WeeklyReportModal";
 import {
   getProgress,
   getStreak,
@@ -127,6 +128,7 @@ export default function DashboardPage() {
   const [loaded, setLoaded] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showInactivity, setShowInactivity] = useState(false);
+  const [showWeeklyReport, setShowWeeklyReport] = useState(false);
 
   useEffect(() => {
     seedMockDataIfEmpty();
@@ -152,6 +154,7 @@ export default function DashboardPage() {
       );
       if (daysSince >= 5) setShowInactivity(true);
     }
+    if (shouldShowWeeklyReport()) setShowWeeklyReport(true);
     const t = setTimeout(() => setLoaded(true), 300);
     return () => clearTimeout(t);
   }, []);
@@ -195,6 +198,7 @@ export default function DashboardPage() {
     <>
       <Header title="Dashboard" />
       {showOnboarding && <OnboardingModal onComplete={handleOnboardingComplete} />}
+      {showWeeklyReport && <WeeklyReportModal onClose={() => setShowWeeklyReport(false)} />}
       <div className="flex-1 overflow-y-auto p-6">
 
         <HeroBanner name={profile.name?.trim()} />

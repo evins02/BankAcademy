@@ -9,6 +9,8 @@ export const NAV_GROUPS: NavGroup[] = [
       { label: "Badges", icon: "Award", href: "/badges" },
       { label: "Fehler Übersicht", icon: "AlertCircle", href: "/fehler-uebersicht" },
       { label: "Notizen", icon: "FileText", href: "/notizen" },
+      { label: "Lesezeichen", icon: "Bookmark", href: "/lesezeichen" },
+      { label: "LAP Modus", icon: "GraduationCap", href: "/lap-modus" },
     ],
   },
   {

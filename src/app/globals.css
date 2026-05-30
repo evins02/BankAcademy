@@ -86,3 +86,17 @@ body {
   --primary-light: #052e16;
   --accent-light: #431407;
 }
+
+@media print {
+  nav, aside, header .search-bar, [data-no-print] {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .rounded-2xl, .rounded-xl {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+}

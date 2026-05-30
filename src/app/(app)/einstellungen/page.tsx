@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { getSettings, saveSettings, applyTheme, type AppSettings } from "@/lib/settingsData";
 import { getProgress, getStreak, computeBadges } from "@/lib/progressData";
 import { getXP, getXPLevel } from "@/lib/xpData";
-import { Check, RotateCcw } from "lucide-react";
+import { getAverageRating } from "@/lib/ratingsData";
+import { Check, RotateCcw, Printer } from "lucide-react";
 
 const AVATAR_COLORS = [
   { hex: "#0D1B4B", label: "Navy" },
@@ -74,6 +75,7 @@ export default function EinstellungenPage() {
   const [earnedBadges, setEarnedBadges] = useState(0);
   const [totalCompleted, setTotalCompleted] = useState(0);
   const [streakRecord, setStreakRecord] = useState(0);
+  const [avgRating, setAvgRating] = useState(0);
 
   useEffect(() => {
     setSettings(getSettings());
@@ -96,6 +98,7 @@ export default function EinstellungenPage() {
     const badges = computeBadges();
     setEarnedBadges(badges.filter((b) => b.earnedAt).length);
     setXp(getXP());
+    setAvgRating(getAverageRating());
   }, []);
 
   function patch(key: keyof AppSettings, value: AppSettings[keyof AppSettings]) {
@@ -254,6 +257,7 @@ export default function EinstellungenPage() {
                 { label: "Badges", value: earnedBadges },
                 { label: "Szenarien", value: totalCompleted },
                 { label: "Streak-Rekord", value: `${streakRecord}🔥` },
+                { label: "Ø Bewertung", value: avgRating > 0 ? `${avgRating}⭐` : "–" },
               ].map((stat) => (
                 <div key={stat.label} className="rounded-xl bg-background p-4 text-center">
                   <p className="text-2xl font-bold text-text-primary">{stat.value}</p>
@@ -281,7 +285,21 @@ export default function EinstellungenPage() {
             </div>
           </section>
 
-          {/* 5. Über BankAcademy */}
+          {/* 5. Export */}
+          <section className="rounded-2xl border border-border bg-surface p-6">
+            <SectionHeader>Export & Druck</SectionHeader>
+            <SettingsRow label="Lernbericht drucken" description="Öffnet den Druckdialog mit deinem Fortschritt">
+              <button
+                onClick={() => window.print()}
+                className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-text-primary hover:bg-gray-50"
+              >
+                <Printer size={13} />
+                Drucken
+              </button>
+            </SettingsRow>
+          </section>
+
+          {/* 6. Über BankAcademy */}
           <section className="rounded-2xl border border-border bg-surface p-6">
             <SectionHeader>Über BankAcademy</SectionHeader>
             <div className="space-y-3 text-sm text-text-secondary">
