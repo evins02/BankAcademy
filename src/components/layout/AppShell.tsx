@@ -1,3 +1,5 @@
+"use client";
+
 import { Sidebar } from "./Sidebar";
 import { GlossarProvider } from "@/context/GlossarContext";
 import { FocusModeProvider, useFocusMode } from "@/context/FocusModeContext";
