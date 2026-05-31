@@ -12,7 +12,6 @@ import { ProgressBar } from "@/components/ui/progress-bar";
 import { SkeletonStatCard, SkeletonModuleCard } from "@/components/ui/skeleton";
 import { useCountUp } from "@/hooks/useCountUp";
 import { DailyChallenge } from "@/components/shared/DailyChallenge";
-import { OnboardingModal } from "@/components/shared/OnboardingModal";
 import { WeeklyReportModal, shouldShowWeeklyReport } from "@/components/shared/WeeklyReportModal";
 import {
   getProgress,
@@ -126,7 +125,6 @@ export default function DashboardPage() {
   const [progress, setProgress] = useState<Record<string, ModuleProgress>>({});
   const [streak, setStreak] = useState<StreakData>({ current: 0, longest: 0, lastActivity: "" });
   const [loaded, setLoaded] = useState(false);
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [showInactivity, setShowInactivity] = useState(false);
   const [showWeeklyReport, setShowWeeklyReport] = useState(false);
 
@@ -137,11 +135,6 @@ export default function DashboardPage() {
       if (raw) {
         const p = JSON.parse(raw);
         setProfile(p);
-        if (!p.name?.trim() && !localStorage.getItem("onboarding-complete")) {
-          setShowOnboarding(true);
-        }
-      } else if (!localStorage.getItem("onboarding-complete")) {
-        setShowOnboarding(true);
       }
     } catch {}
     setProgress(getProgress());
@@ -158,14 +151,6 @@ export default function DashboardPage() {
     const t = setTimeout(() => setLoaded(true), 300);
     return () => clearTimeout(t);
   }, []);
-
-  function handleOnboardingComplete(name: string, role: string) {
-    const updated = { ...profile, name, role };
-    localStorage.setItem("user-profile", JSON.stringify(updated));
-    localStorage.setItem("onboarding-complete", "true");
-    setProfile(updated);
-    setShowOnboarding(false);
-  }
 
   const allModules = [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES];
   const totalCompleted = allModules.reduce((s, m) => s + (progress[m.moduleId]?.completed ?? 0), 0);
@@ -197,7 +182,6 @@ export default function DashboardPage() {
   return (
     <>
       <Header title="Dashboard" />
-      {showOnboarding && <OnboardingModal onComplete={handleOnboardingComplete} />}
       {showWeeklyReport && <WeeklyReportModal onClose={() => setShowWeeklyReport(false)} />}
       <div className="flex-1 overflow-y-auto p-6">
 
