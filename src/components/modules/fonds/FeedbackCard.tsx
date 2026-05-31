@@ -10,6 +10,7 @@ import { Confetti } from "@/components/shared/Confetti";
 import { useGlossar } from "@/context/GlossarContext";
 import { addXP } from "@/lib/xpData";
 import { InlineRating } from "@/components/shared/StarRating";
+import { FeedbackEnhancement } from "@/components/shared/FeedbackEnhancement";
 
 interface FeedbackCardProps {
   fondsCase: FondsCase;
@@ -121,7 +122,14 @@ export function FeedbackCard({
             <p className="text-sm leading-relaxed text-text-primary">{fondsCase.feedback}</p>
           </div>
 
-          <div className="mb-4 flex items-center justify-between">
+          <FeedbackEnhancement
+            warum={fondsCase.warum}
+            inDerPraxis={fondsCase.inDerPraxis}
+            merksatz={fondsCase.merksatz}
+            glossarTerm={fondsCase.glossarTerm}
+          />
+
+          <div className="mb-4 mt-4 flex items-center justify-between">
             <button
               onClick={openGlossar}
               className="flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"

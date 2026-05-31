@@ -10,6 +10,7 @@ import { Confetti } from "@/components/shared/Confetti";
 import { useGlossar } from "@/context/GlossarContext";
 import { addXP } from "@/lib/xpData";
 import { InlineRating } from "@/components/shared/StarRating";
+import { FeedbackEnhancement } from "@/components/shared/FeedbackEnhancement";
 
 interface FeedbackPanelProps {
   zvCase: ZvCase;
@@ -121,7 +122,14 @@ export function FeedbackPanel({
             <p className="text-sm leading-relaxed text-text-primary">{zvCase.feedback}</p>
           </div>
 
-          <div className="mb-4 flex items-center justify-between">
+          <FeedbackEnhancement
+            warum={zvCase.warum}
+            inDerPraxis={zvCase.inDerPraxis}
+            merksatz={zvCase.merksatz}
+            glossarTerm={zvCase.glossarTerm}
+          />
+
+          <div className="mb-4 mt-4 flex items-center justify-between">
             <button
               onClick={openGlossar}
               className="flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"

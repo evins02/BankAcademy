@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ChevronRight, CheckCircle2, Clock, Lock } from "lucide-react";
+import { ChevronRight, CheckCircle2, Clock, Lock, BookOpen, Lightbulb } from "lucide-react";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { getProgress, type ModuleProgress } from "@/lib/progressData";
 import { cn } from "@/lib/utils";
+import { BankerDenkweise } from "@/components/shared/BankerDenkweise";
+import { PraxisTipps } from "@/components/shared/PraxisTipps";
+import { PRAXIS_DATA } from "@/lib/praxisData";
 
 interface SubModuleItem {
   id: string;
@@ -375,10 +378,14 @@ interface ModuleOverviewProps {
   configId: string;
 }
 
+type TabId = "szenarien" | "praxis";
+
 export function ModuleOverview({ configId }: ModuleOverviewProps) {
   const config = CONFIGS[configId];
   const [allProgress, setAllProgress] = useState<Record<string, ModuleProgress>>({});
   const [loaded, setLoaded] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabId>("szenarien");
+  const hasPraxisData = !!PRAXIS_DATA[configId];
 
   useEffect(() => {
     setAllProgress(getProgress());
@@ -431,25 +438,65 @@ export function ModuleOverview({ configId }: ModuleOverviewProps) {
         </div>
       </div>
 
-      {/* Sub-module groups */}
-      <div className="space-y-5">
-        {config.groups.map((group) => (
-          <div key={group.label}>
-            <h2 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wider text-text-secondary">
-              {group.label}
-            </h2>
-            <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm">
-              {group.items.map((item) => (
-                <SubModuleRow
-                  key={item.id}
-                  item={item}
-                  subProgress={allProgress[item.id] ?? null}
-                />
-              ))}
+      {/* Tab navigation */}
+      {hasPraxisData && (
+        <div className="mb-5 flex rounded-xl border border-border bg-surface p-1 gap-1">
+          <button
+            onClick={() => setActiveTab("szenarien")}
+            className={cn(
+              "flex flex-1 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition-colors",
+              activeTab === "szenarien"
+                ? "bg-primary text-white shadow-sm"
+                : "text-text-secondary hover:text-text-primary"
+            )}
+          >
+            <BookOpen size={14} />
+            Szenarien
+          </button>
+          <button
+            onClick={() => setActiveTab("praxis")}
+            className={cn(
+              "flex flex-1 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition-colors",
+              activeTab === "praxis"
+                ? "bg-primary text-white shadow-sm"
+                : "text-text-secondary hover:text-text-primary"
+            )}
+          >
+            <Lightbulb size={14} />
+            Praxis
+          </button>
+        </div>
+      )}
+
+      {/* Szenarien tab */}
+      {activeTab === "szenarien" && (
+        <div className="space-y-5">
+          {config.groups.map((group) => (
+            <div key={group.label}>
+              <h2 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                {group.label}
+              </h2>
+              <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm">
+                {group.items.map((item) => (
+                  <SubModuleRow
+                    key={item.id}
+                    item={item}
+                    subProgress={allProgress[item.id] ?? null}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
+
+      {/* Praxis tab */}
+      {activeTab === "praxis" && hasPraxisData && (
+        <div className="space-y-5">
+          <BankerDenkweise configId={configId} />
+          <PraxisTipps configId={configId} />
+        </div>
+      )}
     </div>
   );
 }
