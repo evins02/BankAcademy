@@ -1231,13 +1231,13 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
       { label: "Demo", action: () => document.getElementById("mockup")?.scrollIntoView({ behavior: "smooth" }) },
     ],
     Ressourcen: [
-      { label: "Glossar", action: () => { window.location.href = "/dashboard"; } },
+      { label: "Glossar", action: () => { window.location.href = "/glossar"; } },
       { label: "Community", action: () => { window.location.href = "/community"; } },
       { label: "LAP Modus", action: () => { window.location.href = "/lap-modus"; } },
     ],
     Legal: [
-      { label: "Impressum", action: () => {} },
-      { label: "Datenschutz", action: () => {} },
+      { label: "Impressum", action: () => { window.location.href = "/impressum"; } },
+      { label: "Datenschutz", action: () => { window.location.href = "/datenschutz"; } },
       { label: "Kontakt", action: () => { window.location.href = "mailto:evinsariaratnam@gmail.com"; } },
     ],
   };

@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Banking Lab",
-  description: "Interactive learning platform for banking professionals",
+  title: "BankAcademy",
+  description: "Der digitale Praxisausbildner für die Banklehre – realistische Szenarien für Lernende im Schweizer Banking.",
 };
 
 export default function RootLayout({
