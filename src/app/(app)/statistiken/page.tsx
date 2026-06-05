@@ -6,18 +6,21 @@ import { Award, AlertCircle, Target, CheckCircle2, Flame } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProgressBar } from "@/components/ui/progress-bar";
+import { Skeleton, SkeletonStatCard } from "@/components/ui/skeleton";
 import { getProgress, getStreak, computeBadges, type ModuleProgress } from "@/lib/progressData";
 
 export default function StatistikenPage() {
   const [progress, setProgress] = useState<Record<string, ModuleProgress>>({});
   const [streak, setStreak] = useState({ current: 0, longest: 0, lastActivity: "" });
   const [earnedBadges, setEarnedBadges] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     setProgress(getProgress());
     setStreak(getStreak());
     const badges = computeBadges();
     setEarnedBadges(badges.filter((b) => b.earnedAt).length);
+    setLoaded(true);
   }, []);
 
   const modules = Object.values(progress);
@@ -46,38 +49,64 @@ export default function StatistikenPage() {
 
         {/* Overview cards */}
         <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <Card>
-            <CardContent className="pt-4">
-              <CheckCircle2 size={20} className="mb-2 text-primary" />
-              <p className="text-2xl font-bold text-text-primary">{totalCompleted}</p>
-              <p className="text-xs text-text-secondary">Szenarien</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-4">
-              <Target size={20} className="mb-2 text-accent" />
-              <p className="text-2xl font-bold text-text-primary">{avgAccuracy}%</p>
-              <p className="text-xs text-text-secondary">Genauigkeit</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-4">
-              <Flame size={20} className="mb-2 text-orange-500" />
-              <p className="text-2xl font-bold text-text-primary">{streak.current}</p>
-              <p className="text-xs text-text-secondary">Streak (Tage)</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-4">
-              <Award size={20} className="mb-2 text-yellow-500" />
-              <p className="text-2xl font-bold text-text-primary">{earnedBadges}</p>
-              <p className="text-xs text-text-secondary">Badges</p>
-            </CardContent>
-          </Card>
+          {!loaded ? (
+            <>
+              <SkeletonStatCard />
+              <SkeletonStatCard />
+              <SkeletonStatCard />
+              <SkeletonStatCard />
+            </>
+          ) : (
+            <>
+              <Card>
+                <CardContent className="pt-4">
+                  <CheckCircle2 size={20} className="mb-2 text-primary" />
+                  <p className="text-2xl font-bold text-text-primary">{totalCompleted}</p>
+                  <p className="text-xs text-text-secondary">Szenarien</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-4">
+                  <Target size={20} className="mb-2 text-accent" />
+                  <p className="text-2xl font-bold text-text-primary">{avgAccuracy}%</p>
+                  <p className="text-xs text-text-secondary">Genauigkeit</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-4">
+                  <Flame size={20} className="mb-2 text-orange-500" />
+                  <p className="text-2xl font-bold text-text-primary">{streak.current}</p>
+                  <p className="text-xs text-text-secondary">Streak (Tage)</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-4">
+                  <Award size={20} className="mb-2 text-yellow-500" />
+                  <p className="text-2xl font-bold text-text-primary">{earnedBadges}</p>
+                  <p className="text-xs text-text-secondary">Badges</p>
+                </CardContent>
+              </Card>
+            </>
+          )}
         </div>
 
         {/* Module breakdown */}
-        {modules.length > 0 && (
+        {!loaded ? (
+          <div className="mb-8">
+            <Skeleton className="mb-4 h-4 w-40" />
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="rounded-xl border border-border bg-surface p-4">
+                  <div className="mb-3 flex items-center justify-between">
+                    <Skeleton className="h-4 w-28" />
+                    <Skeleton className="h-3 w-32" />
+                  </div>
+                  <Skeleton className="h-2 w-full rounded-full" />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : modules.length > 0 ? (
           <div className="mb-8">
             <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
               Fortschritt nach Modul
@@ -98,7 +127,7 @@ export default function StatistikenPage() {
               ))}
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* Quick links */}
         <div className="grid gap-4 sm:grid-cols-2">

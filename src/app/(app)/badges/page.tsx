@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { computeBadges, type Badge } from "@/lib/progressData";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function BadgeCard({ badge }: { badge: Badge }) {
   const earned = !!badge.earnedAt;
@@ -49,15 +50,43 @@ function BadgeCard({ badge }: { badge: Badge }) {
   );
 }
 
+function BadgeSkeleton() {
+  return (
+    <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-surface p-5 text-center">
+      <Skeleton className="h-16 w-16 rounded-full" />
+      <div className="w-full space-y-2">
+        <Skeleton className="mx-auto h-4 w-24" />
+        <Skeleton className="mx-auto h-3 w-32" />
+      </div>
+    </div>
+  );
+}
+
 export default function BadgesPage() {
   const [badges, setBadges] = useState<Badge[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     setBadges(computeBadges());
+    setLoaded(true);
   }, []);
 
   const earned = badges.filter((b) => b.earnedAt);
   const locked = badges.filter((b) => !b.earnedAt);
+
+  if (!loaded) {
+    return (
+      <>
+        <Header title="Badges" subtitle="Lade Badges…" />
+        <div className="flex-1 overflow-y-auto p-6">
+          <Skeleton className="mb-4 h-4 w-24" />
+          <div className="mb-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {[1, 2, 3, 4, 5, 6].map((i) => <BadgeSkeleton key={i} />)}
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
