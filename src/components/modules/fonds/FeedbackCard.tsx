@@ -127,6 +127,7 @@ export function FeedbackCard({
             inDerPraxis={fondsCase.inDerPraxis}
             merksatz={fondsCase.merksatz}
             glossarTerm={fondsCase.glossarTerm}
+            rechtsgrundlage={fondsCase.rechtsgrundlage}
           />
 
           <div className="mb-4 mt-4 flex items-center justify-between">

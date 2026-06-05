@@ -18,6 +18,7 @@ export interface FondsCase {
   inDerPraxis?: string;
   merksatz?: string;
   glossarTerm?: string;
+  rechtsgrundlage?: string;
 }
 
 export interface FondsLevel {
@@ -58,6 +59,7 @@ const L1_CASES: FondsCase[] = [
     merksatz:
       "Strategie = Horizont + Risikofähigkeit + Risikobereitschaft. Alle drei müssen passen, sonst passt die Strategie nicht.",
     glossarTerm: "Anlegerprofil",
+    rechtsgrundlage: "FIDLEG Art. 12 Abs. 1 (Eignungsprüfung)",
   },
   {
     id: "1.2",
@@ -87,6 +89,7 @@ const L1_CASES: FondsCase[] = [
       "Als Berater erkläre ich komplexe Produkte immer mit einem konkreten Bild. Der Korb-Vergleich ist klassisch und funktioniert. Kunden die ein Produkt nicht verstehen, kaufen es entweder nicht (verlorener Abschluss) oder kaufen es unüberlegt (Reklamation). Verständlichkeit ist Beratungsqualität.",
     merksatz: "Ein Fonds = viele Anleger, viele Anlagen, weniger Einzelrisiko. Nicht Sparkonto, nicht Versicherung.",
     glossarTerm: "Diversifikation",
+    rechtsgrundlage: "FIDLEG Art. 10 Abs. 2 (Kundenkategorisierung)",
   },
   {
     id: "1.3",
@@ -114,6 +117,7 @@ const L1_CASES: FondsCase[] = [
     merksatz:
       "Notreserve auf Sparkonto, den Rest anlegen wenn Horizont lang genug. Sicherheit hat ihren Preis: schleichender Kaufkraftverlust.",
     glossarTerm: "Inflation",
+    rechtsgrundlage: "FIDLEG Art. 12 Abs. 2 (Angemessenheitsprüfung)",
   },
 ];
 
@@ -151,6 +155,7 @@ const L2_CASES: FondsCase[] = [
     merksatz:
       "Wer bei Kursschwankungen panisch reagiert, hat einen zu hohen Aktienanteil. Risikoprofil = was der Kunde wirklich aushält, nicht was er möchte.",
     glossarTerm: "Risikoprofil",
+    rechtsgrundlage: "FIDLEG Art. 9 (Informations- und Offenlegungspflichten)",
   },
   {
     id: "2.2",
@@ -181,6 +186,7 @@ const L2_CASES: FondsCase[] = [
     merksatz:
       "Je kürzer der Horizont, desto mehr Kapitalerhaltung, desto weniger Aktien. Faustregel: Unter 5 Jahren kein wesentlicher Aktienanteil.",
     glossarTerm: "Anlagehorizont",
+    rechtsgrundlage: "FIDLEG Art. 9 Abs. 2 (Kosten- und Gebührentransparenz)",
   },
   {
     id: "2.3",
@@ -214,6 +220,7 @@ const L2_CASES: FondsCase[] = [
     merksatz:
       "1% mehr Kosten = bis zu 20% weniger Endvermögen über 20 Jahre (Zinseszins). TER ist die fairste Renditebremse.",
     glossarTerm: "TER",
+    rechtsgrundlage: "FIDLEG Art. 12 (Eignung und Angemessenheit)",
   },
 ];
 
@@ -248,6 +255,7 @@ const L3_CASES: FondsCase[] = [
     merksatz:
       "Unterschiedliche Risikoprofile = separate Depots oder echter Kompromiss. Nie das höhere Profil durchdrücken.",
     glossarTerm: "Anlegerprofil",
+    rechtsgrundlage: "FIDLEG Art. 17 (Portfolioverwaltungsmandat)",
   },
   {
     id: "3.2",
@@ -278,6 +286,7 @@ const L3_CASES: FondsCase[] = [
     merksatz:
       "Strategie ändern wegen Marktpanik ist der grösste Fehler. Ändere die Strategie, wenn sich die Lebenssituation ändert – nicht wenn der Markt fällt.",
     glossarTerm: "Marktvolatilität",
+    rechtsgrundlage: "DBG Art. 20 / StHG Art. 7 (Kapitalerträge)",
   },
   {
     id: "3.3",
@@ -308,6 +317,7 @@ const L3_CASES: FondsCase[] = [
     merksatz:
       "Effektiver Horizont = frühester Zeitpunkt, zu dem das Geld gebraucht wird. Nicht was unterschrieben wurde.",
     glossarTerm: "Beratungspflicht",
+    rechtsgrundlage: "FIDLEG Art. 12 / FINMA-RS 2018/3",
   },
 ];
 

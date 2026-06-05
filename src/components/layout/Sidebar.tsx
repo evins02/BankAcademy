@@ -327,7 +327,14 @@ export function Sidebar() {
             </p>
           </div>
         </div>
-        <div className="mt-2.5 flex gap-3 px-3 pb-0.5">
+        <div className="mt-2.5 flex flex-wrap gap-3 px-3 pb-0.5">
+          <Link
+            href="/ueber-uns"
+            className="text-[10px] text-text-secondary transition-colors hover:text-text-primary"
+          >
+            Über uns
+          </Link>
+          <span className="text-[10px] text-text-secondary opacity-40">·</span>
           <Link
             href="/impressum"
             className="text-[10px] text-text-secondary transition-colors hover:text-text-primary"

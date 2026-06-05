@@ -447,7 +447,7 @@ function AppMockup() {
 
 /* ─── Section: Hero ───────────────────────────────────────────────────────── */
 
-function Hero() {
+function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
   return (
     <section
       style={{
@@ -579,7 +579,7 @@ function Hero() {
             Kostenlos starten <ChevronRight size={17} />
           </Link>
           <button
-            onClick={() => document.getElementById("mockup")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={onDemoOpen}
             style={{
               padding: "15px 32px",
               borderRadius: 100,
@@ -598,7 +598,7 @@ function Hero() {
               (e.currentTarget as HTMLButtonElement).style.background = "transparent";
             }}
           >
-            Demo ansehen
+            ▶ Demo ansehen
           </button>
         </div>
 
@@ -609,6 +609,31 @@ function Hero() {
               <span style={{ color: "#00C9B1", fontSize: 14 }}>✓</span> {t}
             </span>
           ))}
+        </div>
+
+        {/* Trust indicators – Improvement 2 */}
+        <div style={{ marginTop: 28, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+          <p style={{ margin: 0, fontSize: 12, color: "rgba(255,255,255,0.38)", fontStyle: "italic" }}>
+            Entwickelt von einem Banklehrling mit Praxiserfahrung bei einer Schweizer Bank
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 6 }}>
+            {["GwG", "VSB 20", "KKG", "FIDLEG", "OR", "BVG"].map((law) => (
+              <span
+                key={law}
+                style={{
+                  padding: "3px 10px",
+                  borderRadius: 100,
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: "rgba(255,255,255,0.45)",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {law}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -1220,6 +1245,211 @@ function FinalCTA() {
   );
 }
 
+/* ─── Beta Banner (Improvement 10) ────────────────────────────────────────── */
+
+function BetaBanner({ onDismiss }: { onDismiss: () => void }) {
+  return (
+    <div
+      style={{
+        background: "linear-gradient(90deg, #0D1B4B 0%, #1a2d6e 100%)",
+        borderBottom: "1px solid rgba(0,201,177,0.2)",
+        padding: "10px 24px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 12,
+        position: "relative",
+      }}
+    >
+      <p style={{ margin: 0, fontSize: 13, color: "rgba(255,255,255,0.85)", textAlign: "center" }}>
+        🚀 BankAcademy ist in der Beta-Phase – dein Feedback hilft uns besser zu werden!{" "}
+        <a
+          href="mailto:evinsariaratnam@gmail.com?subject=BankAcademy Feedback"
+          style={{ color: "#00C9B1", fontWeight: 600, textDecoration: "underline", cursor: "pointer" }}
+        >
+          Feedback geben →
+        </a>
+      </p>
+      <button
+        onClick={onDismiss}
+        style={{
+          position: "absolute",
+          right: 16,
+          background: "none",
+          border: "none",
+          color: "rgba(255,255,255,0.45)",
+          cursor: "pointer",
+          fontSize: 18,
+          lineHeight: 1,
+          padding: "0 4px",
+        }}
+        aria-label="Banner schliessen"
+      >
+        ×
+      </button>
+    </div>
+  );
+}
+
+/* ─── Demo Modal (Improvement 9) ─────────────────────────────────────────── */
+
+function DemoModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.75)",
+        backdropFilter: "blur(6px)",
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 24,
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#0D1B4B",
+          borderRadius: 20,
+          border: "1px solid rgba(255,255,255,0.1)",
+          boxShadow: "0 40px 100px rgba(0,0,0,0.6)",
+          width: "100%",
+          maxWidth: 700,
+          overflow: "hidden",
+        }}
+      >
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 24px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+          <div>
+            <p style={{ margin: 0, fontSize: 17, fontWeight: 700, color: "#fff" }}>BankAcademy Demo</p>
+            <p style={{ margin: "2px 0 0", fontSize: 13, color: "rgba(255,255,255,0.45)" }}>Lerne, wie die App in der Praxis funktioniert</p>
+          </div>
+          <button
+            onClick={onClose}
+            style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "rgba(255,255,255,0.6)", cursor: "pointer", padding: "6px 12px", fontSize: 13 }}
+          >
+            ✕ Schliessen
+          </button>
+        </div>
+
+        {/* Video placeholder */}
+        <div style={{ aspectRatio: "16/9", background: "rgba(0,0,0,0.4)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16 }}>
+          <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(0,201,177,0.12)", border: "1px solid rgba(0,201,177,0.25)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ fontSize: 28 }}>▶</span>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <p style={{ margin: 0, fontSize: 15, fontWeight: 600, color: "#fff" }}>Demo Video</p>
+            <p style={{ margin: "6px 0 0", fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Wird bald verfügbar sein</p>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div style={{ padding: "20px 24px", display: "flex", gap: 12, justifyContent: "center" }}>
+          <a
+            href="/dashboard"
+            style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 24px", borderRadius: 100, background: "#00C9B1", color: "#0D1B4B", fontSize: 14, fontWeight: 700, textDecoration: "none" }}
+          >
+            Jetzt kostenlos ausprobieren →
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── FAQ (Improvement 8) ────────────────────────────────────────────────── */
+
+const FAQ_ITEMS = [
+  {
+    q: "Ist BankAcademy wirklich kostenlos?",
+    a: "Ja, vollständig kostenlos – kein Abo, keine versteckten Kosten, kein Konto erforderlich. BankAcademy ist ein Non-Profit-Lernprojekt für die Banklehre.",
+  },
+  {
+    q: "Für wen ist BankAcademy geeignet?",
+    a: "Primär für Lernende im 1.–3. Lehrjahr im Schweizer Banking. Auch Quereinsteiger, Berufsschullehrpersonen und Ausbildner/innen profitieren von den praxisnahen Szenarien.",
+  },
+  {
+    q: "Ist der Inhalt auf die LAP abgestimmt?",
+    a: "Ja. Die Szenarien orientieren sich an den offiziellen Ausbildungszielen des Schweizerischen Bankenverbands (SBVg) und decken die prüfungsrelevanten Kompetenzbereiche ab.",
+  },
+  {
+    q: "Wie oft wird der Inhalt aktualisiert?",
+    a: "Regelmässig. Da BankAcademy in aktiver Entwicklung ist, werden neue Szenarien, Module und Rechtsgrundlagen laufend ergänzt – besonders nach regulatorischen Änderungen (z.B. FIDLEG, GwG).",
+  },
+  {
+    q: "Kann unsere Bank BankAcademy für die Ausbildung nutzen?",
+    a: "Absolut. Schreibe uns unter evinsariaratnam@gmail.com – wir freuen uns über Bildungspartnerschaften mit Banken, Berufsschulen und Ausbildungsanbietern.",
+  },
+];
+
+function FAQ() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  return (
+    <section id="faq" style={{ background: "#fff", padding: "96px 24px" }}>
+      <div style={{ maxWidth: 720, margin: "0 auto" }}>
+        <FadeIn className="text-center" style={{ marginBottom: 48 }}>
+          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#00C9B1" }}>
+            Häufige Fragen
+          </p>
+          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,38px)", fontWeight: 800, letterSpacing: "-0.5px", color: "#111827" }}>
+            Alles Wichtige auf einen Blick.
+          </h2>
+        </FadeIn>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {FAQ_ITEMS.map((item, i) => (
+            <FadeIn key={i} delay={i * 0.05}>
+              <div
+                style={{
+                  border: "1px solid #e5e7eb",
+                  borderRadius: 16,
+                  overflow: "hidden",
+                  background: openIndex === i ? "#fafbff" : "#fff",
+                  transition: "background 0.2s",
+                }}
+              >
+                <button
+                  onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 16,
+                    padding: "20px 24px",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    textAlign: "left",
+                  }}
+                >
+                  <p style={{ margin: 0, fontSize: 15, fontWeight: 600, color: "#111827", lineHeight: 1.4 }}>
+                    {item.q}
+                  </p>
+                  <span style={{ flexShrink: 0, fontSize: 20, color: "#9ca3af", transform: openIndex === i ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>
+                    +
+                  </span>
+                </button>
+                {openIndex === i && (
+                  <div style={{ padding: "0 24px 20px", borderTop: "1px solid #f3f4f6" }}>
+                    <p style={{ margin: "16px 0 0", fontSize: 14, color: "#6b7280", lineHeight: 1.65 }}>
+                      {item.a}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ─── Footer ──────────────────────────────────────────────────────────────── */
 
 function Footer({ onNav }: { onNav: (id: string) => void }) {
@@ -1236,6 +1466,7 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
       { label: "LAP Modus", action: () => { window.location.href = "/lap-modus"; } },
     ],
     Legal: [
+      { label: "Über uns", action: () => { window.location.href = "/ueber-uns"; } },
       { label: "Impressum", action: () => { window.location.href = "/impressum"; } },
       { label: "Datenschutz", action: () => { window.location.href = "/datenschutz"; } },
       { label: "Kontakt", action: () => { window.location.href = "mailto:evinsariaratnam@gmail.com"; } },
@@ -1321,6 +1552,17 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
 export default function LandingPage() {
   const scrolled = useScrolled();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useState(true);
+  const [demoOpen, setDemoOpen] = useState(false);
+
+  useEffect(() => {
+    setBannerDismissed(localStorage.getItem("beta-banner-dismissed") === "true");
+  }, []);
+
+  function dismissBanner() {
+    localStorage.setItem("beta-banner-dismissed", "true");
+    setBannerDismissed(true);
+  }
 
   function scrollTo(id: string) {
     setMobileOpen(false);
@@ -1343,14 +1585,17 @@ export default function LandingPage() {
         }
       `}</style>
 
+      {demoOpen && <DemoModal onClose={() => setDemoOpen(false)} />}
+
       <div style={{ minHeight: "100vh", background: "#fff" }}>
+        {!bannerDismissed && <BetaBanner onDismiss={dismissBanner} />}
         <Navbar
           scrolled={scrolled}
           mobileOpen={mobileOpen}
           onToggle={() => setMobileOpen((v) => !v)}
           onNav={scrollTo}
         />
-        <Hero />
+        <Hero onDemoOpen={() => setDemoOpen(true)} />
         <StatsBar />
         <ProblemSolution />
         <HowItWorks />
@@ -1359,6 +1604,7 @@ export default function LandingPage() {
         <ForBanks />
         <Testimonials />
         <FinalCTA />
+        <FAQ />
         <Footer onNav={scrollTo} />
       </div>
     </>

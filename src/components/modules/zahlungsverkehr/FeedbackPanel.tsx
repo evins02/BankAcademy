@@ -127,6 +127,7 @@ export function FeedbackPanel({
             inDerPraxis={zvCase.inDerPraxis}
             merksatz={zvCase.merksatz}
             glossarTerm={zvCase.glossarTerm}
+            rechtsgrundlage={zvCase.rechtsgrundlage}
           />
 
           <div className="mb-4 mt-4 flex items-center justify-between">

@@ -18,6 +18,7 @@ export interface ZvCase {
   inDerPraxis?: string;
   merksatz?: string;
   glossarTerm?: string;
+  rechtsgrundlage?: string;
 }
 
 export interface ZvLevelConfig {
@@ -86,6 +87,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "Schweizer IBAN: immer genau 21 Stellen. Keine Ausnahmen. Kein Ergänzen. Zurückweisen und Kunden fragen.",
         glossarTerm: "IBAN",
+        rechtsgrundlage: "OR Art. 466 ff. (Auftragsverhältnis)",
       },
       {
         id: "1.2",
@@ -112,6 +114,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "Kein Geld = kein Dauerauftrag. Nicht verschoben, sondern storniert. Keine Teilzahlung.",
         glossarTerm: "Dauerauftrag",
+        rechtsgrundlage: "OR Art. 466 / IBAN-Standard ISO 13616",
       },
       {
         id: "1.3",
@@ -138,6 +141,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "Kartenverlust: Erst sperren (0800 80 40 40), dann alles andere. Keine Ausnahmen.",
         glossarTerm: "Kartensperrung",
+        rechtsgrundlage: "GwG Art. 3 (Identifikationspflicht) / SWIFT-Standards",
       },
     ],
   },
@@ -171,6 +175,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "Retour = Rückbuchung + Kundeninfo + neue Zahlungsdetails einholen. Nie nochmals ausführen.",
         glossarTerm: "Zahlungsretour",
+        rechtsgrundlage: "GwG Art. 9 Abs. 1 (Meldepflicht an MROS)",
       },
       {
         id: "2.2",
@@ -197,6 +202,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "Auslandzahlung ausserhalb SEPA: BIC + IBAN zwingend. Ohne BIC = Zahlung stoppen und Kunden informieren.",
         glossarTerm: "BIC/SWIFT",
+        rechtsgrundlage: "OR Art. 466 ff. / SIC-Reglement Art. 12",
       },
       {
         id: "2.3",
@@ -223,6 +229,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "Doppelzahlung: Sofort melden, sofort Rückbuchung einleiten, sofort Kunden informieren. Warten ist keine Option.",
         glossarTerm: "Rückbuchung",
+        rechtsgrundlage: "OR Art. 117 ff. (Kontokorrent)",
       },
     ],
   },
@@ -256,6 +263,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "Knapp unter CHF 10'000 in Serie = Structuring-Alarm. GwG Art. 6 Abklärungspflicht + MROS prüfen. Kunden NICHT informieren.",
         glossarTerm: "Geldwäscherei",
+        rechtsgrundlage: "GwG Art. 6 Abs. 2 (Erhöhte Sorgfaltspflichten / PEP)",
       },
       {
         id: "3.2",
@@ -282,6 +290,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "LSV-Widerspruch: 30-Tage-Frist, Mandat prüfen, Rückbuchung wenn berechtigt. Danach kein Rechtsmittel mehr.",
         glossarTerm: "LSV",
+        rechtsgrundlage: "ZAG Art. 24 / Instant-Payment-Regeln SIC",
       },
       {
         id: "3.3",
@@ -311,6 +320,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "Zahlungsauftrag-Prüfung: IBAN, Betrag, Valuta (frühestens heute), BIC (Ausland), Deckung. Alle Fehler auf einmal kommunizieren.",
         glossarTerm: "Valuta",
+        rechtsgrundlage: "GwG Art. 9 Abs. 1 (Meldepflicht) / GwG Art. 10 (Transaktionsverbot)",
       },
     ],
   },

@@ -288,13 +288,60 @@ export default function EinstellungenPage() {
           {/* 5. Export */}
           <section className="rounded-2xl border border-border bg-surface p-6">
             <SectionHeader>Export & Druck</SectionHeader>
-            <SettingsRow label="Lernbericht drucken" description="Öffnet den Druckdialog mit deinem Fortschritt">
+            <SettingsRow label="Lernbericht exportieren" description="Erstellt einen druckbaren Lernbericht mit deinem Fortschritt, Badges und XP">
               <button
-                onClick={() => window.print()}
+                onClick={() => {
+                  const prog = getProgress();
+                  const badges = computeBadges();
+                  const earned = badges.filter((b) => b.earnedAt);
+                  const modules = Object.entries(prog).map(([id, m]) => ({
+                    id,
+                    completed: m.completed,
+                    accuracy: m.accuracy,
+                  }));
+                  const date = new Date().toLocaleDateString("de-CH", { year: "numeric", month: "long", day: "numeric" });
+                  const win = window.open("", "_blank");
+                  if (!win) return;
+                  win.document.write(`<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><title>Lernbericht BankAcademy</title><style>
+                    body{font-family:system-ui,sans-serif;max-width:720px;margin:40px auto;padding:0 24px;color:#111827}
+                    h1{font-size:26px;font-weight:800;letter-spacing:-0.5px;color:#0D1B4B;margin:0 0 4px}
+                    .subtitle{color:#6b7280;font-size:14px;margin:0 0 32px}
+                    .section{margin-bottom:28px;border:1px solid #e5e7eb;border-radius:12px;padding:20px 24px}
+                    .section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin:0 0 14px}
+                    .row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:14px}
+                    .row:last-child{border-bottom:none}
+                    .badge{display:inline-block;background:#eff6ff;color:#1d4ed8;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:600}
+                    .xp{font-size:32px;font-weight:800;color:#0D1B4B}
+                    .footer{margin-top:40px;padding-top:16px;border-top:1px solid #e5e7eb;font-size:12px;color:#9ca3af;display:flex;justify-content:space-between}
+                    @media print{body{margin:20px auto}}
+                  </style></head><body>
+                    <h1>BankAcademy Lernbericht</h1>
+                    <p class="subtitle">Erstellt am ${date}</p>
+                    <div class="section">
+                      <p class="section-title">Lernender</p>
+                      <div class="row"><span>Name</span><strong>${profile.name || "–"}</strong></div>
+                      <div class="row"><span>Rolle</span><strong>${profile.role || "–"}</strong></div>
+                      ${profile.focus ? `<div class="row"><span>Fokus</span><strong>${profile.focus}</strong></div>` : ""}
+                    </div>
+                    <div class="section">
+                      <p class="section-title">Übersicht</p>
+                      <div class="row"><span>Gesamt-XP</span><span class="xp">${xp}</span></div>
+                      <div class="row"><span>Level</span><strong>${xpLevel.title}</strong></div>
+                      <div class="row"><span>Abgeschlossene Szenarien</span><strong>${totalCompleted}</strong></div>
+                      <div class="row"><span>Verdiente Badges</span><strong>${earnedBadges}</strong></div>
+                      <div class="row"><span>Streak-Rekord</span><strong>${streakRecord} Tage</strong></div>
+                    </div>
+                    ${modules.length > 0 ? `<div class="section"><p class="section-title">Module</p>${modules.map(m => `<div class="row"><span>${m.id}</span><strong>${m.completed} Szenarien · ${m.accuracy}% Genauigkeit</strong></div>`).join("")}</div>` : ""}
+                    ${earned.length > 0 ? `<div class="section"><p class="section-title">Badges</p><div style="display:flex;flex-wrap:wrap;gap:8px">${earned.map(b => `<span class="badge">${b.title || b.id}</span>`).join("")}</div></div>` : ""}
+                    <div class="footer"><span>BankAcademy – Der digitale Praxisausbildner für die Banklehre 🇨🇭</span><span>${date}</span></div>
+                  </body></html>`);
+                  win.document.close();
+                  win.print();
+                }}
                 className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-text-primary hover:bg-gray-50"
               >
                 <Printer size={13} />
-                Drucken
+                Lernbericht erstellen
               </button>
             </SettingsRow>
           </section>

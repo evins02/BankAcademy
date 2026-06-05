@@ -1,6 +1,6 @@
 "use client";
 
-import { Lightbulb, Building2, BookOpen } from "lucide-react";
+import { Lightbulb, Building2, BookOpen, Scale } from "lucide-react";
 import { useGlossar } from "@/context/GlossarContext";
 
 interface FeedbackEnhancementProps {
@@ -8,6 +8,7 @@ interface FeedbackEnhancementProps {
   inDerPraxis?: string;
   merksatz?: string;
   glossarTerm?: string;
+  rechtsgrundlage?: string;
 }
 
 export function FeedbackEnhancement({
@@ -15,10 +16,11 @@ export function FeedbackEnhancement({
   inDerPraxis,
   merksatz,
   glossarTerm,
+  rechtsgrundlage,
 }: FeedbackEnhancementProps) {
   const { open: openGlossar } = useGlossar();
 
-  if (!warum && !inDerPraxis && !merksatz) return null;
+  if (!warum && !inDerPraxis && !merksatz && !rechtsgrundlage) return null;
 
   return (
     <div className="mt-4 space-y-3">
@@ -54,6 +56,18 @@ export function FeedbackEnhancement({
               Merksatz
             </p>
             <p className="text-sm font-medium leading-snug text-text-primary">{merksatz}</p>
+          </div>
+        </div>
+      )}
+
+      {rechtsgrundlage && (
+        <div className="flex items-start gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <Scale size={13} className="mt-0.5 shrink-0 text-slate-500" />
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-0.5">
+              Rechtsgrundlage
+            </p>
+            <p className="text-xs font-medium text-slate-700">{rechtsgrundlage}</p>
           </div>
         </div>
       )}
