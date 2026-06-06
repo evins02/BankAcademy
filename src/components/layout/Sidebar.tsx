@@ -314,19 +314,22 @@ export function Sidebar() {
           <Settings size={16} />
           Einstellungen
         </Link>
-        <div className="mt-3 flex items-center gap-3 px-3">
+        <Link
+          href="/einstellungen"
+          className="mt-3 flex items-center gap-3 rounded-pill px-3 py-1.5 transition-colors hover:bg-gray-100"
+        >
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-light text-xs font-semibold text-primary">
-            {initials(profile.name) || "?"}
+            {initials(profile.name) || "G"}
           </div>
           <div className="min-w-0">
             <p className="truncate text-xs font-medium text-text-primary">
-              {profile.name || "Lernender"}
+              {profile.name || "Gast"}
             </p>
             <p className="truncate text-[11px] text-text-secondary">
-              {profile.role || "Banking"}
+              {profile.role || "Profil einrichten"}
             </p>
           </div>
-        </div>
+        </Link>
         <div className="mt-2.5 flex flex-wrap gap-3 px-3 pb-0.5">
           <Link
             href="/ueber-uns"

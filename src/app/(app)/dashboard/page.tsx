@@ -128,6 +128,13 @@ export default function DashboardPage() {
   const [showInactivity, setShowInactivity] = useState(false);
   const [showWeeklyReport, setShowWeeklyReport] = useState(false);
 
+  // Auto-dismiss inactivity banner after 5 s
+  useEffect(() => {
+    if (!showInactivity) return;
+    const t = setTimeout(() => setShowInactivity(false), 5000);
+    return () => clearTimeout(t);
+  }, [showInactivity]);
+
   useEffect(() => {
     seedMockDataIfEmpty();
     try {
@@ -187,19 +194,17 @@ export default function DashboardPage() {
 
         <HeroBanner name={profile.name?.trim()} />
 
-        {/* Inactivity banner */}
+        {/* Inactivity banner – subtle, auto-dismisses after 5 s */}
         {showInactivity && (
-          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-primary/30 bg-primary-light p-4">
-            <span className="text-xl">👋</span>
-            <div className="flex-1">
-              <p className="text-sm font-semibold text-primary">Willkommen zurück!</p>
-              <p className="text-xs text-text-secondary">
-                Dein Streak läuft noch – starte jetzt und lerne weiter!
-              </p>
-            </div>
+          <div className="mb-4 flex items-center gap-2.5 rounded-xl border border-border bg-gray-50 px-4 py-2.5">
+            <span className="text-base">👋</span>
+            <p className="flex-1 text-xs text-text-secondary">
+              <span className="font-semibold text-text-primary">Willkommen zurück!</span>{" "}
+              Starte jetzt und lerne weiter.
+            </p>
             <button
               onClick={() => setShowInactivity(false)}
-              className="text-text-secondary hover:text-text-primary text-xs"
+              className="shrink-0 text-[11px] text-text-secondary hover:text-text-primary"
             >
               ✕
             </button>
@@ -219,8 +224,8 @@ export default function DashboardPage() {
             <>
               <Card>
                 <CardContent className="pt-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-2xl">
-                    🔥
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: "#E8EBF7" }}>
+                    <Flame size={22} style={{ color: "#0D1B4B" }} />
                   </div>
                   <p className="mt-3 text-3xl font-bold text-text-primary">{countStreak}</p>
                   <p className="mt-0.5 text-sm text-text-secondary">Tage Streak</p>
@@ -232,8 +237,8 @@ export default function DashboardPage() {
 
               <Card>
                 <CardContent className="pt-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-light">
-                    <CheckCircle2 size={22} className="text-primary" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: "#E8EBF7" }}>
+                    <CheckCircle2 size={22} style={{ color: "#0D1B4B" }} />
                   </div>
                   <p className="mt-3 text-3xl font-bold text-text-primary">{countCompleted}</p>
                   <p className="mt-0.5 text-sm text-text-secondary">Abgeschlossen</p>
@@ -242,8 +247,8 @@ export default function DashboardPage() {
 
               <Card>
                 <CardContent className="pt-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-light">
-                    <Target size={22} className="text-accent" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: "#E8EBF7" }}>
+                    <Target size={22} style={{ color: "#0D1B4B" }} />
                   </div>
                   <p className="mt-3 text-3xl font-bold text-text-primary">{countAccuracy}%</p>
                   <p className="mt-0.5 text-sm text-text-secondary">Genauigkeit</p>
@@ -252,8 +257,8 @@ export default function DashboardPage() {
 
               <Card>
                 <CardContent className="pt-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-light">
-                    <Flame size={22} className="text-primary" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: "#E8EBF7" }}>
+                    <CheckCircle2 size={22} style={{ color: "#0D1B4B" }} />
                   </div>
                   <p className="mt-3 text-3xl font-bold text-text-primary">
                     {totalCompleted}/{totalScenarios}
