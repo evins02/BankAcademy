@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, XCircle, AlertTriangle, CheckSquare, Square } from "lucide-react";
+import { CheckSquare, Square, Shield } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,7 +9,6 @@ import {
   BKO_KYC_LEVELS,
   type BkoKycScenario,
   type SubmissionResult,
-  type FieldStatus,
 } from "@/lib/backoffice-kyc";
 
 interface DossierViewProps {
@@ -17,12 +16,6 @@ interface DossierViewProps {
   scenarioIndex: number;
   total: number;
   onSubmit: (result: SubmissionResult) => void;
-}
-
-function FieldIcon({ status }: { status: FieldStatus }) {
-  if (status === "ok") return <CheckCircle2 size={14} className="shrink-0 text-green-500" />;
-  if (status === "missing") return <XCircle size={14} className="shrink-0 text-red-500" />;
-  return <AlertTriangle size={14} className="shrink-0 text-amber-500" />;
 }
 
 export function DossierView({ scenario, scenarioIndex, total, onSubmit }: DossierViewProps) {
@@ -95,45 +88,47 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
       </div>
 
       {/* Briefing */}
-      <div className="rounded-DEFAULT border border-amber-200 bg-amber-50 p-4">
-        <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-amber-700">
-          Briefing – Erstkontrolle
+      <div className="rounded-DEFAULT border border-border bg-gray-50 p-4">
+        <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
+          Auftrag
         </p>
-        <p className="text-sm text-amber-900">{scenario.briefing}</p>
+        <p className="text-sm text-text-primary">{scenario.briefing}</p>
       </div>
 
       {/* Two-column layout */}
       <div className="grid grid-cols-5 gap-4">
         {/* Dossier */}
-        <div className="col-span-3 overflow-hidden rounded-DEFAULT bg-surface shadow-card">
-          <div className="border-b border-border bg-gray-50 px-4 py-3">
-            <p className="text-sm font-semibold text-text-primary">{scenario.dossierTitle}</p>
-            <p className="text-xs text-text-secondary">KYC Dossier – Neueröffnung</p>
+        <div className="col-span-3 overflow-hidden rounded-DEFAULT border border-border bg-white shadow-card">
+          <div className="border-b border-border bg-white px-4 py-3">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-text-secondary">
+                  KYC Dossier · Neueröffnung
+                </p>
+                <p className="mt-0.5 text-sm font-semibold text-text-primary">
+                  {scenario.dossierTitle}
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 rounded border border-border px-2 py-1">
+                <Shield size={10} className="text-text-secondary" />
+                <span className="text-[10px] font-medium text-text-secondary">Vertraulich</span>
+              </div>
+            </div>
           </div>
+
           <div className="divide-y divide-border">
             {scenario.dossierFields.map((field, i) => (
-              <div
-                key={i}
-                className={cn(
-                  "flex items-center gap-3 px-4 py-2.5",
-                  field.status === "missing" && "bg-red-50",
-                  field.status === "suspicious" && "bg-amber-50"
-                )}
-              >
-                <FieldIcon status={field.status} />
+              <div key={i} className="flex items-center px-4 py-2.5">
                 <span className="w-44 shrink-0 text-xs text-text-secondary">{field.label}</span>
-                <span
-                  className={cn(
-                    "flex-1 text-xs font-medium",
-                    field.status === "ok" && "text-text-primary",
-                    field.status === "missing" && "italic text-red-600",
-                    field.status === "suspicious" && "text-amber-700"
-                  )}
-                >
-                  {field.value}
-                </span>
+                <span className="flex-1 text-xs text-text-primary">{field.value}</span>
               </div>
             ))}
+          </div>
+
+          <div className="border-t border-border bg-gray-50 px-4 py-2">
+            <p className="text-[10px] text-text-secondary">
+              Vertraulich – Nur für internen Gebrauch
+            </p>
           </div>
         </div>
 
@@ -142,9 +137,9 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
           {scenario.type === "checklist" ? (
             <>
               <div className="border-b border-border bg-gray-50 px-4 py-3">
-                <p className="text-sm font-semibold text-text-primary">Mängel identifizieren</p>
+                <p className="text-sm font-semibold text-text-primary">Prüfpunkte</p>
                 <p className="text-xs text-text-secondary">
-                  Markiere alle Probleme im Dossier
+                  Wähle alle Mängel, die du feststellst
                 </p>
               </div>
               <div className="divide-y divide-border">
@@ -156,18 +151,18 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
                       onClick={() => toggleIssue(item.id)}
                       className={cn(
                         "flex w-full items-center gap-3 px-4 py-3 text-left transition-colors",
-                        isSelected ? "bg-red-50 hover:bg-red-100" : "hover:bg-gray-50"
+                        isSelected ? "bg-primary-light hover:bg-primary-light/80" : "hover:bg-gray-50"
                       )}
                     >
                       {isSelected ? (
-                        <CheckSquare size={15} className="shrink-0 text-red-500" />
+                        <CheckSquare size={15} className="shrink-0 text-primary" />
                       ) : (
                         <Square size={15} className="shrink-0 text-gray-300" />
                       )}
                       <span
                         className={cn(
                           "text-xs leading-snug",
-                          isSelected ? "font-medium text-red-700" : "text-text-secondary"
+                          isSelected ? "font-medium text-text-primary" : "text-text-secondary"
                         )}
                       >
                         {item.label}
@@ -180,7 +175,7 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
           ) : (
             <>
               <div className="border-b border-border bg-gray-50 px-4 py-3">
-                <p className="text-sm font-semibold text-text-primary">Beurteilung</p>
+                <p className="text-sm font-semibold text-text-primary">Dein Entscheid</p>
                 <p className="text-xs text-text-secondary">{scenario.question}</p>
               </div>
               <div className="divide-y divide-border">
@@ -229,16 +224,14 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
             <div className="flex gap-3">
               <button
                 onClick={handleFreigeben}
-                className="flex flex-1 items-center justify-center gap-2 rounded-DEFAULT border border-green-300 bg-green-50 py-2.5 text-sm font-semibold text-green-700 transition-colors hover:bg-green-100"
+                className="flex flex-1 items-center justify-center gap-2 rounded-DEFAULT border border-border bg-surface py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-gray-50"
               >
-                <CheckCircle2 size={14} />
                 Dossier freigeben
               </button>
               <button
                 onClick={handleZurueckweisen}
-                className="flex flex-1 items-center justify-center gap-2 rounded-DEFAULT bg-red-600 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-700"
+                className="flex flex-1 items-center justify-center gap-2 rounded-DEFAULT border border-border bg-text-primary py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-90"
               >
-                <XCircle size={14} />
                 Zurückweisen
               </button>
             </div>

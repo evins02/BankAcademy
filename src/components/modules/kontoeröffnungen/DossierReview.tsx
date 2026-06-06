@@ -74,8 +74,8 @@ export function DossierReview({ scenario, onComplete }: Props) {
         disabled={submitted}
         className={cn(
           "flex items-center gap-2 rounded-DEFAULT border px-4 py-2.5 text-sm transition-colors",
-          !submitted && "hover:border-red-300 hover:bg-red-50",
-          isFlagged && !submitted && "border-red-300 bg-red-50 text-red-600 line-through",
+          !submitted && "hover:border-primary/40 hover:bg-primary-light/30",
+          isFlagged && !submitted && "border-primary bg-primary-light text-primary font-medium",
           state === "correct" && "border-primary bg-primary-light text-primary",
           state === "missed" && "border-amber-300 bg-amber-50 text-amber-700",
           state === "wrong" && "border-red-300 bg-red-50 text-red-600",

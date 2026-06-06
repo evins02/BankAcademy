@@ -1,6 +1,5 @@
 "use client";
 
-import { CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -53,24 +52,9 @@ export function CaseCard({
               {scenario.checklist.map((item) => (
                 <div
                   key={item.label}
-                  className={cn(
-                    "flex items-center gap-3 px-4 py-3 text-sm",
-                    item.ok ? "bg-primary-light/30" : "bg-red-50"
-                  )}
+                  className="flex items-center gap-3 px-4 py-3 text-sm"
                 >
-                  {item.ok ? (
-                    <CheckCircle2 size={16} className="shrink-0 text-primary" />
-                  ) : (
-                    <XCircle size={16} className="shrink-0 text-red-500" />
-                  )}
-                  <span className={item.ok ? "text-text-primary" : "font-medium text-red-700"}>
-                    {item.label}
-                  </span>
-                  {!item.ok && (
-                    <span className="ml-auto rounded-pill bg-red-100 px-2 py-0.5 text-[10px] font-semibold text-red-700">
-                      Fehlt
-                    </span>
-                  )}
+                  <span className="text-text-primary">{item.label}</span>
                 </div>
               ))}
             </div>

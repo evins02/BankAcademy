@@ -103,22 +103,8 @@ export function CaseCard({
                   })}
                 </div>
                 {section.verdict && (
-                  <div
-                    className={cn(
-                      "px-4 py-3",
-                      section.verdict.ok && !section.verdict.warning && "bg-primary-light",
-                      section.verdict.ok && section.verdict.warning && "bg-amber-50",
-                      !section.verdict.ok && "bg-red-50"
-                    )}
-                  >
-                    <p
-                      className={cn(
-                        "font-mono text-sm font-bold",
-                        section.verdict.ok && !section.verdict.warning && "text-primary",
-                        section.verdict.ok && section.verdict.warning && "text-amber-700",
-                        !section.verdict.ok && "text-red-700"
-                      )}
-                    >
+                  <div className="border-t border-border bg-gray-50 px-4 py-3">
+                    <p className="font-mono text-sm font-semibold text-text-primary">
                       {section.verdict.text}
                     </p>
                   </div>
