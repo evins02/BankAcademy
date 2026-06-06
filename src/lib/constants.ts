@@ -11,6 +11,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { label: "Notizen", icon: "FileText", href: "/notizen" },
       { label: "Lesezeichen", icon: "Bookmark", href: "/lesezeichen" },
       { label: "LAP Modus", icon: "GraduationCap", href: "/lap-modus" },
+      { label: "Lernpfad", icon: "Map", href: "/lernpfad" },
     ],
   },
   {
@@ -18,6 +19,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "Leaderboard", icon: "Trophy", href: "/leaderboard" },
       { label: "Forum", icon: "MessageSquare", href: "/community" },
+      { label: "Praxisfälle", icon: "ClipboardList", href: "/community/cases" },
     ],
   },
 

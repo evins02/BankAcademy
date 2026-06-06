@@ -14,13 +14,16 @@ import { SkeletonStatCard, SkeletonModuleCard } from "@/components/ui/skeleton";
 import { useCountUp } from "@/hooks/useCountUp";
 import { DailyChallenge } from "@/components/shared/DailyChallenge";
 import { WeeklyReportModal, shouldShowWeeklyReport } from "@/components/shared/WeeklyReportModal";
+import { SmartRecommendation } from "@/components/shared/SmartRecommendation";
 import {
   getProgress,
   getStreak,
   seedMockDataIfEmpty,
+  computeBadges,
   type ModuleProgress,
   type StreakData,
 } from "@/lib/progressData";
+import { BadgeEarnAnimation, useNewlyEarnedBadge } from "@/components/shared/BadgeEarnAnimation";
 
 interface UserProfile {
   name?: string;
@@ -128,6 +131,7 @@ export default function DashboardPage() {
   const [loaded, setLoaded] = useState(false);
   const [showInactivity, setShowInactivity] = useState(false);
   const [showWeeklyReport, setShowWeeklyReport] = useState(false);
+  const { pendingBadge, checkForNewBadges, dismiss: dismissBadge } = useNewlyEarnedBadge();
 
   // Auto-dismiss inactivity banner after 5 s
   useEffect(() => {
@@ -145,7 +149,8 @@ export default function DashboardPage() {
         setProfile(p);
       }
     } catch {}
-    setProgress(getProgress());
+    const prog = getProgress();
+    setProgress(prog);
     const str = getStreak();
     setStreak(str);
     // Check 5-day inactivity
@@ -156,8 +161,11 @@ export default function DashboardPage() {
       if (daysSince >= 5) setShowInactivity(true);
     }
     if (shouldShowWeeklyReport()) setShowWeeklyReport(true);
+    // Check for newly earned badges
+    checkForNewBadges(computeBadges());
     const t = setTimeout(() => setLoaded(true), 300);
     return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const allModules = [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES];
@@ -199,10 +207,17 @@ export default function DashboardPage() {
   const recommended: { title: string; href: string; icon: LucideIcon } =
     (profile.role ? roleToModule[profile.role] : undefined) ?? { title: "Privatkunde", href: "/privatkunde", icon: User };
 
+  const allModulesList = [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES];
+  const completedModulesList = allModulesList.filter((m) => {
+    const p = progress[m.moduleId];
+    return p && p.completed >= m.totalScenarios;
+  });
+
   return (
     <>
       <Header title="Dashboard" />
       {showWeeklyReport && <WeeklyReportModal onClose={() => setShowWeeklyReport(false)} />}
+      {pendingBadge && <BadgeEarnAnimation badge={pendingBadge} onClose={dismissBadge} />}
       <div className="flex-1 overflow-y-auto p-6">
 
         {/* Empty / welcome state for new users */}
@@ -322,6 +337,14 @@ export default function DashboardPage() {
           )}
         </div>)}
 
+        {loaded && !isEmptyState && (
+          <SmartRecommendation
+            progress={progress}
+            streak={streak}
+            modules={allModulesList}
+          />
+        )}
+
         <WeakModulesSection progress={progress} />
 
         {loaded && <DailyChallenge />}
@@ -344,6 +367,22 @@ export default function DashboardPage() {
             : backModules.map((m) => <ModuleCard key={m.title} {...m} />)}
         </div>
 
+        {/* Certificates for completed modules */}
+        {loaded && completedModulesList.length > 0 && (
+          <div className="mb-6">
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-text-secondary">
+              Zertifikate
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              {completedModulesList.map((m) => (
+                <Button key={m.moduleId} asChild variant="secondary" size="sm">
+                  <Link href={`/zertifikat/${m.moduleId}`}>🎓 {m.title}</Link>
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Quick links */}
         <div className="flex flex-wrap gap-3">
           <Button asChild variant="secondary" size="sm">
@@ -354,6 +393,12 @@ export default function DashboardPage() {
           </Button>
           <Button asChild variant="secondary" size="sm">
             <Link href="/fehler-uebersicht">❌ Fehler Übersicht</Link>
+          </Button>
+          <Button asChild variant="secondary" size="sm">
+            <Link href="/lernpfad">🗺️ Lernpfad</Link>
+          </Button>
+          <Button asChild variant="secondary" size="sm">
+            <Link href="/community/cases">📋 Praxisfälle</Link>
           </Button>
         </div>
       </div>

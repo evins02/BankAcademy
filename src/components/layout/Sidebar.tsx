@@ -24,6 +24,8 @@ import {
   FileText,
   Bookmark,
   GraduationCap,
+  Map,
+  ClipboardList,
   PanelLeftClose,
   PanelLeftOpen,
   type LucideIcon,
@@ -49,6 +51,8 @@ const ICONS: Record<string, LucideIcon> = {
   FileText,
   Bookmark,
   GraduationCap,
+  Map,
+  ClipboardList,
 };
 
 interface UserProfile {

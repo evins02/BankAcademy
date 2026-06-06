@@ -288,7 +288,78 @@ const ALL_BADGES: Badge[] = [
     icon: "⚙️",
     condition: "all_back_office",
   },
+  {
+    id: "erster-tag",
+    title: "Erster Tag",
+    description: "Willkommen bei BankAcademy!",
+    icon: "🌟",
+    condition: "first_login",
+  },
+  {
+    id: "wissensdurst",
+    title: "Wissensdurst",
+    description: "5 Szenarien abgeschlossen",
+    icon: "📚",
+    condition: "scenarios_5",
+  },
+  {
+    id: "scharfschuetze",
+    title: "Scharfschütze",
+    description: "5 richtige Antworten in Folge",
+    icon: "🎯",
+    condition: "correct_5_row",
+  },
+  {
+    id: "comeback-kid",
+    title: "Comeback Kid",
+    description: "Aufgeben ist keine Option!",
+    icon: "💪",
+    condition: "comeback",
+  },
+  {
+    id: "banking-insider",
+    title: "Banking Insider",
+    description: "Alle Banking-Operations abgeschlossen",
+    icon: "🏦",
+    condition: "all_banking_ops",
+  },
+  {
+    id: "unaufhaltbar",
+    title: "Unaufhaltbar",
+    description: "14-Tage-Streak erreicht",
+    icon: "🔥",
+    condition: "streak_14",
+  },
+  {
+    id: "lap-bereit",
+    title: "LAP Bereit",
+    description: "LAP Modus mit >80% abgeschlossen",
+    icon: "🎓",
+    condition: "lap_80",
+  },
+  {
+    id: "bankacademy-pro",
+    title: "BankAcademy Pro",
+    description: "Alle Module gemeistert",
+    icon: "🚀",
+    condition: "all_modules",
+  },
 ];
+
+export function recordCorrectAnswer() {
+  if (typeof window === "undefined") return;
+  const streak = parseInt(localStorage.getItem("correct-streak") ?? "0") + 1;
+  localStorage.setItem("correct-streak", String(streak));
+  const best = parseInt(localStorage.getItem("correct-streak-best") ?? "0");
+  if (streak > best) localStorage.setItem("correct-streak-best", String(streak));
+}
+
+export function recordWrongAnswer() {
+  if (typeof window === "undefined") return;
+  const prevStreak = parseInt(localStorage.getItem("correct-streak") ?? "0");
+  if (prevStreak === 0) localStorage.setItem("comeback-earned", "true");
+  localStorage.setItem("correct-streak", "0");
+}
 
 export function computeBadges(): Badge[] {
   const progress = getProgress();
@@ -310,6 +381,24 @@ export function computeBadges(): Badge[] {
     earned.add("all-front-office");
   if (backOffice.every((id) => completedModules.find((m) => m.moduleId === id)))
     earned.add("all-back-office");
+
+  // New badges
+  if (typeof window !== "undefined") {
+    if (!localStorage.getItem("first-visit")) localStorage.setItem("first-visit", new Date().toISOString());
+    earned.add("erster-tag");
+
+    const totalCompleted = modules.reduce((s, m) => s + m.completed, 0);
+    if (totalCompleted >= 5) earned.add("wissensdurst");
+
+    if (parseInt(localStorage.getItem("correct-streak-best") ?? "0") >= 5) earned.add("scharfschuetze");
+    if (localStorage.getItem("comeback-earned") === "true") earned.add("comeback-kid");
+    if (parseInt(localStorage.getItem("lap-best-score") ?? "0") >= 80) earned.add("lap-bereit");
+  }
+
+  if (completedModules.find((m) => m.moduleId === "banking-operations")) earned.add("banking-insider");
+  if (streak.current >= 14 || streak.longest >= 14) earned.add("unaufhaltbar");
+  const allModuleIds = ["privatkunde", "firmenkunde", "anlagekunde", "banking-operations", "credit-operations"];
+  if (allModuleIds.every((id) => completedModules.find((m) => m.moduleId === id))) earned.add("bankacademy-pro");
 
   const stored = read<Record<string, string>>("badge-dates", {});
   const now = new Date().toISOString();
