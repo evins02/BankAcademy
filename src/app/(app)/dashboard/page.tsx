@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Sparkles, type LucideIcon } from "lucide-react";
 import { User, Building2, TrendingUp, Settings2, Landmark, Flame, Target, CheckCircle2, AlertTriangle } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { HeroBanner } from "@/components/shared/HeroBanner";
@@ -186,33 +187,84 @@ export default function DashboardPage() {
   const countCompleted = useCountUp(loaded ? totalCompleted : 0);
   const countAccuracy = useCountUp(loaded ? avgAccuracy : 0);
 
+  // Empty state: new user with no progress yet
+  const isEmptyState = loaded && totalCompleted === 0;
+
+  // Recommend first module based on role
+  const roleToModule: Record<string, { title: string; href: string; icon: LucideIcon }> = {
+    Privatkunde: { title: "Privatkunde", href: "/privatkunde", icon: User },
+    Firmenkunde: { title: "Firmenkunde", href: "/firmenkunde", icon: Building2 },
+    "Back Office": { title: "Banking Operations", href: "/backoffice", icon: Landmark },
+  };
+  const recommended: { title: string; href: string; icon: LucideIcon } =
+    (profile.role ? roleToModule[profile.role] : undefined) ?? { title: "Privatkunde", href: "/privatkunde", icon: User };
+
   return (
     <>
       <Header title="Dashboard" />
       {showWeeklyReport && <WeeklyReportModal onClose={() => setShowWeeklyReport(false)} />}
       <div className="flex-1 overflow-y-auto p-6">
 
-        <HeroBanner name={profile.name?.trim()} />
+        {/* Empty / welcome state for new users */}
+        {isEmptyState ? (
+          <>
+            <div className="mb-6 overflow-hidden rounded-2xl p-6" style={{ background: "linear-gradient(135deg, #0D1B4B 0%, #00C9B1 100%)" }}>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-3xl">🎉</span>
+                <h1 className="text-xl font-bold text-white">Willkommen bei BankAcademy!</h1>
+              </div>
+              <p className="text-sm text-white/80 leading-relaxed">
+                Starte dein erstes Szenario und baue dein Banking-Wissen auf.<br />
+                Wähle ein Modul aus und leg los – kostenlos und ohne Anmeldung.
+              </p>
+            </div>
 
-        {/* Inactivity banner – subtle, auto-dismisses after 5 s */}
-        {showInactivity && (
-          <div className="mb-4 flex items-center gap-2.5 rounded-xl border border-border bg-gray-50 px-4 py-2.5">
-            <span className="text-base">👋</span>
-            <p className="flex-1 text-xs text-text-secondary">
-              <span className="font-semibold text-text-primary">Willkommen zurück!</span>{" "}
-              Starte jetzt und lerne weiter.
-            </p>
-            <button
-              onClick={() => setShowInactivity(false)}
-              className="shrink-0 text-[11px] text-text-secondary hover:text-text-primary"
-            >
-              ✕
-            </button>
-          </div>
+            <div className="mb-6 rounded-2xl border border-primary/20 bg-primary-light p-5">
+              <div className="flex items-center gap-1.5 mb-3">
+                <Sparkles size={14} className="text-primary" />
+                <p className="text-xs font-bold uppercase tracking-wider text-primary">Empfohlen für dich</p>
+              </div>
+              <Link href={recommended.href}>
+                <div className="flex items-center gap-4 rounded-xl border border-primary/20 bg-white/60 p-4 transition-all hover:bg-white hover:shadow-sm">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl" style={{ background: "#E8EBF7" }}>
+                    <recommended.icon size={24} style={{ color: "#0D1B4B" }} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-bold text-text-primary">{recommended.title}</p>
+                    <p className="text-sm text-text-secondary">Jetzt starten und erstes Szenario absolvieren</p>
+                  </div>
+                  <div className="rounded-full px-4 py-2 text-sm font-bold text-white" style={{ background: "#0D1B4B" }}>
+                    Starten →
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </>
+        ) : (
+          <>
+            <HeroBanner name={profile.name?.trim()} />
+
+            {/* Inactivity banner – subtle, auto-dismisses after 5 s */}
+            {showInactivity && (
+              <div className="mb-4 flex items-center gap-2.5 rounded-xl border border-border bg-gray-50 px-4 py-2.5">
+                <span className="text-base">👋</span>
+                <p className="flex-1 text-xs text-text-secondary">
+                  <span className="font-semibold text-text-primary">Willkommen zurück!</span>{" "}
+                  Starte jetzt und lerne weiter.
+                </p>
+                <button
+                  onClick={() => setShowInactivity(false)}
+                  className="shrink-0 text-[11px] text-text-secondary hover:text-text-primary"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+          </>
         )}
 
-        {/* Stats row */}
-        <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {/* Stats row – hidden for empty state */}
+        {!isEmptyState && (<div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
           {!loaded ? (
             <>
               <SkeletonStatCard />
@@ -268,7 +320,7 @@ export default function DashboardPage() {
               </Card>
             </>
           )}
-        </div>
+        </div>)}
 
         <WeakModulesSection progress={progress} />
 

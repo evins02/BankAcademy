@@ -24,6 +24,8 @@ import {
   FileText,
   Bookmark,
   GraduationCap,
+  PanelLeftClose,
+  PanelLeftOpen,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -55,22 +57,14 @@ interface UserProfile {
 }
 
 function initials(name?: string) {
-  if (!name) return "?";
-  return name
-    .trim()
-    .split(" ")
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
+  if (!name) return "G";
+  return name.trim().split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
 }
 
 function isChildActive(item: NavItem, pathname: string): boolean {
   if (item.sections) {
     return item.sections.some((section) =>
-      section.items.some(
-        (sub) => pathname === sub.href || pathname.startsWith(sub.href + "/")
-      )
+      section.items.some((sub) => pathname === sub.href || pathname.startsWith(sub.href + "/"))
     );
   }
   return false;
@@ -98,22 +92,30 @@ export function Sidebar() {
   const { open: openGlossar } = useGlossar();
   const [profile, setProfile] = useState<UserProfile>({});
   const [search, setSearch] = useState("");
+  const [collapsed, setCollapsed] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem("user-profile");
       if (raw) setProfile(JSON.parse(raw));
+      const saved = localStorage.getItem("sidebar-collapsed");
+      if (saved === "true") setCollapsed(true);
     } catch {}
   }, []);
+
+  function toggleCollapse() {
+    setCollapsed((v) => {
+      localStorage.setItem("sidebar-collapsed", String(!v));
+      return !v;
+    });
+  }
 
   const [openItems, setOpenItems] = useState<Set<string>>(() => {
     const open = new Set<string>();
     for (const group of NAV_GROUPS) {
       for (const item of group.items) {
-        if (item.sections && isChildActive(item, pathname)) {
-          open.add(item.label);
-        }
+        if (item.sections && isChildActive(item, pathname)) open.add(item.label);
       }
     }
     return open;
@@ -144,42 +146,72 @@ export function Sidebar() {
 
   const searchResults =
     search.trim().length > 0
-      ? flatNavLinks().filter((l) =>
-          l.label.toLowerCase().includes(search.toLowerCase())
-        )
+      ? flatNavLinks().filter((l) => l.label.toLowerCase().includes(search.toLowerCase()))
       : [];
 
   return (
-    <aside className="flex h-screen w-64 shrink-0 flex-col border-r border-border bg-surface">
-      {/* Logo */}
-      <div className="flex h-16 items-center border-b border-border px-5">
-        <Link href="/dashboard">
-          <BankingLabLogo size="md" />
-        </Link>
-      </div>
-
-      {/* Search */}
-      <div className="relative px-3 pt-3">
-        <Search size={14} className="absolute left-6 top-1/2 mt-1.5 -translate-y-1/2 text-text-secondary pointer-events-none" />
-        <input
-          ref={searchRef}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Suchen…"
-          className="w-full rounded-pill border border-border bg-background py-1.5 pl-7 pr-7 text-xs text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
-        />
-        {search && (
+    <aside
+      className="flex h-screen shrink-0 flex-col border-r border-border bg-surface overflow-hidden"
+      style={{ width: collapsed ? 60 : 240, transition: "width 250ms ease" }}
+    >
+      {/* Logo + collapse toggle */}
+      <div className="flex h-16 items-center border-b border-border px-3 gap-2">
+        {!collapsed && (
+          <Link href="/dashboard" className="flex-1 min-w-0">
+            <BankingLabLogo size="md" />
+          </Link>
+        )}
+        {collapsed && (
+          <Link href="/dashboard" className="flex h-8 w-8 items-center justify-center rounded-lg flex-shrink-0 mx-auto" style={{ background: "#0D1B4B" }}>
+            <span className="text-[10px] font-black text-white">BA</span>
+          </Link>
+        )}
+        {!collapsed && (
           <button
-            onClick={() => setSearch("")}
-            className="absolute right-5 top-1/2 mt-1.5 -translate-y-1/2 text-text-secondary hover:text-text-primary"
+            onClick={toggleCollapse}
+            className="shrink-0 rounded-lg p-1.5 text-text-secondary hover:bg-gray-100 hover:text-text-primary transition-colors"
+            title="Sidebar einklappen"
           >
-            <X size={12} />
+            <PanelLeftClose size={15} />
           </button>
         )}
       </div>
 
-      {/* Search results dropdown */}
-      {searchResults.length > 0 && (
+      {/* Expand button (shown when collapsed) */}
+      {collapsed && (
+        <button
+          onClick={toggleCollapse}
+          className="flex items-center justify-center py-2 text-text-secondary hover:text-text-primary transition-colors border-b border-border"
+          title="Sidebar ausklappen"
+        >
+          <PanelLeftOpen size={15} />
+        </button>
+      )}
+
+      {/* Search (hidden when collapsed) */}
+      {!collapsed && (
+        <div className="relative px-3 pt-3">
+          <Search size={14} className="absolute left-6 top-1/2 mt-1.5 -translate-y-1/2 text-text-secondary pointer-events-none" />
+          <input
+            ref={searchRef}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Suchen…"
+            className="w-full rounded-pill border border-border bg-background py-1.5 pl-7 pr-7 text-xs text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+          {search && (
+            <button
+              onClick={() => setSearch("")}
+              className="absolute right-5 top-1/2 mt-1.5 -translate-y-1/2 text-text-secondary hover:text-text-primary"
+            >
+              <X size={12} />
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Search results */}
+      {!collapsed && searchResults.length > 0 && (
         <div className="mx-3 mt-1 rounded-lg border border-border bg-surface shadow-lg z-50">
           {searchResults.slice(0, 8).map((r) => (
             <Link
@@ -194,26 +226,32 @@ export function Sidebar() {
           ))}
         </div>
       )}
-      {search.trim().length > 0 && searchResults.length === 0 && (
+      {!collapsed && search.trim().length > 0 && searchResults.length === 0 && (
         <p className="px-5 py-2 text-xs text-text-secondary">Keine Ergebnisse</p>
       )}
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-3 py-3">
+      <nav className="flex-1 overflow-y-auto px-2 py-3">
         {NAV_GROUPS.map((group) => (
           <div key={group.label} className="mb-4">
-            <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-widest text-text-secondary">
-              {group.label}
-            </p>
+            {!collapsed && (
+              <p className="mb-1 px-2 text-[10px] font-bold uppercase tracking-widest text-text-secondary">
+                {group.label}
+              </p>
+            )}
             <ul className="flex flex-col gap-0.5">
               {group.label === "Mein Lernen" && (
                 <li>
                   <button
                     onClick={openGlossar}
-                    className="flex w-full items-center gap-3 rounded-pill px-3 py-2 text-sm font-semibold text-text-primary transition-colors hover:bg-gray-100"
+                    title="Glossar"
+                    className={cn(
+                      "flex w-full items-center gap-3 rounded-pill px-2 py-2 text-sm font-semibold text-text-primary transition-colors hover:bg-gray-100",
+                      collapsed && "justify-center px-0"
+                    )}
                   >
-                    <BookOpen size={16} />
-                    <span className="flex-1 text-left">Glossar</span>
+                    <BookOpen size={18} className="shrink-0" />
+                    {!collapsed && <span className="flex-1 text-left">Glossar</span>}
                   </button>
                 </li>
               )}
@@ -223,31 +261,36 @@ export function Sidebar() {
                 const hasActiveChild = isChildActive(item, pathname);
                 const isDirectlyActive =
                   item.href &&
-                  (pathname === item.href ||
-                    pathname.startsWith(item.href + "/"));
+                  (pathname === item.href || pathname.startsWith(item.href + "/"));
 
                 if (item.sections) {
                   return (
                     <li key={item.label}>
                       <button
-                        onClick={() => toggle(item.label)}
+                        onClick={() => { if (!collapsed) toggle(item.label); }}
+                        title={item.label}
                         className={cn(
-                          "flex w-full items-center gap-3 rounded-pill px-3 py-2 text-sm font-semibold transition-colors",
+                          "flex w-full items-center gap-3 rounded-pill px-2 py-2 text-sm font-semibold transition-colors",
+                          collapsed && "justify-center px-0",
                           hasActiveChild
                             ? "bg-text-primary text-white"
                             : "text-text-primary hover:bg-gray-100"
                         )}
                       >
-                        {Icon && <Icon size={16} />}
-                        <span className="flex-1 text-left">{item.label}</span>
-                        {isOpen ? (
-                          <ChevronDown size={13} className="shrink-0 opacity-70" />
-                        ) : (
-                          <ChevronRight size={13} className="shrink-0 opacity-70" />
+                        {Icon && <Icon size={18} className="shrink-0" />}
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1 text-left">{item.label}</span>
+                            {isOpen ? (
+                              <ChevronDown size={13} className="shrink-0 opacity-70" />
+                            ) : (
+                              <ChevronRight size={13} className="shrink-0 opacity-70" />
+                            )}
+                          </>
                         )}
                       </button>
 
-                      {isOpen && (
+                      {!collapsed && isOpen && (
                         <div className="ml-3 mt-0.5 border-l-2 border-border pl-3">
                           {item.sections.map((section) => (
                             <div key={section.label || "_"} className="mb-1 mt-1">
@@ -258,8 +301,7 @@ export function Sidebar() {
                               )}
                               {section.items.map((sub) => {
                                 const subActive =
-                                  pathname === sub.href ||
-                                  pathname.startsWith(sub.href + "/");
+                                  pathname === sub.href || pathname.startsWith(sub.href + "/");
                                 return (
                                   <Link
                                     key={sub.href}
@@ -287,15 +329,17 @@ export function Sidebar() {
                   <li key={item.label}>
                     <Link
                       href={item.href!}
+                      title={item.label}
                       className={cn(
-                        "flex items-center gap-3 rounded-pill px-3 py-2 text-sm font-semibold transition-colors",
+                        "flex items-center gap-3 rounded-pill px-2 py-2 text-sm font-semibold transition-colors",
+                        collapsed && "justify-center px-0",
                         isDirectlyActive
                           ? "bg-text-primary text-white"
                           : "text-text-primary hover:bg-gray-100"
                       )}
                     >
-                      {Icon && <Icon size={16} />}
-                      <span className="flex-1">{item.label}</span>
+                      {Icon && <Icon size={18} className="shrink-0" />}
+                      {!collapsed && <span className="flex-1">{item.label}</span>}
                     </Link>
                   </li>
                 );
@@ -306,52 +350,55 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-border px-3 py-3">
+      <div className="border-t border-border px-2 py-3">
+        {!collapsed && (
+          <Link
+            href="/einstellungen"
+            className="flex items-center gap-3 rounded-pill px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-gray-100 hover:text-text-primary"
+          >
+            <Settings size={18} className="shrink-0" />
+            Einstellungen
+          </Link>
+        )}
+
         <Link
           href="/einstellungen"
-          className="flex items-center gap-3 rounded-pill px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-gray-100 hover:text-text-primary"
-        >
-          <Settings size={16} />
-          Einstellungen
-        </Link>
-        <Link
-          href="/einstellungen"
-          className="mt-3 flex items-center gap-3 rounded-pill px-3 py-1.5 transition-colors hover:bg-gray-100"
+          title={profile.name || "Gast"}
+          className={cn(
+            "mt-1 flex items-center gap-3 rounded-pill px-2 py-2 transition-colors hover:bg-gray-100",
+            collapsed && "justify-center"
+          )}
         >
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-light text-xs font-semibold text-primary">
-            {initials(profile.name) || "G"}
+            {initials(profile.name)}
           </div>
-          <div className="min-w-0">
-            <p className="truncate text-xs font-medium text-text-primary">
-              {profile.name || "Gast"}
-            </p>
-            <p className="truncate text-[11px] text-text-secondary">
-              {profile.role || "Profil einrichten"}
-            </p>
-          </div>
+          {!collapsed && (
+            <div className="min-w-0">
+              <p className="truncate text-xs font-medium text-text-primary">
+                {profile.name || "Gast"}
+              </p>
+              <p className="truncate text-[11px] text-text-secondary">
+                {profile.role || "Profil einrichten"}
+              </p>
+            </div>
+          )}
         </Link>
-        <div className="mt-2.5 flex flex-wrap gap-3 px-3 pb-0.5">
-          <Link
-            href="/ueber-uns"
-            className="text-[10px] text-text-secondary transition-colors hover:text-text-primary"
-          >
-            Über uns
-          </Link>
-          <span className="text-[10px] text-text-secondary opacity-40">·</span>
-          <Link
-            href="/impressum"
-            className="text-[10px] text-text-secondary transition-colors hover:text-text-primary"
-          >
-            Impressum
-          </Link>
-          <span className="text-[10px] text-text-secondary opacity-40">·</span>
-          <Link
-            href="/datenschutz"
-            className="text-[10px] text-text-secondary transition-colors hover:text-text-primary"
-          >
-            Datenschutz
-          </Link>
-        </div>
+
+        {!collapsed && (
+          <div className="mt-2 flex flex-wrap gap-3 px-3 pb-0.5">
+            <Link href="/impressum" className="text-[10px] text-text-secondary transition-colors hover:text-text-primary">
+              Impressum
+            </Link>
+            <span className="text-[10px] text-text-secondary opacity-40">·</span>
+            <Link href="/datenschutz" className="text-[10px] text-text-secondary transition-colors hover:text-text-primary">
+              Datenschutz
+            </Link>
+            <span className="text-[10px] text-text-secondary opacity-40">·</span>
+            <Link href="/kontakt" className="text-[10px] text-text-secondary transition-colors hover:text-text-primary">
+              Kontakt
+            </Link>
+          </div>
+        )}
       </div>
     </aside>
   );

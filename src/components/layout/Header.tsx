@@ -1,8 +1,9 @@
 "use client";
 
-import { Search, Maximize2, Minimize2 } from "lucide-react";
+import { Search, Maximize2, Minimize2, User, Settings, RotateCcw, LogOut } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 import { NotificationBell } from "@/components/layout/NotificationBell";
@@ -46,8 +47,10 @@ export function Header({ title, subtitle }: HeaderProps) {
   const [xp, setXp] = useState(0);
   const [xpProgress, setXpProgress] = useState(0);
   const [xpLevelTitle, setXpLevelTitle] = useState("");
-  const [initials, setInitials] = useState("");
+  const [initials, setInitials] = useState("?");
   const [avatarColor, setAvatarColor] = useState("#0D1B4B");
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
@@ -62,32 +65,30 @@ export function Header({ title, subtitle }: HeaderProps) {
         const profile = JSON.parse(raw);
         const name = profile.name?.trim();
         if (name) {
-          setInitials(
-            name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase()
-          );
+          setInitials(name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase());
         }
         if (profile.avatarColor) setAvatarColor(profile.avatarColor);
       }
     } catch {}
   }, []);
 
-  const results = query.trim()
-    ? ALL_LINKS.filter((l) => l.label.toLowerCase().includes(query.toLowerCase()))
-    : [];
-
-  useEffect(() => {
-    if (searchOpen) setTimeout(() => inputRef.current?.focus(), 50);
-  }, [searchOpen]);
-
+  // Close dropdowns on outside click
   useEffect(() => {
     function handler(e: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
         setSearchOpen(false);
         setQuery("");
       }
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false);
+      }
     }
-    if (searchOpen) document.addEventListener("mousedown", handler);
+    document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  useEffect(() => {
+    if (searchOpen) setTimeout(() => inputRef.current?.focus(), 50);
   }, [searchOpen]);
 
   useEffect(() => {
@@ -99,6 +100,7 @@ export function Header({ title, subtitle }: HeaderProps) {
       if (e.key === "Escape") {
         setSearchOpen(false);
         setQuery("");
+        setProfileOpen(false);
       }
     }
     window.addEventListener("keydown", handleKey);
@@ -111,8 +113,29 @@ export function Header({ title, subtitle }: HeaderProps) {
     setQuery("");
   }
 
+  function resetProgress() {
+    if (!confirm("Möchtest du deinen Fortschritt wirklich zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.")) return;
+    ["progress", "streak", "notifications", "badge-dates", "total-xp", "mock-seeded", "activity-dates"].forEach((k) =>
+      localStorage.removeItem(k)
+    );
+    setProfileOpen(false);
+    router.push("/dashboard");
+    router.refresh();
+  }
+
+  function abmelden() {
+    localStorage.clear();
+    setProfileOpen(false);
+    router.push("/");
+  }
+
+  const results = query.trim()
+    ? ALL_LINKS.filter((l) => l.label.toLowerCase().includes(query.toLowerCase()))
+    : [];
+
   return (
     <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-surface px-6">
+      {/* Left */}
       <div className="flex items-center gap-4">
         <BankingLabLogo size="sm" />
         <div>
@@ -120,14 +143,22 @@ export function Header({ title, subtitle }: HeaderProps) {
           {subtitle && <p className="text-xs text-text-secondary">{subtitle}</p>}
         </div>
       </div>
+
+      {/* Right */}
       <div className="flex items-center gap-2">
+        {/* Streak – clickable */}
         {streak > 0 && (
-          <div className="hidden items-center gap-1 rounded-full bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-600 sm:flex">
+          <Link
+            href="/statistiken"
+            className="hidden items-center gap-1 rounded-full bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-600 transition-opacity hover:opacity-80 sm:flex"
+          >
             🔥 {streak}
-          </div>
+          </Link>
         )}
+
+        {/* XP + Level – clickable */}
         {xp > 0 && (
-          <div className="hidden flex-col items-end sm:flex">
+          <Link href="/statistiken" className="hidden flex-col items-end hover:opacity-80 sm:flex">
             <div className="flex items-center gap-1 text-xs font-semibold text-primary">
               ⚡ {xp} XP
               <span className="font-normal text-text-secondary">· {xpLevelTitle}</span>
@@ -138,24 +169,12 @@ export function Header({ title, subtitle }: HeaderProps) {
                 style={{ width: `${xpProgress}%` }}
               />
             </div>
-          </div>
+          </Link>
         )}
-        {initials && (
-          <div
-            className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white"
-            style={{ background: avatarColor }}
-          >
-            {initials}
-          </div>
-        )}
+
         {/* Search */}
         <div ref={searchRef} className="relative">
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Suche"
-            onClick={() => setSearchOpen((v) => !v)}
-          >
+          <Button variant="ghost" size="icon" aria-label="Suche" onClick={() => setSearchOpen((v) => !v)}>
             <Search size={18} />
           </Button>
           {searchOpen && (
@@ -169,14 +188,10 @@ export function Header({ title, subtitle }: HeaderProps) {
               />
               <div className="max-h-60 overflow-y-auto">
                 {results.length === 0 && query.trim() && (
-                  <p className="px-4 py-4 text-center text-sm text-text-secondary">
-                    Keine Ergebnisse
-                  </p>
+                  <p className="px-4 py-4 text-center text-sm text-text-secondary">Keine Ergebnisse</p>
                 )}
                 {results.length === 0 && !query.trim() && (
-                  <p className="px-4 py-4 text-center text-xs text-text-secondary">
-                    Suchbegriff eingeben
-                  </p>
+                  <p className="px-4 py-4 text-center text-xs text-text-secondary">Suchbegriff eingeben</p>
                 )}
                 {results.slice(0, 8).map((r) => (
                   <button
@@ -202,7 +217,65 @@ export function Header({ title, subtitle }: HeaderProps) {
         >
           {focusMode ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
         </Button>
+
         <NotificationBell />
+
+        {/* Profile avatar + dropdown */}
+        <div ref={profileRef} className="relative">
+          <button
+            onClick={() => setProfileOpen((v) => !v)}
+            className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white transition-opacity hover:opacity-85"
+            style={{ background: avatarColor }}
+            aria-label="Profil"
+          >
+            {initials}
+          </button>
+
+          {profileOpen && (
+            <div className="absolute right-0 top-10 z-50 w-52 overflow-hidden rounded-xl border border-border bg-surface shadow-xl">
+              <div className="px-4 py-3 border-b border-border">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white mb-2" style={{ background: avatarColor }}>
+                  {initials}
+                </div>
+                <p className="text-xs font-semibold text-text-primary">Mein Konto</p>
+              </div>
+              <div className="py-1">
+                <Link
+                  href="/einstellungen"
+                  onClick={() => setProfileOpen(false)}
+                  className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-text-primary hover:bg-gray-50"
+                >
+                  <User size={14} className="text-text-secondary" />
+                  Mein Profil
+                </Link>
+                <Link
+                  href="/einstellungen"
+                  onClick={() => setProfileOpen(false)}
+                  className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-text-primary hover:bg-gray-50"
+                >
+                  <Settings size={14} className="text-text-secondary" />
+                  Einstellungen
+                </Link>
+                <button
+                  onClick={resetProgress}
+                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-text-primary hover:bg-gray-50"
+                >
+                  <RotateCcw size={14} className="text-text-secondary" />
+                  Fortschritt zurücksetzen
+                </button>
+              </div>
+              <div className="border-t border-border py-1">
+                <button
+                  onClick={abmelden}
+                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50"
+                >
+                  <LogOut size={14} />
+                  Abmelden
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
