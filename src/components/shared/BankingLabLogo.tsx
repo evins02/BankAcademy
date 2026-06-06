@@ -1,10 +1,10 @@
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
-// Logo is a 1254×1254 square PNG
 const SIZE_MAP = {
-  sm: 32,
-  md: 48,
-  lg: 64,
+  sm: { width: 105, height: 30 },
+  md: { width: 140, height: 40 },
+  lg: { width: 175, height: 50 },
 } as const;
 
 interface BankingLabLogoProps {
@@ -13,18 +13,32 @@ interface BankingLabLogoProps {
 }
 
 export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) {
-  const px = SIZE_MAP[size];
+  const { width, height } = SIZE_MAP[size];
 
   return (
-    <Image
-      src="/BankingLab Logo.png"
-      alt="Banking Lab"
-      width={px}
-      height={px}
-      quality={95}
-      priority
-      style={{ objectFit: "contain" }}
-      className={className}
-    />
+    <>
+      {/* Shown in light mode */}
+      <Image
+        src="/logo-light.png"
+        alt="BankAcademy"
+        width={width}
+        height={height}
+        quality={100}
+        priority
+        style={{ objectFit: "contain" }}
+        className={cn("dark:hidden", className)}
+      />
+      {/* Shown in dark mode */}
+      <Image
+        src="/logo-dark.png"
+        alt="BankAcademy"
+        width={width}
+        height={height}
+        quality={100}
+        priority
+        style={{ objectFit: "contain" }}
+        className={cn("hidden dark:block", className)}
+      />
+    </>
   );
 }

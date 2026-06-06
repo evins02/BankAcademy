@@ -1,36 +1,13 @@
 import Link from "next/link";
-import { CheckCircle2, type LucideIcon } from "lucide-react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { type LucideIcon } from "lucide-react";
 import { ProgressBar } from "@/components/ui/progress-bar";
 
 export type ModuleStatus = "idle" | "active" | "done";
 
-const statusConfig: Record<
-  ModuleStatus,
-  { label: string; className: string; dot?: boolean; check?: boolean }
-> = {
-  idle: {
-    label: "Nicht gestartet",
-    className: "bg-gray-100 text-text-secondary",
-  },
-  active: {
-    label: "In Bearbeitung",
-    className: "bg-accent-light text-accent",
-    dot: true,
-  },
-  done: {
-    label: "Abgeschlossen",
-    className: "bg-primary-light text-primary",
-    check: true,
-  },
+const STATUS_CONFIG: Record<ModuleStatus, { label: string; className: string }> = {
+  idle: { label: "Nicht gestartet", className: "bg-gray-100 text-text-secondary" },
+  active: { label: "In Bearbeitung", className: "bg-accent-light text-accent" },
+  done: { label: "Abgeschlossen ✅", className: "bg-green-50 text-green-700" },
 };
 
 interface ModuleCardProps {
@@ -52,47 +29,55 @@ export function ModuleCard({
   completedScenarios,
   totalScenarios,
 }: ModuleCardProps) {
-  const s = statusConfig[status];
+  const s = STATUS_CONFIG[status];
+  const pct = totalScenarios > 0 ? Math.round((completedScenarios / totalScenarios) * 100) : 0;
 
   return (
-    <Card className="flex flex-col">
-      <CardHeader>
-        <div className="mb-3 flex items-start justify-between gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-light">
-            <Icon size={20} className="text-primary" />
+    <Link href={href} className="group block h-full">
+      <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg">
+        {/* Gradient accent bar */}
+        <div className="h-[3px] w-full flex-shrink-0" style={{ background: "linear-gradient(90deg, #0D1B4B 0%, #00C9B1 100%)" }} />
+
+        <div className="flex flex-1 flex-col p-5">
+          {/* Icon + status */}
+          <div className="mb-4 flex items-start justify-between gap-2">
+            <div
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+              style={{ background: "#E8EBF7" }}
+            >
+              <Icon size={24} style={{ color: "#0D1B4B" }} />
+            </div>
+            <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${s.className}`}>
+              {status === "active" && <span className="h-1.5 w-1.5 rounded-full bg-accent" />}
+              {s.label}
+            </span>
           </div>
-          {/* Status badge */}
-          <span
-            className={`inline-flex items-center gap-1.5 rounded-pill px-2.5 py-0.5 text-xs font-medium ${s.className}`}
+
+          {/* Title + description */}
+          <h3 className="mb-1.5 text-base font-bold text-text-primary">{title}</h3>
+          <p className="mb-4 flex-1 text-sm leading-relaxed text-text-secondary">{description}</p>
+
+          {/* Progress */}
+          <div className="mb-4">
+            <div className="mb-1.5 flex items-center justify-between text-xs">
+              <span className="text-text-secondary">Fortschritt</span>
+              <span className="font-bold text-text-primary">{pct}%</span>
+            </div>
+            <ProgressBar value={completedScenarios} max={Math.max(totalScenarios, 1)} />
+            <p className="mt-1 text-[11px] text-text-secondary">
+              {completedScenarios} / {totalScenarios} Szenarien
+            </p>
+          </div>
+
+          {/* CTA */}
+          <div
+            className="w-full rounded-full py-2.5 text-center text-sm font-bold text-white transition-opacity group-hover:opacity-90"
+            style={{ background: "#0D1B4B" }}
           >
-            {s.dot && (
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-            )}
-            {s.check && <CheckCircle2 size={11} />}
-            {s.label}
-          </span>
+            {status === "idle" ? "Starten →" : status === "active" ? "Fortfahren →" : "Wiederholen →"}
+          </div>
         </div>
-        <CardTitle className="text-lg">{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-
-      <CardContent className="flex-1">
-        <div className="flex items-center justify-between text-xs text-text-secondary mb-1.5">
-          <span>Fortschritt</span>
-          <span>
-            {completedScenarios}/{totalScenarios} Szenarien
-          </span>
-        </div>
-        <ProgressBar value={completedScenarios} max={totalScenarios} />
-      </CardContent>
-
-      <CardFooter>
-        <Button asChild className="w-full">
-          <Link href={href}>
-            {status === "idle" ? "Starten" : status === "active" ? "Fortfahren" : "Wiederholen"}
-          </Link>
-        </Button>
-      </CardFooter>
-    </Card>
+      </div>
+    </Link>
   );
 }
