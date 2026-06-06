@@ -128,6 +128,100 @@ export function addNotification(msg: string, type: Notification["type"] = "info"
   write("notifications", notes.slice(0, 20));
 }
 
+const MODULE_TOTALS: Record<string, { name: string; total: number }> = {
+  privatkunde: { name: "Privatkunde", total: 10 },
+  firmenkunde: { name: "Firmenkunde", total: 7 },
+  anlagekunde: { name: "Anlagekunde", total: 4 },
+  "banking-operations": { name: "Banking Operations", total: 4 },
+  "credit-operations": { name: "Credit Operations", total: 5 },
+};
+
+export function generateSmartNotifications() {
+  if (typeof window === "undefined") return;
+  const today = new Date().toISOString().slice(0, 10);
+  const lastGen = localStorage.getItem("notif-generated-date");
+  if (lastGen === today) return;
+  localStorage.setItem("notif-generated-date", today);
+
+  const streak = getStreak();
+  const progress = getProgress();
+  const badges = computeBadges();
+  const notes = getNotifications();
+  const existingMessages = new Set(notes.map((n) => n.message));
+
+  const newNotes: Notification[] = [];
+
+  function push(msg: string, type: Notification["type"]) {
+    if (!existingMessages.has(msg)) {
+      newNotes.push({ id: crypto.randomUUID(), message: msg, type, timestamp: new Date().toISOString(), read: false });
+    }
+  }
+
+  // Streak milestone
+  if (streak.current > 0 && [3, 5, 7, 10, 14, 21, 30].includes(streak.current)) {
+    push(`🔥 ${streak.current} Tage Streak! Weiter so – du bist auf dem richtigen Weg!`, "achievement");
+  }
+
+  // Near-completion modules
+  for (const [id, meta] of Object.entries(MODULE_TOTALS)) {
+    const p = progress[id];
+    if (p && p.completed > 0 && p.completed < meta.total) {
+      const remaining = meta.total - p.completed;
+      if (remaining === 1) {
+        push(`📚 Noch 1 Szenario in ${meta.name} – schliess das Modul ab!`, "reminder");
+      } else if (remaining <= 2 && p.completed / meta.total >= 0.75) {
+        push(`📚 Fast geschafft! Nur noch ${remaining} Szenarien in ${meta.name}.`, "reminder");
+      }
+    }
+  }
+
+  // Newly earned badges
+  for (const badge of badges) {
+    if (badge.earnedAt) {
+      const badgeDate = badge.earnedAt.slice(0, 10);
+      const daysDiff = Math.floor((Date.now() - new Date(badgeDate).getTime()) / 86400000);
+      if (daysDiff <= 1) {
+        push(`🏆 Badge verdient: "${badge.title}" – ${badge.description}`, "achievement");
+      }
+    }
+  }
+
+  // Weekly summary on Mondays
+  const dayOfWeek = new Date().getDay();
+  if (dayOfWeek === 1) {
+    const totalCompleted = Object.values(progress).reduce((s, m) => s + m.completed, 0);
+    if (totalCompleted > 0) {
+      const lastWeekKey = "notif-weekly-shown";
+      const lastWeekDate = localStorage.getItem(lastWeekKey);
+      if (lastWeekDate !== today) {
+        localStorage.setItem(lastWeekKey, today);
+        const completedMods = Object.values(MODULE_TOTALS).filter((m, i) => {
+          const id = Object.keys(MODULE_TOTALS)[i];
+          const p = progress[id];
+          return p && p.completed >= m.total;
+        }).length;
+        push(`📊 Wochenzusammenfassung: ${totalCompleted} Szenarien abgeschlossen, ${completedMods}/${Object.keys(MODULE_TOTALS).length} Module fertig. Weiter so!`, "info");
+      }
+    }
+  }
+
+  // Accuracy encouragement
+  const activeModules = Object.entries(progress).filter(([, p]) => p.completed > 0);
+  if (activeModules.length > 0) {
+    const avgAcc = Math.round(activeModules.reduce((s, [, p]) => s + p.accuracy, 0) / activeModules.length);
+    if (avgAcc >= 90) {
+      push(`⭐ Exzellent! Deine durchschnittliche Genauigkeit liegt bei ${avgAcc}%. Du bist ein Banking-Profi!`, "achievement");
+    } else if (avgAcc >= 80) {
+      push(`👍 Gut gemacht! Durchschnittliche Genauigkeit: ${avgAcc}%. Noch ein bisschen üben für Perfektion.`, "info");
+    }
+  }
+
+  if (newNotes.length > 0) {
+    const all = [...newNotes, ...notes].slice(0, 20);
+    write("notifications", all);
+  }
+}
+
 // ─── Errors ───────────────────────────────────────────────────────────────────
 
 export function getErrors(): ErrorEntry[] {

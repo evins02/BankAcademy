@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { getNotifications, markAllRead, type Notification } from "@/lib/progressData";
+import { getNotifications, markAllRead, generateSmartNotifications, type Notification } from "@/lib/progressData";
 
 function relativeTime(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -29,6 +29,7 @@ export function NotificationBell() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    generateSmartNotifications();
     setNotes(getNotifications());
   }, []);
 
