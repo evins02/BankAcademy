@@ -88,11 +88,12 @@ function FadeIn({
 
 /* ─── Navbar ──────────────────────────────────────────────────────────────── */
 
-const NAV_ITEMS = [
+const NAV_ITEMS: { label: string; id?: string; href?: string }[] = [
   { label: "Features", id: "features" },
   { label: "Module", id: "module" },
   { label: "Für Banken", id: "fuer-banken" },
   { label: "Preise", id: "preise" },
+  { label: "Kontakt", href: "/kontakt" },
 ];
 
 function Navbar({
@@ -141,32 +142,58 @@ function Navbar({
 
         {/* Desktop nav */}
         <nav style={{ display: "flex", gap: 4, alignItems: "center" }} className="hidden md:flex">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => onNav(item.id)}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: "8px 16px",
-                borderRadius: 8,
-                fontSize: 14,
-                color: "rgba(255,255,255,0.65)",
-                transition: "all 0.15s",
-              }}
-              onMouseEnter={(e) => {
-                (e.target as HTMLButtonElement).style.color = "#fff";
-                (e.target as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)";
-              }}
-              onMouseLeave={(e) => {
-                (e.target as HTMLButtonElement).style.color = "rgba(255,255,255,0.65)";
-                (e.target as HTMLButtonElement).style.background = "transparent";
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
+          {NAV_ITEMS.map((item) =>
+            item.href ? (
+              <Link
+                key={item.label}
+                href={item.href}
+                style={{
+                  display: "inline-block",
+                  padding: "8px 16px",
+                  borderRadius: 8,
+                  fontSize: 14,
+                  color: "rgba(255,255,255,0.65)",
+                  textDecoration: "none",
+                  transition: "all 0.15s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#fff";
+                  e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "rgba(255,255,255,0.65)";
+                  e.currentTarget.style.background = "transparent";
+                }}
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <button
+                key={item.id}
+                onClick={() => onNav(item.id!)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "8px 16px",
+                  borderRadius: 8,
+                  fontSize: 14,
+                  color: "rgba(255,255,255,0.65)",
+                  transition: "all 0.15s",
+                }}
+                onMouseEnter={(e) => {
+                  (e.target as HTMLButtonElement).style.color = "#fff";
+                  (e.target as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.target as HTMLButtonElement).style.color = "rgba(255,255,255,0.65)";
+                  (e.target as HTMLButtonElement).style.background = "transparent";
+                }}
+              >
+                {item.label}
+              </button>
+            )
+          )}
         </nav>
 
         {/* Desktop CTA */}
@@ -241,24 +268,41 @@ function Navbar({
           }}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            {NAV_ITEMS.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => onNav(item.id)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: "12px 16px",
-                  borderRadius: 10,
-                  fontSize: 15,
-                  color: "rgba(255,255,255,0.65)",
-                  textAlign: "left",
-                }}
-              >
-                {item.label}
-              </button>
-            ))}
+            {NAV_ITEMS.map((item) =>
+              item.href ? (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  style={{
+                    display: "block",
+                    padding: "12px 16px",
+                    borderRadius: 10,
+                    fontSize: 15,
+                    color: "rgba(255,255,255,0.65)",
+                    textDecoration: "none",
+                  }}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <button
+                  key={item.id}
+                  onClick={() => onNav(item.id!)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: "12px 16px",
+                    borderRadius: 10,
+                    fontSize: 15,
+                    color: "rgba(255,255,255,0.65)",
+                    textAlign: "left",
+                  }}
+                >
+                  {item.label}
+                </button>
+              )
+            )}
             <div style={{ marginTop: 12, borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
               <Link
                 href="/dashboard"
@@ -1075,8 +1119,8 @@ function ForBanks() {
         </div>
 
         <FadeIn style={{ textAlign: "center" }} delay={0.32}>
-          <a
-            href="mailto:evinsariaratnam@gmail.com"
+          <Link
+            href="/kontakt"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -1095,7 +1139,7 @@ function ForBanks() {
             onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
           >
             Kontakt aufnehmen <ChevronRight size={15} />
-          </a>
+          </Link>
         </FadeIn>
       </div>
     </section>
@@ -1263,12 +1307,12 @@ function BetaBanner({ onDismiss }: { onDismiss: () => void }) {
     >
       <p style={{ margin: 0, fontSize: 13, color: "rgba(255,255,255,0.85)", textAlign: "center" }}>
         🚀 BankAcademy ist in der Beta-Phase – dein Feedback hilft uns besser zu werden!{" "}
-        <a
-          href="mailto:evinsariaratnam@gmail.com?subject=BankAcademy Feedback"
-          style={{ color: "#00C9B1", fontWeight: 600, textDecoration: "underline", cursor: "pointer" }}
+        <Link
+          href="/kontakt"
+          style={{ color: "#00C9B1", fontWeight: 600, textDecoration: "underline" }}
         >
           Feedback geben →
-        </a>
+        </Link>
       </p>
       <button
         onClick={onDismiss}
@@ -1360,96 +1404,6 @@ function DemoModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-/* ─── FAQ (Improvement 8) ────────────────────────────────────────────────── */
-
-const FAQ_ITEMS = [
-  {
-    q: "Ist BankAcademy wirklich kostenlos?",
-    a: "Ja, vollständig kostenlos – kein Abo, keine versteckten Kosten, kein Konto erforderlich. BankAcademy ist ein Non-Profit-Lernprojekt für die Banklehre.",
-  },
-  {
-    q: "Für wen ist BankAcademy geeignet?",
-    a: "Primär für Lernende im 1.–3. Lehrjahr im Schweizer Banking. Auch Quereinsteiger, Berufsschullehrpersonen und Ausbildner/innen profitieren von den praxisnahen Szenarien.",
-  },
-  {
-    q: "Ist der Inhalt auf die LAP abgestimmt?",
-    a: "Ja. Die Szenarien orientieren sich an den offiziellen Ausbildungszielen des Schweizerischen Bankenverbands (SBVg) und decken die prüfungsrelevanten Kompetenzbereiche ab.",
-  },
-  {
-    q: "Wie oft wird der Inhalt aktualisiert?",
-    a: "Regelmässig. Da BankAcademy in aktiver Entwicklung ist, werden neue Szenarien, Module und Rechtsgrundlagen laufend ergänzt – besonders nach regulatorischen Änderungen (z.B. FIDLEG, GwG).",
-  },
-  {
-    q: "Kann unsere Bank BankAcademy für die Ausbildung nutzen?",
-    a: "Absolut. Schreibe uns unter evinsariaratnam@gmail.com – wir freuen uns über Bildungspartnerschaften mit Banken, Berufsschulen und Ausbildungsanbietern.",
-  },
-];
-
-function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  return (
-    <section id="faq" style={{ background: "#fff", padding: "96px 24px" }}>
-      <div style={{ maxWidth: 720, margin: "0 auto" }}>
-        <FadeIn className="text-center" style={{ marginBottom: 48 }}>
-          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#00C9B1" }}>
-            Häufige Fragen
-          </p>
-          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,38px)", fontWeight: 800, letterSpacing: "-0.5px", color: "#111827" }}>
-            Alles Wichtige auf einen Blick.
-          </h2>
-        </FadeIn>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {FAQ_ITEMS.map((item, i) => (
-            <FadeIn key={i} delay={i * 0.05}>
-              <div
-                style={{
-                  border: "1px solid #e5e7eb",
-                  borderRadius: 16,
-                  overflow: "hidden",
-                  background: openIndex === i ? "#fafbff" : "#fff",
-                  transition: "background 0.2s",
-                }}
-              >
-                <button
-                  onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 16,
-                    padding: "20px 24px",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    textAlign: "left",
-                  }}
-                >
-                  <p style={{ margin: 0, fontSize: 15, fontWeight: 600, color: "#111827", lineHeight: 1.4 }}>
-                    {item.q}
-                  </p>
-                  <span style={{ flexShrink: 0, fontSize: 20, color: "#9ca3af", transform: openIndex === i ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>
-                    +
-                  </span>
-                </button>
-                {openIndex === i && (
-                  <div style={{ padding: "0 24px 20px", borderTop: "1px solid #f3f4f6" }}>
-                    <p style={{ margin: "16px 0 0", fontSize: 14, color: "#6b7280", lineHeight: 1.65 }}>
-                      {item.a}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </FadeIn>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ─── Footer ──────────────────────────────────────────────────────────────── */
 
 function Footer({ onNav }: { onNav: (id: string) => void }) {
@@ -1466,10 +1420,9 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
       { label: "LAP Modus", action: () => { window.location.href = "/lap-modus"; } },
     ],
     Legal: [
-      { label: "Über uns", action: () => { window.location.href = "/ueber-uns"; } },
       { label: "Impressum", action: () => { window.location.href = "/impressum"; } },
       { label: "Datenschutz", action: () => { window.location.href = "/datenschutz"; } },
-      { label: "Kontakt", action: () => { window.location.href = "mailto:evinsariaratnam@gmail.com"; } },
+      { label: "Kontakt", action: () => { window.location.href = "/kontakt"; } },
     ],
   };
 
@@ -1604,7 +1557,6 @@ export default function LandingPage() {
         <ForBanks />
         <Testimonials />
         <FinalCTA />
-        <FAQ />
         <Footer onNav={scrollTo} />
       </div>
     </>
