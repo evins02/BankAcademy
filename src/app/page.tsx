@@ -4,6 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ChevronRight, Eye, EyeOff, Menu, X } from "lucide-react";
 
+/* ─── Design tokens ───────────────────────────────────────────────────────── */
+
+const N = "#0A1628";        // navy darkest
+const NM = "#0D1F3C";       // navy mid
+const CY = "#00D4B8";       // cyan
+const PU = "#7B6FE8";       // purple
+const WH = "#F8FAFC";       // white
+const WD = "rgba(248,250,252,0.65)";  // white dim
+const WM = "rgba(248,250,252,0.38)";  // white muted
+const BR = "rgba(255,255,255,0.08)";  // border
+const CB = "rgba(255,255,255,0.04)";  // card bg
+
 /* ─── Hooks ───────────────────────────────────────────────────────────────── */
 
 function useScrolled(threshold = 20) {
@@ -116,9 +128,9 @@ function Navbar({
         inset: "0 0 auto 0",
         zIndex: 50,
         transition: "all 0.3s ease",
-        background: scrolled ? "rgba(13,27,75,0.96)" : "transparent",
+        background: scrolled ? `${NM}f5` : "transparent",
         backdropFilter: scrolled ? "blur(16px)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.08)" : "none",
+        borderBottom: scrolled ? `1px solid ${BR}` : "none",
       }}
     >
       <div
@@ -137,8 +149,8 @@ function Navbar({
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
         >
-          <span style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", color: "#fff" }}>
-            Bank<span style={{ color: "#00C9B1" }}>Academy</span>
+          <span style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
+            Bank<span style={{ color: CY }}>Academy</span>
           </span>
         </button>
 
@@ -154,16 +166,16 @@ function Navbar({
                   padding: "8px 16px",
                   borderRadius: 8,
                   fontSize: 14,
-                  color: "rgba(255,255,255,0.65)",
+                  color: WD,
                   textDecoration: "none",
                   transition: "all 0.15s",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#fff";
+                  e.currentTarget.style.color = WH;
                   e.currentTarget.style.background = "rgba(255,255,255,0.06)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "rgba(255,255,255,0.65)";
+                  e.currentTarget.style.color = WD;
                   e.currentTarget.style.background = "transparent";
                 }}
               >
@@ -180,15 +192,15 @@ function Navbar({
                   padding: "8px 16px",
                   borderRadius: 8,
                   fontSize: 14,
-                  color: "rgba(255,255,255,0.65)",
+                  color: WD,
                   transition: "all 0.15s",
                 }}
                 onMouseEnter={(e) => {
-                  (e.target as HTMLButtonElement).style.color = "#fff";
+                  (e.target as HTMLButtonElement).style.color = WH;
                   (e.target as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)";
                 }}
                 onMouseLeave={(e) => {
-                  (e.target as HTMLButtonElement).style.color = "rgba(255,255,255,0.65)";
+                  (e.target as HTMLButtonElement).style.color = WD;
                   (e.target as HTMLButtonElement).style.background = "transparent";
                 }}
               >
@@ -204,17 +216,23 @@ function Navbar({
             onClick={onLoginOpen}
             style={{
               background: "none",
-              border: "none",
+              border: `1px solid ${BR}`,
               cursor: "pointer",
               padding: "8px 18px",
               borderRadius: 8,
               fontSize: 14,
               fontWeight: 500,
-              color: "rgba(255,255,255,0.75)",
-              transition: "color 0.15s",
+              color: WD,
+              transition: "all 0.15s",
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#fff"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.75)"; }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.color = WH;
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.2)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.color = WD;
+              (e.currentTarget as HTMLButtonElement).style.borderColor = BR;
+            }}
           >
             Einloggen
           </button>
@@ -228,14 +246,14 @@ function Navbar({
               borderRadius: 100,
               fontSize: 14,
               fontWeight: 700,
-              background: "#00C9B1",
-              color: "#0D1B4B",
+              background: CY,
+              color: N,
               textDecoration: "none",
               transition: "transform 0.15s, box-shadow 0.15s",
             }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLAnchorElement).style.transform = "scale(1.04)";
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(0,201,177,0.4)";
+              (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 4px 20px ${CY}66`;
             }}
             onMouseLeave={(e) => {
               (e.currentTarget as HTMLAnchorElement).style.transform = "scale(1)";
@@ -253,7 +271,7 @@ function Navbar({
           style={{
             background: "none",
             border: "none",
-            color: "#fff",
+            color: WH,
             cursor: "pointer",
             padding: 8,
             borderRadius: 8,
@@ -268,8 +286,8 @@ function Navbar({
         <div
           className="md:hidden"
           style={{
-            background: "#0D1B4B",
-            borderTop: "1px solid rgba(255,255,255,0.08)",
+            background: NM,
+            borderTop: `1px solid ${BR}`,
             padding: "16px 24px 24px",
           }}
         >
@@ -284,7 +302,7 @@ function Navbar({
                     padding: "12px 16px",
                     borderRadius: 10,
                     fontSize: 15,
-                    color: "rgba(255,255,255,0.65)",
+                    color: WD,
                     textDecoration: "none",
                   }}
                 >
@@ -301,7 +319,7 @@ function Navbar({
                     padding: "12px 16px",
                     borderRadius: 10,
                     fontSize: 15,
-                    color: "rgba(255,255,255,0.65)",
+                    color: WD,
                     textAlign: "left",
                   }}
                 >
@@ -309,7 +327,7 @@ function Navbar({
                 </button>
               )
             )}
-            <div style={{ marginTop: 12, borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ marginTop: 12, borderTop: `1px solid ${BR}`, paddingTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
               <button
                 onClick={onLoginOpen}
                 style={{
@@ -317,11 +335,11 @@ function Navbar({
                   width: "100%",
                   padding: "12px 16px",
                   borderRadius: 12,
-                  border: "1px solid rgba(255,255,255,0.2)",
+                  border: `1px solid rgba(255,255,255,0.2)`,
                   background: "none",
                   fontSize: 14,
                   fontWeight: 600,
-                  color: "#fff",
+                  color: WH,
                   textAlign: "center",
                   cursor: "pointer",
                 }}
@@ -336,8 +354,8 @@ function Navbar({
                   borderRadius: 100,
                   fontSize: 14,
                   fontWeight: 700,
-                  background: "#00C9B1",
-                  color: "#0D1B4B",
+                  background: CY,
+                  color: N,
                   textAlign: "center",
                   textDecoration: "none",
                 }}
@@ -371,9 +389,9 @@ function AppMockup() {
           width: "60%",
           height: 160,
           borderRadius: "50%",
-          background: "#00C9B1",
-          opacity: 0.15,
-          filter: "blur(48px)",
+          background: CY,
+          opacity: 0.12,
+          filter: "blur(56px)",
           pointerEvents: "none",
         }}
       />
@@ -383,7 +401,7 @@ function AppMockup() {
         style={{
           borderRadius: 18,
           overflow: "hidden",
-          boxShadow: "0 0 0 1px rgba(255,255,255,0.07), 0 40px 100px rgba(0,0,0,0.65)",
+          boxShadow: `0 0 0 1px ${BR}, 0 40px 100px rgba(0,0,0,0.7)`,
           animation: "mockupFloat 6s ease-in-out infinite",
           transform: "perspective(1400px) rotateX(4deg)",
         }}
@@ -394,7 +412,7 @@ function AppMockup() {
             display: "flex",
             alignItems: "center",
             gap: 12,
-            background: "#111827",
+            background: "#0d1117",
             padding: "10px 16px",
           }}
         >
@@ -408,7 +426,7 @@ function AppMockup() {
               flex: 1,
               maxWidth: 300,
               margin: "0 auto",
-              background: "#1f2937",
+              background: "#161b22",
               borderRadius: 6,
               padding: "5px 12px",
               display: "flex",
@@ -417,7 +435,7 @@ function AppMockup() {
             }}
           >
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e", display: "inline-block" }} />
-            <span style={{ fontSize: 11, color: "#9ca3af" }}>app.bankacademy.ch/dashboard</span>
+            <span style={{ fontSize: 11, color: "#6b7280" }}>app.bankacademy.ch/dashboard</span>
           </div>
         </div>
 
@@ -426,7 +444,7 @@ function AppMockup() {
           {/* Sidebar */}
           <div style={{ width: 168, flexShrink: 0, background: "#0D1B4B", padding: "12px 10px", display: "flex", flexDirection: "column", gap: 2 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "6px 10px", marginBottom: 10 }}>
-              <span style={{ width: 20, height: 20, borderRadius: 6, background: "#00C9B1", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: "#0D1B4B" }}>BA</span>
+              <span style={{ width: 20, height: 20, borderRadius: 6, background: CY, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: N }}>BA</span>
               <span style={{ fontSize: 11, fontWeight: 800, color: "#fff", letterSpacing: "-0.3px" }}>BankAcademy</span>
             </div>
             {[
@@ -443,8 +461,8 @@ function AppMockup() {
                   padding: "7px 10px",
                   fontSize: 10,
                   fontWeight: item.active ? 600 : 400,
-                  color: item.active ? "#00C9B1" : "rgba(255,255,255,0.38)",
-                  background: item.active ? "rgba(0,201,177,0.13)" : "transparent",
+                  color: item.active ? CY : "rgba(255,255,255,0.38)",
+                  background: item.active ? `${CY}22` : "transparent",
                 }}
               >
                 {item.label}
@@ -476,8 +494,8 @@ function AppMockup() {
             <p style={{ margin: "0 0 6px", fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#9ca3af" }}>Module</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
               {[
-                { name: "Privatkunde", pct: 65, clr: "#00C9B1" },
-                { name: "Firmenkunde", pct: 40, clr: "#6C63FF" },
+                { name: "Privatkunde", pct: 65, clr: CY },
+                { name: "Firmenkunde", pct: 40, clr: PU },
                 { name: "Back Office", pct: 80, clr: "#10b981" },
                 { name: "Anlagekunde", pct: 20, clr: "#f59e0b" },
               ].map((m) => (
@@ -499,11 +517,11 @@ function AppMockup() {
 
 /* ─── Section: Hero ───────────────────────────────────────────────────────── */
 
-function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
+function Hero() {
   return (
     <section
       style={{
-        background: "#0D1B4B",
+        background: N,
         minHeight: "100vh",
         position: "relative",
         overflow: "hidden",
@@ -517,7 +535,7 @@ function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
           position: "absolute",
           inset: 0,
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)",
+            "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
           pointerEvents: "none",
         }}
@@ -527,7 +545,16 @@ function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
         style={{
           position: "absolute",
           inset: 0,
-          background: "radial-gradient(ellipse 90% 55% at 50% -5%, rgba(0,201,177,0.14) 0%, transparent 65%)",
+          background: `radial-gradient(ellipse 90% 55% at 50% -5%, ${CY}22 0%, transparent 65%)`,
+          pointerEvents: "none",
+        }}
+      />
+      {/* Purple side glow */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `radial-gradient(ellipse 60% 40% at 85% 30%, ${PU}18 0%, transparent 60%)`,
           pointerEvents: "none",
         }}
       />
@@ -539,14 +566,14 @@ function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
             display: "inline-flex",
             alignItems: "center",
             gap: 9,
-            border: "1px solid rgba(0,201,177,0.28)",
-            background: "rgba(0,201,177,0.08)",
+            border: `1px solid ${CY}44`,
+            background: `${CY}10`,
             borderRadius: 100,
             padding: "8px 18px",
             marginBottom: 28,
             fontSize: 14,
             fontWeight: 500,
-            color: "#00C9B1",
+            color: CY,
           }}
         >
           <span
@@ -554,7 +581,7 @@ function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
               width: 8,
               height: 8,
               borderRadius: "50%",
-              background: "#00C9B1",
+              background: CY,
               display: "inline-block",
               animation: "pulseDot 2.2s ease-in-out infinite",
             }}
@@ -570,14 +597,14 @@ function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
             fontWeight: 800,
             lineHeight: 1.08,
             letterSpacing: "-1.5px",
-            color: "#fff",
+            color: WH,
           }}
         >
           Banking lernen –{" "}
           <br />
           <span
             style={{
-              background: "linear-gradient(90deg, #00C9B1 0%, #6C63FF 100%)",
+              background: `linear-gradient(90deg, ${CY} 0%, ${PU} 100%)`,
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -594,7 +621,7 @@ function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
             maxWidth: 600,
             fontSize: 18,
             lineHeight: 1.65,
-            color: "rgba(255,255,255,0.58)",
+            color: WD,
           }}
         >
           Realistische Szenarien, typische Fehler und operative Denkweise –
@@ -613,59 +640,59 @@ function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
               borderRadius: 100,
               fontSize: 15,
               fontWeight: 700,
-              background: "#00C9B1",
-              color: "#0D1B4B",
+              background: CY,
+              color: N,
               textDecoration: "none",
-              boxShadow: "0 0 40px rgba(0,201,177,0.35)",
+              boxShadow: `0 0 40px ${CY}55`,
               transition: "transform 0.15s, box-shadow 0.15s",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "scale(1.04)";
-              e.currentTarget.style.boxShadow = "0 0 55px rgba(0,201,177,0.5)";
+              e.currentTarget.style.boxShadow = `0 0 55px ${CY}80`;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.boxShadow = "0 0 40px rgba(0,201,177,0.35)";
+              e.currentTarget.style.boxShadow = `0 0 40px ${CY}55`;
             }}
           >
             Kostenlos starten <ChevronRight size={17} />
           </Link>
-          <button
-            onClick={onDemoOpen}
+          <Link
+            href="/dashboard"
             style={{
               padding: "15px 32px",
               borderRadius: 100,
               fontSize: 15,
               fontWeight: 600,
               background: "transparent",
-              border: "1px solid rgba(255,255,255,0.22)",
-              color: "#fff",
-              cursor: "pointer",
+              border: `1px solid rgba(255,255,255,0.2)`,
+              color: WH,
+              textDecoration: "none",
               transition: "background 0.15s",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.07)";
+              (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.07)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+              (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
             }}
           >
             ▶ Demo ansehen
-          </button>
+          </Link>
         </div>
 
         {/* Trust badges */}
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 24, fontSize: 13, color: "rgba(255,255,255,0.38)" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 24, fontSize: 13, color: WM }}>
           {["Kein Konto nötig", "100% kostenlos", "LAP-konform"].map((t) => (
             <span key={t} style={{ display: "flex", alignItems: "center", gap: 5 }}>
-              <span style={{ color: "#00C9B1", fontSize: 14 }}>✓</span> {t}
+              <span style={{ color: CY, fontSize: 14 }}>✓</span> {t}
             </span>
           ))}
         </div>
 
-        {/* Trust indicators – Improvement 2 */}
-        <div style={{ marginTop: 28, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
-          <p style={{ margin: 0, fontSize: 12, color: "rgba(255,255,255,0.38)", fontStyle: "italic" }}>
+        {/* Trust indicators */}
+        <div style={{ marginTop: 28, paddingTop: 24, borderTop: `1px solid ${BR}`, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+          <p style={{ margin: 0, fontSize: 12, color: WM, fontStyle: "italic" }}>
             Entwickelt von einem Banklehrling mit Praxiserfahrung bei einer Schweizer Bank
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 6 }}>
@@ -675,10 +702,10 @@ function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
                 style={{
                   padding: "3px 10px",
                   borderRadius: 100,
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  border: `1px solid ${BR}`,
                   fontSize: 11,
                   fontWeight: 600,
-                  color: "rgba(255,255,255,0.45)",
+                  color: WM,
                   letterSpacing: "0.02em",
                 }}
               >
@@ -699,7 +726,7 @@ function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
           left: 0,
           right: 0,
           height: 120,
-          background: "linear-gradient(to bottom, transparent, #0D1B4B)",
+          background: `linear-gradient(to bottom, transparent, ${N})`,
           pointerEvents: "none",
         }}
       />
@@ -726,9 +753,9 @@ function StatsBar() {
     <div
       ref={ref}
       style={{
-        background: "#080f2e",
-        borderTop: "1px solid rgba(255,255,255,0.05)",
-        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        background: NM,
+        borderTop: `1px solid ${BR}`,
+        borderBottom: `1px solid ${BR}`,
         padding: "40px 24px",
       }}
     >
@@ -738,15 +765,15 @@ function StatsBar() {
             key={s.label}
             style={{
               textAlign: "center",
-              borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
+              borderRight: i < 3 ? `1px solid ${BR}` : "none",
               padding: "0 16px",
             }}
             className={i === 1 ? "sm:border-r" : ""}
           >
-            <p style={{ margin: 0, fontSize: "clamp(28px,4vw,40px)", fontWeight: 800, color: "#00C9B1" }}>
+            <p style={{ margin: 0, fontSize: "clamp(28px,4vw,48px)", fontWeight: 800, color: CY }}>
               {s.value}
             </p>
-            <p style={{ margin: "4px 0 0", fontSize: 13, fontWeight: 500, color: "rgba(255,255,255,0.45)" }}>
+            <p style={{ margin: "4px 0 0", fontSize: 13, fontWeight: 500, color: WM }}>
               {s.label}
             </p>
           </div>
@@ -776,29 +803,29 @@ const SOLUTIONS = [
 
 function ProblemSolution() {
   return (
-    <section style={{ background: "#fff", padding: "96px 24px" }}>
+    <section style={{ background: N, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <FadeIn className="text-center" style={{ marginBottom: 56 }}>
-          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#00C9B1" }}>
+          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
             Warum BankAcademy
           </p>
-          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: "#111827" }}>
+          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
             Die bessere Art zu lernen.
           </h2>
         </FadeIn>
 
         <div style={{ display: "grid", gap: 24 }} className="sm:grid-cols-2">
           <FadeIn delay={0.1}>
-            <div style={{ borderRadius: 20, border: "1px solid #fecaca", background: "#fff8f8", padding: 36, height: "100%" }}>
-              <span style={{ display: "inline-block", background: "#fee2e2", color: "#b91c1c", borderRadius: 100, padding: "4px 14px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20 }}>
+            <div style={{ borderRadius: 20, border: "1px solid rgba(239,68,68,0.25)", background: "rgba(239,68,68,0.05)", padding: 36, height: "100%" }}>
+              <span style={{ display: "inline-block", background: "rgba(239,68,68,0.15)", color: "#f87171", borderRadius: 100, padding: "4px 14px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20 }}>
                 Das Problem
               </span>
-              <h3 style={{ margin: "0 0 24px", fontSize: 20, fontWeight: 700, color: "#111827" }}>
+              <h3 style={{ margin: "0 0 24px", fontSize: 20, fontWeight: 700, color: WH }}>
                 Klassische Ausbildung hat Lücken.
               </h3>
               <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
                 {PROBLEMS.map((p) => (
-                  <li key={p} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, color: "#374151", lineHeight: 1.5 }}>
+                  <li key={p} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, color: WD, lineHeight: 1.5 }}>
                     <span style={{ flexShrink: 0, marginTop: 1 }}>❌</span> {p}
                   </li>
                 ))}
@@ -807,16 +834,16 @@ function ProblemSolution() {
           </FadeIn>
 
           <FadeIn delay={0.2}>
-            <div style={{ borderRadius: 20, border: "1px solid #a7f3d0", background: "#f0fdf8", padding: 36, height: "100%" }}>
-              <span style={{ display: "inline-block", background: "#d1fae5", color: "#065f46", borderRadius: 100, padding: "4px 14px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20 }}>
+            <div style={{ borderRadius: 20, border: `1px solid ${CY}33`, background: `${CY}08`, padding: 36, height: "100%" }}>
+              <span style={{ display: "inline-block", background: `${CY}20`, color: CY, borderRadius: 100, padding: "4px 14px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20 }}>
                 Die Lösung
               </span>
-              <h3 style={{ margin: "0 0 24px", fontSize: 20, fontWeight: 700, color: "#111827" }}>
+              <h3 style={{ margin: "0 0 24px", fontSize: 20, fontWeight: 700, color: WH }}>
                 Praxis von Tag 1.
               </h3>
               <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
                 {SOLUTIONS.map((s) => (
-                  <li key={s} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, color: "#374151", lineHeight: 1.5 }}>
+                  <li key={s} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, color: WD, lineHeight: 1.5 }}>
                     <span style={{ flexShrink: 0, marginTop: 1 }}>✅</span> {s}
                   </li>
                 ))}
@@ -854,13 +881,13 @@ const HOW_STEPS = [
 
 function HowItWorks() {
   return (
-    <section id="how-it-works" style={{ background: "#F5F6FA", padding: "96px 24px" }}>
+    <section id="how-it-works" style={{ background: NM, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <FadeIn style={{ textAlign: "center", marginBottom: 60 }}>
-          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#00C9B1" }}>
+          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
             So funktioniert es
           </p>
-          <h2 style={{ margin: "0 0 10px", fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: "#111827" }}>
+          <h2 style={{ margin: "0 0 10px", fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
             In 3 Schritten zum Banking-Profi
           </h2>
         </FadeIn>
@@ -870,13 +897,22 @@ function HowItWorks() {
             <FadeIn key={step.num} delay={i * 0.12} style={{ position: "relative" }}>
               <div
                 style={{
-                  background: "#fff",
-                  border: "1px solid #e5e7eb",
+                  background: CB,
+                  border: `1px solid ${BR}`,
                   borderRadius: 20,
                   padding: 32,
                   height: "100%",
                   position: "relative",
                   overflow: "hidden",
+                  transition: "border-color 0.2s, background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = `${CY}44`;
+                  (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.07)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = BR;
+                  (e.currentTarget as HTMLDivElement).style.background = CB;
                 }}
               >
                 <span
@@ -886,7 +922,7 @@ function HowItWorks() {
                     right: 20,
                     fontSize: 52,
                     fontWeight: 900,
-                    color: "rgba(13,27,75,0.06)",
+                    color: "rgba(255,255,255,0.04)",
                     lineHeight: 1,
                     userSelect: "none",
                   }}
@@ -898,7 +934,8 @@ function HowItWorks() {
                     width: 56,
                     height: 56,
                     borderRadius: 16,
-                    background: "rgba(13,27,75,0.07)",
+                    background: `${CY}15`,
+                    border: `1px solid ${CY}25`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -908,8 +945,8 @@ function HowItWorks() {
                 >
                   {step.emoji}
                 </div>
-                <h3 style={{ margin: "0 0 10px", fontSize: 16, fontWeight: 700, color: "#111827" }}>{step.title}</h3>
-                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: "#6b7280" }}>{step.text}</p>
+                <h3 style={{ margin: "0 0 10px", fontSize: 16, fontWeight: 700, color: WH }}>{step.title}</h3>
+                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: WD }}>{step.text}</p>
               </div>
               {i < HOW_STEPS.length - 1 && (
                 <div
@@ -921,7 +958,7 @@ function HowItWorks() {
                     transform: "translateY(-50%)",
                     zIndex: 10,
                     fontSize: 20,
-                    color: "#d1d5db",
+                    color: WM,
                   }}
                 >
                   →
@@ -948,13 +985,13 @@ const FEATURE_CARDS = [
 
 function Features() {
   return (
-    <section id="features" style={{ background: "#fff", padding: "96px 24px" }}>
+    <section id="features" style={{ background: N, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <FadeIn style={{ textAlign: "center", marginBottom: 56 }}>
-          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#00C9B1" }}>
+          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
             Features
           </p>
-          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: "#111827" }}>
+          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
             Was BankAcademy einzigartig macht
           </h2>
         </FadeIn>
@@ -964,26 +1001,44 @@ function Features() {
             <FadeIn key={f.title} delay={i * 0.07}>
               <div
                 style={{
-                  background: "#fff",
-                  border: "1px solid #e5e7eb",
+                  background: CB,
+                  border: `1px solid ${BR}`,
                   borderRadius: 18,
                   padding: "28px 28px 24px",
                   cursor: "default",
-                  transition: "transform 0.2s, box-shadow 0.2s",
+                  transition: "transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s",
                   height: "100%",
                 }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 32px rgba(0,0,0,0.08)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = `0 12px 40px rgba(0,0,0,0.3)`;
+                  (e.currentTarget as HTMLDivElement).style.borderColor = `${CY}33`;
+                  (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.07)";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
                   (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+                  (e.currentTarget as HTMLDivElement).style.borderColor = BR;
+                  (e.currentTarget as HTMLDivElement).style.background = CB;
                 }}
               >
-                <span style={{ fontSize: 32, display: "block", marginBottom: 16 }}>{f.emoji}</span>
-                <h3 style={{ margin: "0 0 8px", fontSize: 15, fontWeight: 700, color: "#111827" }}>{f.title}</h3>
-                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: "#6b7280" }}>{f.text}</p>
+                <div
+                  style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 14,
+                    background: `${CY}15`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 24,
+                    marginBottom: 16,
+                  }}
+                >
+                  {f.emoji}
+                </div>
+                <h3 style={{ margin: "0 0 8px", fontSize: 15, fontWeight: 700, color: WH }}>{f.title}</h3>
+                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: WD }}>{f.text}</p>
               </div>
             </FadeIn>
           ))}
@@ -1003,23 +1058,25 @@ function ModuleItem({ emoji, title, desc }: { emoji: string; title: string; desc
         alignItems: "flex-start",
         gap: 14,
         borderRadius: 14,
-        border: "1px solid rgba(255,255,255,0.07)",
-        background: "rgba(255,255,255,0.04)",
+        border: `1px solid ${BR}`,
+        background: CB,
         padding: "16px 18px",
-        transition: "background 0.15s",
+        transition: "background 0.15s, border-color 0.15s",
         cursor: "default",
       }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.07)";
+        (e.currentTarget as HTMLDivElement).style.borderColor = `${CY}33`;
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.04)";
+        (e.currentTarget as HTMLDivElement).style.background = CB;
+        (e.currentTarget as HTMLDivElement).style.borderColor = BR;
       }}
     >
       <span style={{ fontSize: 22, flexShrink: 0, marginTop: 1 }}>{emoji}</span>
       <div>
-        <p style={{ margin: "0 0 4px", fontSize: 13, fontWeight: 700, color: "#fff" }}>{title}</p>
-        <p style={{ margin: 0, fontSize: 12, lineHeight: 1.5, color: "rgba(255,255,255,0.45)" }}>{desc}</p>
+        <p style={{ margin: "0 0 4px", fontSize: 13, fontWeight: 700, color: WH }}>{title}</p>
+        <p style={{ margin: 0, fontSize: 12, lineHeight: 1.5, color: WM }}>{desc}</p>
       </div>
     </div>
   );
@@ -1027,31 +1084,31 @@ function ModuleItem({ emoji, title, desc }: { emoji: string; title: string; desc
 
 function Modules() {
   return (
-    <section id="module" style={{ background: "#0D1B4B", padding: "96px 24px" }}>
+    <section id="module" style={{ background: NM, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <FadeIn style={{ textAlign: "center", marginBottom: 56 }}>
-          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#00C9B1" }}>
+          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
             Inhalte
           </p>
-          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: "#fff" }}>
+          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
             Alle Module im Überblick
           </h2>
         </FadeIn>
 
         <div style={{ display: "grid", gap: 40 }} className="sm:grid-cols-2">
           <FadeIn delay={0.1}>
-            <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,0.35)" }}>
+            <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: WM }}>
               Front Office
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <ModuleItem emoji="👤" title="Privatkunde" desc="Kontoeröffnung, Sparen & Konto, Zahlungsverkehr, 3a, Hypotheken" />
               <ModuleItem emoji="🏢" title="Firmenkunde" desc="Jahresabschluss, Tragbarkeit, Hypothek Verlängerung" />
-              <ModuleItem emoji="📈" title="Anlagekunde" desc="Anlegerprofil, Fonds & ETFs" />
+              <ModuleItem emoji="📈" title="Anlagekunde" desc="Anlegerprofil, Obligationen, Aktien, Fonds & ETFs" />
             </div>
           </FadeIn>
 
           <FadeIn delay={0.2}>
-            <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,0.35)" }}>
+            <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: WM }}>
               Back Office
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -1059,9 +1116,29 @@ function Modules() {
               <ModuleItem emoji="💳" title="Credit Operations" desc="Vertragserstellung, Auszahlung, Verlängerung, Kündigung" />
             </div>
           </FadeIn>
+
+          <FadeIn delay={0.25}>
+            <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: WM }}>
+              LAP Vorbereitung
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <ModuleItem emoji="🎓" title="LAP Modus" desc="Prüfungsrelevante Level-3 Szenarien aller Module" />
+              <ModuleItem emoji="🗺️" title="Lernpfad" desc="Strukturierter Pfad von Grundlagen bis zur Abschlussprüfung" />
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.3}>
+            <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: WM }}>
+              Simulationen
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <ModuleItem emoji="🎭" title="Anlageberatung" desc="Vollständiges Beratungsgespräch mit VideoCall-Simulation" />
+              <ModuleItem emoji="🏠" title="Hypothek & Kontoeröffnung" desc="Interaktive Simulationen mit Kundendialogen" />
+            </div>
+          </FadeIn>
         </div>
 
-        <FadeIn style={{ textAlign: "center", marginTop: 44 }} delay={0.3}>
+        <FadeIn style={{ textAlign: "center", marginTop: 44 }} delay={0.35}>
           <Link
             href="/dashboard"
             style={{
@@ -1072,8 +1149,8 @@ function Modules() {
               borderRadius: 100,
               fontSize: 14,
               fontWeight: 700,
-              background: "#00C9B1",
-              color: "#0D1B4B",
+              background: CY,
+              color: N,
               textDecoration: "none",
               transition: "transform 0.15s",
             }}
@@ -1094,127 +1171,79 @@ const B2B_CARDS = [
   { emoji: "📊", title: "Fortschritt verfolgen", text: "Sehen Sie wie Ihre Lernenden vorankommen – Modul für Modul" },
   { emoji: "🎯", title: "Praxisnah & aktuell", text: "Inhalte aus der echten Bankpraxis – abgestimmt auf Schweizer Bankstandards" },
   { emoji: "🚀", title: "Sofort einsatzbereit", text: "Keine Installation, kein Setup – direkt im Browser, überall verfügbar" },
+  { emoji: "📋", title: "Compliance-konform", text: "Alle Inhalte nach GwG, VSB 20, FIDLEG und weiteren Regelwerken" },
 ];
 
 function ForBanks() {
   return (
-    <section id="fuer-banken" style={{ background: "#F5F6FA", padding: "96px 24px" }}>
+    <section id="fuer-banken" style={{ background: N, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
-        <FadeIn style={{ textAlign: "center", marginBottom: 56 }}>
-          <span style={{ display: "inline-block", background: "#dbeafe", color: "#1d4ed8", borderRadius: 100, padding: "4px 14px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>
-            Für Banken & Ausbildner
-          </span>
-          <h2 style={{ margin: "0 0 12px", fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: "#111827" }}>
-            Moderne Ausbildung
-            <br />
-            für Ihre Lernenden.
-          </h2>
-          <p style={{ margin: 0, maxWidth: 500, marginLeft: "auto", marginRight: "auto", fontSize: 16, color: "#6b7280", lineHeight: 1.6 }}>
-            BankAcademy ergänzt bestehende Ausbildungsangebote mit praxisnahem digitalem Training.
-          </p>
-        </FadeIn>
+        <div style={{ display: "grid", gap: 56, alignItems: "center" }} className="lg:grid-cols-2">
+          {/* Text side */}
+          <FadeIn delay={0.1}>
+            <span style={{ display: "inline-block", background: `${PU}20`, color: PU, borderRadius: 100, padding: "4px 14px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>
+              Für Banken & Ausbildner
+            </span>
+            <h2 style={{ margin: "0 0 16px", fontSize: "clamp(26px,4vw,36px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH, lineHeight: 1.15 }}>
+              Moderne Ausbildung
+              <br />
+              für Ihre Lernenden.
+            </h2>
+            <p style={{ margin: "0 0 28px", fontSize: 16, color: WD, lineHeight: 1.65 }}>
+              BankAcademy ergänzt bestehende Ausbildungsangebote mit praxisnahem digitalem Training – abgestimmt auf Schweizer Bankstandards.
+            </p>
+            <Link
+              href="/kontakt"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 7,
+                padding: "13px 28px",
+                borderRadius: 100,
+                fontSize: 14,
+                fontWeight: 700,
+                background: PU,
+                color: WH,
+                textDecoration: "none",
+                boxShadow: `0 4px 20px ${PU}44`,
+                transition: "transform 0.15s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+            >
+              Kontakt aufnehmen <ChevronRight size={15} />
+            </Link>
+          </FadeIn>
 
-        <div style={{ display: "grid", gap: 16, marginBottom: 36 }} className="sm:grid-cols-3">
-          {B2B_CARDS.map((b, i) => (
-            <FadeIn key={b.title} delay={i * 0.1}>
-              <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 18, padding: "28px 24px", height: "100%" }}>
-                <span style={{ fontSize: 32, display: "block", marginBottom: 16 }}>{b.emoji}</span>
-                <h3 style={{ margin: "0 0 8px", fontSize: 15, fontWeight: 700, color: "#111827" }}>{b.title}</h3>
-                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: "#6b7280" }}>{b.text}</p>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
-
-        <FadeIn style={{ textAlign: "center" }} delay={0.32}>
-          <Link
-            href="/kontakt"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 7,
-              padding: "13px 28px",
-              borderRadius: 100,
-              fontSize: 14,
-              fontWeight: 700,
-              background: "#0D1B4B",
-              color: "#fff",
-              textDecoration: "none",
-              boxShadow: "0 4px 20px rgba(13,27,75,0.2)",
-              transition: "transform 0.15s",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
-          >
-            Kontakt aufnehmen <ChevronRight size={15} />
-          </Link>
-        </FadeIn>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Section: Testimonials ───────────────────────────────────────────────── */
-
-const QUOTES = [
-  {
-    quote: "Endlich eine Plattform die zeigt wie das Bankgeschäft wirklich funktioniert – nicht nur Theorie.",
-    name: "Lernende, 2. Lehrjahr",
-    bank: "Kantonalbank",
-  },
-  {
-    quote: "Die typischen Fehler Sektion ist Gold. Ich wusste nicht wie viele Stolpersteine es gibt bis ich sie hier gesehen habe.",
-    name: "Praktikant",
-    bank: "Grossbank",
-  },
-  {
-    quote: "Als Quereinsteiger war das genau das richtige Tool um schnell ins Banking-Vokabular einzutauchen.",
-    name: "Quereinsteiger",
-    bank: "Regionalbank",
-  },
-];
-
-function Testimonials() {
-  return (
-    <section style={{ background: "#fff", padding: "96px 24px" }}>
-      <div style={{ maxWidth: 960, margin: "0 auto" }}>
-        <FadeIn style={{ textAlign: "center", marginBottom: 56 }}>
-          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#00C9B1" }}>
-            Stimmen
-          </p>
-          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: "#111827" }}>
-            Was Beta-Tester sagen
-          </h2>
-        </FadeIn>
-
-        <div style={{ display: "grid", gap: 20 }} className="sm:grid-cols-3">
-          {QUOTES.map((q, i) => (
-            <FadeIn key={i} delay={i * 0.1}>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                  background: "#f9fafb",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: 20,
-                  padding: 28,
-                }}
-              >
-                <div style={{ display: "flex", marginBottom: 16, color: "#fbbf24", fontSize: 16 }}>
-                  ★★★★★
+          {/* Cards grid */}
+          <FadeIn delay={0.2}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              {B2B_CARDS.map((b) => (
+                <div
+                  key={b.title}
+                  style={{
+                    background: CB,
+                    border: `1px solid ${BR}`,
+                    borderRadius: 16,
+                    padding: "22px 20px",
+                    transition: "border-color 0.15s, background 0.15s",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.borderColor = `${PU}44`;
+                    (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.07)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.borderColor = BR;
+                    (e.currentTarget as HTMLDivElement).style.background = CB;
+                  }}
+                >
+                  <span style={{ fontSize: 26, display: "block", marginBottom: 10 }}>{b.emoji}</span>
+                  <h3 style={{ margin: "0 0 6px", fontSize: 13, fontWeight: 700, color: WH }}>{b.title}</h3>
+                  <p style={{ margin: 0, fontSize: 12, lineHeight: 1.55, color: WD }}>{b.text}</p>
                 </div>
-                <p style={{ flex: 1, margin: "0 0 20px", fontSize: 14, lineHeight: 1.7, color: "#374151" }}>
-                  &ldquo;{q.quote}&rdquo;
-                </p>
-                <div style={{ borderTop: "1px solid #e5e7eb", paddingTop: 16 }}>
-                  <p style={{ margin: "0 0 2px", fontSize: 13, fontWeight: 700, color: "#111827" }}>{q.name}</p>
-                  <p style={{ margin: "0 0 6px", fontSize: 12, color: "#9ca3af" }}>{q.bank}</p>
-                  <span style={{ fontSize: 11, color: "#9ca3af" }}>* Beta-Feedback</span>
-                </div>
-              </div>
-            </FadeIn>
-          ))}
+              ))}
+            </div>
+          </FadeIn>
         </div>
       </div>
     </section>
@@ -1228,19 +1257,30 @@ function FinalCTA() {
     <section
       id="preise"
       style={{
-        background: "linear-gradient(135deg, #0D1B4B 0%, #0e2a5a 50%, #053a4a 100%)",
+        background: NM,
         padding: "112px 24px",
         textAlign: "center",
         position: "relative",
         overflow: "hidden",
       }}
     >
-      {/* Decorative radial */}
+      {/* Radial glow */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: "radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,201,177,0.08) 0%, transparent 70%)",
+          background: `radial-gradient(ellipse 70% 70% at 50% 50%, ${CY}12 0%, transparent 65%)`,
+          pointerEvents: "none",
+        }}
+      />
+      {/* Grid */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
           pointerEvents: "none",
         }}
       />
@@ -1252,13 +1292,13 @@ function FinalCTA() {
               fontSize: "clamp(28px,5vw,48px)",
               fontWeight: 800,
               letterSpacing: "-0.8px",
-              color: "#fff",
+              color: WH,
               lineHeight: 1.1,
             }}
           >
             Bereit für BankAcademy?
           </h2>
-          <p style={{ margin: "0 0 36px", fontSize: 18, color: "rgba(255,255,255,0.58)", lineHeight: 1.6 }}>
+          <p style={{ margin: "0 0 36px", fontSize: 18, color: WD, lineHeight: 1.6 }}>
             Starte heute kostenlos und trainiere Banking wie es wirklich ist.
           </p>
           <Link
@@ -1271,144 +1311,29 @@ function FinalCTA() {
               borderRadius: 100,
               fontSize: 16,
               fontWeight: 800,
-              background: "#fff",
-              color: "#0D1B4B",
+              background: CY,
+              color: N,
               textDecoration: "none",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+              boxShadow: `0 8px 40px ${CY}55`,
               transition: "transform 0.15s, box-shadow 0.15s",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "scale(1.05)";
-              e.currentTarget.style.boxShadow = "0 12px 48px rgba(0,0,0,0.3)";
+              e.currentTarget.style.boxShadow = `0 12px 48px ${CY}77`;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.2)";
+              e.currentTarget.style.boxShadow = `0 8px 40px ${CY}55`;
             }}
           >
             Kostenlos starten <ChevronRight size={18} />
           </Link>
-          <p style={{ margin: "18px 0 0", fontSize: 13, color: "rgba(255,255,255,0.35)" }}>
+          <p style={{ margin: "18px 0 0", fontSize: 13, color: WM }}>
             Kein Konto nötig · Kostenlos · Sofort starten
           </p>
         </div>
       </FadeIn>
     </section>
-  );
-}
-
-/* ─── Beta Banner (Improvement 10) ────────────────────────────────────────── */
-
-function BetaBanner({ onDismiss }: { onDismiss: () => void }) {
-  return (
-    <div
-      style={{
-        background: "linear-gradient(90deg, #0D1B4B 0%, #1a2d6e 100%)",
-        borderBottom: "1px solid rgba(0,201,177,0.2)",
-        padding: "10px 24px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 12,
-        position: "relative",
-      }}
-    >
-      <p style={{ margin: 0, fontSize: 13, color: "rgba(255,255,255,0.85)", textAlign: "center" }}>
-        🚀 BankAcademy ist in der Beta-Phase – dein Feedback hilft uns besser zu werden!{" "}
-        <Link
-          href="/kontakt"
-          style={{ color: "#00C9B1", fontWeight: 600, textDecoration: "underline" }}
-        >
-          Feedback geben →
-        </Link>
-      </p>
-      <button
-        onClick={onDismiss}
-        style={{
-          position: "absolute",
-          right: 16,
-          background: "none",
-          border: "none",
-          color: "rgba(255,255,255,0.45)",
-          cursor: "pointer",
-          fontSize: 18,
-          lineHeight: 1,
-          padding: "0 4px",
-        }}
-        aria-label="Banner schliessen"
-      >
-        ×
-      </button>
-    </div>
-  );
-}
-
-/* ─── Demo Modal (Improvement 9) ─────────────────────────────────────────── */
-
-function DemoModal({ onClose }: { onClose: () => void }) {
-  return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.75)",
-        backdropFilter: "blur(6px)",
-        zIndex: 9999,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 24,
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          background: "#0D1B4B",
-          borderRadius: 20,
-          border: "1px solid rgba(255,255,255,0.1)",
-          boxShadow: "0 40px 100px rgba(0,0,0,0.6)",
-          width: "100%",
-          maxWidth: 700,
-          overflow: "hidden",
-        }}
-      >
-        {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 24px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-          <div>
-            <p style={{ margin: 0, fontSize: 17, fontWeight: 700, color: "#fff" }}>BankAcademy Demo</p>
-            <p style={{ margin: "2px 0 0", fontSize: 13, color: "rgba(255,255,255,0.45)" }}>Lerne, wie die App in der Praxis funktioniert</p>
-          </div>
-          <button
-            onClick={onClose}
-            style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "rgba(255,255,255,0.6)", cursor: "pointer", padding: "6px 12px", fontSize: 13 }}
-          >
-            ✕ Schliessen
-          </button>
-        </div>
-
-        {/* Video placeholder */}
-        <div style={{ aspectRatio: "16/9", background: "rgba(0,0,0,0.4)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16 }}>
-          <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(0,201,177,0.12)", border: "1px solid rgba(0,201,177,0.25)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ fontSize: 28 }}>▶</span>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: 15, fontWeight: 600, color: "#fff" }}>Demo Video</p>
-            <p style={{ margin: "6px 0 0", fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Wird bald verfügbar sein</p>
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div style={{ padding: "20px 24px", display: "flex", gap: 12, justifyContent: "center" }}>
-          <a
-            href="/dashboard"
-            style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 24px", borderRadius: 100, background: "#00C9B1", color: "#0D1B4B", fontSize: 14, fontWeight: 700, textDecoration: "none" }}
-          >
-            Jetzt kostenlos ausprobieren →
-          </a>
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -1687,26 +1612,26 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
   };
 
   return (
-    <footer style={{ background: "#fff", borderTop: "1px solid #e5e7eb" }}>
+    <footer style={{ background: N, borderTop: `1px solid ${BR}` }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "64px 24px 32px" }}>
         <div style={{ display: "grid", gap: 40 }} className="sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <p style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", color: "#0D1B4B" }}>
-              Bank<span style={{ color: "#00C9B1" }}>Academy</span>
+            <p style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
+              Bank<span style={{ color: CY }}>Academy</span>
             </p>
-            <p style={{ margin: "0 0 4px", fontSize: 13, color: "#6b7280", lineHeight: 1.5 }}>
+            <p style={{ margin: "0 0 4px", fontSize: 13, color: WD, lineHeight: 1.5 }}>
               Der digitale Praxisausbildner
               <br />
               für die Banklehre 🇨🇭
             </p>
-            <p style={{ margin: "8px 0 0", fontSize: 12, color: "#9ca3af" }}>© 2026 BankAcademy</p>
+            <p style={{ margin: "8px 0 0", fontSize: 12, color: WM }}>© 2026 BankAcademy</p>
           </div>
 
           {/* Link columns */}
           {Object.entries(COLS).map(([cat, links]) => (
             <div key={cat}>
-              <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.09em", color: "#9ca3af" }}>
+              <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.09em", color: WM }}>
                 {cat}
               </p>
               <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
@@ -1720,11 +1645,11 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
                         cursor: "pointer",
                         padding: 0,
                         fontSize: 14,
-                        color: "#6b7280",
+                        color: WD,
                         transition: "color 0.15s",
                       }}
-                      onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#111827"; }}
-                      onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#6b7280"; }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = WH; }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = WD; }}
                     >
                       {l.label}
                     </button>
@@ -1740,7 +1665,7 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
           style={{
             marginTop: 48,
             paddingTop: 24,
-            borderTop: "1px solid #e5e7eb",
+            borderTop: `1px solid ${BR}`,
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "space-between",
@@ -1748,10 +1673,10 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
             gap: 8,
           }}
         >
-          <p style={{ margin: 0, fontSize: 12, color: "#9ca3af" }}>
+          <p style={{ margin: 0, fontSize: 12, color: WM }}>
             © 2026 BankAcademy. Alle Rechte vorbehalten.
           </p>
-          <p style={{ margin: 0, fontSize: 12, color: "#9ca3af" }}>
+          <p style={{ margin: 0, fontSize: 12, color: WM }}>
             Für Lernende und Ausbildner in Schweizer Banken.
           </p>
         </div>
@@ -1765,18 +1690,7 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
 export default function LandingPage() {
   const scrolled = useScrolled();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [bannerDismissed, setBannerDismissed] = useState(true);
-  const [demoOpen, setDemoOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
-
-  useEffect(() => {
-    setBannerDismissed(localStorage.getItem("beta-banner-dismissed") === "true");
-  }, []);
-
-  function dismissBanner() {
-    localStorage.setItem("beta-banner-dismissed", "true");
-    setBannerDismissed(true);
-  }
 
   function scrollTo(id: string) {
     setMobileOpen(false);
@@ -1807,11 +1721,9 @@ export default function LandingPage() {
         }
       `}</style>
 
-      {demoOpen && <DemoModal onClose={() => setDemoOpen(false)} />}
       {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
 
-      <div style={{ minHeight: "100vh", background: "#fff" }}>
-        {!bannerDismissed && <BetaBanner onDismiss={dismissBanner} />}
+      <div style={{ minHeight: "100vh", background: N }}>
         <Navbar
           scrolled={scrolled}
           mobileOpen={mobileOpen}
@@ -1819,14 +1731,13 @@ export default function LandingPage() {
           onNav={scrollTo}
           onLoginOpen={() => { setMobileOpen(false); setLoginOpen(true); }}
         />
-        <Hero onDemoOpen={() => setDemoOpen(true)} />
+        <Hero />
         <StatsBar />
         <ProblemSolution />
         <HowItWorks />
         <Features />
         <Modules />
         <ForBanks />
-        <Testimonials />
         <FinalCTA />
         <Footer onNav={scrollTo} />
       </div>
