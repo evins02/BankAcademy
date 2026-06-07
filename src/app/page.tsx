@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronRight, Menu, X } from "lucide-react";
+import { ChevronRight, Eye, EyeOff, Menu, X } from "lucide-react";
 
 /* ─── Hooks ───────────────────────────────────────────────────────────────── */
 
@@ -101,11 +101,13 @@ function Navbar({
   mobileOpen,
   onToggle,
   onNav,
+  onLoginOpen,
 }: {
   scrolled: boolean;
   mobileOpen: boolean;
   onToggle: () => void;
   onNav: (id: string) => void;
+  onLoginOpen: () => void;
 }) {
   return (
     <header
@@ -198,20 +200,24 @@ function Navbar({
 
         {/* Desktop CTA */}
         <div style={{ display: "flex", gap: 12, alignItems: "center" }} className="hidden md:flex">
-          <Link
-            href="/dashboard"
+          <button
+            onClick={onLoginOpen}
             style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
               padding: "8px 18px",
               borderRadius: 8,
               fontSize: 14,
               fontWeight: 500,
               color: "rgba(255,255,255,0.75)",
-              textDecoration: "none",
               transition: "color 0.15s",
             }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#fff"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.75)"; }}
           >
             Einloggen
-          </Link>
+          </button>
           <Link
             href="/dashboard"
             style={{
@@ -304,22 +310,24 @@ function Navbar({
               )
             )}
             <div style={{ marginTop: 12, borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-              <Link
-                href="/dashboard"
+              <button
+                onClick={onLoginOpen}
                 style={{
                   display: "block",
+                  width: "100%",
                   padding: "12px 16px",
                   borderRadius: 12,
                   border: "1px solid rgba(255,255,255,0.2)",
+                  background: "none",
                   fontSize: 14,
                   fontWeight: 600,
                   color: "#fff",
                   textAlign: "center",
-                  textDecoration: "none",
+                  cursor: "pointer",
                 }}
               >
                 Einloggen
-              </Link>
+              </button>
               <Link
                 href="/dashboard"
                 style={{
@@ -1404,6 +1412,258 @@ function DemoModal({ onClose }: { onClose: () => void }) {
   );
 }
 
+/* ─── Login Modal ─────────────────────────────────────────────────────────── */
+
+function LoginModal({ onClose }: { onClose: () => void }) {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showForgotMsg, setShowForgotMsg] = useState(false);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    window.location.href = "/dashboard";
+  }
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.6)",
+        backdropFilter: "blur(8px)",
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 24,
+        animation: "modalFadeIn 0.22s ease",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#fff",
+          borderRadius: 20,
+          boxShadow: "0 32px 96px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06)",
+          width: "100%",
+          maxWidth: 420,
+          padding: "40px 36px 32px",
+          position: "relative",
+          animation: "modalSlideIn 0.25s cubic-bezier(0.34,1.56,0.64,1)",
+        }}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          aria-label="Schliessen"
+          style={{
+            position: "absolute",
+            top: 16,
+            right: 16,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 8,
+            borderRadius: 8,
+            color: "#9ca3af",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "color 0.15s, background 0.15s",
+          }}
+          onMouseEnter={(e) => {
+            const btn = e.currentTarget as HTMLButtonElement;
+            btn.style.color = "#374151";
+            btn.style.background = "#f3f4f6";
+          }}
+          onMouseLeave={(e) => {
+            const btn = e.currentTarget as HTMLButtonElement;
+            btn.style.color = "#9ca3af";
+            btn.style.background = "none";
+          }}
+        >
+          <X size={18} />
+        </button>
+
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <p style={{ margin: "0 0 18px", fontSize: 21, fontWeight: 800, letterSpacing: "-0.5px", color: "#0D1B4B" }}>
+            Bank<span style={{ color: "#00C9B1" }}>Academy</span>
+          </p>
+          <h2 style={{ margin: "0 0 8px", fontSize: 21, fontWeight: 700, color: "#111827", letterSpacing: "-0.3px" }}>
+            Willkommen zurück
+          </h2>
+          <p style={{ margin: 0, fontSize: 14, color: "#6b7280", lineHeight: 1.5 }}>
+            Melde dich mit deinen Zugangsdaten an
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit}>
+          {/* Email */}
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ display: "block", marginBottom: 6, fontSize: 13, fontWeight: 600, color: "#374151" }}>
+              E-Mail Adresse
+            </label>
+            <input
+              type="email"
+              placeholder="max@beispiel.ch"
+              required
+              style={{
+                width: "100%",
+                padding: "11px 14px",
+                borderRadius: 10,
+                border: "1.5px solid #e5e7eb",
+                fontSize: 14,
+                color: "#111827",
+                outline: "none",
+                boxSizing: "border-box",
+                transition: "border-color 0.15s",
+                background: "#fff",
+              }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = "#0D1B4B"; }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = "#e5e7eb"; }}
+            />
+          </div>
+
+          {/* Password */}
+          <div style={{ marginBottom: showForgotMsg ? 8 : 20 }}>
+            <label style={{ display: "block", marginBottom: 6, fontSize: 13, fontWeight: 600, color: "#374151" }}>
+              Passwort
+            </label>
+            <div style={{ position: "relative" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                required
+                style={{
+                  width: "100%",
+                  padding: "11px 44px 11px 14px",
+                  borderRadius: 10,
+                  border: "1.5px solid #e5e7eb",
+                  fontSize: 14,
+                  color: "#111827",
+                  outline: "none",
+                  boxSizing: "border-box",
+                  transition: "border-color 0.15s",
+                  background: "#fff",
+                }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = "#0D1B4B"; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = "#e5e7eb"; }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                style={{
+                  position: "absolute",
+                  right: 12,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#9ca3af",
+                  padding: 4,
+                  display: "flex",
+                  alignItems: "center",
+                  transition: "color 0.15s",
+                }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#374151"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#9ca3af"; }}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+          </div>
+
+          {/* Forgot password */}
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <button
+                type="button"
+                onClick={() => setShowForgotMsg((v) => !v)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: 13,
+                  color: "#6b7280",
+                  padding: 0,
+                  textDecoration: "underline",
+                  textUnderlineOffset: 3,
+                }}
+              >
+                Passwort vergessen?
+              </button>
+            </div>
+            {showForgotMsg && (
+              <div style={{ marginTop: 10, padding: "10px 14px", background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 10, fontSize: 13, color: "#374151" }}>
+                Bitte kontaktiere deinen Ausbildner.
+              </div>
+            )}
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            style={{
+              width: "100%",
+              padding: "13px 24px",
+              borderRadius: 100,
+              border: "none",
+              background: "#0D1B4B",
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 700,
+              cursor: "pointer",
+              transition: "background 0.15s",
+              marginBottom: 20,
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#0a1438"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#0D1B4B"; }}
+          >
+            Anmelden →
+          </button>
+        </form>
+
+        {/* Divider */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+          <div style={{ flex: 1, height: 1, background: "#e5e7eb" }} />
+          <span style={{ fontSize: 13, color: "#9ca3af" }}>oder</span>
+          <div style={{ flex: 1, height: 1, background: "#e5e7eb" }} />
+        </div>
+
+        {/* Register */}
+        <button
+          onClick={() => { window.location.href = "/dashboard"; }}
+          style={{
+            width: "100%",
+            padding: "13px 24px",
+            borderRadius: 100,
+            border: "1.5px solid #0D1B4B",
+            background: "transparent",
+            color: "#0D1B4B",
+            fontSize: 15,
+            fontWeight: 700,
+            cursor: "pointer",
+            transition: "background 0.15s",
+            marginBottom: 24,
+          }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#f0f2fa"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+        >
+          Kostenlos registrieren →
+        </button>
+
+        {/* Footer note */}
+        <p style={{ margin: 0, fontSize: 12, color: "#9ca3af", textAlign: "center", lineHeight: 1.5 }}>
+          Noch kein Konto? Dein Ausbildner richtet deinen Zugang ein.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Footer ──────────────────────────────────────────────────────────────── */
 
 function Footer({ onNav }: { onNav: (id: string) => void }) {
@@ -1507,6 +1767,7 @@ export default function LandingPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [bannerDismissed, setBannerDismissed] = useState(true);
   const [demoOpen, setDemoOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
 
   useEffect(() => {
     setBannerDismissed(localStorage.getItem("beta-banner-dismissed") === "true");
@@ -1536,9 +1797,18 @@ export default function LandingPage() {
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.45; transform: scale(0.8); }
         }
+        @keyframes modalFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes modalSlideIn {
+          from { opacity: 0; transform: scale(0.93) translateY(12px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
       `}</style>
 
       {demoOpen && <DemoModal onClose={() => setDemoOpen(false)} />}
+      {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
 
       <div style={{ minHeight: "100vh", background: "#fff" }}>
         {!bannerDismissed && <BetaBanner onDismiss={dismissBanner} />}
@@ -1547,6 +1817,7 @@ export default function LandingPage() {
           mobileOpen={mobileOpen}
           onToggle={() => setMobileOpen((v) => !v)}
           onNav={scrollTo}
+          onLoginOpen={() => { setMobileOpen(false); setLoginOpen(true); }}
         />
         <Hero onDemoOpen={() => setDemoOpen(true)} />
         <StatsBar />
