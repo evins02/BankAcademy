@@ -82,7 +82,11 @@ export const NAV_GROUPS: NavGroup[] = [
           {
             label: "Anlageberatung",
             items: [
-              { label: "Anlegerprofil", href: "/anlagekunde/anlegerprofil" },
+              { label: "Anlegerprofil & Beratung", href: "/anlagekunde/anlegerprofil" },
+              { label: "Obligationen", href: "/anlagekunde/obligationen" },
+              { label: "Aktien & Kennzahlen", href: "/anlagekunde/aktien" },
+              { label: "Anlagefonds & ETF", href: "/anlagekunde/fonds" },
+              { label: "Simulation: Anlageberatung", href: "/anlagekunde/simulation" },
             ],
           },
         ],
