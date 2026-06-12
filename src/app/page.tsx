@@ -491,7 +491,7 @@ function AppMockup() {
 
 /* ─── Section: Hero ───────────────────────────────────────────────────────── */
 
-function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
+function Hero() {
   return (
     <section
       style={{
@@ -622,8 +622,8 @@ function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
           >
             Kostenlos starten <ChevronRight size={17} />
           </Link>
-          <button
-            onClick={onDemoOpen}
+          <Link
+            href="/demo"
             style={{
               padding: "15px 32px",
               borderRadius: 100,
@@ -632,19 +632,26 @@ function Hero({ onDemoOpen }: { onDemoOpen: () => void }) {
               background: "transparent",
               border: "1px solid rgba(255,255,255,0.22)",
               color: "#fff",
-              cursor: "pointer",
+              textDecoration: "none",
               transition: "background 0.15s",
+              display: "inline-flex",
+              alignItems: "center",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.07)";
+              e.currentTarget.style.background = "rgba(255,255,255,0.07)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+              e.currentTarget.style.background = "transparent";
             }}
           >
-            ▶ Demo ansehen
-          </button>
+            Demo ansehen →
+          </Link>
         </div>
+
+        {/* Demo / Full version note */}
+        <p style={{ margin: "0 0 16px", fontSize: 12, color: "rgba(255,255,255,0.38)" }}>
+          Demo: 3 Module kostenlos &nbsp;|&nbsp; Vollversion: Alle 6 Module
+        </p>
 
         {/* Trust badges */}
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 24, fontSize: 13, color: "rgba(255,255,255,0.38)" }}>
@@ -1548,7 +1555,7 @@ export default function LandingPage() {
           onToggle={() => setMobileOpen((v) => !v)}
           onNav={scrollTo}
         />
-        <Hero onDemoOpen={() => setDemoOpen(true)} />
+        <Hero />
         <StatsBar />
         <ProblemSolution />
         <HowItWorks />
