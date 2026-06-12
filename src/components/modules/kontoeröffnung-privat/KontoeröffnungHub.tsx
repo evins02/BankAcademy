@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, FileText, ClipboardCheck, MessageSquare, Bot, Clock, Star } from "lucide-react";
+import { ArrowLeft, FileText, ClipboardCheck, MessageSquare, Clock, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { KontoPrivatRunner } from "./KontoPrivatRunner";
@@ -48,15 +48,7 @@ export function KontoeröffnungHub() {
   if (view === "kyc") {
     return (
       <div className="flex flex-1 flex-col overflow-hidden">
-        <BackBar
-          onClick={() => setView("hub")}
-          extra={
-            <div className="flex items-center gap-2">
-              <Bot size={15} className="text-primary" />
-              <span className="text-xs font-semibold text-primary">KI-gestützte Auswertung</span>
-            </div>
-          }
-        />
+        <BackBar onClick={() => setView("hub")} />
         <KycFormRunner onBack={() => setView("hub")} />
       </div>
     );
@@ -65,15 +57,7 @@ export function KontoeröffnungHub() {
   if (view === "conversation") {
     return (
       <div className="flex flex-1 flex-col overflow-hidden">
-        <BackBar
-          onClick={() => setView("hub")}
-          extra={
-            <div className="flex items-center gap-2">
-              <Bot size={15} className="text-primary" />
-              <span className="text-xs font-semibold text-primary">KI-Gespräch + Auswertung</span>
-            </div>
-          }
-        />
+        <BackBar onClick={() => setView("hub")} />
         <KycConversationRunner onBack={() => setView("hub")} />
       </div>
     );
@@ -127,8 +111,7 @@ export function KontoeröffnungHub() {
             <div className="flex-1">
               <h3 className="text-base font-bold text-text-primary mb-2">KYC Formular ausfüllen</h3>
               <p className="text-sm text-text-secondary leading-relaxed">
-                Fülle das KYC-Formular für Thomas Kowalski korrekt aus. Dossier ist sichtbar –
-                finde die zwei versteckten Fallen!
+                Fülle das KYC-Formular für Thomas Kowalski korrekt aus – finde die zwei versteckten Fehler!
               </p>
               <div className="mt-3 flex flex-wrap gap-2 text-xs">
                 <span className="flex items-center gap-1 text-text-secondary">
@@ -137,10 +120,6 @@ export function KontoeröffnungHub() {
                 <span className="text-text-secondary/40">·</span>
                 <span className="flex items-center gap-1 text-text-secondary">
                   <Star size={10} /> +150 XP
-                </span>
-                <span className="text-text-secondary/40">·</span>
-                <span className="flex items-center gap-1 text-primary font-semibold">
-                  <Bot size={10} /> KI
                 </span>
               </div>
             </div>
@@ -162,8 +141,7 @@ export function KontoeröffnungHub() {
             <div className="flex-1">
               <h3 className="text-base font-bold text-text-primary mb-2">KYC Gespräch &amp; Formular</h3>
               <p className="text-sm text-text-secondary leading-relaxed">
-                Führe das KYC-Gespräch mit Thomas Kowalski, dann fülle das Formular aus dem
-                Gedächtnis aus – KI bewertet beides.
+                Führe das KYC-Gespräch mit Thomas Kowalski und fülle das Formular aus dem Gedächtnis aus.
               </p>
               <div className="mt-3 flex flex-wrap gap-2 text-xs">
                 <span className="flex items-center gap-1 text-text-secondary">
@@ -172,10 +150,6 @@ export function KontoeröffnungHub() {
                 <span className="text-text-secondary/40">·</span>
                 <span className="flex items-center gap-1 text-text-secondary">
                   <Star size={10} /> +200 XP
-                </span>
-                <span className="text-text-secondary/40">·</span>
-                <span className="flex items-center gap-1 text-primary font-semibold">
-                  <Bot size={10} /> KI
                 </span>
               </div>
             </div>
