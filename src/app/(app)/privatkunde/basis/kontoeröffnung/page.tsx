@@ -1,13 +1,13 @@
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { KontoPrivatRunner } from "@/components/modules/kontoeröffnung-privat/KontoPrivatRunner";
+import { KontoeröffnungHub } from "@/components/modules/kontoeröffnung-privat/KontoeröffnungHub";
 
 export default function KontoeröffnungPage() {
   return (
     <>
       <Header
         title="Kontoeröffnung Privatkunde"
-        subtitle="Dokumente prüfen, Risiken erkennen, GwG-Regeln anwenden"
+        subtitle="Dokumente prüfen, KYC-Formular ausfüllen, GwG-Regeln anwenden"
       />
       <Breadcrumb
         items={[
@@ -17,7 +17,7 @@ export default function KontoeröffnungPage() {
           { label: "Kontoeröffnung" },
         ]}
       />
-      <KontoPrivatRunner />
+      <KontoeröffnungHub />
     </>
   );
 }
