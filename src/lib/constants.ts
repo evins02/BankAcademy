@@ -107,6 +107,21 @@ export const NAV_GROUPS: NavGroup[] = [
         ],
       },
       { label: "Credit Operations", icon: "Settings2", href: "/backoffice/credit-operations" },
+      {
+        label: "Credit Office",
+        icon: "Scale",
+        sections: [
+          {
+            label: "",
+            items: [
+              { label: "Privathypothek prüfen", href: "/backoffice/credit-office/hypothek" },
+              { label: "Blankokredit prüfen", href: "/backoffice/credit-office/blankokredit" },
+              { label: "Firmenkredit prüfen", href: "/backoffice/credit-office/firmenkredit" },
+              { label: "Periodische Neubewilligung", href: "/backoffice/credit-office/neubewilligung" },
+            ],
+          },
+        ],
+      },
     ],
   },
 ];
