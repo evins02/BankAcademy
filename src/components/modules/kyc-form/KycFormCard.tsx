@@ -240,7 +240,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
           <FieldRow label="Nationalität" required>
             <input
               className={inputCls}
-              placeholder="z.B. Schweizer"
+              placeholder="Nationalität"
               value={form.nationalitaet}
               onChange={(e) => set("nationalitaet", e.target.value)}
             />

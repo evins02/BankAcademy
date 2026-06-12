@@ -84,7 +84,7 @@ export function KycFormRunner({ onBack }: KycFormRunnerProps) {
               style={{ borderColor: "var(--primary, #0D1B4B)", borderTopColor: "transparent" }}
             />
             <div className="text-center">
-              <p className="text-base font-semibold text-text-primary">KI prüft Ihr Formular…</p>
+              <p className="text-base font-semibold text-text-primary">Formular wird geprüft…</p>
               <p className="text-sm text-text-secondary mt-1">
                 Compliance-Check gemäss VSB 20 und GwG
               </p>

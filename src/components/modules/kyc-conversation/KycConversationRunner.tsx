@@ -222,7 +222,7 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
             }}
           />
           <div>
-            <p className="text-base font-semibold text-text-primary">KI prüft Ihr Formular…</p>
+            <p className="text-base font-semibold text-text-primary">Formular wird geprüft…</p>
             <p className="text-sm text-text-secondary mt-1">
               Gespräch und Formular werden gleichzeitig ausgewertet
             </p>
