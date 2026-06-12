@@ -43,7 +43,7 @@ export function DocumentCaseCard({
       <div className="rounded-DEFAULT bg-surface p-5 shadow-card">
         <h3 className="mb-1 text-base font-bold text-text-primary">{c.title}</h3>
         {c.today && (
-          <div className="mb-3 flex items-center gap-1.5 text-xs text-amber-700">
+          <div className="mb-3 flex items-center gap-1.5 text-xs text-text-secondary">
             <Calendar size={12} />
             <span>Heute: {c.today}</span>
           </div>

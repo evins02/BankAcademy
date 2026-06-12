@@ -33,9 +33,9 @@ function FieldRow({ label, required, children, note }: FieldRowProps) {
     <div className="grid grid-cols-[160px_1fr] gap-4 items-start py-3 border-b border-border last:border-0">
       <label className="text-sm text-text-secondary pt-2 leading-snug">
         {label}
-        {required && <span className="text-red-500 ml-0.5">*</span>}
+        {required && <span className="text-text-secondary ml-0.5">*</span>}
         {note && (
-          <span className="block text-xs text-amber-600 mt-0.5 font-medium">
+          <span className="block text-xs text-text-secondary mt-0.5">
             {note}
           </span>
         )}
@@ -276,7 +276,6 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
           <FieldRow
             label="Ausweis gültig bis"
             required
-            note="⚠ Gültigkeit immer prüfen (VSB 20)"
           >
             <input
               type="date"
@@ -519,14 +518,11 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
                   className="mt-1 accent-primary w-4 h-4"
                 />
                 <div>
-                  <span
-                    className="text-sm font-medium"
-                    style={{ color: item.isTrap ? "#b45309" : "var(--text-primary)" }}
-                  >
+                  <span className="text-sm font-medium text-text-primary">
                     {item.label}
                   </span>
                   {item.note && (
-                    <p className="text-xs text-amber-600 mt-0.5 font-medium">{item.note}</p>
+                    <p className="text-xs text-text-secondary mt-0.5">{item.note}</p>
                   )}
                 </div>
               </label>

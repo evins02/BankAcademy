@@ -1,7 +1,5 @@
 "use client";
 
-import { XCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
 import type { TragbarkeitRenteCalc } from "@/lib/vorsorge";
 
 function chf(n: number) {
@@ -17,7 +15,6 @@ export function TragbarkeitPanel({ calc }: TragbarkeitPanelProps) {
   const zinsKosten = Math.round((calc.hypothek * calc.zinsSatz) / 100);
   const totalKosten = zinsKosten + calc.amortisation + calc.nebenkosten;
   const tragbarkeit = (totalKosten / totalRente) * 100;
-  const ueberschreitung = tragbarkeit > calc.limite;
 
   return (
     <div className="mb-5 overflow-hidden rounded-DEFAULT border border-border bg-background">
@@ -77,7 +74,7 @@ export function TragbarkeitPanel({ calc }: TragbarkeitPanelProps) {
         </div>
 
         {/* Ergebnis */}
-        <div className={cn("p-4", ueberschreitung ? "bg-red-50" : "bg-green-50")}>
+        <div className="p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-text-secondary">
@@ -88,20 +85,9 @@ export function TragbarkeitPanel({ calc }: TragbarkeitPanelProps) {
               </p>
             </div>
             <div className="text-right">
-              <p
-                className={cn(
-                  "text-2xl font-bold",
-                  ueberschreitung ? "text-red-700" : "text-green-700"
-                )}
-              >
+              <p className="text-2xl font-bold text-text-primary">
                 {tragbarkeit.toFixed(1)}%
               </p>
-              {ueberschreitung && (
-                <div className="flex items-center gap-1 justify-end">
-                  <XCircle size={12} className="text-red-600" />
-                  <p className="text-xs font-semibold text-red-700">Nicht tragbar</p>
-                </div>
-              )}
             </div>
           </div>
         </div>

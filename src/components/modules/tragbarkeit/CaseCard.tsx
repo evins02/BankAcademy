@@ -101,31 +101,11 @@ function CalcTable({ rows }: { rows: TragbarkeitCase["calcRows"] }) {
               key={i}
               className={cn(
                 "flex items-center justify-between px-4 py-2.5 text-sm",
-                row.type === "total-ok" && "bg-primary-light font-semibold",
-                row.type === "total-error" && "bg-red-50 font-semibold",
-                row.type === "total-neutral" && "bg-amber-50 font-semibold"
+                (row.type === "total-ok" || row.type === "total-error" || row.type === "total-neutral") && "bg-gray-50 font-semibold"
               )}
             >
-              <span
-                className={cn(
-                  "text-text-secondary",
-                  row.type === "total-ok" && "text-primary",
-                  row.type === "total-error" && "text-red-700",
-                  row.type === "total-neutral" && "text-amber-700"
-                )}
-              >
-                {row.label}
-              </span>
-              <span
-                className={cn(
-                  "font-mono text-text-primary",
-                  row.type === "total-ok" && "text-primary",
-                  row.type === "total-error" && "text-red-700",
-                  row.type === "total-neutral" && "text-amber-700"
-                )}
-              >
-                {row.value}
-              </span>
+              <span className="text-text-secondary">{row.label}</span>
+              <span className="font-mono text-text-primary">{row.value}</span>
             </div>
           );
         })}
@@ -168,16 +148,8 @@ function DeckungsgradCalculator({
               {line}
             </p>
           ))}
-          <p
-            className={cn(
-              "mt-3 rounded-DEFAULT px-3 py-2 font-mono text-sm font-bold",
-              data.isOk
-                ? "bg-primary-light text-primary"
-                : "bg-red-50 text-red-700"
-            )}
-          >
+          <p className="mt-3 rounded-DEFAULT bg-gray-50 px-3 py-2 font-mono text-sm font-bold text-text-primary">
             {data.resultLine}
-            {data.isOk ? " ✅" : " ❌"}
           </p>
         </div>
       </div>
