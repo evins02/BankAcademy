@@ -72,9 +72,10 @@ const selectCls =
 interface KycFormCardProps {
   onSubmit: (data: KycFormData) => void;
   isDemo?: boolean;
+  hideDossier?: boolean;
 }
 
-export function KycFormCard({ onSubmit, isDemo }: KycFormCardProps) {
+export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps) {
   const [dossierOpen, setDossierOpen] = useState(true);
   const [form, setForm] = useState<KycFormData>(EMPTY_FORM);
 
@@ -160,7 +161,7 @@ export function KycFormCard({ onSubmit, isDemo }: KycFormCardProps) {
       )}
 
       {/* Customer dossier */}
-      <div className="rounded-DEFAULT bg-surface shadow-card overflow-hidden">
+      {!hideDossier && <div className="rounded-DEFAULT bg-surface shadow-card overflow-hidden">
         <button
           type="button"
           onClick={() => setDossierOpen((v) => !v)}
@@ -204,7 +205,7 @@ export function KycFormCard({ onSubmit, isDemo }: KycFormCardProps) {
             </div>
           </div>
         )}
-      </div>
+      </div>}
 
       {/* KYC Form document */}
       <div className="rounded-DEFAULT bg-surface shadow-card overflow-hidden">

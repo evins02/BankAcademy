@@ -1,0 +1,230 @@
+"use client";
+
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Send, CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { type ConvMessage, REQUIRED_QUESTIONS } from "./conv-types";
+
+interface ChatPhaseProps {
+  messages: ConvMessage[];
+  coveredFields: Set<string>;
+  isLoading: boolean;
+  onSend: (text: string) => void;
+  onFinish: () => void;
+}
+
+const MIN_EXCHANGES = 8; // minimum total messages (student + customer)
+
+export function ChatPhase({ messages, coveredFields, isLoading, onSend, onFinish }: ChatPhaseProps) {
+  const [input, setInput] = useState("");
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const studentMessages = messages.filter((m) => m.role === "student").length;
+  const canFinish = messages.length >= MIN_EXCHANGES;
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleSend = useCallback(() => {
+    const text = input.trim();
+    if (!text || isLoading) return;
+    setInput("");
+    onSend(text);
+    setTimeout(() => inputRef.current?.focus(), 50);
+  }, [input, isLoading, onSend]);
+
+  function handleKey(e: React.KeyboardEvent) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  }
+
+  const covered = coveredFields.size;
+  const total = REQUIRED_QUESTIONS.length;
+  const pct = Math.round((covered / total) * 100);
+
+  return (
+    <div className="flex flex-1 flex-col overflow-hidden">
+      {/* Progress bar */}
+      <div className="shrink-0 border-b border-border bg-surface px-5 py-3">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs font-semibold text-text-primary">
+            Pflichtfragen erledigt: {covered}/{total}
+          </span>
+          <span className="text-xs text-text-secondary">{pct}%</span>
+        </div>
+        <div className="h-1.5 rounded-full bg-border overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all duration-500"
+            style={{
+              width: `${pct}%`,
+              background: covered === total ? "#16a34a" : "var(--primary, #0D1B4B)",
+            }}
+          />
+        </div>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {REQUIRED_QUESTIONS.map((q) => (
+            <span
+              key={q.key}
+              className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium transition-colors"
+              style={{
+                background: coveredFields.has(q.key)
+                  ? "rgba(22,163,74,0.1)"
+                  : "rgba(0,0,0,0.04)",
+                color: coveredFields.has(q.key) ? "#15803d" : "var(--text-secondary)",
+                border: coveredFields.has(q.key)
+                  ? "1px solid rgba(22,163,74,0.25)"
+                  : "1px solid var(--border)",
+              }}
+            >
+              {coveredFields.has(q.key) && <CheckCircle2 size={10} />}
+              {q.label}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Customer card */}
+      <div className="shrink-0 border-b border-border px-5 py-3">
+        <div className="flex items-center gap-3">
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm text-white shrink-0"
+            style={{ background: "#6b7280" }}
+          >
+            TK
+          </div>
+          <div>
+            <p className="text-sm font-bold text-text-primary">Thomas Kowalski</p>
+            <p className="text-xs text-text-secondary">Neukunde – Privatkonto eröffnen</p>
+          </div>
+          <div className="ml-auto">
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-full px-2.5 py-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+              In der Filiale
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
+        {messages.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-sm text-text-secondary">
+              Begrüssen Sie den Kunden und stellen Sie die nötigen KYC-Fragen.
+            </p>
+            <p className="text-xs text-text-secondary mt-1">
+              Tipp: Fragen Sie nach Beruf, Einkommen, Herkunft der Mittel, PEP-Status und Ausweis.
+            </p>
+          </div>
+        )}
+
+        {messages.map((msg, i) => (
+          <div
+            key={i}
+            className={`flex gap-3 ${msg.role === "student" ? "flex-row-reverse" : "flex-row"}`}
+          >
+            {msg.role === "customer" && (
+              <div
+                className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 mt-0.5"
+                style={{ background: "#6b7280" }}
+              >
+                TK
+              </div>
+            )}
+            <div
+              className="max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed"
+              style={
+                msg.role === "student"
+                  ? {
+                      background: "var(--primary, #0D1B4B)",
+                      color: "#fff",
+                      borderBottomRightRadius: 4,
+                    }
+                  : {
+                      background: "var(--surface, #f9fafb)",
+                      color: "var(--text-primary)",
+                      border: "1px solid var(--border)",
+                      borderBottomLeftRadius: 4,
+                    }
+              }
+            >
+              {msg.content}
+            </div>
+          </div>
+        ))}
+
+        {isLoading && (
+          <div className="flex gap-3">
+            <div
+              className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 mt-0.5"
+              style={{ background: "#6b7280" }}
+            >
+              TK
+            </div>
+            <div
+              className="rounded-2xl px-4 py-3 flex gap-1.5 items-center"
+              style={{
+                background: "var(--surface, #f9fafb)",
+                border: "1px solid var(--border)",
+                borderBottomLeftRadius: 4,
+              }}
+            >
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  className="w-1.5 h-1.5 rounded-full bg-text-secondary animate-bounce"
+                  style={{ animationDelay: `${i * 0.15}s` }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Input */}
+      <div className="shrink-0 border-t border-border px-5 py-3 space-y-3">
+        <div className="flex gap-2 items-end">
+          <textarea
+            ref={inputRef}
+            className="flex-1 resize-none rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary/25 transition-colors"
+            placeholder="Ihre Frage an den Kunden…"
+            rows={2}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKey}
+            disabled={isLoading}
+          />
+          <Button
+            variant="primary"
+            onClick={handleSend}
+            disabled={!input.trim() || isLoading}
+            className="shrink-0 h-10 px-4"
+          >
+            <Send size={15} />
+          </Button>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-text-secondary">
+            {studentMessages} Fragen gestellt
+            {!canFinish && ` · noch ${Math.max(0, MIN_EXCHANGES - messages.length)} Nachrichten für Abschluss`}
+          </p>
+          <Button
+            variant={canFinish ? "primary" : "secondary"}
+            onClick={onFinish}
+            disabled={!canFinish}
+            className="text-sm"
+          >
+            Gespräch abschliessen →
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
