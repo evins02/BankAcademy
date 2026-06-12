@@ -224,7 +224,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
           <FieldRow label="Name, Vorname" required>
             <input
               className={inputCls}
-              placeholder="Kowalski Thomas"
+              placeholder="Nachname Vorname"
               value={form.name}
               onChange={(e) => set("name", e.target.value)}
             />
@@ -268,7 +268,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
           <FieldRow label="Ausweis Nummer" required>
             <input
               className={inputCls}
-              placeholder="z.B. X1234567"
+              placeholder="Ausweisnummer"
               value={form.ausweisNummer}
               onChange={(e) => set("ausweisNummer", e.target.value)}
             />
@@ -293,7 +293,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
           <FieldRow label="Beruf / Funktion" required>
             <input
               className={inputCls}
-              placeholder="z.B. Projektleiter IT"
+              placeholder="Berufsbezeichnung"
               value={form.beruf}
               onChange={(e) => set("beruf", e.target.value)}
             />
@@ -301,7 +301,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
           <FieldRow label="Arbeitgeber / Firma" required>
             <input
               className={inputCls}
-              placeholder="z.B. Swisscom AG"
+              placeholder="Firma / Arbeitgebername"
               value={form.arbeitgeber}
               onChange={(e) => set("arbeitgeber", e.target.value)}
             />
@@ -330,7 +330,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
               <span className="absolute left-3 top-2 text-sm text-text-secondary">CHF</span>
               <input
                 className={inputCls + " pl-10"}
-                placeholder="95'000"
+                placeholder="Betrag in CHF"
                 value={form.jahreseinkommen}
                 onChange={(e) => set("jahreseinkommen", e.target.value)}
               />
@@ -341,7 +341,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
               <span className="absolute left-3 top-2 text-sm text-text-secondary">CHF</span>
               <input
                 className={inputCls + " pl-10"}
-                placeholder="45'000"
+                placeholder="Betrag in CHF"
                 value={form.vermoegen}
                 onChange={(e) => set("vermoegen", e.target.value)}
               />
@@ -364,7 +364,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
           <FieldRow label="Andere Bankbeziehungen">
             <input
               className={inputCls}
-              placeholder="z.B. PostFinance, UBS"
+              placeholder="z.B. keine / Bank A, Bank B"
               value={form.andereBankbeziehungen}
               onChange={(e) => set("andereBankbeziehungen", e.target.value)}
             />
