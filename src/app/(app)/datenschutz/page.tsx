@@ -13,7 +13,7 @@ export default function DatenschutzPage() {
             </h2>
             <p className="text-sm leading-relaxed text-text-secondary">
               Verantwortlich für die Datenbearbeitung im Sinne des Schweizer Datenschutzgesetzes
-              (DSG) ist BankAcademy (Evin Sariaratnam). Kontakt:{" "}
+              (DSG) ist BankAcademy. Kontakt:{" "}
               <a href="mailto:evinsariaratnam@gmail.com" className="text-primary underline">
                 evinsariaratnam@gmail.com
               </a>
