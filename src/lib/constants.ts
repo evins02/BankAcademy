@@ -85,6 +85,17 @@ export const NAV_GROUPS: NavGroup[] = [
               { label: "Anlegerprofil", href: "/anlagekunde/anlegerprofil" },
             ],
           },
+          {
+            label: "Produkte & Themen",
+            items: [
+              { label: "Strukturierte Produkte", href: "/anlagekunde/strukturierte-produkte" },
+              { label: "Vorsorge & 3a", href: "/anlagekunde/vorsorge-anlage" },
+              { label: "Nachhaltige Anlagen ESG", href: "/anlagekunde/esg" },
+              { label: "Währungsrisiken", href: "/anlagekunde/waehrungsrisiken" },
+              { label: "Depotauszug lesen", href: "/anlagekunde/depotauszug" },
+              { label: "Steuerliche Aspekte", href: "/anlagekunde/steuern" },
+            ],
+          },
         ],
       },
     ],
