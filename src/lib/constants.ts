@@ -106,7 +106,24 @@ export const NAV_GROUPS: NavGroup[] = [
           },
         ],
       },
-      { label: "Credit Operations", icon: "Settings2", href: "/backoffice/credit-operations" },
+      {
+        label: "Credit Operations",
+        icon: "Settings2",
+        sections: [
+          {
+            label: "",
+            items: [
+              { label: "Übersicht", href: "/backoffice/credit-operations" },
+              { label: "Sicherheitenverwaltung", href: "/backoffice/credit-operations/sicherheiten" },
+              { label: "Grundpfand & Schuldbrief", href: "/backoffice/credit-operations/grundpfand" },
+              { label: "Bürgschaften", href: "/backoffice/credit-operations/buergschaft" },
+              { label: "Vorzeitige Rückzahlung", href: "/backoffice/credit-operations/vorzeitige-rueckzahlung" },
+              { label: "Schuldbriefverwaltung", href: "/backoffice/credit-operations/schuldbrief" },
+              { label: "Rating erfassen", href: "/backoffice/credit-operations/rating" },
+            ],
+          },
+        ],
+      },
       {
         label: "Credit Office",
         icon: "Scale",
