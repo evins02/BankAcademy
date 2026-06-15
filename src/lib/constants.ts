@@ -89,6 +89,17 @@ export const NAV_GROUPS: NavGroup[] = [
               { label: "Simulation: Anlageberatung", href: "/anlagekunde/simulation" },
             ],
           },
+          {
+            label: "Produkte & Themen",
+            items: [
+              { label: "Strukturierte Produkte", href: "/anlagekunde/strukturierte-produkte" },
+              { label: "Vorsorge & 3a", href: "/anlagekunde/vorsorge-anlage" },
+              { label: "Nachhaltige Anlagen ESG", href: "/anlagekunde/esg" },
+              { label: "Währungsrisiken", href: "/anlagekunde/waehrungsrisiken" },
+              { label: "Depotauszug lesen", href: "/anlagekunde/depotauszug" },
+              { label: "Steuerliche Aspekte", href: "/anlagekunde/steuern" },
+            ],
+          },
         ],
       },
     ],
@@ -110,7 +121,39 @@ export const NAV_GROUPS: NavGroup[] = [
           },
         ],
       },
-      { label: "Credit Operations", icon: "Settings2", href: "/backoffice/credit-operations" },
+      {
+        label: "Credit Operations",
+        icon: "Settings2",
+        sections: [
+          {
+            label: "",
+            items: [
+              { label: "Übersicht", href: "/backoffice/credit-operations" },
+              { label: "Sicherheitenverwaltung", href: "/backoffice/credit-operations/sicherheiten" },
+              { label: "Grundpfand & Schuldbrief", href: "/backoffice/credit-operations/grundpfand" },
+              { label: "Bürgschaften", href: "/backoffice/credit-operations/buergschaft" },
+              { label: "Vorzeitige Rückzahlung", href: "/backoffice/credit-operations/vorzeitige-rueckzahlung" },
+              { label: "Schuldbriefverwaltung", href: "/backoffice/credit-operations/schuldbrief" },
+              { label: "Rating erfassen", href: "/backoffice/credit-operations/rating" },
+            ],
+          },
+        ],
+      },
+      {
+        label: "Credit Office",
+        icon: "Scale",
+        sections: [
+          {
+            label: "",
+            items: [
+              { label: "Privathypothek prüfen", href: "/backoffice/credit-office/hypothek" },
+              { label: "Blankokredit prüfen", href: "/backoffice/credit-office/blankokredit" },
+              { label: "Firmenkredit prüfen", href: "/backoffice/credit-office/firmenkredit" },
+              { label: "Periodische Neubewilligung", href: "/backoffice/credit-office/neubewilligung" },
+            ],
+          },
+        ],
+      },
     ],
   },
 ];

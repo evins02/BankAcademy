@@ -13,7 +13,6 @@ export default function ImpressumPage() {
             </h2>
             <div className="space-y-1 text-sm text-text-primary">
               <p className="font-semibold text-base">BankAcademy</p>
-              <p>Evin Sariaratnam</p>
               <p>Schweiz 🇨🇭</p>
             </div>
           </section>
@@ -40,10 +39,9 @@ export default function ImpressumPage() {
               Zweck der Plattform
             </h2>
             <p className="text-sm leading-relaxed text-text-secondary">
-              BankAcademy ist eine nicht-kommerzielle Lernplattform für Lernende, Praktikanten und
-              Quereinsteiger im Schweizer Bankwesen. Die Plattform stellt praxisnahe Szenarien und
-              Lernmaterialien bereit und erhebt keinen Anspruch auf Vollständigkeit oder rechtliche
-              Verbindlichkeit der dargestellten Inhalte.
+              BankAcademy ist eine digitale Lernplattform für Banklehrlinge im Schweizer Bankwesen.
+              Die Plattform stellt praxisnahe Szenarien und Lernmaterialien bereit und erhebt keinen
+              Anspruch auf Vollständigkeit oder rechtliche Verbindlichkeit der dargestellten Inhalte.
             </p>
           </section>
 

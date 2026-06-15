@@ -658,7 +658,7 @@ function Hero() {
             Kostenlos starten <ChevronRight size={17} />
           </Link>
           <Link
-            href="/dashboard"
+            href="/demo"
             style={{
               padding: "15px 32px",
               borderRadius: 100,
@@ -677,7 +677,7 @@ function Hero() {
               (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
             }}
           >
-            ▶ Demo ansehen
+            Demo ansehen →
           </Link>
         </div>
 
