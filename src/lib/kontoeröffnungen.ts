@@ -3,7 +3,6 @@ export type DocumentId =
   | "formular-a"
   | "formular-k"
   | "eigenerklaerung-nat"
-  | "eigenerklaerung-steuerstatus"
   | "eigenerklaerung-jur"
   | "ausweis"
   | "wohnsitznachweis"
@@ -14,8 +13,7 @@ export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   basisvertrag: "Basisvertrag",
   "formular-a": "Formular A",
   "formular-k": "Formular K",
-  "eigenerklaerung-nat": "Eigenerklärung natürliche Person",
-  "eigenerklaerung-steuerstatus": "Eigenerklärung Steuerstatus (FATCA)",
+  "eigenerklaerung-nat": "Eigenerklärung Steuerstatus (FATCA)",
   "eigenerklaerung-jur": "Eigenerklärung juristische Person",
   ausweis: "Ausweis / Passkopie",
   wohnsitznachweis: "Wohnsitznachweis",
@@ -59,7 +57,6 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
       "basisvertrag",
       "formular-a",
       "eigenerklaerung-nat",
-      "eigenerklaerung-steuerstatus",
       "ausweis",
       "wohnsitznachweis",
     ],
@@ -67,7 +64,6 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
       "basisvertrag",
       "formular-a",
       "eigenerklaerung-nat",
-      "eigenerklaerung-steuerstatus",
       "ausweis",
       // missing: wohnsitznachweis
     ],
