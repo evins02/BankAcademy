@@ -103,6 +103,20 @@ const L1_STANDARD: DocumentCase = {
       feedbackNotSelected: "Fehler: Eigenerklärung ist nach GwG Art. 4 zwingend auszufüllen.",
     },
     {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A dokumentiert den wirtschaftlich Berechtigten gemäss VSB 20, auch wenn er identisch mit dem Kontoinhaber ist.",
+      feedbackNotSelected: "Fehler: Formular A ist nach VSB 20 zwingend – auch wenn Kontoinhaber = wirtschaftlich Berechtigter.",
+    },
+    {
+      id: "eigenerklaerung-steuerstatus",
+      label: "Eigenerklärung Steuerstatus (FATCA)",
+      status: "required",
+      feedbackSelected: "Korrekt – US-Person Abklärung (Staatsbürgerschaft, Geburtsort USA, Greencard) ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung muss bei jeder Neueröffnung erfolgen – Fragen zu US-Staatsbürgerschaft, Geburtsort USA, Greencard und US-Steuernummer.",
+    },
+    {
       id: "wohnsitzbestatigung",
       label: "Wohnsitzbestätigung / Meldebestätigung",
       status: "required",
@@ -167,7 +181,7 @@ const L1_STANDARD: DocumentCase = {
     },
   ],
   generalFeedback:
-    "Beim Standardfall Schweizer Privatkunde benötigen Sie: gültiger CH-Ausweis, Eigenerklärung (GwG Art. 4), Wohnsitzbestätigung und Unterschriftenprobe. Firmendokumente, EDD oder PEP-Formulare sind bei einem normalen Privatkundenfall nicht nötig.",
+    "Beim Standardfall Schweizer Privatkunde benötigen Sie: gültiger CH-Ausweis, Eigenerklärung natürliche Person (GwG Art. 4), Formular A (VSB 20 – wirtschaftlich Berechtigter), Eigenerklärung Steuerstatus (FATCA), Wohnsitzbestätigung und Unterschriftenprobe. Firmendokumente, EDD oder PEP-Formulare sind bei einem normalen Privatkundenfall nicht nötig.",
 };
 
 const L1_AUSWEIS_ABGELAUFEN: DocumentCase = {
@@ -191,6 +205,20 @@ const L1_AUSWEIS_ABGELAUFEN: DocumentCase = {
       status: "required",
       feedbackSelected: "Korrekt – Eigenerklärung bleibt weiterhin zwingend.",
       feedbackNotSelected: "Fehler: Eigenerklärung nicht vergessen.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A ist auch in diesem Fall zwingend auszufüllen.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20) nicht vergessen – unabhängig vom Ausweisproblem.",
+    },
+    {
+      id: "eigenerklaerung-steuerstatus",
+      label: "Eigenerklärung Steuerstatus (FATCA)",
+      status: "required",
+      feedbackSelected: "Korrekt – FATCA-Abklärung ist bei jeder Kontoeröffnung pflicht.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen – Fragen zu US-Verbindungen sind zwingend.",
     },
     {
       id: "wohnsitzbestatigung",
@@ -314,6 +342,20 @@ const L2_AUSLAENDER: DocumentCase = {
       feedbackNotSelected: "Fehler: Eigenerklärung ist immer auszufüllen.",
     },
     {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A ist unabhängig von der Nationalität bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20 – wirtschaftlich Berechtigter) ist auch bei ausländischen Kunden obligatorisch.",
+    },
+    {
+      id: "eigenerklaerung-steuerstatus",
+      label: "Eigenerklärung Steuerstatus (FATCA)",
+      status: "required",
+      feedbackSelected: "Korrekt – FATCA gilt auch für EU-Bürger: US-Verbindungen müssen aktiv abgeklärt werden.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung ist bei jeder Neueröffnung zwingend – unabhängig der Nationalität.",
+    },
+    {
       id: "wohnsitzbestatigung",
       label: "Wohnsitzbestätigung / Meldebestätigung",
       status: "required",
@@ -359,7 +401,7 @@ const L2_AUSLAENDER: DocumentCase = {
   ],
   requiredOneOf: [["reisepass-ausl", "aufenthalt-b"]],
   generalFeedback:
-    "Für ausländische Kunden gilt: Entweder der ausländische Pass ODER die Aufenthaltsbewilligung reicht für die Identifikation. Zusätzlich sind Eigenerklärung (GwG), Wohnsitznachweis und Unterschriftenprobe erforderlich. Bei einem normalen Angestelltenverhältnis besteht kein erhöhtes Risiko – kein EDD nötig.",
+    "Für ausländische Kunden gilt: Entweder der ausländische Pass ODER die Aufenthaltsbewilligung reicht für die Identifikation. Zusätzlich sind Eigenerklärung (GwG Art. 4), Formular A (VSB 20 – wirtschaftlich Berechtigter), Eigenerklärung Steuerstatus (FATCA), Wohnsitznachweis und Unterschriftenprobe erforderlich. Bei einem normalen Angestelltenverhältnis besteht kein erhöhtes Risiko – kein EDD nötig.",
 };
 
 const L2_BAREINLAGE: DocumentCase = {
@@ -383,6 +425,20 @@ const L2_BAREINLAGE: DocumentCase = {
       status: "required",
       feedbackSelected: "Korrekt – immer erforderlich.",
       feedbackNotSelected: "Fehler: Eigenerklärung ist immer auszufüllen.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A ist auch in Risikofällen zwingend auszufüllen.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20) ist immer erforderlich – besonders wichtig bei unklarer Mittelherkunft.",
+    },
+    {
+      id: "eigenerklaerung-steuerstatus",
+      label: "Eigenerklärung Steuerstatus (FATCA)",
+      status: "required",
+      feedbackSelected: "Korrekt – FATCA-Abklärung ist auch in diesem Fall zwingend.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen.",
     },
     {
       id: "herkunft-abklaeren",
@@ -555,6 +611,20 @@ const L3_GEMEINSCHAFTSKONTO: DocumentCase = {
       feedbackNotSelected: "Fehler: Eigenerklärung für Maria fehlt.",
     },
     {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A wird einmal pro Konto ausgestellt und dokumentiert beide wirtschaftlich Berechtigten.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20) ist auch beim Gemeinschaftskonto zwingend – ein Formular für beide Inhaber.",
+    },
+    {
+      id: "fatca-deklaration",
+      label: "Eigenerklärung Steuerstatus (FATCA) – für beide Inhaber",
+      status: "required",
+      feedbackSelected: "Korrekt – FATCA-Abklärung für jeden Kontoinhaber separat erforderlich.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung (US-Verbindungen) ist für beide Inhaber zwingend.",
+    },
+    {
       id: "einzel-vereinbarung",
       label: "Einzelzeichnungsvereinbarung (jeder verfügt alleine)",
       status: "required",
@@ -603,7 +673,7 @@ const L3_GEMEINSCHAFTSKONTO: DocumentCase = {
     },
   ],
   generalFeedback:
-    "Beim Gemeinschaftskonto: BEIDE Inhaber werden identifiziert (je Ausweis + Eigenerklärung). Die Zeichnungsregelung richtet sich nach dem Kundenwunsch – hier Einzelzeichnung. Kollektivzeichnung wäre falsch, da das Ehepaar explizit einzeln verfügen möchte.",
+    "Beim Gemeinschaftskonto: BEIDE Inhaber werden identifiziert (je Ausweis + Eigenerklärung natürliche Person). Zusätzlich: Formular A (einmal pro Konto, VSB 20) und FATCA-Deklaration für beide. Die Zeichnungsregelung richtet sich nach dem Kundenwunsch – hier Einzelzeichnung. Kollektivzeichnung wäre falsch, da das Ehepaar explizit einzeln verfügen möchte.",
 };
 
 const L3_AUSWEIS_TRICK_MCQ: McqCase = {
@@ -665,6 +735,20 @@ const L3_HOCHRISIKO_PEP: DocumentCase = {
       status: "required",
       feedbackSelected: "Korrekt – immer erforderlich.",
       feedbackNotSelected: "Fehler: Eigenerklärung nicht vergessen.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A ist zwingend, besonders kritisch bei PEP-Verdacht.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20) ist immer obligatorisch – bei PEP-Verdacht besonders wichtig.",
+    },
+    {
+      id: "eigenerklaerung-steuerstatus",
+      label: "Eigenerklärung Steuerstatus (FATCA)",
+      status: "required",
+      feedbackSelected: "Korrekt – FATCA-Abklärung ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen.",
     },
     {
       id: "wohnsitzbestatigung",
