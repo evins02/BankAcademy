@@ -8,7 +8,8 @@ export type DocumentId =
   | "wohnsitznachweis"
   | "hr-auszug"
   | "aktienbuch"
-  | "beglaubigte-ausweiskopie";
+  | "beglaubigte-ausweiskopie"
+  | "gesellschaftervertrag";
 
 export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   basisvertrag: "Basisvertrag",
@@ -21,6 +22,7 @@ export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   "hr-auszug": "HR-Auszug",
   aktienbuch: "Aktienbuch",
   "beglaubigte-ausweiskopie": "Beglaubigte Ausweiskopie Zeichnungsberechtigter",
+  gesellschaftervertrag: "Gesellschaftervertrag (GmbH)",
 };
 
 export const ALL_DOCUMENT_IDS = Object.keys(DOCUMENT_LABELS) as DocumentId[];
@@ -127,11 +129,17 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     description:
       "Eine GmbH möchte ein Geschäftskonto eröffnen. GmbH-Gesellschaften haben Stammanteile statt Aktien – kein Aktienbuch erforderlich. Wählen Sie die korrekten Dokumente aus und prüfen Sie das Dossier.",
     checklistDocuments: [
+      // correct (5)
       "hr-auszug",
       "basisvertrag",
       "formular-k",
       "eigenerklaerung-jur-fatca",
       "beglaubigte-ausweiskopie",
+      // distractors (4)
+      "aktienbuch",           // trap: gehört zur AG, nicht zur GmbH
+      "formular-a",           // trap: nur für Sitzgesellschaft
+      "wohnsitznachweis",     // trap: nur für natürliche Personen
+      "gesellschaftervertrag", // plausibel, aber nicht erforderlich
     ],
     requiredDocuments: [
       "hr-auszug",
@@ -192,14 +200,17 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     description:
       "Eine operativ tätige Aktiengesellschaft möchte ein Geschäftskonto eröffnen. Wählen Sie die erforderlichen Dokumente aus und prüfen Sie das Dossier.",
     checklistDocuments: [
+      // correct (6)
       "aktienbuch",
       "hr-auszug",
       "basisvertrag",
       "formular-k",
-      "formular-a",
       "eigenerklaerung-jur-fatca",
-      "eigenerklaerung-nat",
       "beglaubigte-ausweiskopie",
+      // distractors (3)
+      "formular-a",            // trap: nur für Sitzgesellschaft
+      "eigenerklaerung-nat",   // trap: für natürliche Personen, nicht juristische
+      "gesellschaftervertrag", // trap: plausibel für GmbH, aber nicht für AG relevant
     ],
     requiredDocuments: [
       "aktienbuch",
@@ -244,14 +255,17 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     description:
       "Eine Sitzgesellschaft ohne operative Tätigkeit möchte ein Konto eröffnen. Wählen Sie die erforderlichen Dokumente aus und prüfen Sie das vorbereitete Dossier auf Fehler.",
     checklistDocuments: [
+      // correct (6)
       "aktienbuch",
       "hr-auszug",
       "basisvertrag",
       "formular-a",
-      "formular-k",
       "eigenerklaerung-jur-fatca",
-      "eigenerklaerung-nat",
       "beglaubigte-ausweiskopie",
+      // distractors (3)
+      "formular-k",              // trap: nur für operativ tätige Gesellschaften
+      "eigenerklaerung-nat",     // trap: für natürliche Personen, nicht juristische
+      "gesellschaftervertrag",   // trap: plausibel aber nicht erforderlich für Sitzgesellschaft
     ],
     requiredDocuments: [
       "aktienbuch",
