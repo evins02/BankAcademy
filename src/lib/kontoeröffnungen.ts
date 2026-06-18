@@ -9,7 +9,10 @@ export type DocumentId =
   | "hr-auszug"
   | "aktienbuch"
   | "beglaubigte-ausweiskopie"
-  | "gesellschaftervertrag";
+  | "gesellschaftervertrag"
+  | "jahresrechnung"
+  | "vollmacht"
+  | "wohnsitznachweis-gf";
 
 export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   basisvertrag: "Basisvertrag",
@@ -23,6 +26,9 @@ export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   aktienbuch: "Aktienbuch",
   "beglaubigte-ausweiskopie": "Beglaubigte Ausweiskopie Zeichnungsberechtigter",
   gesellschaftervertrag: "Gesellschaftervertrag (GmbH)",
+  jahresrechnung: "Jahresrechnung",
+  vollmacht: "Vollmacht",
+  "wohnsitznachweis-gf": "Wohnsitznachweis Geschäftsführer",
 };
 
 export const ALL_DOCUMENT_IDS = Object.keys(DOCUMENT_LABELS) as DocumentId[];
@@ -170,10 +176,10 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     ],
     possiblyMissingOptions: [
       "beglaubigte-ausweiskopie",  // correct – fehlt im Dossier
-      "aktienbuch",                // distractor – GmbH hat keine Aktien, kein Aktienbuch!
-      "formular-a",                // distractor – falsche Formularart (Sitzgesellschaft)
-      "eigenerklaerung-nat",       // distractor – Privatkunden-FATCA, nicht Firmenkunde
-      "hr-auszug",                 // trap – bereits im Dossier vorhanden
+      "jahresrechnung",            // distractor – plausibel, aber nicht für Kontoeröffnung
+      "gesellschaftervertrag",     // distractor – plausibel, aber nicht erforderlich
+      "vollmacht",                 // distractor – nur bei Vertretung nötig
+      "wohnsitznachweis-gf",       // distractor – nicht standard bei Firmenkonto
     ],
     lernblock: {
       title: "GmbH: Kein Aktienbuch",
@@ -236,10 +242,10 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     ],
     possiblyMissingOptions: [
       "aktienbuch",                // correct – genuinely missing
-      "eigenerklaerung-nat",       // trap – Privatkunden-FATCA statt juristische Person
-      "hr-auszug",                 // trap – bereits im Dossier vorhanden
-      "ausweis",                   // distractor – einfache Kopie statt beglaubigte
-      "formular-a",                // distractor – falsche Formularart für AG
+      "jahresrechnung",            // distractor – plausibel, aber nicht für Kontoeröffnung
+      "gesellschaftervertrag",     // distractor – plausibel, aber nicht erforderlich
+      "vollmacht",                 // distractor – nur bei Vertretung nötig
+      "wohnsitznachweis-gf",       // distractor – nicht standard bei Firmenkonto
     ],
     lernblock: LERNBLOCK_FORMULAR_AK,
   },
@@ -303,8 +309,10 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     possiblyMissingOptions: [
       "formular-a",                // correct – fehlt (formular-k ersetzt es fälschlich)
       "eigenerklaerung-jur-fatca", // correct – FATCA-Abklärung fehlt
-      "hr-auszug",                 // trap – bereits im Dossier vorhanden
-      "aktienbuch",                // trap – bereits im Dossier vorhanden
+      "jahresrechnung",            // distractor – plausibel, aber nicht für Kontoeröffnung
+      "gesellschaftervertrag",     // distractor – plausibel, aber nicht erforderlich
+      "vollmacht",                 // distractor – nur bei Vertretung nötig
+      "wohnsitznachweis-gf",       // distractor – nicht standard bei Firmenkonto
     ],
     lernblock: LERNBLOCK_FORMULAR_AK,
   },
