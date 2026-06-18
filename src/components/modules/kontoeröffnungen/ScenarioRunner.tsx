@@ -73,7 +73,7 @@ export function ScenarioRunner({ scenario, scenarios, basePath }: Props) {
           />
         )}
 
-        {scenario.lernblock && (
+        {scenario.lernblock && phase > 1 && (
           <div className="mt-6 rounded-DEFAULT border border-blue-200 bg-blue-50 p-4">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-blue-700">
               Lernblock — {scenario.lernblock.title}
