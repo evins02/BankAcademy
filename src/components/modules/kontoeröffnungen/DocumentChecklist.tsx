@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
-  ALL_DOCUMENT_IDS,
   DOCUMENT_LABELS,
   type DocumentId,
   type KontoScenario,
@@ -32,8 +31,9 @@ export function DocumentChecklist({ scenario, onComplete }: Props) {
 
   const handleSubmit = () => setSubmitted(true);
 
+  const docs = scenario.checklistDocuments;
   const required = new Set(scenario.requiredDocuments);
-  const correctCount = ALL_DOCUMENT_IDS.filter(
+  const correctCount = docs.filter(
     (id) => selected.has(id) === required.has(id)
   ).length;
 
@@ -55,7 +55,7 @@ export function DocumentChecklist({ scenario, onComplete }: Props) {
       </CardHeader>
       <CardContent>
         <ul className="mb-6 grid gap-2 sm:grid-cols-2">
-          {ALL_DOCUMENT_IDS.map((id) => {
+          {docs.map((id) => {
             const state = getState(id);
             return (
               <li key={id}>
@@ -100,13 +100,13 @@ export function DocumentChecklist({ scenario, onComplete }: Props) {
           <div className="flex items-center justify-between">
             <div className="flex gap-4 text-sm">
               <span className="flex items-center gap-1.5 text-primary">
-                <CheckCircle2 size={14} /> Richtig: {correctCount}/{ALL_DOCUMENT_IDS.length}
+                <CheckCircle2 size={14} /> Richtig: {correctCount}/{docs.length}
               </span>
               <span className="flex items-center gap-1.5 text-amber-600">
                 <AlertCircle size={14} /> Legende: grün = korrekt, orange = vergessen, rot = falsch ausgewählt
               </span>
             </div>
-            <Button onClick={() => onComplete({ correct: correctCount, total: ALL_DOCUMENT_IDS.length })}>
+            <Button onClick={() => onComplete({ correct: correctCount, total: docs.length })}>
               Weiter zu Phase 2
             </Button>
           </div>

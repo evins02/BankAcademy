@@ -3,7 +3,6 @@ export type DocumentId =
   | "formular-a"
   | "formular-k"
   | "eigenerklaerung-nat"
-  | "eigenerklaerung-jur"
   | "eigenerklaerung-jur-fatca"
   | "ausweis"
   | "wohnsitznachweis"
@@ -16,7 +15,6 @@ export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   "formular-a": "Formular A",
   "formular-k": "Formular K",
   "eigenerklaerung-nat": "Eigenerklärung Steuerstatus (FATCA)",
-  "eigenerklaerung-jur": "Eigenerklärung juristische Person",
   "eigenerklaerung-jur-fatca": "Eigenerklärung FATCA (juristische Person)",
   ausweis: "Ausweis / Passkopie",
   wohnsitznachweis: "Wohnsitznachweis",
@@ -41,6 +39,8 @@ export interface KontoScenario {
   customerType: string;
   difficulty: Difficulty;
   description: string;
+  /** Documents shown in the Phase 1 checklist (curated per scenario) */
+  checklistDocuments: DocumentId[];
   /** Correct answer for Phase 1 */
   requiredDocuments: DocumentId[];
   /** What the bank employee prepared (may contain errors) */
@@ -77,6 +77,17 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     difficulty: "einfach",
     description:
       "Ein neuer Privatkunde möchte ein Konto eröffnen. Wählen Sie alle erforderlichen Dokumente aus.",
+    checklistDocuments: [
+      "basisvertrag",
+      "formular-a",
+      "formular-k",
+      "eigenerklaerung-nat",
+      "eigenerklaerung-jur-fatca",
+      "ausweis",
+      "wohnsitznachweis",
+      "hr-auszug",
+      "aktienbuch",
+    ],
     requiredDocuments: [
       "basisvertrag",
       "formular-a",
@@ -102,7 +113,7 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     possiblyMissingOptions: [
       "wohnsitznachweis",          // correct – genuinely missing
       "formular-k",                // distractor – Firmenkunden-Formular
-      "eigenerklaerung-jur-fatca", // distractor – Firmenkunden-FATCA, nicht Privatkunde
+      "eigenerklaerung-jur-fatca", // distractor – Firmenkunden-FATCA
       "formular-a",                // trap – bereits im Dossier vorhanden
     ],
   },
@@ -115,6 +126,13 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     difficulty: "einfach",
     description:
       "Eine GmbH möchte ein Geschäftskonto eröffnen. GmbH-Gesellschaften haben Stammanteile statt Aktien – kein Aktienbuch erforderlich. Wählen Sie die korrekten Dokumente aus und prüfen Sie das Dossier.",
+    checklistDocuments: [
+      "hr-auszug",
+      "basisvertrag",
+      "formular-k",
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
+    ],
     requiredDocuments: [
       "hr-auszug",
       "basisvertrag",
@@ -173,6 +191,16 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     difficulty: "mittel",
     description:
       "Eine operativ tätige Aktiengesellschaft möchte ein Geschäftskonto eröffnen. Wählen Sie die erforderlichen Dokumente aus und prüfen Sie das Dossier.",
+    checklistDocuments: [
+      "aktienbuch",
+      "hr-auszug",
+      "basisvertrag",
+      "formular-k",
+      "formular-a",
+      "eigenerklaerung-jur-fatca",
+      "eigenerklaerung-nat",
+      "beglaubigte-ausweiskopie",
+    ],
     requiredDocuments: [
       "aktienbuch",
       "hr-auszug",
@@ -199,9 +227,9 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     ],
     possiblyMissingOptions: [
       "aktienbuch",                // correct – genuinely missing
-      "eigenerklaerung-jur",       // trap – klingt plausibel, ist aber eigenerklaerung-jur-fatca korrekt
+      "eigenerklaerung-nat",       // trap – Privatkunden-FATCA statt juristische Person
       "hr-auszug",                 // trap – bereits im Dossier vorhanden
-      "ausweis",                   // distractor – einfache Kopie / Privatkundendokument
+      "ausweis",                   // distractor – einfache Kopie statt beglaubigte
       "formular-a",                // distractor – falsche Formularart für AG
     ],
     lernblock: LERNBLOCK_FORMULAR_AK,
@@ -215,6 +243,16 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     difficulty: "schwer",
     description:
       "Eine Sitzgesellschaft ohne operative Tätigkeit möchte ein Konto eröffnen. Wählen Sie die erforderlichen Dokumente aus und prüfen Sie das vorbereitete Dossier auf Fehler.",
+    checklistDocuments: [
+      "aktienbuch",
+      "hr-auszug",
+      "basisvertrag",
+      "formular-a",
+      "formular-k",
+      "eigenerklaerung-jur-fatca",
+      "eigenerklaerung-nat",
+      "beglaubigte-ausweiskopie",
+    ],
     requiredDocuments: [
       "aktienbuch",
       "hr-auszug",
