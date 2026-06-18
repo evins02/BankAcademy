@@ -22,10 +22,10 @@ export function DossierReview({ scenario, onComplete }: Props) {
 
   // Documents to show in dossier section + possibly-missing section
   const dossierSet = new Set(scenario.dossierDocuments);
-  // Docs to show as "possibly missing" = required docs not in dossier
-  const possiblyMissing = scenario.requiredDocuments.filter(
-    (id) => !dossierSet.has(id)
-  );
+  // Use explicit list if provided (includes distractors); otherwise compute from required docs
+  const possiblyMissing: DocumentId[] =
+    scenario.possiblyMissingOptions ??
+    scenario.requiredDocuments.filter((id) => !dossierSet.has(id));
   // Wrong-type issue docs (in dossier but shouldn't be)
   const wrongIssues = new Set(
     scenario.issues.filter((i) => i.type === "wrong").map((i) => i.documentId)

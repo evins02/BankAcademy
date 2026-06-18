@@ -43,6 +43,10 @@ export interface KontoScenario {
   dossierDocuments: DocumentId[];
   /** The problems in the dossier */
   issues: Issue[];
+  /** Explicit list of DocumentIds shown in the "Möglicherweise fehlend" section.
+   *  Include the genuinely missing docs AND plausible distractors.
+   *  If absent, falls back to requiredDocuments − dossierDocuments. */
+  possiblyMissingOptions?: DocumentId[];
   /** Optional learning block shown alongside the scenario */
   lernblock?: { title: string; items: Array<{ heading: string; body: string }> };
 }
@@ -77,6 +81,12 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
           "Ohne Wohnsitznachweis kann die Identität des Kunden nicht vollständig verifiziert werden. Dies ist eine regulatorische Anforderung.",
       },
     ],
+    possiblyMissingOptions: [
+      "wohnsitznachweis",     // correct – genuinely missing
+      "formular-k",           // distractor – Firmenkunden-Formular, hier nicht zutreffend
+      "eigenerklaerung-jur",  // distractor – für juristische Personen, nicht für Privatkunden
+      "formular-a",           // trap – bereits im Dossier vorhanden
+    ],
   },
   {
     id: "firmenkunde-ag",
@@ -106,6 +116,13 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
         explanation:
           "Das Aktienbuch ist bei einer AG zwingend erforderlich, um die wirtschaftlich Berechtigten mit mehr als 25% Beteiligung identifizieren zu können.",
       },
+    ],
+    possiblyMissingOptions: [
+      "aktienbuch",           // correct – genuinely missing
+      "eigenerklaerung-jur",  // trap – klingt plausibel, aber FATCA (nat) ist hier korrekt
+      "hr-auszug",            // trap – bereits im Dossier vorhanden, testet Aufmerksamkeit
+      "ausweis",              // distractor – Privatkundendokument, nicht für AG
+      "formular-a",           // distractor – falsche Formularart für operativ tätige AG
     ],
     lernblock: {
       title: "Formular A vs. Formular K",
@@ -147,7 +164,13 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
         type: "wrong",
         documentId: "formular-k",
         explanation:
-          "Fehler: Formular K gilt für operativ tätige Gesellschaften (AG/GmbH). Bei einer Sitzgesellschaft ohne operative Tätigkeit ist Formular A erforderlich — es erfasst ALLE im Aktienbuch eingetragenen Personen, unabhängig vom Beteiligungsanteil.",
+          "Formular K gilt für operativ tätige Gesellschaften (AG/GmbH). Bei einer Sitzgesellschaft ist Formular A erforderlich — es erfasst ALLE im Aktienbuch eingetragenen Personen, unabhängig vom Beteiligungsanteil.",
+      },
+      {
+        type: "missing",
+        documentId: "formular-a",
+        explanation:
+          "Formular A fehlt im Dossier. Es wurde fälschlicherweise durch Formular K ersetzt. Für Sitzgesellschaften ohne operative Tätigkeit ist Formular A — nicht Formular K — zwingend vorgeschrieben.",
       },
       {
         type: "missing",
@@ -155,6 +178,13 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
         explanation:
           "Die Eigenerklärung Steuerstatus (FATCA) fehlt. US-Verbindungen (Staatsbürgerschaft, Geburtsort USA, Greencard, US-Steuernummer) müssen bei jeder Kontoeröffnung abgeklärt werden.",
       },
+    ],
+    possiblyMissingOptions: [
+      "eigenerklaerung-jur",  // distractor – veraltetes Formular, klingt plausibel
+      "formular-a",           // correct – fehlt, weil formular-k es fälschlich ersetzt hat
+      "eigenerklaerung-nat",  // correct – FATCA-Abklärung fehlt
+      "aktienbuch",           // trap – bereits im Dossier vorhanden
+      "ausweis",              // distractor – Privatkundendokument, nicht für Sitzgesellschaft
     ],
     lernblock: {
       title: "Formular A vs. Formular K",
