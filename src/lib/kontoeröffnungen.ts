@@ -4,10 +4,12 @@ export type DocumentId =
   | "formular-k"
   | "eigenerklaerung-nat"
   | "eigenerklaerung-jur"
+  | "eigenerklaerung-jur-fatca"
   | "ausweis"
   | "wohnsitznachweis"
   | "hr-auszug"
-  | "aktienbuch";
+  | "aktienbuch"
+  | "beglaubigte-ausweiskopie";
 
 export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   basisvertrag: "Basisvertrag",
@@ -15,10 +17,12 @@ export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   "formular-k": "Formular K",
   "eigenerklaerung-nat": "Eigenerklärung Steuerstatus (FATCA)",
   "eigenerklaerung-jur": "Eigenerklärung juristische Person",
+  "eigenerklaerung-jur-fatca": "Eigenerklärung FATCA (juristische Person)",
   ausweis: "Ausweis / Passkopie",
   wohnsitznachweis: "Wohnsitznachweis",
   "hr-auszug": "HR-Auszug",
   aktienbuch: "Aktienbuch",
+  "beglaubigte-ausweiskopie": "Beglaubigte Ausweiskopie Zeichnungsberechtigter",
 };
 
 export const ALL_DOCUMENT_IDS = Object.keys(DOCUMENT_LABELS) as DocumentId[];
@@ -43,15 +47,29 @@ export interface KontoScenario {
   dossierDocuments: DocumentId[];
   /** The problems in the dossier */
   issues: Issue[];
-  /** Explicit list of DocumentIds shown in the "Möglicherweise fehlend" section.
-   *  Include the genuinely missing docs AND plausible distractors.
-   *  If absent, falls back to requiredDocuments − dossierDocuments. */
+  /** Explicit list for Phase 2 "Möglicherweise fehlend" section (includes distractors).
+   *  Falls back to requiredDocuments − dossierDocuments if absent. */
   possiblyMissingOptions?: DocumentId[];
-  /** Optional learning block shown alongside the scenario */
+  /** Learning block shown below the scenario (only from Phase 2 onward) */
   lernblock?: { title: string; items: Array<{ heading: string; body: string }> };
 }
 
+const LERNBLOCK_FORMULAR_AK = {
+  title: "Formular A vs. Formular K",
+  items: [
+    {
+      heading: "Formular K — Operativ tätige Gesellschaft (AG/GmbH)",
+      body: "Bei Gesellschaften mit eigener Geschäftstätigkeit. Listet wirtschaftlich Berechtigte mit mehr als 25% Beteiligung. Falls niemand über 25% hält: Geschäftsführer eintragen.",
+    },
+    {
+      heading: "Formular A — Sitzgesellschaft ohne operative Tätigkeit",
+      body: "Bei Holdinggesellschaften und Sitzgesellschaften ohne eigene Geschäftstätigkeit. Listet ALLE im Aktienbuch eingetragenen Personen — unabhängig vom Beteiligungsanteil.",
+    },
+  ],
+};
+
 export const KONTO_SCENARIOS: KontoScenario[] = [
+  // ─── Privatkunde ──────────────────────────────────────────────────────────
   {
     id: "privatkunde",
     title: "Kontoeröffnung Privatkunde",
@@ -82,12 +100,72 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
       },
     ],
     possiblyMissingOptions: [
-      "wohnsitznachweis",     // correct – genuinely missing
-      "formular-k",           // distractor – Firmenkunden-Formular, hier nicht zutreffend
-      "eigenerklaerung-jur",  // distractor – für juristische Personen, nicht für Privatkunden
-      "formular-a",           // trap – bereits im Dossier vorhanden
+      "wohnsitznachweis",          // correct – genuinely missing
+      "formular-k",                // distractor – Firmenkunden-Formular
+      "eigenerklaerung-jur-fatca", // distractor – Firmenkunden-FATCA, nicht Privatkunde
+      "formular-a",                // trap – bereits im Dossier vorhanden
     ],
   },
+
+  // ─── Firmenkunde GmbH (einfach) ───────────────────────────────────────────
+  {
+    id: "firmenkunde-gmbh",
+    title: "Kontoeröffnung Firmenkunde GmbH",
+    customerType: "Firmenkunde (GmbH)",
+    difficulty: "einfach",
+    description:
+      "Eine GmbH möchte ein Geschäftskonto eröffnen. GmbH-Gesellschaften haben Stammanteile statt Aktien – kein Aktienbuch erforderlich. Wählen Sie die korrekten Dokumente aus und prüfen Sie das Dossier.",
+    requiredDocuments: [
+      "hr-auszug",
+      "basisvertrag",
+      "formular-k",
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
+    ],
+    dossierDocuments: [
+      "hr-auszug",
+      "basisvertrag",
+      "formular-k",
+      "eigenerklaerung-jur-fatca",
+      "ausweis", // wrong – einfache Kopie statt beglaubigte Ausweiskopie
+    ],
+    issues: [
+      {
+        type: "wrong",
+        documentId: "ausweis",
+        explanation:
+          "Eine einfache Ausweis- oder Passkopie ist nicht ausreichend. Bei Firmenkunden ist eine amtlich beglaubigte Ausweiskopie des Zeichnungsberechtigten erforderlich – die Person muss im HR als zeichnungsberechtigt eingetragen sein.",
+      },
+      {
+        type: "missing",
+        documentId: "beglaubigte-ausweiskopie",
+        explanation:
+          "Die beglaubigte Ausweiskopie des Zeichnungsberechtigten fehlt. Eine unbeglaubigte Fotokopie genügt regulatorisch nicht – nur die amtlich beglaubigte Kopie ist gültig.",
+      },
+    ],
+    possiblyMissingOptions: [
+      "beglaubigte-ausweiskopie",  // correct – fehlt im Dossier
+      "aktienbuch",                // distractor – GmbH hat keine Aktien, kein Aktienbuch!
+      "formular-a",                // distractor – falsche Formularart (Sitzgesellschaft)
+      "eigenerklaerung-nat",       // distractor – Privatkunden-FATCA, nicht Firmenkunde
+      "hr-auszug",                 // trap – bereits im Dossier vorhanden
+    ],
+    lernblock: {
+      title: "GmbH: Kein Aktienbuch",
+      items: [
+        {
+          heading: "GmbH hat Stammanteile – keine Aktien",
+          body: "Eine GmbH emittiert keine Aktien, sondern Stammanteile. Daher ist kein Aktienbuch erforderlich. Merkhilfe: Nur die AG benötigt ein Aktienbuch.",
+        },
+        {
+          heading: "Formular K — Für operativ tätige Gesellschaften (GmbH und AG)",
+          body: "Listet wirtschaftlich Berechtigte mit mehr als 25% Beteiligung. Falls niemand über 25% hält: Geschäftsführer eintragen. Für Sitzgesellschaften gilt dagegen Formular A.",
+        },
+      ],
+    },
+  },
+
+  // ─── Firmenkunde AG (mittel) ──────────────────────────────────────────────
   {
     id: "firmenkunde-ag",
     title: "Kontoeröffnung Firmenkunde AG",
@@ -96,17 +174,19 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     description:
       "Eine operativ tätige Aktiengesellschaft möchte ein Geschäftskonto eröffnen. Wählen Sie die erforderlichen Dokumente aus und prüfen Sie das Dossier.",
     requiredDocuments: [
+      "aktienbuch",
+      "hr-auszug",
       "basisvertrag",
       "formular-k",
-      "eigenerklaerung-nat",
-      "hr-auszug",
-      "aktienbuch",
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
     ],
     dossierDocuments: [
+      "hr-auszug",
       "basisvertrag",
       "formular-k",
-      "eigenerklaerung-nat",
-      "hr-auszug",
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
       // missing: aktienbuch
     ],
     issues: [
@@ -118,26 +198,16 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
       },
     ],
     possiblyMissingOptions: [
-      "aktienbuch",           // correct – genuinely missing
-      "eigenerklaerung-jur",  // trap – klingt plausibel, aber FATCA (nat) ist hier korrekt
-      "hr-auszug",            // trap – bereits im Dossier vorhanden, testet Aufmerksamkeit
-      "ausweis",              // distractor – Privatkundendokument, nicht für AG
-      "formular-a",           // distractor – falsche Formularart für operativ tätige AG
+      "aktienbuch",                // correct – genuinely missing
+      "eigenerklaerung-jur",       // trap – klingt plausibel, ist aber eigenerklaerung-jur-fatca korrekt
+      "hr-auszug",                 // trap – bereits im Dossier vorhanden
+      "ausweis",                   // distractor – einfache Kopie / Privatkundendokument
+      "formular-a",                // distractor – falsche Formularart für AG
     ],
-    lernblock: {
-      title: "Formular A vs. Formular K",
-      items: [
-        {
-          heading: "Formular K — Operativ tätige Gesellschaft (AG/GmbH)",
-          body: "Bei Gesellschaften mit eigener Geschäftstätigkeit. Listet wirtschaftlich Berechtigte mit mehr als 25% Beteiligung. Falls niemand über 25% hält: Geschäftsführer eintragen.",
-        },
-        {
-          heading: "Formular A — Sitzgesellschaft ohne operative Tätigkeit",
-          body: "Bei Holdinggesellschaften und Sitzgesellschaften ohne eigene Geschäftstätigkeit. Listet ALLE im Aktienbuch eingetragenen Personen — unabhängig vom Beteiligungsanteil.",
-        },
-      ],
-    },
+    lernblock: LERNBLOCK_FORMULAR_AK,
   },
+
+  // ─── Sitzgesellschaft (schwer) ────────────────────────────────────────────
   {
     id: "sitzgesellschaft",
     title: "Kontoeröffnung Sitzgesellschaft",
@@ -146,59 +216,49 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     description:
       "Eine Sitzgesellschaft ohne operative Tätigkeit möchte ein Konto eröffnen. Wählen Sie die erforderlichen Dokumente aus und prüfen Sie das vorbereitete Dossier auf Fehler.",
     requiredDocuments: [
+      "aktienbuch",
+      "hr-auszug",
       "basisvertrag",
       "formular-a",
-      "eigenerklaerung-nat",
-      "hr-auszug",
-      "aktienbuch",
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
     ],
     dossierDocuments: [
       "basisvertrag",
-      "formular-k", // wrong – should be formular-a
+      "formular-k",   // wrong – should be formular-a
       "hr-auszug",
       "aktienbuch",
-      // missing: eigenerklaerung-nat
+      "beglaubigte-ausweiskopie",
+      // missing: formular-a, eigenerklaerung-jur-fatca
     ],
     issues: [
       {
         type: "wrong",
         documentId: "formular-k",
         explanation:
-          "Formular K gilt für operativ tätige Gesellschaften (AG/GmbH). Bei einer Sitzgesellschaft ist Formular A erforderlich — es erfasst ALLE im Aktienbuch eingetragenen Personen, unabhängig vom Beteiligungsanteil.",
+          "Formular K gilt für operativ tätige Gesellschaften (AG/GmbH). Bei einer Sitzgesellschaft ohne operative Tätigkeit ist Formular A erforderlich — es erfasst ALLE im Aktienbuch eingetragenen Personen, unabhängig vom Beteiligungsanteil.",
       },
       {
         type: "missing",
         documentId: "formular-a",
         explanation:
-          "Formular A fehlt im Dossier. Es wurde fälschlicherweise durch Formular K ersetzt. Für Sitzgesellschaften ohne operative Tätigkeit ist Formular A — nicht Formular K — zwingend vorgeschrieben.",
+          "Formular A fehlt. Es wurde fälschlicherweise durch Formular K ersetzt. Für Sitzgesellschaften ohne operative Tätigkeit ist Formular A — nicht Formular K — zwingend vorgeschrieben.",
       },
       {
         type: "missing",
-        documentId: "eigenerklaerung-nat",
+        documentId: "eigenerklaerung-jur-fatca",
         explanation:
-          "Die Eigenerklärung Steuerstatus (FATCA) fehlt. US-Verbindungen (Staatsbürgerschaft, Geburtsort USA, Greencard, US-Steuernummer) müssen bei jeder Kontoeröffnung abgeklärt werden.",
+          "Die Eigenerklärung FATCA (juristische Person) fehlt. US-Verbindungen (Staatsbürgerschaft, Geburtsort USA, Greencard, US-Steuernummer) müssen bei jeder Firmenkonto-Eröffnung abgeklärt werden.",
       },
     ],
     possiblyMissingOptions: [
-      "eigenerklaerung-jur",  // distractor – veraltetes Formular, klingt plausibel
-      "formular-a",           // correct – fehlt, weil formular-k es fälschlich ersetzt hat
-      "eigenerklaerung-nat",  // correct – FATCA-Abklärung fehlt
-      "aktienbuch",           // trap – bereits im Dossier vorhanden
-      "ausweis",              // distractor – Privatkundendokument, nicht für Sitzgesellschaft
+      "formular-a",                // correct – fehlt (formular-k ersetzt es fälschlich)
+      "eigenerklaerung-jur-fatca", // correct – FATCA-Abklärung fehlt
+      "eigenerklaerung-nat",       // distractor – Privatkunden-FATCA, nicht Firmenkunde
+      "hr-auszug",                 // trap – bereits im Dossier vorhanden
+      "aktienbuch",                // trap – bereits im Dossier vorhanden
     ],
-    lernblock: {
-      title: "Formular A vs. Formular K",
-      items: [
-        {
-          heading: "Formular K — Operativ tätige Gesellschaft (AG/GmbH)",
-          body: "Bei Gesellschaften mit eigener Geschäftstätigkeit. Listet wirtschaftlich Berechtigte mit mehr als 25% Beteiligung. Falls niemand über 25% hält: Geschäftsführer eintragen.",
-        },
-        {
-          heading: "Formular A — Sitzgesellschaft ohne operative Tätigkeit",
-          body: "Bei Holdinggesellschaften und Sitzgesellschaften ohne eigene Geschäftstätigkeit. Listet ALLE im Aktienbuch eingetragenen Personen — unabhängig vom Beteiligungsanteil.",
-        },
-      ],
-    },
+    lernblock: LERNBLOCK_FORMULAR_AK,
   },
 ];
 
@@ -207,5 +267,5 @@ export const PRIVATKUNDE_KONTO_SCENARIOS = KONTO_SCENARIOS.filter(
 );
 
 export const FIRMENKUNDE_KONTO_SCENARIOS = KONTO_SCENARIOS.filter(
-  (s) => s.id === "firmenkunde-ag" || s.id === "sitzgesellschaft"
+  (s) => s.id === "firmenkunde-gmbh" || s.id === "firmenkunde-ag" || s.id === "sitzgesellschaft"
 );

@@ -73,14 +73,14 @@ export function DocumentCaseCard({
               className={cn(
                 "flex w-full items-center gap-3 rounded-DEFAULT border p-3 text-left text-sm transition-colors",
                 checked
-                  ? "border-primary bg-primary-light"
+                  ? "border-gray-400 bg-gray-100"
                   : "border-border bg-surface hover:bg-background"
               )}
             >
               <div
                 className={cn(
                   "flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors",
-                  checked ? "border-primary bg-primary" : "border-gray-300"
+                  checked ? "border-gray-500 bg-gray-500" : "border-gray-300"
                 )}
               >
                 {checked && (
