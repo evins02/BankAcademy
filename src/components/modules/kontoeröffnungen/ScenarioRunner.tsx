@@ -72,6 +72,22 @@ export function ScenarioRunner({ scenario, scenarios, basePath }: Props) {
             onRetry={handleRetry}
           />
         )}
+
+        {scenario.lernblock && (
+          <div className="mt-6 rounded-DEFAULT border border-blue-200 bg-blue-50 p-4">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-blue-700">
+              Lernblock — {scenario.lernblock.title}
+            </p>
+            <div className="space-y-3">
+              {scenario.lernblock.items.map((item) => (
+                <div key={item.heading}>
+                  <p className="text-sm font-semibold text-blue-900">{item.heading}</p>
+                  <p className="mt-0.5 text-sm text-blue-800">{item.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

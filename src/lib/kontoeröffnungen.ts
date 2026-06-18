@@ -43,6 +43,8 @@ export interface KontoScenario {
   dossierDocuments: DocumentId[];
   /** The problems in the dossier */
   issues: Issue[];
+  /** Optional learning block shown alongside the scenario */
+  lernblock?: { title: string; items: Array<{ heading: string; body: string }> };
 }
 
 export const KONTO_SCENARIOS: KontoScenario[] = [
@@ -82,18 +84,18 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     customerType: "Firmenkunde (AG)",
     difficulty: "mittel",
     description:
-      "Eine Aktiengesellschaft möchte ein Geschäftskonto eröffnen. Stellen Sie das korrekte Dossier zusammen.",
+      "Eine operativ tätige Aktiengesellschaft möchte ein Geschäftskonto eröffnen. Wählen Sie die erforderlichen Dokumente aus und prüfen Sie das Dossier.",
     requiredDocuments: [
       "basisvertrag",
       "formular-k",
-      "eigenerklaerung-jur",
+      "eigenerklaerung-nat",
       "hr-auszug",
       "aktienbuch",
     ],
     dossierDocuments: [
       "basisvertrag",
       "formular-k",
-      "eigenerklaerung-jur",
+      "eigenerklaerung-nat",
       "hr-auszug",
       // missing: aktienbuch
     ],
@@ -102,9 +104,22 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
         type: "missing",
         documentId: "aktienbuch",
         explanation:
-          "Das Aktienbuch ist bei einer AG zwingend erforderlich, um die wirtschaftlich Berechtigten identifizieren zu können.",
+          "Das Aktienbuch ist bei einer AG zwingend erforderlich, um die wirtschaftlich Berechtigten mit mehr als 25% Beteiligung identifizieren zu können.",
       },
     ],
+    lernblock: {
+      title: "Formular A vs. Formular K",
+      items: [
+        {
+          heading: "Formular K — Operativ tätige Gesellschaft (AG/GmbH)",
+          body: "Bei Gesellschaften mit eigener Geschäftstätigkeit. Listet wirtschaftlich Berechtigte mit mehr als 25% Beteiligung. Falls niemand über 25% hält: Geschäftsführer eintragen.",
+        },
+        {
+          heading: "Formular A — Sitzgesellschaft ohne operative Tätigkeit",
+          body: "Bei Holdinggesellschaften und Sitzgesellschaften ohne eigene Geschäftstätigkeit. Listet ALLE im Aktienbuch eingetragenen Personen — unabhängig vom Beteiligungsanteil.",
+        },
+      ],
+    },
   },
   {
     id: "sitzgesellschaft",
@@ -112,11 +127,11 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     customerType: "Sitzgesellschaft",
     difficulty: "schwer",
     description:
-      "Eine Sitzgesellschaft ohne operative Tätigkeit möchte ein Konto eröffnen. Prüfen Sie das vorbereitete Dossier auf Fehler.",
+      "Eine Sitzgesellschaft ohne operative Tätigkeit möchte ein Konto eröffnen. Wählen Sie die erforderlichen Dokumente aus und prüfen Sie das vorbereitete Dossier auf Fehler.",
     requiredDocuments: [
       "basisvertrag",
       "formular-a",
-      "eigenerklaerung-jur",
+      "eigenerklaerung-nat",
       "hr-auszug",
       "aktienbuch",
     ],
@@ -125,22 +140,35 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
       "formular-k", // wrong – should be formular-a
       "hr-auszug",
       "aktienbuch",
-      // missing: eigenerklaerung-jur
+      // missing: eigenerklaerung-nat
     ],
     issues: [
       {
         type: "wrong",
         documentId: "formular-k",
         explanation:
-          "Bei einer Sitzgesellschaft wird Formular A benötigt, nicht Formular K. Formular K ist für juristische Personen mit operativer Tätigkeit.",
+          "Fehler: Formular K gilt für operativ tätige Gesellschaften (AG/GmbH). Bei einer Sitzgesellschaft ohne operative Tätigkeit ist Formular A erforderlich — es erfasst ALLE im Aktienbuch eingetragenen Personen, unabhängig vom Beteiligungsanteil.",
       },
       {
         type: "missing",
-        documentId: "eigenerklaerung-jur",
+        documentId: "eigenerklaerung-nat",
         explanation:
-          "Die Eigenerklärung juristische Person ist obligatorisch, da es sich um eine juristische Person handelt.",
+          "Die Eigenerklärung Steuerstatus (FATCA) fehlt. US-Verbindungen (Staatsbürgerschaft, Geburtsort USA, Greencard, US-Steuernummer) müssen bei jeder Kontoeröffnung abgeklärt werden.",
       },
     ],
+    lernblock: {
+      title: "Formular A vs. Formular K",
+      items: [
+        {
+          heading: "Formular K — Operativ tätige Gesellschaft (AG/GmbH)",
+          body: "Bei Gesellschaften mit eigener Geschäftstätigkeit. Listet wirtschaftlich Berechtigte mit mehr als 25% Beteiligung. Falls niemand über 25% hält: Geschäftsführer eintragen.",
+        },
+        {
+          heading: "Formular A — Sitzgesellschaft ohne operative Tätigkeit",
+          body: "Bei Holdinggesellschaften und Sitzgesellschaften ohne eigene Geschäftstätigkeit. Listet ALLE im Aktienbuch eingetragenen Personen — unabhängig vom Beteiligungsanteil.",
+        },
+      ],
+    },
   },
 ];
 

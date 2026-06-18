@@ -64,8 +64,8 @@ export function DocumentChecklist({ scenario, onComplete }: Props) {
                   disabled={submitted}
                   className={cn(
                     "flex w-full items-center gap-3 rounded-DEFAULT border px-4 py-3 text-left text-sm transition-colors",
-                    !submitted && "hover:border-primary hover:bg-primary-light",
-                    selected.has(id) && !submitted && "border-primary bg-primary-light font-medium text-primary",
+                    !submitted && "hover:border-slate-400 hover:bg-slate-50",
+                    selected.has(id) && !submitted && "border-slate-400 bg-slate-100 font-medium text-slate-700",
                     state === "correct" && "border-primary bg-primary-light text-primary",
                     state === "wrong" && "border-red-300 bg-red-50 text-red-600",
                     state === "missed" && "border-amber-300 bg-amber-50 text-amber-700",
@@ -80,7 +80,7 @@ export function DocumentChecklist({ scenario, onComplete }: Props) {
                       <span
                         className={cn(
                           "h-4 w-4 rounded border-2 transition-colors",
-                          selected.has(id) ? "border-primary bg-primary" : "border-gray-300"
+                          selected.has(id) ? "border-slate-500 bg-slate-500" : "border-gray-300"
                         )}
                       />
                     )}
