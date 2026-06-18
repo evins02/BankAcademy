@@ -97,7 +97,7 @@ const L1_STANDARD: DocumentCase = {
     },
     {
       id: "eigenerklarung-np",
-      label: "Eigenerklärung Steuerstatus (FATCA)",
+      label: "Eigenerklärung FATCA (juristische Person)",
       status: "required",
       feedbackSelected: "Korrekt – US-Person Abklärung (Staatsbürgerschaft, Geburtsort USA, Greencard) ist bei jeder Kontoeröffnung zwingend.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung muss bei jeder Neueröffnung erfolgen – Fragen zu US-Staatsbürgerschaft, Geburtsort USA, Greencard und US-Steuernummer.",
@@ -174,7 +174,7 @@ const L1_STANDARD: DocumentCase = {
     },
   ],
   generalFeedback:
-    "Beim Standardfall Schweizer Privatkunde benötigen Sie: gültiger CH-Ausweis, Eigenerklärung Steuerstatus (FATCA), Formular A (VSB 20 – wirtschaftlich Berechtigter), Wohnsitzbestätigung und Unterschriftenprobe. Firmendokumente, EDD oder PEP-Formulare sind bei einem normalen Privatkundenfall nicht nötig.",
+    "Beim Standardfall Schweizer Privatkunde benötigen Sie: gültiger CH-Ausweis, Eigenerklärung FATCA (juristische Person), Formular A (VSB 20 – wirtschaftlich Berechtigter), Wohnsitzbestätigung und Unterschriftenprobe. Firmendokumente, EDD oder PEP-Formulare sind bei einem normalen Privatkundenfall nicht nötig.",
 };
 
 const L1_AUSWEIS_ABGELAUFEN: DocumentCase = {
@@ -194,7 +194,7 @@ const L1_AUSWEIS_ABGELAUFEN: DocumentCase = {
     },
     {
       id: "eigenerklarung-np",
-      label: "Eigenerklärung Steuerstatus (FATCA)",
+      label: "Eigenerklärung FATCA (juristische Person)",
       status: "required",
       feedbackSelected: "Korrekt – FATCA-Abklärung ist bei jeder Kontoeröffnung pflicht.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen – Fragen zu US-Verbindungen sind zwingend.",
@@ -322,7 +322,7 @@ const L2_AUSLAENDER: DocumentCase = {
     },
     {
       id: "eigenerklarung-np",
-      label: "Eigenerklärung Steuerstatus (FATCA)",
+      label: "Eigenerklärung FATCA (juristische Person)",
       status: "required",
       feedbackSelected: "Korrekt – FATCA gilt auch für EU-Bürger: US-Verbindungen müssen aktiv abgeklärt werden.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung ist bei jeder Neueröffnung zwingend – unabhängig der Nationalität.",
@@ -380,7 +380,7 @@ const L2_AUSLAENDER: DocumentCase = {
   ],
   requiredOneOf: [["reisepass-ausl", "aufenthalt-b"]],
   generalFeedback:
-    "Für ausländische Kunden gilt: Entweder der ausländische Pass ODER die Aufenthaltsbewilligung reicht für die Identifikation. Zusätzlich sind Eigenerklärung Steuerstatus (FATCA), Formular A (VSB 20 – wirtschaftlich Berechtigter), Wohnsitznachweis und Unterschriftenprobe erforderlich. Bei einem normalen Angestelltenverhältnis besteht kein erhöhtes Risiko – kein EDD nötig.",
+    "Für ausländische Kunden gilt: Entweder der ausländische Pass ODER die Aufenthaltsbewilligung reicht für die Identifikation. Zusätzlich sind Eigenerklärung FATCA (juristische Person), Formular A (VSB 20 – wirtschaftlich Berechtigter), Wohnsitznachweis und Unterschriftenprobe erforderlich. Bei einem normalen Angestelltenverhältnis besteht kein erhöhtes Risiko – kein EDD nötig.",
 };
 
 const L2_BAREINLAGE: DocumentCase = {
@@ -400,7 +400,7 @@ const L2_BAREINLAGE: DocumentCase = {
     },
     {
       id: "eigenerklarung-np",
-      label: "Eigenerklärung Steuerstatus (FATCA)",
+      label: "Eigenerklärung FATCA (juristische Person)",
       status: "required",
       feedbackSelected: "Korrekt – FATCA-Abklärung ist auch in diesem Fall zwingend.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen.",
@@ -570,14 +570,14 @@ const L3_GEMEINSCHAFTSKONTO: DocumentCase = {
     },
     {
       id: "eigenerklarung-stefan",
-      label: "Eigenerklärung Steuerstatus (FATCA) – Stefan Berger",
+      label: "Eigenerklärung FATCA (juristische Person) – Stefan Berger",
       status: "required",
       feedbackSelected: "Korrekt – FATCA-Abklärung für jeden Kontoinhaber separat erforderlich.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung für Stefan Berger fehlt.",
     },
     {
       id: "eigenerklarung-maria",
-      label: "Eigenerklärung Steuerstatus (FATCA) – Maria Berger",
+      label: "Eigenerklärung FATCA (juristische Person) – Maria Berger",
       status: "required",
       feedbackSelected: "Korrekt – FATCA-Abklärung für jeden Kontoinhaber separat erforderlich.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung für Maria Berger fehlt.",
@@ -638,7 +638,7 @@ const L3_GEMEINSCHAFTSKONTO: DocumentCase = {
     },
   ],
   generalFeedback:
-    "Beim Gemeinschaftskonto: BEIDE Inhaber werden identifiziert (je Ausweis + Eigenerklärung Steuerstatus FATCA). Zusätzlich: Formular A einmal pro Konto (VSB 20). Die Zeichnungsregelung richtet sich nach dem Kundenwunsch – hier Einzelzeichnung. Kollektivzeichnung wäre falsch, da das Ehepaar explizit einzeln verfügen möchte.",
+    "Beim Gemeinschaftskonto: BEIDE Inhaber werden identifiziert (je Ausweis + Eigenerklärung FATCA (juristische Person)). Zusätzlich: Formular A einmal pro Konto (VSB 20). Die Zeichnungsregelung richtet sich nach dem Kundenwunsch – hier Einzelzeichnung. Kollektivzeichnung wäre falsch, da das Ehepaar explizit einzeln verfügen möchte.",
 };
 
 const L3_AUSWEIS_TRICK_MCQ: McqCase = {
@@ -696,7 +696,7 @@ const L3_HOCHRISIKO_PEP: DocumentCase = {
     },
     {
       id: "eigenerklarung-np",
-      label: "Eigenerklärung Steuerstatus (FATCA)",
+      label: "Eigenerklärung FATCA (juristische Person)",
       status: "required",
       feedbackSelected: "Korrekt – FATCA-Abklärung ist bei jeder Kontoeröffnung zwingend.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen.",

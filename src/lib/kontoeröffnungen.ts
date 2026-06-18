@@ -15,7 +15,7 @@ export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   basisvertrag: "Basisvertrag",
   "formular-a": "Formular A",
   "formular-k": "Formular K",
-  "eigenerklaerung-nat": "Eigenerklärung Steuerstatus (FATCA)",
+  "eigenerklaerung-nat": "Eigenerklärung FATCA (juristische Person)",
   "eigenerklaerung-jur-fatca": "Eigenerklärung FATCA (juristische Person)",
   ausweis: "Ausweis / Passkopie",
   wohnsitznachweis: "Wohnsitznachweis",
@@ -84,7 +84,6 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
       "formular-a",
       "formular-k",
       "eigenerklaerung-nat",
-      "eigenerklaerung-jur-fatca",
       "ausweis",
       "wohnsitznachweis",
       "hr-auszug",
@@ -209,7 +208,6 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
       "beglaubigte-ausweiskopie",
       // distractors (3)
       "formular-a",            // trap: nur für Sitzgesellschaft
-      "eigenerklaerung-nat",   // trap: für natürliche Personen, nicht juristische
       "gesellschaftervertrag", // trap: plausibel für GmbH, aber nicht für AG relevant
     ],
     requiredDocuments: [
@@ -264,7 +262,6 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
       "beglaubigte-ausweiskopie",
       // distractors (3)
       "formular-k",              // trap: nur für operativ tätige Gesellschaften
-      "eigenerklaerung-nat",     // trap: für natürliche Personen, nicht juristische
       "gesellschaftervertrag",   // trap: plausibel aber nicht erforderlich für Sitzgesellschaft
     ],
     requiredDocuments: [
@@ -306,7 +303,6 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     possiblyMissingOptions: [
       "formular-a",                // correct – fehlt (formular-k ersetzt es fälschlich)
       "eigenerklaerung-jur-fatca", // correct – FATCA-Abklärung fehlt
-      "eigenerklaerung-nat",       // distractor – Privatkunden-FATCA, nicht Firmenkunde
       "hr-auszug",                 // trap – bereits im Dossier vorhanden
       "aktienbuch",                // trap – bereits im Dossier vorhanden
     ],
