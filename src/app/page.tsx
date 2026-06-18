@@ -681,15 +681,6 @@ function Hero() {
           </Link>
         </div>
 
-        {/* Trust badges */}
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 24, fontSize: 13, color: WM }}>
-          {["Kein Konto nötig", "100% kostenlos", "LAP-konform"].map((t) => (
-            <span key={t} style={{ display: "flex", alignItems: "center", gap: 5 }}>
-              <span style={{ color: CY, fontSize: 14 }}>✓</span> {t}
-            </span>
-          ))}
-        </div>
-
         {/* Trust indicators */}
         <div style={{ marginTop: 28, paddingTop: 24, borderTop: `1px solid ${BR}`, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
           <p style={{ margin: 0, fontSize: 12, color: WM, fontStyle: "italic" }}>
