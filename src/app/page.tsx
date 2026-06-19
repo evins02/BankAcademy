@@ -1363,8 +1363,11 @@ function AccessModal({ onClose }: { onClose: () => void }) {
   function handleCodeSubmit(e: React.FormEvent) {
     e.preventDefault();
     setCodeError(false);
-    const validCode = process.env.NEXT_PUBLIC_ACCESS_CODE ?? "";
-    if (validCode && code.trim().toUpperCase() === validCode.trim().toUpperCase()) {
+    const envCodes = process.env.NEXT_PUBLIC_ACCESS_CODE ?? "";
+    const validCodes = envCodes
+      ? envCodes.split(",").map((c) => c.trim().toUpperCase())
+      : ["COMPENDIO2026"];
+    if (validCodes.includes(code.trim().toUpperCase())) {
       window.location.href = "/dashboard";
     } else {
       setCodeError(true);
