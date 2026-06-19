@@ -89,6 +89,13 @@ const L1_STANDARD: DocumentCase = {
     "Herr Müller (32), Schweizer Staatsbürger, wohnhaft in Bern, möchte ein Privatkonto eröffnen. Er hat einen gültigen Schweizer Pass dabei. Keine besonderen Risikomerkmale erkennbar.",
   documents: [
     {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – der Basisvertrag regelt die Geschäftsbeziehung und ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
+    },
+    {
       id: "ausweis-ch",
       label: "Gültiger CH-Ausweis / Reisepass",
       status: "required",
@@ -97,7 +104,7 @@ const L1_STANDARD: DocumentCase = {
     },
     {
       id: "eigenerklarung-np",
-      label: "Eigenerklärung FATCA (juristische Person)",
+      label: "Eigenerklärung FATCA (natürliche Person)",
       status: "required",
       feedbackSelected: "Korrekt – US-Person Abklärung (Staatsbürgerschaft, Geburtsort USA, Greencard) ist bei jeder Kontoeröffnung zwingend.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung muss bei jeder Neueröffnung erfolgen – Fragen zu US-Staatsbürgerschaft, Geburtsort USA, Greencard und US-Steuernummer.",
@@ -112,23 +119,23 @@ const L1_STANDARD: DocumentCase = {
     {
       id: "wohnsitzbestatigung",
       label: "Wohnsitzbestätigung / Meldebestätigung",
-      status: "required",
-      feedbackSelected: "Korrekt – Wohnsitznachweis ist standardmässig erforderlich.",
-      feedbackNotSelected: "Fehler: Der Wohnsitz muss dokumentiert werden.",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Eine Wohnsitzbestätigung ist für diesen Standardfall nicht erforderlich.",
+      feedbackNotSelected: "Korrekt – keine Wohnsitzbestätigung nötig beim Standardfall.",
     },
     {
       id: "unterschriftenprobe",
       label: "Unterschriftenprobe",
-      status: "required",
-      feedbackSelected: "Korrekt – für die Kontoführung und spätere Verfügungen benötigt.",
-      feedbackNotSelected: "Fehler: Unterschriftenprobe wird für die Kontoeröffnung benötigt.",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Die Unterschriftenprobe ist kein Pflichtdokument der regulatorischen Kontoeröffnung.",
+      feedbackNotSelected: "Korrekt – nicht zu den zwingenden Dokumenten des Standardfalls gehörend.",
     },
     {
       id: "kontaktdaten",
       label: "Telefon / E-Mail-Adresse",
-      status: "optional",
-      feedbackSelected: "Gut – Kontaktdaten erleichtern die Korrespondenz.",
-      feedbackNotSelected: "Akzeptabel, aber Kontaktdaten werden für Mitteilungen empfohlen.",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Kontaktdaten sind kein Dokument der regulatorischen Kontoeröffnung.",
+      feedbackNotSelected: "Korrekt – nicht erforderlich.",
     },
     {
       id: "handelsregister",
@@ -174,7 +181,7 @@ const L1_STANDARD: DocumentCase = {
     },
   ],
   generalFeedback:
-    "Beim Standardfall Schweizer Privatkunde benötigen Sie: gültiger CH-Ausweis, Eigenerklärung FATCA (juristische Person), Formular A (VSB 20 – wirtschaftlich Berechtigter), Wohnsitzbestätigung und Unterschriftenprobe. Firmendokumente, EDD oder PEP-Formulare sind bei einem normalen Privatkundenfall nicht nötig.",
+    "Beim Standardfall Schweizer Privatkunde benötigen Sie: Basisvertrag, gültiger CH-Ausweis, Eigenerklärung FATCA (natürliche Person) und Formular A (VSB 20 – wirtschaftlich Berechtigter). Firmendokumente, EDD, PEP-Formulare, Wohnsitzbestätigungen oder Unterschriftenproben gehören nicht zu den zwingenden regulatorischen Dokumenten dieses Standardfalls.",
 };
 
 const L1_AUSWEIS_ABGELAUFEN: DocumentCase = {
