@@ -329,7 +329,7 @@ const L2_AUSLAENDER: DocumentCase = {
     },
     {
       id: "eigenerklarung-np",
-      label: "Eigenerklärung FATCA (juristische Person)",
+      label: "Eigenerklärung FATCA (natürliche Person)",
       status: "required",
       feedbackSelected: "Korrekt – FATCA gilt auch für EU-Bürger: US-Verbindungen müssen aktiv abgeklärt werden.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung ist bei jeder Neueröffnung zwingend – unabhängig der Nationalität.",
@@ -357,7 +357,7 @@ const L2_AUSLAENDER: DocumentCase = {
     },
     {
       id: "arbeitsvertrag",
-      label: "Arbeitsvertrag / Lohnausweis (optional)",
+      label: "Arbeitsvertrag / Lohnausweis",
       status: "optional",
       feedbackSelected: "Gut – bestätigt Einkommen und Aufenthaltsgrund, zeigt proaktiven Kundenservice.",
       feedbackNotSelected: "Akzeptabel – bei plausiblem Anlass nicht zwingend.",
@@ -387,7 +387,7 @@ const L2_AUSLAENDER: DocumentCase = {
   ],
   requiredOneOf: [["reisepass-ausl", "aufenthalt-b"]],
   generalFeedback:
-    "Für ausländische Kunden gilt: Entweder der ausländische Pass ODER die Aufenthaltsbewilligung reicht für die Identifikation. Zusätzlich sind Eigenerklärung FATCA (juristische Person), Formular A (VSB 20 – wirtschaftlich Berechtigter), Wohnsitznachweis und Unterschriftenprobe erforderlich. Bei einem normalen Angestelltenverhältnis besteht kein erhöhtes Risiko – kein EDD nötig.",
+    "Für ausländische Kunden gilt: Entweder der ausländische Pass ODER die Aufenthaltsbewilligung reicht für die Identifikation. Zusätzlich sind Eigenerklärung FATCA (natürliche Person), Formular A (VSB 20 – wirtschaftlich Berechtigter), Wohnsitznachweis und Unterschriftenprobe erforderlich. Bei einem normalen Angestelltenverhältnis besteht kein erhöhtes Risiko – kein EDD nötig.",
 };
 
 const L2_BAREINLAGE: DocumentCase = {
