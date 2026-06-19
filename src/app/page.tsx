@@ -114,12 +114,14 @@ function Navbar({
   onToggle,
   onNav,
   onLoginOpen,
+  onAccessOpen,
 }: {
   scrolled: boolean;
   mobileOpen: boolean;
   onToggle: () => void;
   onNav: (id: string) => void;
   onLoginOpen: () => void;
+  onAccessOpen: () => void;
 }) {
   return (
     <header
@@ -236,8 +238,8 @@ function Navbar({
           >
             Einloggen
           </button>
-          <Link
-            href="/dashboard"
+          <button
+            onClick={onAccessOpen}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -248,20 +250,21 @@ function Navbar({
               fontWeight: 700,
               background: CY,
               color: N,
-              textDecoration: "none",
+              border: "none",
+              cursor: "pointer",
               transition: "transform 0.15s, box-shadow 0.15s",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.transform = "scale(1.04)";
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 4px 20px ${CY}66`;
+              (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.04)";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 4px 20px ${CY}66`;
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.transform = "scale(1)";
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
+              (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
             }}
           >
-            Kostenlos starten <ChevronRight size={14} />
-          </Link>
+            Zugang anfragen <ChevronRight size={14} />
+          </button>
         </div>
 
         {/* Hamburger */}
@@ -346,10 +349,11 @@ function Navbar({
               >
                 Einloggen
               </button>
-              <Link
-                href="/dashboard"
+              <button
+                onClick={onAccessOpen}
                 style={{
                   display: "block",
+                  width: "100%",
                   padding: "12px 16px",
                   borderRadius: 100,
                   fontSize: 14,
@@ -357,11 +361,12 @@ function Navbar({
                   background: CY,
                   color: N,
                   textAlign: "center",
-                  textDecoration: "none",
+                  border: "none",
+                  cursor: "pointer",
                 }}
               >
-                Kostenlos starten →
-              </Link>
+                Zugang anfragen →
+              </button>
             </div>
           </div>
         </div>
@@ -517,7 +522,7 @@ function AppMockup() {
 
 /* ─── Section: Hero ───────────────────────────────────────────────────────── */
 
-function Hero() {
+function Hero({ onAccessOpen }: { onAccessOpen: () => void }) {
   return (
     <section
       style={{
@@ -630,8 +635,8 @@ function Hero() {
 
         {/* Buttons */}
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12, marginBottom: 28 }}>
-          <Link
-            href="/dashboard"
+          <button
+            onClick={onAccessOpen}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -642,7 +647,8 @@ function Hero() {
               fontWeight: 700,
               background: CY,
               color: N,
-              textDecoration: "none",
+              border: "none",
+              cursor: "pointer",
               boxShadow: `0 0 40px ${CY}55`,
               transition: "transform 0.15s, box-shadow 0.15s",
             }}
@@ -655,8 +661,8 @@ function Hero() {
               e.currentTarget.style.boxShadow = `0 0 40px ${CY}55`;
             }}
           >
-            Kostenlos starten <ChevronRight size={17} />
-          </Link>
+            Zugang anfragen <ChevronRight size={17} />
+          </button>
           <Link
             href="/demo"
             style={{
@@ -1243,7 +1249,7 @@ function ForBanks() {
 
 /* ─── Section: Final CTA ──────────────────────────────────────────────────── */
 
-function FinalCTA() {
+function FinalCTA({ onAccessOpen }: { onAccessOpen: () => void }) {
   return (
     <section
       id="preise"
@@ -1290,10 +1296,10 @@ function FinalCTA() {
             Bereit für BankAcademy?
           </h2>
           <p style={{ margin: "0 0 36px", fontSize: 18, color: WD, lineHeight: 1.6 }}>
-            Starte heute kostenlos und trainiere Banking wie es wirklich ist.
+            Fordere deinen Zugang an und trainiere Banking wie es wirklich ist.
           </p>
-          <Link
-            href="/dashboard"
+          <button
+            onClick={onAccessOpen}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -1304,7 +1310,8 @@ function FinalCTA() {
               fontWeight: 800,
               background: CY,
               color: N,
-              textDecoration: "none",
+              border: "none",
+              cursor: "pointer",
               boxShadow: `0 8px 40px ${CY}55`,
               transition: "transform 0.15s, box-shadow 0.15s",
             }}
@@ -1317,14 +1324,338 @@ function FinalCTA() {
               e.currentTarget.style.boxShadow = `0 8px 40px ${CY}55`;
             }}
           >
-            Kostenlos starten <ChevronRight size={18} />
-          </Link>
+            Zugang anfragen <ChevronRight size={18} />
+          </button>
           <p style={{ margin: "18px 0 0", fontSize: 13, color: WM }}>
-            Kein Konto nötig · Kostenlos · Sofort starten
+            Wir melden uns mit deinen Zugangsdaten
           </p>
         </div>
       </FadeIn>
     </section>
+  );
+}
+
+/* ─── Access Modal ────────────────────────────────────────────────────────── */
+
+function saveLead(email: string, name: string, company: string) {
+  try {
+    const raw = localStorage.getItem("bankinglab:leads");
+    const leads = raw ? JSON.parse(raw) : [];
+    leads.push({ email, name, company, timestamp: Date.now() });
+    localStorage.setItem("bankinglab:leads", JSON.stringify(leads));
+  } catch {}
+}
+
+function AccessModal({ onClose }: { onClose: () => void }) {
+  const [step, setStep] = useState<"lead" | "code" | "thanks">("lead");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
+  const [code, setCode] = useState("");
+  const [codeError, setCodeError] = useState(false);
+
+  function handleLeadSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    saveLead(email, name, company);
+    setStep("code");
+  }
+
+  function handleCodeSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setCodeError(false);
+    const validCode = process.env.NEXT_PUBLIC_ACCESS_CODE ?? "";
+    if (validCode && code.trim().toUpperCase() === validCode.trim().toUpperCase()) {
+      window.location.href = "/dashboard";
+    } else {
+      setCodeError(true);
+    }
+  }
+
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "11px 14px",
+    borderRadius: 10,
+    border: "1.5px solid #e5e7eb",
+    fontSize: 14,
+    color: "#111827",
+    outline: "none",
+    boxSizing: "border-box",
+    transition: "border-color 0.15s",
+    background: "#fff",
+  };
+
+  const labelStyle: React.CSSProperties = {
+    display: "block",
+    marginBottom: 6,
+    fontSize: 13,
+    fontWeight: 600,
+    color: "#374151",
+  };
+
+  const primaryBtnStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "13px 24px",
+    borderRadius: 100,
+    border: "none",
+    background: "#0D1B4B",
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: 700,
+    cursor: "pointer",
+    transition: "background 0.15s",
+  };
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.6)",
+        backdropFilter: "blur(8px)",
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 24,
+        animation: "modalFadeIn 0.22s ease",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#fff",
+          borderRadius: 20,
+          boxShadow: "0 32px 96px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06)",
+          width: "100%",
+          maxWidth: 420,
+          padding: "40px 36px 32px",
+          position: "relative",
+          animation: "modalSlideIn 0.25s cubic-bezier(0.34,1.56,0.64,1)",
+        }}
+      >
+        {/* Close */}
+        <button
+          onClick={onClose}
+          aria-label="Schliessen"
+          style={{
+            position: "absolute",
+            top: 16,
+            right: 16,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 8,
+            borderRadius: 8,
+            color: "#9ca3af",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "color 0.15s, background 0.15s",
+          }}
+          onMouseEnter={(e) => {
+            const b = e.currentTarget as HTMLButtonElement;
+            b.style.color = "#374151";
+            b.style.background = "#f3f4f6";
+          }}
+          onMouseLeave={(e) => {
+            const b = e.currentTarget as HTMLButtonElement;
+            b.style.color = "#9ca3af";
+            b.style.background = "none";
+          }}
+        >
+          <X size={18} />
+        </button>
+
+        {/* Logo */}
+        <p style={{ margin: "0 0 24px", fontSize: 21, fontWeight: 800, letterSpacing: "-0.5px", color: "#0D1B4B", textAlign: "center" }}>
+          Bank<span style={{ color: "#00C9B1" }}>Academy</span>
+        </p>
+
+        {/* ── Step 1: Lead form ── */}
+        {step === "lead" && (
+          <>
+            <div style={{ textAlign: "center", marginBottom: 24 }}>
+              <h2 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 700, color: "#111827", letterSpacing: "-0.3px" }}>
+                Zugang anfragen
+              </h2>
+              <p style={{ margin: 0, fontSize: 14, color: "#6b7280", lineHeight: 1.5 }}>
+                Wir melden uns innerhalb von 24 Stunden mit deinen Zugangsdaten.
+              </p>
+            </div>
+            <form onSubmit={handleLeadSubmit}>
+              <div style={{ marginBottom: 14 }}>
+                <label style={labelStyle}>
+                  E-Mail Adresse <span style={{ color: "#ef4444" }}>*</span>
+                </label>
+                <input
+                  type="email"
+                  placeholder="max@beispiel.ch"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  style={inputStyle}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "#0D1B4B"; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = "#e5e7eb"; }}
+                />
+              </div>
+              <div style={{ marginBottom: 14 }}>
+                <label style={labelStyle}>
+                  Name <span style={{ fontWeight: 400, color: "#9ca3af" }}>(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Max Muster"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  style={inputStyle}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "#0D1B4B"; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = "#e5e7eb"; }}
+                />
+              </div>
+              <div style={{ marginBottom: 24 }}>
+                <label style={labelStyle}>
+                  Firma / Bank <span style={{ fontWeight: 400, color: "#9ca3af" }}>(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="UBS, Raiffeisen, Compendio …"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  style={inputStyle}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "#0D1B4B"; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = "#e5e7eb"; }}
+                />
+              </div>
+              <button
+                type="submit"
+                style={primaryBtnStyle}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#0a1438"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#0D1B4B"; }}
+              >
+                Weiter →
+              </button>
+            </form>
+          </>
+        )}
+
+        {/* ── Step 2: Code entry ── */}
+        {step === "code" && (
+          <>
+            <div style={{ textAlign: "center", marginBottom: 24 }}>
+              <h2 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 700, color: "#111827", letterSpacing: "-0.3px" }}>
+                Haben Sie einen Zugangscode?
+              </h2>
+              <p style={{ margin: 0, fontSize: 14, color: "#6b7280", lineHeight: 1.5 }}>
+                Kunden wie Compendio können sofort einsteigen. Kein Code? Kein Problem.
+              </p>
+            </div>
+            <form onSubmit={handleCodeSubmit}>
+              <div style={{ marginBottom: codeError ? 6 : 20 }}>
+                <label style={labelStyle}>Zugangscode</label>
+                <input
+                  type="text"
+                  placeholder="Z.B. COMPENDIO2026"
+                  value={code}
+                  autoFocus
+                  onChange={(e) => { setCode(e.target.value); setCodeError(false); }}
+                  style={{
+                    ...inputStyle,
+                    borderColor: codeError ? "#ef4444" : "#e5e7eb",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                    fontWeight: 600,
+                  }}
+                  onFocus={(e) => { if (!codeError) e.currentTarget.style.borderColor = "#0D1B4B"; }}
+                  onBlur={(e) => { if (!codeError) e.currentTarget.style.borderColor = "#e5e7eb"; }}
+                />
+              </div>
+              {codeError && (
+                <p style={{ margin: "0 0 14px", fontSize: 13, color: "#ef4444" }}>
+                  Ungültiger Code – bitte überprüfe deine Eingabe.
+                </p>
+              )}
+              <button
+                type="submit"
+                style={{ ...primaryBtnStyle, marginBottom: 16 }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#0a1438"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#0D1B4B"; }}
+              >
+                Zugang aktivieren →
+              </button>
+            </form>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+              <div style={{ flex: 1, height: 1, background: "#e5e7eb" }} />
+              <span style={{ fontSize: 13, color: "#9ca3af" }}>oder</span>
+              <div style={{ flex: 1, height: 1, background: "#e5e7eb" }} />
+            </div>
+            <button
+              onClick={() => setStep("thanks")}
+              style={{
+                width: "100%",
+                padding: "13px 24px",
+                borderRadius: 100,
+                border: "1.5px solid #e5e7eb",
+                background: "transparent",
+                color: "#6b7280",
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "border-color 0.15s, color 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = "#9ca3af";
+                (e.currentTarget as HTMLButtonElement).style.color = "#374151";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = "#e5e7eb";
+                (e.currentTarget as HTMLButtonElement).style.color = "#6b7280";
+              }}
+            >
+              Keinen Code – ich warte auf die Zugangsdaten
+            </button>
+          </>
+        )}
+
+        {/* ── Step 3: Thanks ── */}
+        {step === "thanks" && (
+          <div style={{ textAlign: "center", padding: "4px 0 12px" }}>
+            <div
+              style={{
+                width: 64,
+                height: 64,
+                borderRadius: "50%",
+                background: "#f0fdf4",
+                border: "2px solid #bbf7d0",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 20px",
+                fontSize: 26,
+                color: "#16a34a",
+              }}
+            >
+              ✓
+            </div>
+            <h2 style={{ margin: "0 0 10px", fontSize: 22, fontWeight: 700, color: "#111827" }}>
+              Danke für deine Anfrage!
+            </h2>
+            <p style={{ margin: "0 0 28px", fontSize: 14, color: "#6b7280", lineHeight: 1.65 }}>
+              Wir melden uns bald mit deinen Zugangsdaten.<br />
+              Schau auch in deinen Spam-Ordner.
+            </p>
+            <button
+              onClick={onClose}
+              style={primaryBtnStyle}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#0a1438"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#0D1B4B"; }}
+            >
+              Schliessen
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -1682,6 +2013,7 @@ export default function LandingPage() {
   const scrolled = useScrolled();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [accessOpen, setAccessOpen] = useState(false);
 
   function scrollTo(id: string) {
     setMobileOpen(false);
@@ -1713,6 +2045,7 @@ export default function LandingPage() {
       `}</style>
 
       {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
+      {accessOpen && <AccessModal onClose={() => setAccessOpen(false)} />}
 
       <div style={{ minHeight: "100vh", background: N }}>
         <Navbar
@@ -1721,15 +2054,16 @@ export default function LandingPage() {
           onToggle={() => setMobileOpen((v) => !v)}
           onNav={scrollTo}
           onLoginOpen={() => { setMobileOpen(false); setLoginOpen(true); }}
+          onAccessOpen={() => { setMobileOpen(false); setAccessOpen(true); }}
         />
-        <Hero />
+        <Hero onAccessOpen={() => setAccessOpen(true)} />
         <StatsBar />
         <ProblemSolution />
         <HowItWorks />
         <Features />
         <Modules />
         <ForBanks />
-        <FinalCTA />
+        <FinalCTA onAccessOpen={() => setAccessOpen(true)} />
         <Footer onNav={scrollTo} />
       </div>
     </>
