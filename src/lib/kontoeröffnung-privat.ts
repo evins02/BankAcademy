@@ -193,13 +193,6 @@ const L1_AUSWEIS_ABGELAUFEN: DocumentCase = {
     "Frau Keller möchte ein Privatkonto eröffnen. Sie legt ihren Schweizer Ausweis vor – bei näherer Prüfung stellen Sie fest, dass das Ablaufdatum vor 3 Monaten war. Frau Keller sagt: 'Das ist doch egal, das Foto stimmt noch.'",
   documents: [
     {
-      id: "basisvertrag",
-      label: "Basisvertrag",
-      status: "required",
-      feedbackSelected: "Korrekt – der Basisvertrag regelt die Geschäftsbeziehung und ist bei jeder Kontoeröffnung zwingend.",
-      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
-    },
-    {
       id: "gultig-ausweis-anfordern",
       label: "Gültigen Ausweis / Reisepass einfordern",
       status: "required",
@@ -207,32 +200,46 @@ const L1_AUSWEIS_ABGELAUFEN: DocumentCase = {
       feedbackNotSelected: "Fehler: Sie müssen zwingend einen gültigen Ausweis verlangen.",
     },
     {
-      id: "eigenerklarung-np",
-      label: "Eigenerklärung FATCA (natürliche Person)",
+      id: "termin-neu",
+      label: "Neuen Termin vereinbaren, sobald gültiger Ausweis vorliegt",
       status: "required",
-      feedbackSelected: "Korrekt – FATCA-Abklärung ist bei jeder Kontoeröffnung pflicht.",
-      feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen – Fragen zu US-Verbindungen sind zwingend.",
+      feedbackSelected: "Korrekt – Frau Keller muss den Ausweis erneuern und danach zurückkommen.",
+      feedbackNotSelected: "Fehler: Frau Keller muss auf einen neuen Termin mit gültigem Ausweis verwiesen werden.",
+    },
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "forbidden",
+      feedbackSelected: "Falsch – ohne gültige Identifikation darf kein Vertrag abgeschlossen werden. Genau das ist der Lernpunkt dieses Falls.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – kein Vertragsabschluss ohne gültigen Ausweis möglich.",
     },
     {
       id: "formular-a",
       label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
-      status: "required",
-      feedbackSelected: "Korrekt – Formular A ist auch in diesem Fall zwingend auszufüllen.",
-      feedbackNotSelected: "Fehler: Formular A (VSB 20) nicht vergessen – unabhängig vom Ausweisproblem.",
+      status: "forbidden",
+      feedbackSelected: "Falsch – solange kein gültiger Ausweis vorliegt, darf der Prozess gar nicht bis zu diesem Schritt fortschreiten.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – der Prozess stoppt vorher beim ungültigen Ausweis.",
+    },
+    {
+      id: "eigenerklarung-np",
+      label: "Eigenerklärung FATCA (natürliche Person)",
+      status: "forbidden",
+      feedbackSelected: "Falsch – der FATCA-Prozess setzt eine abgeschlossene Identifikation voraus. Ohne gültigen Ausweis wird dieser Schritt nicht erreicht.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – der Prozess stoppt beim ungültigen Ausweis, bevor FATCA relevant wird.",
     },
     {
       id: "wohnsitzbestatigung",
       label: "Wohnsitzbestätigung",
-      status: "required",
-      feedbackSelected: "Korrekt.",
-      feedbackNotSelected: "Fehler: Wohnsitznachweis nicht vergessen.",
+      status: "forbidden",
+      feedbackSelected: "Falsch – Wohnsitznachweis ist erst nach gültiger Identifikation relevant. Der Prozess stoppt vorher.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – ohne gültige Identifikation kein weiterer Dokumentenprozess.",
     },
     {
-      id: "termin-neu",
-      label: "Neuen Termin vereinbaren, sobald gültiger Ausweis vorliegt",
-      status: "optional",
-      feedbackSelected: "Gut – praktische Lösung und guter Kundenservice.",
-      feedbackNotSelected: "Akzeptabel – Terminvereinbarung ist jedoch empfehlenswert.",
+      id: "unterschriftenprobe",
+      label: "Unterschriftenprobe",
+      status: "forbidden",
+      feedbackSelected: "Falsch – Unterschriftenprobe gehört in den Eröffnungsprozess, der erst nach gültiger Identifikation beginnt.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – der Prozess stoppt vorher.",
     },
     {
       id: "ausweis-abgelaufen-akzeptieren",
@@ -254,19 +261,12 @@ const L1_AUSWEIS_ABGELAUFEN: DocumentCase = {
       label: "Ausnahme beim Compliance-Bereich beantragen",
       status: "forbidden",
       feedbackSelected:
-        "Fehler: Es gibt keine Ausnahmeregelung für abgelaufene Identifikationsdokumente.",
-      feedbackNotSelected: "Korrekt – keine Ausnahme möglich.",
-    },
-    {
-      id: "unterschriftenprobe",
-      label: "Unterschriftenprobe",
-      status: "required",
-      feedbackSelected: "Korrekt – kann bereits aufgenommen werden für spätere Kontoeröffnung.",
-      feedbackNotSelected: "Hinweis: Unterschriftenprobe kann bereits vorbereitet werden.",
+        "Fehler: Ein abgelaufener Ausweis ist eine Hard-Regel ohne Ermessensspielraum – es gibt keine Compliance-Ausnahme.",
+      feedbackNotSelected: "Korrekt – keine Ausnahme möglich, das ist eine absolute Regel.",
     },
   ],
   generalFeedback:
-    "Ein abgelaufener Ausweis ist kein gültiges Identifikationsmittel – unabhängig davon, wie kurz er abgelaufen ist. GwG kennt keine Toleranzfristen. Frau Keller muss ihren Ausweis beim Einwohneramt/Passbüro erneuern und danach wiederkommen.",
+    "Ein abgelaufener Ausweis ist kein gültiges Identifikationsdokument – auch wenn 'das Foto noch stimmt'. Der gesamte weitere Prozess (Formular A, Basisvertrag, FATCA etc.) darf erst nach Vorlage eines gültigen Ausweises fortgesetzt werden. Es gibt keine Ausnahme über Compliance.",
 };
 
 const L1_VOLLMACHT_MCQ: McqCase = {
