@@ -549,6 +549,214 @@ const L2_MINDERJAEHRIG: DocumentCase = {
     "Bei Minderjährigen (unter 18 Jahren): Mindestens ein Elternteil muss persönlich erscheinen, sich ausweisen und die Kontoeröffnung unterzeichnen. Die Minderjährige selbst unterzeichnet keine Bankdokumente. Mündliche Zustimmung – auch per Telefon – genügt nicht.",
 };
 
+const L2_PEP_SCHMID: DocumentCase = {
+  id: "l2-pep-schmid",
+  type: "document-select",
+  level: 2,
+  title: "PEP-Kunde – ehemaliger Nationalrat",
+  briefing:
+    "Herr Schmid (58), Schweizer Staatsbürger, wohnhaft in Bern, möchte ein Privatkonto eröffnen. Er ist ehemaliger Nationalrat (bis vor 2 Jahren im Amt) und derzeit als Verwaltungsratspräsident einer mittelständischen Firma tätig. Er hat einen gültigen Schweizer Pass dabei. Auf Nachfrage nach seinem Beruf erwähnt er nur 'Unternehmer' – die politische Vergangenheit erwähnt er nicht von sich aus.",
+  documents: [
+    {
+      id: "ausweis-ch",
+      label: "Gültiger CH-Ausweis / Reisepass",
+      status: "required",
+      feedbackSelected: "Richtig, die Identität muss immer mit einem gültigen Ausweis geprüft werden.",
+      feedbackNotSelected: "Ohne gültigen Ausweis darf keine Kontoeröffnung erfolgen.",
+    },
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt, der Basisvertrag ist Grundlage jeder Kontobeziehung.",
+      feedbackNotSelected: "Der Basisvertrag fehlt – ohne ihn keine gültige Kontoeröffnung.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Richtig, der wirtschaftlich Berechtigte muss immer festgestellt werden.",
+      feedbackNotSelected: "Formular A fehlt – die wirtschaftliche Berechtigung wurde nicht dokumentiert.",
+    },
+    {
+      id: "eigenerklarung-np",
+      label: "Eigenerklärung FATCA (natürliche Person)",
+      status: "required",
+      feedbackSelected: "Korrekt, als natürliche Person muss der FATCA-Status erklärt werden.",
+      feedbackNotSelected: "FATCA-Erklärung fehlt – diese ist bei jeder Kontoeröffnung einer natürlichen Person Pflicht.",
+    },
+    {
+      id: "pep-formular",
+      label: "PEP-Prüfungsformular",
+      status: "required",
+      feedbackSelected:
+        "Richtig erkannt: Herr Schmid ist als ehemaliger Nationalrat ein PEP, auch nach Amtsende gilt verstärkte Sorgfaltspflicht.",
+      feedbackNotSelected:
+        "Übersehen: Herr Schmid ist ehemaliger Nationalrat und gilt damit als PEP – die politische Funktion wurde im Gespräch bagatellisiert, muss aber erkannt werden.",
+    },
+    {
+      id: "herkunft-vermoegen",
+      label: "Herkunftsnachweis Vermögen",
+      status: "required",
+      feedbackSelected: "Korrekt, bei PEP gilt eine verstärkte Pflicht zur Prüfung der Vermögensherkunft.",
+      feedbackNotSelected: "Bei PEP-Kunden ist der Herkunftsnachweis Vermögen zwingend – wurde hier übersehen.",
+    },
+    {
+      id: "kontaktdaten",
+      label: "Telefon / E-Mail-Adresse",
+      status: "optional",
+      feedbackSelected: "Sinnvolle Zusatzangabe, aber nicht zwingend für die Kontoeröffnung selbst.",
+      feedbackNotSelected: "Nicht zwingend nötig für die Kontoeröffnung.",
+    },
+    {
+      id: "unterschriftenprobe",
+      label: "Unterschriftenprobe",
+      status: "optional",
+      feedbackSelected: "Üblicher Standardprozess, aber hier nicht der entscheidende Punkt.",
+      feedbackNotSelected: "Kein zwingendes Dokument im Kern dieses Falls.",
+    },
+    {
+      id: "wohnsitzbestatigung",
+      label: "Wohnsitzbestätigung / Meldebestätigung",
+      status: "optional",
+      feedbackSelected: "Der Wohnsitz ist durch den Ausweis bereits ausreichend dokumentiert.",
+      feedbackNotSelected: "Nicht zwingend, da der Ausweis den Wohnsitz bereits belegt.",
+    },
+    {
+      id: "vollmacht",
+      label: "Vollmacht",
+      status: "forbidden",
+      feedbackSelected: "Falsch – im Fall ist keine Vollmacht erwähnt oder nötig, Herr Schmid handelt selbst.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – keine Vollmacht im Spiel.",
+    },
+    {
+      id: "steuerausweis",
+      label: "Steuerausweis / Steuererklärung",
+      status: "forbidden",
+      feedbackSelected:
+        "Falsch – für die Vermögensherkunft bei PEP ist der spezifische Herkunftsnachweis nötig, nicht der allgemeine Steuerausweis.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – nicht das richtige Dokument für diesen Zweck.",
+    },
+    {
+      id: "lohnausweis",
+      label: "Lohnausweis",
+      status: "forbidden",
+      feedbackSelected: "Falsch – bei PEP geht es um die Herkunft des Vermögens, nicht um das Einkommen.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – nicht relevant für die Vermögensherkunfts-Prüfung.",
+    },
+    {
+      id: "handelsregister",
+      label: "Handelsregisterauszug",
+      status: "forbidden",
+      feedbackSelected: "Falsch – das ist ein Privatkonto, kein Firmenkonto.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – kein Firmenbezug in diesem Fall.",
+    },
+    {
+      id: "reisepass-ausl",
+      label: "Ausländischer Reisepass",
+      status: "forbidden",
+      feedbackSelected: "Falsch – Herr Schmid ist Schweizer Staatsbürger mit gültigem CH-Pass.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – nicht zutreffend.",
+    },
+    {
+      id: "jahresabschluss",
+      label: "Jahresabschluss / Bilanz",
+      status: "forbidden",
+      feedbackSelected: "Falsch – relevant für Firmenkunden, nicht für ein Privatkonto.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – kein Firmenbezug.",
+    },
+  ],
+  generalFeedback:
+    "Der zentrale Lernpunkt: Auch wenn ein Kunde seine politische Vergangenheit bagatellisiert ('nur Unternehmer'), muss die Bank selbst erkennen, dass ein ehemaliger Nationalrat als PEP gilt. Das löst verstärkte Sorgfaltspflichten aus – insbesondere PEP-Prüfung und Herkunftsnachweis Vermögen.",
+};
+
+const L2_ERBSCHAFT_KELLER: DocumentCase = {
+  id: "l2-erbschaft-keller",
+  type: "document-select",
+  level: 2,
+  title: "Erbschaft – Kontoauflösung nach Todesfall",
+  briefing:
+    "Frau Keller ist vor 3 Wochen verstorben. Sie hatte ein Privatkonto bei Ihrer Bank. Herr Keller (Sohn) meldet sich am Schalter, legt eine Todesurkunde vor und möchte das Konto seiner verstorbenen Mutter auflösen und das Guthaben auf sein eigenes Konto überweisen lassen. Er erwähnt, dass er noch eine Schwester hat, die 'aber damit nichts zu tun haben will'.",
+  documents: [
+    {
+      id: "erbenschein",
+      label: "Erbenbescheinigung / Erbschein",
+      status: "required",
+      feedbackSelected: "Richtig, der Erbschein weist die Erbberechtigung rechtsgültig nach.",
+      feedbackNotSelected: "Ohne Erbschein kann die Erbberechtigung nicht zweifelsfrei festgestellt werden.",
+    },
+    {
+      id: "todesurkunde",
+      label: "Todesurkunde",
+      status: "required",
+      feedbackSelected: "Korrekt, die Todesurkunde ist Grundvoraussetzung für jede Bearbeitung des Nachlasses.",
+      feedbackNotSelected: "Die Todesurkunde fehlt – ohne sie kann der Erbfall nicht bestätigt werden.",
+    },
+    {
+      id: "zustimmung-alle-erben",
+      label: "Zustimmung / Unterschrift aller Erben",
+      status: "required",
+      feedbackSelected:
+        "Richtig erkannt: Die mündliche Aussage, die Schwester wolle 'nichts damit zu tun haben', ersetzt keine formelle Zustimmung oder einen Erbverzicht.",
+      feedbackNotSelected:
+        "Übersehen: Auch wenn die Schwester laut Aussage 'nichts damit zu tun haben will', braucht es ihre formelle Zustimmung oder einen dokumentierten Verzicht – eine mündliche Aussage reicht nicht.",
+    },
+    {
+      id: "ausweis-ch",
+      label: "Gültiger CH-Ausweis / Reisepass",
+      status: "required",
+      feedbackSelected: "Korrekt, die Identität des sich meldenden Erben muss geprüft werden.",
+      feedbackNotSelected: "Der Ausweis des Erben fehlt – die Identität muss zwingend geprüft werden.",
+    },
+    {
+      id: "kontaktdaten",
+      label: "Telefon / E-Mail-Adresse",
+      status: "optional",
+      feedbackSelected: "Sinnvolle Zusatzangabe, aber nicht der Kernpunkt dieses Falls.",
+      feedbackNotSelected: "Nicht zwingend für die Abwicklung des Erbfalls.",
+    },
+    {
+      id: "heiratsurkunde",
+      label: "Heiratsurkunde / Familienbüchlein",
+      status: "forbidden",
+      feedbackSelected: "Falsch – im Fall wird kein Ehepartner erwähnt, der mitberechtigt sein könnte.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – kein Ehepartner im Fall relevant.",
+    },
+    {
+      id: "testament",
+      label: "Testament / Erbvertrag",
+      status: "forbidden",
+      feedbackSelected:
+        "Falsch in diesem Fall – im Briefing wird kein Testament erwähnt; ohne ein solches regelt der Erbschein bereits die gesetzliche Erbfolge ausreichend.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – kein Testament im Fall erwähnt, der Erbschein reicht hier aus.",
+    },
+    {
+      id: "pep-formular",
+      label: "PEP-Prüfungsformular",
+      status: "forbidden",
+      feedbackSelected: "Falsch – keine PEP-Indizien in diesem Fall.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – nicht relevant in diesem Fall.",
+    },
+    {
+      id: "eigenerklarung-np",
+      label: "Eigenerklärung FATCA (natürliche Person)",
+      status: "forbidden",
+      feedbackSelected:
+        "Falsch – es geht um die Auflösung eines bestehenden Kontos, nicht um eine Neueröffnung mit FATCA-Pflicht.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – nicht der Kernpunkt bei einer Kontoauflösung im Erbfall.",
+    },
+    {
+      id: "wohnsitzbestatigung",
+      label: "Wohnsitzbestätigung / Meldebestätigung",
+      status: "forbidden",
+      feedbackSelected: "Falsch – nicht zwingend bei der Abwicklung eines Erbfalls.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – nicht zwingend in diesem Fall.",
+    },
+  ],
+  generalFeedback:
+    "Der zentrale Lernpunkt: Eine mündliche Aussage wie 'meine Schwester will nichts damit zu tun haben' hat keine rechtliche Wirkung. Es braucht immer die formelle Zustimmung aller Erben oder einen dokumentierten Erbverzicht, bevor das Konto aufgelöst und das Guthaben ausgezahlt werden darf.",
+};
+
 // ─────────────────────────────────────────────────────────
 // LEVEL 3 – LAP-Niveau
 // ─────────────────────────────────────────────────────────
@@ -804,7 +1012,7 @@ export const KONTO_PRIVAT_LEVELS: KontoPrivatLevel[] = [
     label: "Spezialfälle",
     description: "Ausländer, GwG-Risiko, Minderjährige",
     badgeVariant: "orange",
-    cases: [L2_AUSLAENDER, L2_BAREINLAGE, L2_MINDERJAEHRIG],
+    cases: [L2_AUSLAENDER, L2_BAREINLAGE, L2_MINDERJAEHRIG, L2_PEP_SCHMID, L2_ERBSCHAFT_KELLER],
   },
   {
     level: 3,
