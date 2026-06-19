@@ -1,6 +1,6 @@
 "use client";
 
-import { Trophy, RefreshCw, ChevronRight } from "lucide-react";
+import { Trophy, RefreshCw, ChevronRight, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { LevelNum } from "@/lib/kontoeröffnung-privat";
@@ -18,6 +18,7 @@ interface LevelCompleteProps {
   onRepeat: () => void;
   onNextLevel: () => void;
   onBackToMenu: () => void;
+  onRetryCase: (index: number) => void;
 }
 
 export function LevelComplete({
@@ -27,6 +28,7 @@ export function LevelComplete({
   onRepeat,
   onNextLevel,
   onBackToMenu,
+  onRetryCase,
 }: LevelCompleteProps) {
   const avgScore = Math.round(results.reduce((s, r) => s + r.score, 0) / results.length);
   const correctCount = results.filter((r) => r.correct).length;
@@ -47,15 +49,22 @@ export function LevelComplete({
         </p>
       </div>
 
-      {/* Case breakdown */}
+      {/* Case breakdown — each row is clickable for direct retry */}
       <div className="rounded-DEFAULT bg-surface p-4 shadow-card text-left">
         <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-secondary">
-          Übersicht
+          Fälle — zum Wiederholen anklicken
         </p>
-        <div className="space-y-2">
+        <div className="space-y-1">
           {results.map((r, i) => (
-            <div key={r.caseId} className="flex items-center justify-between text-sm">
-              <span className="text-text-secondary">Fall {i + 1}</span>
+            <button
+              key={r.caseId}
+              onClick={() => onRetryCase(i)}
+              className="flex w-full items-center justify-between rounded px-2 py-2 text-sm transition-colors hover:bg-slate-100 group"
+            >
+              <span className="flex items-center gap-2 text-text-secondary">
+                <RotateCcw size={13} className="text-slate-300 group-hover:text-slate-500 transition-colors" />
+                Fall {i + 1}
+              </span>
               <span
                 className={cn(
                   "font-semibold",
@@ -68,7 +77,7 @@ export function LevelComplete({
               >
                 {r.score}%
               </span>
-            </div>
+            </button>
           ))}
         </div>
       </div>

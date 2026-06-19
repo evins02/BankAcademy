@@ -24,6 +24,8 @@ export function KontoPrivatRunner() {
   const [activeLevel, setActiveLevel] = useState<LevelNum>(1);
   const [caseIndex, setCaseIndex] = useState(0);
   const [sessionResults, setSessionResults] = useState<CaseResult[]>([]);
+  // When non-null, the user is retrying a single case by index (not sequential play)
+  const [retryingCaseIndex, setRetryingCaseIndex] = useState<number | null>(null);
 
   // Document case state
   const [selectedDocs, setSelectedDocs] = useState<Set<string>>(new Set());
@@ -76,6 +78,18 @@ export function KontoPrivatRunner() {
       score = correct ? 100 : 0;
     }
 
+    // Single-case retry: overwrite the result at that index, return to summary
+    if (retryingCaseIndex !== null) {
+      const newResults = [...sessionResults];
+      newResults[retryingCaseIndex] = { caseId: currentCase.id, score, correct };
+      setSessionResults(newResults);
+      const avg = Math.round(newResults.reduce((s, r) => s + r.score, 0) / newResults.length);
+      setLevelScores((prev) => ({ ...prev, [activeLevel]: avg }));
+      setRetryingCaseIndex(null);
+      setView("level-complete");
+      return;
+    }
+
     const newResults: CaseResult[] = [
       ...sessionResults,
       { caseId: currentCase.id, score, correct },
@@ -97,13 +111,22 @@ export function KontoPrivatRunner() {
       setSelectedOption(null);
       setView("case");
     }
-  }, [currentCase, selectedDocs, selectedOption, sessionResults, isLastCase, activeLevel]);
+  }, [currentCase, selectedDocs, selectedOption, sessionResults, isLastCase, activeLevel, retryingCaseIndex]);
+
+  const handleRetryCase = useCallback((index: number) => {
+    setCaseIndex(index);
+    setSelectedDocs(new Set());
+    setSelectedOption(null);
+    setRetryingCaseIndex(index);
+    setView("case");
+  }, []);
 
   const handleRepeat = useCallback(() => {
     setCaseIndex(0);
     setSelectedDocs(new Set());
     setSelectedOption(null);
     setSessionResults([]);
+    setRetryingCaseIndex(null);
     setView("case");
   }, []);
 
@@ -143,6 +166,7 @@ export function KontoPrivatRunner() {
           onRepeat={handleRepeat}
           onNextLevel={handleNextLevel}
           onBackToMenu={handleBackToMenu}
+          onRetryCase={handleRetryCase}
         />
       </div>
     );
@@ -177,6 +201,9 @@ export function KontoPrivatRunner() {
     );
   }
 
+  // When retrying a single case, treat it as "last" so the button leads back to the summary
+  const effectiveIsLastCase = retryingCaseIndex !== null ? true : isLastCase;
+
   // result view
   if (currentCase.type === "document-select") {
     return (
@@ -184,7 +211,7 @@ export function KontoPrivatRunner() {
         <DocumentResultCard
           c={currentCase}
           selected={selectedDocs}
-          isLastCase={isLastCase}
+          isLastCase={effectiveIsLastCase}
           onNext={handleNext}
         />
       </div>
@@ -196,7 +223,7 @@ export function KontoPrivatRunner() {
       <McqResultCard
         c={currentCase}
         selected={selectedOption!}
-        isLastCase={isLastCase}
+        isLastCase={effectiveIsLastCase}
         onNext={handleNext}
       />
     </div>
