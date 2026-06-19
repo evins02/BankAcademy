@@ -201,7 +201,7 @@ const L1_AUSWEIS_ABGELAUFEN: DocumentCase = {
     },
     {
       id: "eigenerklarung-np",
-      label: "Eigenerklärung FATCA (juristische Person)",
+      label: "Eigenerklärung FATCA (natürliche Person)",
       status: "required",
       feedbackSelected: "Korrekt – FATCA-Abklärung ist bei jeder Kontoeröffnung pflicht.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen – Fragen zu US-Verbindungen sind zwingend.",
@@ -407,7 +407,7 @@ const L2_BAREINLAGE: DocumentCase = {
     },
     {
       id: "eigenerklarung-np",
-      label: "Eigenerklärung FATCA (juristische Person)",
+      label: "Eigenerklärung FATCA (natürliche Person)",
       status: "required",
       feedbackSelected: "Korrekt – FATCA-Abklärung ist auch in diesem Fall zwingend.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen.",
@@ -515,7 +515,7 @@ const L2_MINDERJAEHRIG: DocumentCase = {
     },
     {
       id: "geburtsurkunde",
-      label: "Geburtsurkunde von Lena (optional)",
+      label: "Geburtsurkunde von Lena",
       status: "optional",
       feedbackSelected: "Sinnvoll – bestätigt das Alter, obwohl der Ausweis ausreichend ist.",
       feedbackNotSelected: "Akzeptabel – der Ausweis belegt das Alter bereits.",
@@ -785,14 +785,14 @@ const L3_GEMEINSCHAFTSKONTO: DocumentCase = {
     },
     {
       id: "eigenerklarung-stefan",
-      label: "Eigenerklärung FATCA (juristische Person) – Stefan Berger",
+      label: "Eigenerklärung FATCA (natürliche Person) – Stefan Berger",
       status: "required",
       feedbackSelected: "Korrekt – FATCA-Abklärung für jeden Kontoinhaber separat erforderlich.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung für Stefan Berger fehlt.",
     },
     {
       id: "eigenerklarung-maria",
-      label: "Eigenerklärung FATCA (juristische Person) – Maria Berger",
+      label: "Eigenerklärung FATCA (natürliche Person) – Maria Berger",
       status: "required",
       feedbackSelected: "Korrekt – FATCA-Abklärung für jeden Kontoinhaber separat erforderlich.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung für Maria Berger fehlt.",
@@ -853,7 +853,7 @@ const L3_GEMEINSCHAFTSKONTO: DocumentCase = {
     },
   ],
   generalFeedback:
-    "Beim Gemeinschaftskonto: BEIDE Inhaber werden identifiziert (je Ausweis + Eigenerklärung FATCA (juristische Person)). Zusätzlich: Formular A einmal pro Konto (VSB 20). Die Zeichnungsregelung richtet sich nach dem Kundenwunsch – hier Einzelzeichnung. Kollektivzeichnung wäre falsch, da das Ehepaar explizit einzeln verfügen möchte.",
+    "Beim Gemeinschaftskonto: BEIDE Inhaber werden identifiziert (je Ausweis + Eigenerklärung FATCA (natürliche Person)). Zusätzlich: Formular A einmal pro Konto (VSB 20). Die Zeichnungsregelung richtet sich nach dem Kundenwunsch – hier Einzelzeichnung. Kollektivzeichnung wäre falsch, da das Ehepaar explizit einzeln verfügen möchte.",
 };
 
 const L3_AUSWEIS_TRICK_MCQ: McqCase = {
@@ -911,7 +911,7 @@ const L3_HOCHRISIKO_PEP: DocumentCase = {
     },
     {
       id: "eigenerklarung-np",
-      label: "Eigenerklärung FATCA (juristische Person)",
+      label: "Eigenerklärung FATCA (natürliche Person)",
       status: "required",
       feedbackSelected: "Korrekt – FATCA-Abklärung ist bei jeder Kontoeröffnung zwingend.",
       feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen.",
