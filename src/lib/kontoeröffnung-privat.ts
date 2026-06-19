@@ -193,6 +193,13 @@ const L1_AUSWEIS_ABGELAUFEN: DocumentCase = {
     "Frau Keller möchte ein Privatkonto eröffnen. Sie legt ihren Schweizer Ausweis vor – bei näherer Prüfung stellen Sie fest, dass das Ablaufdatum vor 3 Monaten war. Frau Keller sagt: 'Das ist doch egal, das Foto stimmt noch.'",
   documents: [
     {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – der Basisvertrag regelt die Geschäftsbeziehung und ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
+    },
+    {
       id: "gultig-ausweis-anfordern",
       label: "Gültigen Ausweis / Reisepass einfordern",
       status: "required",
@@ -312,6 +319,13 @@ const L2_AUSLAENDER: DocumentCase = {
     "Herr Antonescu (35) aus Rumänien wohnt seit 6 Monaten in der Schweiz und arbeitet als Software-Entwickler. Er hat sowohl seinen rumänischen Reisepass als auch seine Aufenthaltsbewilligung B dabei. Einkommen und Anlass sind klar und plausibel.",
   documents: [
     {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – der Basisvertrag regelt die Geschäftsbeziehung und ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
+    },
+    {
       id: "reisepass-ausl",
       label: "Ausländischer Reisepass (gültig)",
       status: "optional",
@@ -387,7 +401,7 @@ const L2_AUSLAENDER: DocumentCase = {
   ],
   requiredOneOf: [["reisepass-ausl", "aufenthalt-b"]],
   generalFeedback:
-    "Für ausländische Kunden gilt: Entweder der ausländische Pass ODER die Aufenthaltsbewilligung reicht für die Identifikation. Zusätzlich sind Eigenerklärung FATCA (natürliche Person), Formular A (VSB 20 – wirtschaftlich Berechtigter), Wohnsitznachweis und Unterschriftenprobe erforderlich. Bei einem normalen Angestelltenverhältnis besteht kein erhöhtes Risiko – kein EDD nötig.",
+    "Für ausländische Kunden gilt: Entweder der ausländische Pass ODER die Aufenthaltsbewilligung reicht für die Identifikation. Zusätzlich sind Basisvertrag, Eigenerklärung FATCA (natürliche Person), Formular A (VSB 20 – wirtschaftlich Berechtigter), Wohnsitznachweis und Unterschriftenprobe erforderlich. Bei einem normalen Angestelltenverhältnis besteht kein erhöhtes Risiko – kein EDD nötig.",
 };
 
 const L2_BAREINLAGE: DocumentCase = {
@@ -398,6 +412,13 @@ const L2_BAREINLAGE: DocumentCase = {
   briefing:
     "Herr X betritt die Filiale und möchte ein Privatkonto eröffnen. Unmittelbar nach der Begrüssung legt er CHF 48'000 in bar auf den Tisch: 'Das kommt aufs Konto.' Er wird nervös und ausweichend, wenn Sie nach der Herkunft fragen. Keine glaubhafte Erklärung.",
   documents: [
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – der Basisvertrag regelt die Geschäftsbeziehung und ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
+    },
     {
       id: "ausweis-identifikation",
       label: "Ausweis genau prüfen und Kopie erstellen",
@@ -480,6 +501,13 @@ const L2_MINDERJAEHRIG: DocumentCase = {
   briefing:
     "Lena Zimmermann (14 Jahre) kommt alleine in die Filiale und möchte ein Jugendkonto eröffnen. Sie sagt, ihre Eltern seien einverstanden, hätten aber heute keine Zeit gekommen zu sein.",
   documents: [
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – der Basisvertrag regelt die Geschäftsbeziehung und ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
+    },
     {
       id: "ausweis-lena",
       label: "Ausweis / Pass von Lena (Minderjährige)",
@@ -770,6 +798,13 @@ const L3_GEMEINSCHAFTSKONTO: DocumentCase = {
     "Das Ehepaar Stefan und Maria Berger (beide Schweizer Bürger, beide anwesend) möchte gemeinsam ein Privatkonto eröffnen. Sie möchten, dass jeder von ihnen alleine über das Konto verfügen kann – ohne dass der andere unterschreiben muss.",
   documents: [
     {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – der Basisvertrag regelt die Geschäftsbeziehung und ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
+    },
+    {
       id: "ausweis-stefan",
       label: "Ausweis / Pass von Stefan Berger",
       status: "required",
@@ -853,7 +888,7 @@ const L3_GEMEINSCHAFTSKONTO: DocumentCase = {
     },
   ],
   generalFeedback:
-    "Beim Gemeinschaftskonto: BEIDE Inhaber werden identifiziert (je Ausweis + Eigenerklärung FATCA (natürliche Person)). Zusätzlich: Formular A einmal pro Konto (VSB 20). Die Zeichnungsregelung richtet sich nach dem Kundenwunsch – hier Einzelzeichnung. Kollektivzeichnung wäre falsch, da das Ehepaar explizit einzeln verfügen möchte.",
+    "Beim Gemeinschaftskonto: Basisvertrag + BEIDE Inhaber identifiziert (je Ausweis + Eigenerklärung FATCA (natürliche Person)). Zusätzlich: Formular A einmal pro Konto (VSB 20). Die Zeichnungsregelung richtet sich nach dem Kundenwunsch – hier Einzelzeichnung. Kollektivzeichnung wäre falsch, da das Ehepaar explizit einzeln verfügen möchte.",
 };
 
 const L3_AUSWEIS_TRICK_MCQ: McqCase = {
@@ -902,6 +937,13 @@ const L3_HOCHRISIKO_PEP: DocumentCase = {
   briefing:
     "Herr Okeke (55) aus Nigeria möchte ein Privatkonto eröffnen. Er beschreibt sich als 'Geschäftsmann mit engen Verbindungen zur nigerianischen Regierung'. Er möchte USD 480'000 aus einem 'Geschäftsdeal' einzahlen und wird ungeduldig bei Nachfragen.",
   documents: [
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – der Basisvertrag regelt die Geschäftsbeziehung und ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
+    },
     {
       id: "reisepass-international",
       label: "Reisepass (international gültig)",
