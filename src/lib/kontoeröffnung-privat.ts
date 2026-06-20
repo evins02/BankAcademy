@@ -1038,6 +1038,317 @@ const L3_HOCHRISIKO_PEP: DocumentCase = {
 };
 
 // ─────────────────────────────────────────────────────────
+// LEVEL 2 – zusätzliche Spezialfälle
+// ─────────────────────────────────────────────────────────
+
+const L2_NIEDERLASSUNGSBEWILLIGUNG_C: DocumentCase = {
+  id: "l2-niederlassungsbewilligung-c",
+  type: "document-select",
+  level: 2,
+  title: "Niederlassungsbewilligung C – gleiche Regeln?",
+  briefing:
+    "Frau Popescu (48), rumänische Staatsbürgerin, lebt seit 12 Jahren in der Schweiz und besitzt die Niederlassungsbewilligung C. Sie möchte ein Privatkonto eröffnen und legt ihren C-Ausweis vor. Sie fragt: 'Ich bin fast wie eine Schweizerin – brauche ich wirklich noch alle diese Dokumente?'",
+  documents: [
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – Grunddokument jeder Kontoeröffnung.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist bei jeder Kontoeröffnung zwingend.",
+    },
+    {
+      id: "ausweis-c",
+      label: "Niederlassungsbewilligung C (Ausweis C)",
+      status: "optional",
+      feedbackSelected: "Korrekt – der C-Ausweis ist ein anerkanntes Identifikationsdokument gemäss GwG.",
+      feedbackNotSelected: "Hinweis: Der C-Ausweis wäre als Identifikationsmittel gültig. Sie haben den Reisepass gewählt – ebenfalls korrekt.",
+    },
+    {
+      id: "reisepass-rum",
+      label: "Rumänischer Reisepass (gültig)",
+      status: "optional",
+      feedbackSelected: "Korrekt – ein gültiger ausländischer Reisepass ist ein anerkanntes Identifikationsmittel.",
+      feedbackNotSelected: "Hinweis: Reisepass wäre ebenfalls gültig. Sie haben den C-Ausweis gewählt – auch korrekt.",
+    },
+    {
+      id: "eigenerklarung-np",
+      label: "Eigenerklärung FATCA (natürliche Person)",
+      status: "required",
+      feedbackSelected: "Korrekt – FATCA gilt unabhängig von Aufenthaltsstatus und Nationalität.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung ist bei jeder Kontoeröffnung Pflicht – auch für C-Ausweis-Inhaberinnen.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A ist unabhängig von der Aufenthaltsbewilligung zwingend.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20) ist bei jeder Kontoeröffnung obligatorisch.",
+    },
+    {
+      id: "wohnsitzbestatigung",
+      label: "Wohnsitzbestätigung / Meldebestätigung",
+      status: "required",
+      feedbackSelected: "Korrekt – Wohnsitznachweis ist auch für C-Ausweis-Inhaberinnen erforderlich.",
+      feedbackNotSelected: "Fehler: Wohnsitznachweis nicht vergessen – auch der C-Ausweis ersetzt diesen nicht vollständig.",
+    },
+    {
+      id: "vereinfachter-prozess",
+      label: "Vereinfachten Prozess anwenden (wie bei Schweizer Staatsbürger)",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Die Niederlassungsbewilligung C verleiht keinen vereinfachten Bankprozess. Der Ablauf ist identisch mit einer Aufenthaltsbewilligung B.",
+      feedbackNotSelected: "Korrekt – es gibt keinen Sonderstatus oder vereinfachten Prozess für C-Ausweis-Inhaber.",
+    },
+    {
+      id: "ausweis-ch",
+      label: "Schweizer Ausweis / Pass anfordern",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Frau Popescu ist rumänische Staatsbürgerin und hat keinen Schweizer Ausweis.",
+      feedbackNotSelected: "Korrekt – Frau Popescu ist nicht eingebürgert.",
+    },
+    {
+      id: "herkunft-vermoegen",
+      label: "Herkunftsnachweis Vermögen (EDD)",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Keine Risikomerkmale erkennbar – normaler Standardfall ohne erhöhtes Risiko.",
+      feedbackNotSelected: "Korrekt – kein EDD erforderlich.",
+    },
+    {
+      id: "pep-formular",
+      label: "PEP-Prüfungsformular",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Kein Hinweis auf politisch exponierte Stellung.",
+      feedbackNotSelected: "Korrekt – kein PEP-Status erkennbar.",
+    },
+  ],
+  requiredOneOf: [["ausweis-c", "reisepass-rum"]],
+  generalFeedback:
+    "Der C-Ausweis (Niederlassungsbewilligung) ist ein anerkanntes Identifikationsdokument – gleichwertig mit einem ausländischen Reisepass. Trotzdem gilt: Der Kontoeröffnungsprozess ist identisch mit dem für B-Ausweis-Inhaber. Kein vereinfachter Prozess, kein Sonderstatus gegenüber Schweizern. Pflichtdokumente: Basisvertrag, Identifikation (C-Ausweis oder Reisepass), Eigenerklärung FATCA (natürliche Person), Formular A, Wohnsitznachweis.",
+};
+
+const L2_BEISTANDSCHAFT: DocumentCase = {
+  id: "l2-beistandschaft",
+  type: "document-select",
+  level: 2,
+  title: "Kunde unter Beistandschaft (ZGB Art. 393)",
+  briefing:
+    "Herr Zimmermann (67) kommt mit Frau Huber in die Filiale. Frau Huber stellt sich als seine Beiständin vor und legt eine Beistandsurkunde vor – Herr Zimmermann steht unter Begleit-Beistandschaft gemäss Art. 393 ZGB (die leichteste Form) aufgrund beginnender Vergesslichkeit. Er möchte selbst ein einfaches Privatkonto eröffnen. Er ist kommunikationsfähig, orientiert und möchte selbst unterschreiben.",
+  documents: [
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – Grunddokument jeder Kontoeröffnung.",
+      feedbackNotSelected: "Fehler: Basisvertrag ist immer erforderlich.",
+    },
+    {
+      id: "ausweis-zimmermann",
+      label: "Ausweis / Pass von Herrn Zimmermann",
+      status: "required",
+      feedbackSelected: "Korrekt – die Identifikation des Kontoinhabers ist zwingend.",
+      feedbackNotSelected: "Fehler: Herr Zimmermann muss identifiziert werden.",
+    },
+    {
+      id: "beistandsurkunde",
+      label: "Beistandsurkunde einsehen und Art der Beistandschaft prüfen",
+      status: "required",
+      feedbackSelected: "Korrekt – die Beistandsurkunde zeigt die Art der Beistandschaft und bestimmt, ob der Kunde selbst handlungsfähig ist. Ohne diese Prüfung weiss die Bank nicht, wie weit die Handlungsfähigkeit eingeschränkt ist.",
+      feedbackNotSelected: "Fehler: Die Beistandsurkunde muss zwingend eingesehen werden – sie definiert den rechtlichen Handlungsrahmen des Kunden.",
+    },
+    {
+      id: "eigenerklarung-np",
+      label: "Eigenerklärung FATCA (natürliche Person) – von Herrn Zimmermann unterzeichnet",
+      status: "required",
+      feedbackSelected: "Korrekt – bei Begleit-Beistandschaft ist Herr Zimmermann voll handlungsfähig und unterzeichnet selbst.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung ist Pflicht. Bei Begleit-Beistandschaft unterzeichnet der Kunde selbst.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A ist auch hier zwingend.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20) ist obligatorisch.",
+    },
+    {
+      id: "beistaendin-mitunterschreibt",
+      label: "Beiständin muss alle Dokumente mitunterzeichnen",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Bei Begleit-Beistandschaft (Art. 393 ZGB) bleibt der Kunde voll handlungsfähig – die Beiständin unterstützt nur beratend, ein Co-Unterzeichnungsrecht besteht nicht.",
+      feedbackNotSelected: "Korrekt – Mitunterzeichnung der Beiständin ist bei Art. 393 ZGB nicht erforderlich.",
+    },
+    {
+      id: "konto-ablehnen-beistandschaft",
+      label: "Kontoeröffnung ablehnen wegen Beistandschaft",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Eine Beistandschaft alleine ist kein Ablehnungsgrund. Bei Begleit-Beistandschaft ist der Kunde handlungsfähig. Ablehnung wäre Diskriminierung einer schutzbedürftigen Person.",
+      feedbackNotSelected: "Korrekt – Ablehnung wäre diskriminierend und rechtlich falsch.",
+    },
+    {
+      id: "ausweis-beistaendin",
+      label: "Ausweis der Beiständin Frau Huber aufnehmen",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Die Beiständin ist weder Kontoinhaberin noch wirtschaftlich Berechtigte – ihre Identifikation ist hier nicht erforderlich.",
+      feedbackNotSelected: "Korrekt – Frau Huber ist Begleitperson, nicht Vertragspartei.",
+    },
+    {
+      id: "beistaendin-als-inhaberin",
+      label: "Beiständin als Kontoinhaberin erfassen",
+      status: "forbidden",
+      feedbackSelected: "Schwerer Fehler: Das Konto gehört Herrn Zimmermann, nicht der Beiständin. Falsche Erfassung der Vertragspartei.",
+      feedbackNotSelected: "Korrekt – Herr Zimmermann ist der Kontoinhaber.",
+    },
+  ],
+  generalFeedback:
+    "Beistandschaft nach ZGB kennt verschiedene Stufen: Begleit-Beistandschaft (Art. 393) lässt den Kunden voll handlungsfähig – die Beiständin unterstützt, hat aber kein Mitspracherecht bei Vertragsabschlüssen. Vertretungs-Beistandschaft (Art. 394) oder Umfassende Beistandschaft (Art. 398) schränken die Handlungsfähigkeit ein und würden ein anderes Vorgehen erfordern. Deshalb ist das Einsehen der Beistandsurkunde der entscheidende erste Schritt.",
+};
+
+// ─────────────────────────────────────────────────────────
+// LEVEL 3 – zusätzliche LAP-Fälle
+// ─────────────────────────────────────────────────────────
+
+const L3_US_STAATSBUERGER_MCQ: McqCase = {
+  id: "l3-us-staatsbuerger-mcq",
+  type: "multiple-choice",
+  level: 3,
+  title: "LAP-Trickfall: Doppelstaatsbürger CH / USA",
+  briefing:
+    "Herr Thompson (42) möchte ein Privatkonto eröffnen. Er legt sowohl seinen Schweizer als auch seinen amerikanischen Pass vor. Auf die FATCA-Frage antwortet er: 'Ich wohne und zahle meine Steuern ausschliesslich in der Schweiz. Ich bin doch Schweizer – das FATCA-Thema betrifft mich nicht.'",
+  question: "Was ist aus FATCA-Sicht korrekt?",
+  options: [
+    {
+      key: "A",
+      text: "Herr Thompson hat recht: Da er in der Schweiz steuerpflichtig ist und keinen Wohnsitz in den USA hat, ist er keine US Person im Sinne von FATCA.",
+    },
+    {
+      key: "B",
+      text: "Er erhält die Standard-FATCA-Eigenerklärung für natürliche Personen – wie jeder andere Schweizer Kunde.",
+    },
+    {
+      key: "C",
+      text: "Herr Thompson ist eine US Person (US Citizen) gemäss FATCA. Die Bank muss seine US Tax Identification Number (TIN) erfassen und das Konto dem IRS melden – unabhängig von Wohnort oder Steuerpflicht in der Schweiz.",
+    },
+    {
+      key: "D",
+      text: "FATCA gilt nur für Greencard-Inhaber (Resident Aliens), nicht für US-Staatsbürger mit zusätzlichem Schweizer Pass.",
+    },
+  ],
+  correct: "C",
+  feedback:
+    "FATCA (Foreign Account Tax Compliance Act) definiert 'US Persons' nach Staatsbürgerschaft – nicht nach Wohnort oder Steuerpflicht. Jeder US-Staatsbürger ist weltweit eine US Person. Die Schweizer Bank muss das Konto dem IRS melden, und Herr Thompson muss seine US-TIN angeben. Die Standard-FATCA-Eigenerklärung reicht nicht – für US Citizens gilt ein separater Prozess.",
+  feedbackPerOption: {
+    A: "Falsch – FATCA richtet sich nach der Staatsbürgerschaft, nicht nach Wohnsitz oder Steuerpflicht. Ein US-Bürger bleibt US Person, egal wo er lebt.",
+    B: "Falsch – die Standard-Eigenerklärung für natürliche Personen genügt bei einer US Person nicht. Eine US Person muss als solche deklariert werden (US-TIN erforderlich, Meldepflicht an IRS).",
+    C: "Korrekt – US Citizenship = US Person = volle FATCA-Meldepflicht, unabhängig vom Schweizer Pass.",
+    D: "Falsch – US Persons umfassen: US-Staatsbürger (Citizenship, unabhängig vom Wohnort), Greencard-Inhaber (Resident Aliens) und Personen, die den Substantial Presence Test erfüllen.",
+  },
+};
+
+const L3_SELBSTAENDIGER: DocumentCase = {
+  id: "l3-selbstaendiger-privatkonto",
+  type: "document-select",
+  level: 3,
+  title: "Selbständigerwerbender – Privatkonto eröffnen",
+  briefing:
+    "Herr Bauer (38) ist IT-Freelancer (Einzelunternehmer, kein HR-Eintrag). Er möchte ein Privatkonto für persönliche Ausgaben eröffnen – Miete, Einkauf, Freizeit. Er hat bereits ein Geschäftskonto bei einer anderen Bank. Er ist Schweizer Staatsbürger, legt seinen CH-Pass vor. Einkommen ist plausibel und stabil. Keine besonderen Risikomerkmale.",
+  documents: [
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – Grunddokument jeder Kontoeröffnung.",
+      feedbackNotSelected: "Fehler: Basisvertrag ist immer erforderlich.",
+    },
+    {
+      id: "ausweis-ch",
+      label: "Gültiger CH-Ausweis / Reisepass",
+      status: "required",
+      feedbackSelected: "Korrekt – Identifikation ist Pflicht.",
+      feedbackNotSelected: "Fehler: Identifikation des Kontoinhabers ist zwingend.",
+    },
+    {
+      id: "eigenerklarung-np",
+      label: "Eigenerklärung FATCA (natürliche Person)",
+      status: "required",
+      feedbackSelected: "Korrekt – Herr Bauer ist als Einzelunternehmer eine natürliche Person. Die Eigenerklärung für natürliche Personen ist korrekt.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung ist Pflicht – auch für Selbständige als natürliche Personen.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A ist auch beim Selbständigen zwingend.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20) ist bei jeder Kontoeröffnung obligatorisch.",
+    },
+    {
+      id: "eigenerklarung-jur-fatca",
+      label: "Eigenerklärung FATCA (juristische Person)",
+      status: "forbidden",
+      feedbackSelected: "Schwerer Fehler: Herr Bauer ist Einzelunternehmer = natürliche Person. Die FATCA-Erklärung für juristische Personen gilt nur für GmbH, AG, Genossenschaften etc. – nicht für Einzelunternehmer.",
+      feedbackNotSelected: "Korrekt – Einzelunternehmer sind natürliche Personen, die Erklärung für juristische Personen ist falsch.",
+    },
+    {
+      id: "hr-auszug",
+      label: "Handelsregisterauszug",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Für ein Privatkonto ist kein HR-Auszug nötig. Ausserdem sind Einzelunternehmen mit unter CHF 100'000 Jahresumsatz nicht eintragspflichtig.",
+      feedbackNotSelected: "Korrekt – kein HR-Auszug für ein Privatkonto erforderlich.",
+    },
+    {
+      id: "jahresabschluss",
+      label: "Jahresabschluss / Buchhaltungsabschluss verlangen",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Für ein Privatkonto ohne Kreditantrag ist kein Jahresabschluss erforderlich – auch nicht bei Selbständigen.",
+      feedbackNotSelected: "Korrekt – kein Jahresabschluss für ein einfaches Privatkonto nötig.",
+    },
+    {
+      id: "herkunft-vermoegen",
+      label: "Herkunftsnachweis Vermögen (EDD)",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Keine Risikomerkmale erkennbar – normaler IT-Freelancer ohne auffällige Einlagen. Kein EDD erforderlich.",
+      feedbackNotSelected: "Korrekt – kein erhöhtes Risiko, kein EDD.",
+    },
+  ],
+  generalFeedback:
+    "Der zentrale LAP-Lernpunkt: Ein Einzelunternehmer (Selbständigerwerbender) ist immer eine natürliche Person – steuerlich und im Sinne des GwG. Für sein Privatkonto gelten exakt die gleichen Regeln wie für jeden anderen Schweizer Privatkunden. Kein HR-Auszug, kein Jahresabschluss, und vor allem: FATCA-Eigenerklärung für 'natürliche Person' – nicht für 'juristische Person'. Das ist der klassische LAP-Trickfehler.",
+};
+
+const L3_WIRTSCHAFTLICH_BERECHTIGTER_DRITTER: McqCase = {
+  id: "l3-wirtschaftlich-berechtigter-dritter",
+  type: "multiple-choice",
+  level: 3,
+  title: "LAP-Fall: Wirtschaftlich Berechtigter ist Dritte Person",
+  briefing:
+    "Herr Meier möchte ein Privatkonto eröffnen. Auf die Standardfrage 'Handeln Sie auf eigene Rechnung?' antwortet er: 'Nein – das Konto ist für meinen Bruder Bruno. Bruno lebt in Dubai und kann nicht persönlich kommen. Ich verwalte das Konto für ihn.'",
+  question: "Was ist das korrekte Vorgehen gemäss VSB 20 / GwG?",
+  options: [
+    {
+      key: "A",
+      text: "Herr Meier unterschreibt alles als Kontoinhaber – Formular A wird auf seinen Namen ausgestellt. Bruno muss nicht erfasst werden.",
+    },
+    {
+      key: "B",
+      text: "Das Konto kann nicht eröffnet werden: Bruno muss persönlich erscheinen und sich identifizieren.",
+    },
+    {
+      key: "C",
+      text: "Herr Meier eröffnet das Konto als Vertragspartner, aber die Bank erfasst Bruno via Formular A als wirtschaftlich Berechtigten (Name, Geburtsdatum, Nationalität, Wohnadresse). Da Bruno in Dubai lebt, ist erhöhte Sorgfalt geboten.",
+    },
+    {
+      key: "D",
+      text: "Das Konto wird direkt auf Bruno eröffnet – Herr Meier erhält eine Vollmacht.",
+    },
+  ],
+  correct: "C",
+  feedback:
+    "VSB 20 Art. 4: Erklärt der Vertragspartner, nicht auf eigene Rechnung zu handeln, muss die Bank den wirtschaftlich Berechtigten via Formular A erfassen. Bruno muss nicht persönlich erscheinen, wird aber vollständig dokumentiert. Dubai / UAE gilt als risikoreicher Finanzplatz – zusätzliche Sorgfaltsprüfung nach GwG Art. 6 ist angebracht.",
+  feedbackPerOption: {
+    A: "Falsch – wenn der Vertragspartner erklärt, für einen Dritten zu handeln, darf Formular A nicht auf den Vertragspartner ausgestellt werden. Das wäre eine falsche Deklaration des wirtschaftlich Berechtigten.",
+    B: "Falsch – der wirtschaftlich Berechtigte muss nicht persönlich erscheinen. Seine Angaben werden durch den Vertragspartner via Formular A deklariert und von der Bank dokumentiert.",
+    C: "Korrekt – Herr Meier ist Vertragspartner (Kontoinhaber), Bruno ist der wirtschaftlich Berechtigte gemäss Formular A. Die UAE-Adresse erhöht das Risikoprofil und erfordert zusätzliche Abklärung.",
+    D: "Falsch – das Konto wird auf den Vertragspartner (Herrn Meier) eröffnet, nicht auf den wirtschaftlich Berechtigten. Bruno kann separat eine Vollmacht erhalten, ist aber nicht Kontoinhaber.",
+  },
+};
+
+// ─────────────────────────────────────────────────────────
 // LEVEL CONFIG
 // ─────────────────────────────────────────────────────────
 
@@ -1052,15 +1363,15 @@ export const KONTO_PRIVAT_LEVELS: KontoPrivatLevel[] = [
   {
     level: 2,
     label: "Spezialfälle",
-    description: "Ausländer, GwG-Risiko, Minderjährige",
+    description: "Ausländer, GwG-Risiko, Minderjährige, Beistandschaft",
     badgeVariant: "orange",
-    cases: [L2_AUSLAENDER, L2_BAREINLAGE, L2_MINDERJAEHRIG, L2_PEP_SCHMID, L2_ERBSCHAFT_KELLER],
+    cases: [L2_AUSLAENDER, L2_BAREINLAGE, L2_MINDERJAEHRIG, L2_PEP_SCHMID, L2_ERBSCHAFT_KELLER, L2_NIEDERLASSUNGSBEWILLIGUNG_C, L2_BEISTANDSCHAFT],
   },
   {
     level: 3,
     label: "LAP-Niveau",
-    description: "Gemeinschaftskonto, Trickfragen, PEP / EDD",
+    description: "Gemeinschaftskonto, US-Persons, Selbständige, Trickfragen, PEP / EDD",
     badgeVariant: "red",
-    cases: [L3_GEMEINSCHAFTSKONTO, L3_AUSWEIS_TRICK_MCQ, L3_HOCHRISIKO_PEP],
+    cases: [L3_GEMEINSCHAFTSKONTO, L3_AUSWEIS_TRICK_MCQ, L3_HOCHRISIKO_PEP, L3_US_STAATSBUERGER_MCQ, L3_SELBSTAENDIGER, L3_WIRTSCHAFTLICH_BERECHTIGTER_DRITTER],
   },
 ];
