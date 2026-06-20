@@ -5,8 +5,6 @@ export interface ConvMessage {
 
 export interface CustomerApiResponse {
   customerMessage: string;
-  revealedFields: string[];
-  conversationComplete: boolean;
 }
 
 export interface ConvEvaluation {

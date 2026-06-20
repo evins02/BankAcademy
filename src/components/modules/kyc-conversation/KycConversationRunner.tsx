@@ -24,7 +24,6 @@ interface KycConversationRunnerProps {
 export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
   const [phase, setPhase] = useState<Phase>("chat");
   const [messages, setMessages] = useState<ConvMessage[]>([]);
-  const [coveredFields, setCoveredFields] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(false);
   const [evaluation, setEvaluation] = useState<ConvEvaluation | null>(null);
   const [isDemo, setIsDemo] = useState(false);
@@ -57,13 +56,6 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
           ...prev,
           { role: "customer", content: data.customerMessage },
         ]);
-        if (data.revealedFields?.length) {
-          setCoveredFields((prev) => {
-            const next = new Set(prev);
-            data.revealedFields.forEach((f) => next.add(f));
-            return next;
-          });
-        }
       } catch {
         // Demo mode fallback
         setIsDemo(true);
@@ -73,13 +65,6 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
           ...prev,
           { role: "customer", content: demo.customer },
         ]);
-        if (demo.revealed.length) {
-          setCoveredFields((prev) => {
-            const next = new Set(prev);
-            demo.revealed.forEach((f) => next.add(f));
-            return next;
-          });
-        }
         setDemoIdx((i) => i + 1);
       } finally {
         setIsLoading(false);
@@ -138,7 +123,6 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
 
   const handleRetry = useCallback(() => {
     setMessages([]);
-    setCoveredFields(new Set());
     setEvaluation(null);
     setIsDemo(false);
     setDemoIdx(0);
@@ -256,7 +240,6 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
       <ChatPhase
         key={attempt}
         messages={messages}
-        coveredFields={coveredFields}
         isLoading={isLoading}
         onSend={handleSend}
         onFinish={handleFinishChat}

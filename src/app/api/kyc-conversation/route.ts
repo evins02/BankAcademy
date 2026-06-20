@@ -36,24 +36,6 @@ VERHALTEN:
 
 Antworte NUR als JSON ohne Markdown: {"customerMessage":"<Antwort als Thomas>"}`;
 
-// Detect which KYC fields Thomas revealed — done server-side so the AI
-// never sees the compliance checklist and cannot accidentally recite it.
-function detectRevealedFields(msg: string): string[] {
-  const m = msg.toLowerCase();
-  const revealed: string[] = [];
-  if (/projektleiter|swisscom|100\s*%/.test(m)) revealed.push("beruf");
-  if (/95['.]?000|45['.]?000|nettoeinkommen|ersparnisse/.test(m)) revealed.push("einkommen");
-  if (/aus\s+(meinem\s+)?lohn|alles\s+aus\s+lohn|lohnsparen/.test(m)) revealed.push("herkunft");
-  if (/postfinance/.test(m)) revealed.push("bankbeziehungen");
-  if (/lohnkonto|zahlungsverkehr/.test(m)) revealed.push("zweck");
-  if (/ich\s+selbst|bin\s+selbst\s+der|wirtschaftlich\s+berechtigt/.test(m)) revealed.push("wibe");
-  if (/politisch\s+expon|kein.*pep|nein.*politisch/.test(m)) revealed.push("pep");
-  if (/keine\s+us|keine\s+verbindung.*usa|us-verbindung|fatca/.test(m)) revealed.push("fatca");
-  if (/hier\s+ist\s+mein\s+pass|bitte.*pass|natürlich.*pass|x4729183/.test(m)) revealed.push("ausweis");
-  return revealed;
-}
-
-
 export async function POST(req: Request) {
   try {
     const { messages } = (await req.json()) as { messages: ConvMessage[] };
@@ -74,11 +56,7 @@ export async function POST(req: Request) {
 
     const parsed = JSON.parse(match[0]) as { customerMessage: string };
     const customerMessage = parsed.customerMessage ?? text;
-    return NextResponse.json({
-      customerMessage,
-      revealedFields: detectRevealedFields(customerMessage),
-      conversationComplete: false,
-    });
+    return NextResponse.json({ customerMessage });
   } catch (error) {
     console.error("KYC conversation API error:", error);
     return NextResponse.json({ error: "API call failed" }, { status: 500 });

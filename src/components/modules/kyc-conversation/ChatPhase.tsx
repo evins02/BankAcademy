@@ -1,21 +1,20 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, CheckCircle2 } from "lucide-react";
+import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { type ConvMessage, REQUIRED_QUESTIONS } from "./conv-types";
+import { type ConvMessage } from "./conv-types";
 
 interface ChatPhaseProps {
   messages: ConvMessage[];
-  coveredFields: Set<string>;
   isLoading: boolean;
   onSend: (text: string) => void;
   onFinish: () => void;
 }
 
-const MIN_EXCHANGES = 8; // minimum total messages (student + customer)
+const MIN_EXCHANGES = 8;
 
-export function ChatPhase({ messages, coveredFields, isLoading, onSend, onFinish }: ChatPhaseProps) {
+export function ChatPhase({ messages, isLoading, onSend, onFinish }: ChatPhaseProps) {
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -42,51 +41,8 @@ export function ChatPhase({ messages, coveredFields, isLoading, onSend, onFinish
     }
   }
 
-  const covered = coveredFields.size;
-  const total = REQUIRED_QUESTIONS.length;
-  const pct = Math.round((covered / total) * 100);
-
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
-      {/* Progress bar */}
-      <div className="shrink-0 border-b border-border bg-surface px-5 py-3">
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs font-semibold text-text-primary">
-            Pflichtfragen erledigt: {covered}/{total}
-          </span>
-          <span className="text-xs text-text-secondary">{pct}%</span>
-        </div>
-        <div className="h-1.5 rounded-full bg-border overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-500"
-            style={{
-              width: `${pct}%`,
-              background: covered === total ? "#16a34a" : "var(--primary, #0D1B4B)",
-            }}
-          />
-        </div>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {REQUIRED_QUESTIONS.map((q) => (
-            <span
-              key={q.key}
-              className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium transition-colors"
-              style={{
-                background: coveredFields.has(q.key)
-                  ? "rgba(22,163,74,0.1)"
-                  : "rgba(0,0,0,0.04)",
-                color: coveredFields.has(q.key) ? "#15803d" : "var(--text-secondary)",
-                border: coveredFields.has(q.key)
-                  ? "1px solid rgba(22,163,74,0.25)"
-                  : "1px solid var(--border)",
-              }}
-            >
-              {coveredFields.has(q.key) && <CheckCircle2 size={10} />}
-              {q.label}
-            </span>
-          ))}
-        </div>
-      </div>
-
       {/* Customer card */}
       <div className="shrink-0 border-b border-border px-5 py-3">
         <div className="flex items-center gap-3">
@@ -115,9 +71,6 @@ export function ChatPhase({ messages, coveredFields, isLoading, onSend, onFinish
           <div className="text-center py-8">
             <p className="text-sm text-text-secondary">
               Begrüssen Sie den Kunden und stellen Sie die nötigen KYC-Fragen.
-            </p>
-            <p className="text-xs text-text-secondary mt-1">
-              Tipp: Fragen Sie nach Beruf, Einkommen, Herkunft der Mittel, PEP-Status und Ausweis.
             </p>
           </div>
         )}
