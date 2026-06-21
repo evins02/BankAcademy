@@ -109,6 +109,23 @@ export function EvalFeedbackCard({
           </div>
         </div>
 
+        {evaluation.irrelevantCount > 0 && (
+          <div
+            className="px-6 py-3 border-t flex items-center justify-between"
+            style={{ borderColor: "#fde68a", background: "#fffbeb" }}
+          >
+            <span className="text-xs text-amber-700">
+              Irrelevante Fragen: <strong>{evaluation.irrelevantCount}</strong>
+              {evaluation.irrelevantCount <= 2
+                ? " (kein Abzug)"
+                : ` → −${evaluation.irrelevantPenalty} Punkt${evaluation.irrelevantPenalty !== 1 ? "e" : ""}`}
+            </span>
+            <span className="text-xs text-amber-600">
+              (Toleranz: 2 · ab der 3. −1 Punkt/Frage · max. −4)
+            </span>
+          </div>
+        )}
+
         {isDemo && (
           <div
             className="px-6 py-2.5 border-t text-xs text-center"

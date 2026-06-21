@@ -12,15 +12,12 @@ interface ChatPhaseProps {
   onFinish: () => void;
 }
 
-const MIN_EXCHANGES = 8;
-
 export function ChatPhase({ messages, isLoading, onSend, onFinish }: ChatPhaseProps) {
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const studentMessages = messages.filter((m) => m.role === "student").length;
-  const canFinish = messages.length >= MIN_EXCHANGES;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -165,16 +162,14 @@ export function ChatPhase({ messages, isLoading, onSend, onFinish }: ChatPhasePr
 
         <div className="flex items-center justify-between">
           <p className="text-xs text-text-secondary">
-            {studentMessages} Fragen gestellt
-            {!canFinish && ` · noch ${Math.max(0, MIN_EXCHANGES - messages.length)} Nachrichten für Abschluss`}
+            {studentMessages} {studentMessages === 1 ? "Frage" : "Fragen"} gestellt
           </p>
           <Button
-            variant={canFinish ? "primary" : "secondary"}
+            variant="primary"
             onClick={onFinish}
-            disabled={!canFinish}
             className="text-sm"
           >
-            Gespräch abschliessen →
+            Weiter zum Formular →
           </Button>
         </div>
       </div>

@@ -5,6 +5,7 @@ export interface ConvMessage {
 
 export interface CustomerApiResponse {
   customerMessage: string;
+  irrelevant: boolean;
 }
 
 export interface ConvEvaluation {
@@ -18,6 +19,8 @@ export interface ConvEvaluation {
   conversationTotal: number;
   formScore: number;
   formTotal: number;
+  irrelevantCount: number;
+  irrelevantPenalty: number;
   feedback: string;
 }
 
@@ -132,6 +135,8 @@ export const DEMO_EVALUATION: ConvEvaluation = {
   conversationTotal: 9,
   formScore: 6,
   formTotal: 8,
+  irrelevantCount: 0,
+  irrelevantPenalty: 0,
   feedback:
     "Das Gespräch wurde sehr strukturiert und professionell geführt – alle neun Pflichtfragen wurden gestellt. Beim Formular wurden jedoch zwei kritische Fehler gemacht: Das abgelaufene Ablaufdatum des Ausweises wurde nicht erkannt, und Formular A wurde vergessen. Beide Fehler sind prüfungsrelevant und würden in der Praxis zur Ablehnung der Kontoeröffnung führen.",
 };

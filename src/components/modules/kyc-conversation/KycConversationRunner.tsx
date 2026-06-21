@@ -28,6 +28,7 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
   const [isDemo, setIsDemo] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [attempt, setAttempt] = useState(0);
+  const [irrelevantCount, setIrrelevantCount] = useState(0);
 
   const handleSend = useCallback(
     async (text: string) => {
@@ -55,6 +56,9 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
           ...prev,
           { role: "customer", content: data.customerMessage },
         ]);
+        if (data.irrelevant) {
+          setIrrelevantCount((n) => n + 1);
+        }
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         setMessages((prev) => [
@@ -73,7 +77,6 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
 
   const handleFinishChat = useCallback(() => {
     setPhase("transition");
-    // Auto-advance to form after 3s
     setTimeout(() => setPhase("form"), 3000);
   }, []);
 
@@ -81,18 +84,22 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
     async (formData: KycFormData) => {
       setPhase("evaluating");
 
+      // Scoring formula: no penalty for first 2 irrelevant questions,
+      // then -1 per additional, capped at -4.
+      const penalty = Math.min(Math.max(irrelevantCount - 2, 0), 4);
+
       try {
         const res = await fetch("/api/kyc-evaluate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages, formData }),
+          body: JSON.stringify({ messages, formData, irrelevantCount, irrelevantPenalty: penalty }),
         });
 
         if (!res.ok) throw new Error(`API ${res.status}`);
         const data: ConvEvaluation = await res.json();
 
         if (data.result !== undefined) {
-          setEvaluation(data);
+          setEvaluation({ ...data, irrelevantCount, irrelevantPenalty: penalty });
         } else {
           throw new Error("Bad evaluation response");
         }
@@ -103,7 +110,7 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
 
       setPhase("feedback");
     },
-    [messages]
+    [messages, irrelevantCount]
   );
 
   // Award XP when feedback arrives
@@ -124,6 +131,7 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
     setEvaluation(null);
     setIsDemo(false);
     setIsLoading(false);
+    setIrrelevantCount(0);
     setPhase("chat");
     setAttempt((a) => a + 1);
   }, []);
