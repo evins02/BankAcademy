@@ -7,7 +7,6 @@ import {
   type ConvMessage,
   type CustomerApiResponse,
   type ConvEvaluation,
-  DEMO_MESSAGES,
   DEMO_EVALUATION,
 } from "./conv-types";
 import { KycFormCard } from "@/components/modules/kyc-form/KycFormCard";
@@ -30,9 +29,6 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
   const [showConfetti, setShowConfetti] = useState(false);
   const [attempt, setAttempt] = useState(0);
 
-  // Demo mode: index into DEMO_MESSAGES
-  const [demoIdx, setDemoIdx] = useState(0);
-
   const handleSend = useCallback(
     async (text: string) => {
       const studentMsg: ConvMessage = { role: "student", content: text };
@@ -47,7 +43,10 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
           body: JSON.stringify({ messages: newMessages }),
         });
 
-        if (!res.ok) throw new Error(`API ${res.status}`);
+        if (!res.ok) {
+          const errText = await res.text().catch(() => "");
+          throw new Error(`API ${res.status}${errText ? `: ${errText}` : ""}`);
+        }
         const data: CustomerApiResponse = await res.json();
 
         if (!data.customerMessage) throw new Error("Bad response");
@@ -56,21 +55,20 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
           ...prev,
           { role: "customer", content: data.customerMessage },
         ]);
-      } catch {
-        // Demo mode fallback
-        setIsDemo(true);
-        const idx = demoIdx % DEMO_MESSAGES.length;
-        const demo = DEMO_MESSAGES[idx];
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
         setMessages((prev) => [
           ...prev,
-          { role: "customer", content: demo.customer },
+          {
+            role: "customer" as const,
+            content: `[Verbindungsfehler – ${msg}. Bitte erneut versuchen.]`,
+          },
         ]);
-        setDemoIdx((i) => i + 1);
       } finally {
         setIsLoading(false);
       }
     },
-    [messages, demoIdx]
+    [messages]
   );
 
   const handleFinishChat = useCallback(() => {
@@ -125,7 +123,6 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
     setMessages([]);
     setEvaluation(null);
     setIsDemo(false);
-    setDemoIdx(0);
     setIsLoading(false);
     setPhase("chat");
     setAttempt((a) => a + 1);
