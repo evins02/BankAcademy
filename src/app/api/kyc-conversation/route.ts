@@ -58,7 +58,8 @@ export async function POST(req: Request) {
     const customerMessage = parsed.customerMessage ?? text;
     return NextResponse.json({ customerMessage });
   } catch (error) {
-    console.error("KYC conversation API error:", error);
-    return NextResponse.json({ error: "API call failed" }, { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("KYC conversation API error:", msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
