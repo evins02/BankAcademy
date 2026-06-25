@@ -104,20 +104,20 @@ export const KYC_LEVELS: KycLevelConfig[] = [
         id: "2.2",
         level: 2,
         situation:
-          "Ein Kunde überweist innerhalb von 3 Tagen dreimal CHF 8'000 auf verschiedene Konten im Ausland. Sein Kundenprofil zeigt ein monatliches Einkommen von CHF 4'500.",
-        question: "Was fällt dir auf und was musst du tun?",
+          "Beim jährlichen Kundengespräch erwähnt ein langjähriger Privatkunde beiläufig: «Meine Kinder wissen das kaum – ich bin eigentlich in Boston geboren.» Die Eigenerklärung FATCA in seinem Dossier zeigt durchgehend «Keine US-Verbindungen».",
+        question: "Was musst du tun?",
         options: [
-          { key: "A", text: "Nichts – der Kunde kann mit seinem Geld machen was er will" },
+          { key: "A", text: "Nichts – er hat keine US-Staatsbürgerschaft erwähnt" },
           {
             key: "B",
-            text: "Transaktionen passen nicht zum Kundenprofil – besondere Abklärungspflicht gemäss GwG",
+            text: "FATCA-Status sofort aktualisieren: US-Geburtsort begründet FATCA-Pflicht. Neue Eigenerklärung aufnehmen, Compliance informieren, Nachweis über US-Steuernummer oder Staatsbürgerschaftsverzicht verlangen.",
           },
-          { key: "C", text: "Nur den Vorgesetzten informieren und abwarten" },
-          { key: "D", text: "Konto sofort sperren" },
+          { key: "C", text: "Intern notieren – beim nächsten Jahresgespräch handeln" },
+          { key: "D", text: "Konto bis zur Klärung sperren" },
         ],
         correct: "B",
         feedback:
-          "Wenn Transaktionen nicht zum Kundenprofil passen, greift die besondere Abklärungspflicht gemäss GwG Art. 6. Die Bank muss den Hintergrund der Transaktionen abklären. Erhärtet sich der Verdacht, besteht Meldepflicht an die Meldestelle für Geldwäscherei (MROS) sowie Sperrpflicht der Vermögenswerte.",
+          "Ein US-Geburtsort begründet grundsätzlich eine US-Staatsbürgerschaft – und damit FATCA-Pflicht. Die Eigenerklärung muss sofort aktualisiert werden. Der Kunde muss entweder eine US-Steuernummer (TIN) liefern oder den Nachweis über den Verzicht auf die US-Staatsbürgerschaft vorlegen (Certificate of Loss of Nationality, CLN). FATCA ist keine einmalige Eröffnungsroutine – das Dossier muss bei jedem neuen relevanten Hinweis aktualisiert werden.",
       },
       {
         id: "2.3",

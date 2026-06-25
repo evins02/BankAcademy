@@ -15,7 +15,8 @@ export type DocumentId =
   | "wohnsitznachweis-gf"
   | "beglaubigte-ausweiskopie-2"
   | "pep-erklaerung"
-  | "konzernstruktur";
+  | "konzernstruktur"
+  | "vereinsstatuten";
 
 export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   basisvertrag: "Basisvertrag",
@@ -35,6 +36,7 @@ export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   "beglaubigte-ausweiskopie-2": "Beglaubigte Ausweiskopie 2. Zeichnungsberechtigter",
   "pep-erklaerung": "PEP-Erklärung / EDD-Formular",
   konzernstruktur: "Konzernstrukturdiagramm / UBO-Nachweis",
+  vereinsstatuten: "Vereinsstatuten / Vorstandsbeschluss",
 };
 
 export const ALL_DOCUMENT_IDS = Object.keys(DOCUMENT_LABELS) as DocumentId[];
@@ -614,6 +616,10 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
           heading: "EDD: Erweiterte Sorgfaltspflicht und Compliance-Genehmigung",
           body: "Geschäftsbeziehungen mit PEPs oder PEP-assoziierten Personen erfordern eine erweiterte Sorgfaltspflicht (Enhanced Due Diligence). Die Kontoeröffnung muss durch die Compliance-Stelle genehmigt werden – die Beraterin darf nicht eigenständig entscheiden.",
         },
+        {
+          heading: "Gesellschaftervertrag: bei EDD zusätzlich erforderlich",
+          body: "Bei einer Standard-GmbH ist der Gesellschaftervertrag kein Pflichtdokument. Bei PEP-Verbindung und EDD ist er jedoch zwingend: Er belegt die genauen Beteiligungsverhältnisse aller Gesellschafter (hier: Stefan König 60%, Barbara König 40%) und ermöglicht die vollständige Identifikation der wirtschaftlich Berechtigten. EDD bedeutet höhere Dokumentationspflicht.",
+        },
       ],
     },
   },
@@ -685,6 +691,106 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
           heading: "Offshore-Holding und Anonymitätswunsch: Red Flags",
           body: "Eine Holding in einem Hochrisikogebiet (z.B. Cayman Islands) und der ausdrückliche Wunsch nach Anonymität des Eigentümers sind klare Red Flags für Geldwäscherei. In solchen Fällen muss die Geschäftsbeziehung abgelehnt oder unverzüglich an die Compliance eskaliert werden.",
         },
+        {
+          heading: "Gesellschaftervertrag: bei komplexen Strukturen erforderlich",
+          body: "Bei einer Standard-GmbH ist der Gesellschaftervertrag kein Pflichtdokument. Bei Holdingstrukturen und erhöhtem Risiko ist er als Teil der EDD-Dokumentation zwingend: Er belegt die Beteiligungsverhältnisse der Schweizer GmbH (hier: 100% SwissOp International Ltd.) und ergänzt das Konzernstrukturdiagramm auf der Ebene der Tochtergesellschaft.",
+        },
+      ],
+    },
+  },
+
+  // ─── Eingetragener Verein ─────────────────────────────────────────────────
+  {
+    id: "verein-geschaeftskonto",
+    title: "Eingetragener Verein – Vereinskonto eröffnen",
+    customerType: "Eingetragener Verein (ZGB Art. 60)",
+    difficulty: "mittel",
+    description:
+      "Der FC Bergdorf, ein lokaler Fussballverein (eingetragen, nicht HR-pflichtig), möchte ein Vereinskonto eröffnen. Präsident Markus Suter und Kassier Sandra Huber haben laut Statuten Kollektivunterschrift zu zweien. Die Beraterin hat das Dossier für «eine Gesellschaft» vorbereitet, ohne die Besonderheiten eines Vereins zu beachten.",
+    checklistDocuments: [
+      // correct (6)
+      "basisvertrag",
+      "vereinsstatuten",
+      "formular-a",
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
+      "beglaubigte-ausweiskopie-2",
+      // distractors / traps (4)
+      "hr-auszug",                    // trap: Verein ist nicht im HR eingetragen
+      "formular-k",                   // trap: nur für operativ tätige juristische Personen (AG/GmbH)
+      "aktienbuch",                   // trap: Verein hat kein Aktienbuch
+      "eigenerklaerung-nat",          // trap: Verein ist juristische Person → jur. FATCA
+    ],
+    requiredDocuments: [
+      "basisvertrag",
+      "vereinsstatuten",
+      "formular-a",
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
+      "beglaubigte-ausweiskopie-2",
+    ],
+    dossierDocuments: [
+      "basisvertrag",
+      "hr-auszug",                    // wrong – Verein ist nicht im HR, Statuten fehlen
+      "formular-k",                   // wrong – Verein braucht Formular A, nicht K
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",     // Suter identifiziert
+      // missing: vereinsstatuten, formular-a, beglaubigte-ausweiskopie-2 (Huber)
+    ],
+    issues: [
+      {
+        type: "wrong",
+        documentId: "hr-auszug",
+        explanation:
+          "Ein eingetragener Verein (ZGB Art. 60) ist nicht im Handelsregister eingetragen – die HR-Eintragungspflicht gilt nur für kommerzielle Unternehmen ab einem bestimmten Umsatz. Statt des HR-Auszugs sind die Vereinsstatuten und ein Vorstandsbeschluss (mit Liste der zeichnungsberechtigten Vorstandsmitglieder) beizubringen.",
+      },
+      {
+        type: "missing",
+        documentId: "vereinsstatuten",
+        explanation:
+          "Die Vereinsstatuten (inkl. Vorstandsbeschluss) fehlen. Sie sind das Äquivalent zum HR-Auszug für eingetragene Vereine: Sie belegen die Rechtsform, die Vertretungsregelung und wer zeichnungsberechtigt ist.",
+      },
+      {
+        type: "wrong",
+        documentId: "formular-k",
+        explanation:
+          "Formular K gilt für operativ tätige juristische Personen (AG/GmbH). Ein gemeinnütziger Verein ist keine operativ tätige Gesellschaft im Sinne der VSB. Korrekt ist Formular A, in dem die Vorstandsmitglieder als kontrollierende Personen erfasst werden.",
+      },
+      {
+        type: "missing",
+        documentId: "formular-a",
+        explanation:
+          "Formular A fehlt. Es wurde fälschlicherweise durch Formular K ersetzt. Bei einem Verein ohne operative Geschäftstätigkeit sind die kontrollierenden Vorstandsmitglieder (Präsident und Kassier) als wirtschaftlich Berechtigte via Formular A zu erfassen.",
+      },
+      {
+        type: "missing",
+        documentId: "beglaubigte-ausweiskopie-2",
+        explanation:
+          "Sandra Huber (Kassier, Kollektivunterschrift) wurde nicht identifiziert. Alle zeichnungsberechtigten Personen müssen gemäss GwG Art. 3 mit einer beglaubigten Ausweiskopie erfasst werden – unabhängig davon, ob sie persönlich anwesend waren.",
+      },
+    ],
+    possiblyMissingOptions: [
+      "vereinsstatuten",              // correct – fehlt (hr-auszug ist falsch)
+      "formular-a",                   // correct – fehlt (formular-k ist falsch)
+      "beglaubigte-ausweiskopie-2",   // correct – Huber nicht identifiziert
+      "gesellschaftervertrag",        // distractor – für GmbH, nicht Verein
+      "aktienbuch",                   // distractor – für AG, nicht Verein
+    ],
+    lernblock: {
+      title: "Eingetragener Verein: Kein HR, kein Aktienbuch, Formular A",
+      items: [
+        {
+          heading: "Verein ist juristische Person – aber kein HR-Eintrag",
+          body: "Ein eingetragener Verein (ZGB Art. 60) hat eigene Rechtspersönlichkeit, ist aber nicht im Handelsregister eingetragen (ausser bei kommerziellem Betrieb). Statt HR-Auszug sind die Vereinsstatuten und ein Vorstandsbeschluss erforderlich, der die Vertretungsregelung und zeichnungsberechtigten Personen belegt.",
+        },
+        {
+          heading: "Formular A – Vorstandsmitglieder als kontrollierende Personen",
+          body: "Ein Verein ohne operative Geschäftstätigkeit verwendet Formular A (nicht K). Die zeichnungsberechtigten Vorstandsmitglieder (Präsident, Kassier etc.) werden als kontrollierende Personen erfasst. Formular K gilt ausschliesslich für kommerzielle juristische Personen (AG, GmbH).",
+        },
+        {
+          heading: "Alle Zeichnungsberechtigten müssen identifiziert werden",
+          body: "Auch beim Verein gilt GwG Art. 3: Alle im Vorstandsbeschluss als zeichnungsberechtigt genannten Personen müssen mit einer beglaubigten Ausweiskopie identifiziert werden – unabhängig davon, wer persönlich anwesend war.",
+        },
       ],
     },
   },
@@ -704,5 +810,6 @@ export const FIRMENKUNDE_KONTO_SCENARIOS = KONTO_SCENARIOS.filter((s) =>
     "ag-kollektivunterschrift",
     "gmbh-pep-gesellschafter",
     "holding-tochter-trick",
+    "verein-geschaeftskonto",
   ].includes(s.id)
 );

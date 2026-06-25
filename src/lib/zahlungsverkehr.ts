@@ -114,7 +114,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "Kein Geld = kein Dauerauftrag. Nicht verschoben, sondern storniert. Keine Teilzahlung.",
         glossarTerm: "Dauerauftrag",
-        rechtsgrundlage: "OR Art. 466 / IBAN-Standard ISO 13616",
+        rechtsgrundlage: "OR Art. 466 (Auftragsverhältnis) / Bankinternes Dauerauftragsreglement",
       },
       {
         id: "1.3",
@@ -141,7 +141,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "Kartenverlust: Erst sperren (0800 80 40 40), dann alles andere. Keine Ausnahmen.",
         glossarTerm: "Kartensperrung",
-        rechtsgrundlage: "GwG Art. 3 (Identifikationspflicht) / SWIFT-Standards",
+        rechtsgrundlage: "SIX-Kartenreglement / OR Art. 402 (Aufwendungsersatz)",
       },
     ],
   },
@@ -175,7 +175,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "Retour = Rückbuchung + Kundeninfo + neue Zahlungsdetails einholen. Nie nochmals ausführen.",
         glossarTerm: "Zahlungsretour",
-        rechtsgrundlage: "GwG Art. 9 Abs. 1 (Meldepflicht an MROS)",
+        rechtsgrundlage: "OR Art. 466 ff. (Auftragsverhältnis) / SIC-Reglement",
       },
       {
         id: "2.2",
@@ -230,6 +230,60 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Doppelzahlung: Sofort melden, sofort Rückbuchung einleiten, sofort Kunden informieren. Warten ist keine Option.",
         glossarTerm: "Rückbuchung",
         rechtsgrundlage: "OR Art. 117 ff. (Kontokorrent)",
+      },
+      {
+        id: "2.4",
+        level: 2,
+        briefing:
+          "Ein Kunde ruft aufgeregt an: Er hat soeben CHF 2'350 überwiesen – aber an die falsche IBAN. Er hat sich bei einer Ziffer vertippt. Die Zahlung ist bereits ausgeführt und vom Konto abgebucht.",
+        question: "Wie gehst du vor?",
+        options: [
+          { key: "A", text: "Zahlung sofort stornieren – der Fehler liegt beim Kunden" },
+          {
+            key: "B",
+            text: "Recall-Anfrage ans Empfängerinstitut senden. Kunden informieren: Rückruf möglich, aber nicht garantiert. Keine sofortige Stornierung möglich.",
+          },
+          { key: "C", text: "Polizei informieren – möglicher Betrug" },
+          { key: "D", text: "Abwarten, bis der Empfänger das Geld freiwillig zurückschickt" },
+        ],
+        correct: "B",
+        feedback:
+          "Einmal ausgeführte Zahlungen können nicht einseitig storniert werden. Die Bank kann eine Recall-Anfrage ans Empfängerinstitut stellen – dieses leitet sie an den Empfänger weiter. Stimmt der Empfänger zu, wird der Betrag zurückgebucht. Bei Verweigerung hat der Auftraggeber zivilrechtliche Möglichkeiten (ungerechtfertigte Bereicherung OR Art. 62). Kunden realistisch informieren: kein Automatismus, keine Garantie.",
+        warum:
+          "Das Prinzip 'Zahlung ausgeführt = unwiderruflich' gilt im Zahlungsverkehr grundsätzlich. Die Bank kann nur vermitteln, nicht erzwingen. Recall-Anfragen sind standardisiert (SWIFT gpi für Auslandzahlungen, bankinternes Verfahren für Inland). Der Auftraggeber trägt die Verantwortung für die Richtigkeit der Zahlungsdetails – die Bank prüft die IBAN, nicht den Namen des Empfängers.",
+        inDerPraxis:
+          "Falschüberweisungen sind häufig. Bei Inlandzahlungen (CH) ist der Rückruf via direktem Bankenkontakt oft innert 1–2 Tagen möglich, wenn der Empfänger kooperiert. Kunden nicht mit falschen Hoffnungen vertrösten. Im Ausland dauert es länger. Kooperiert der Empfänger nicht: Zivilklage oder bei Betrugsabsicht die Polizei.",
+        merksatz:
+          "Falschüberweisung: Recall-Anfrage stellen, Kunden realistisch informieren. Kein Automatismus, keine Garantie.",
+        glossarTerm: "Rückruf / Recall",
+        rechtsgrundlage: "OR Art. 62 ff. (Ungerechtfertigte Bereicherung) / SWIFT gpi Recall Standards",
+      },
+      {
+        id: "2.5",
+        level: 2,
+        briefing:
+          "Beim Tagesabschluss stellst du fest: Ein Dauerauftrag von Kundin Müller (Konto ...456) für CHF 1'200 Miete wurde fälschlicherweise dem Konto ...465 belastet – du hast die letzten zwei Ziffern vertauscht. Der Betrag ist bereits ausgeführt.",
+        question: "Was musst du jetzt tun?",
+        options: [
+          { key: "A", text: "Morgen korrigieren – heute Feierabend" },
+          {
+            key: "B",
+            text: "Sofort intern eskalieren, Fehlbuchung dokumentieren, Rückbuchung auf das richtige Konto einleiten, beide betroffenen Kunden informieren.",
+          },
+          { key: "C", text: "Nur Kundin Müller informieren – der andere Kunde merkt es schon selbst" },
+          { key: "D", text: "Den Dauerauftrag löschen und neu erfassen" },
+        ],
+        correct: "B",
+        feedback:
+          "Operative Fehler der Bank müssen sofort gemeldet, dokumentiert und korrigiert werden. Beide Konten sind betroffen: Konto ...456 (Müller) wurde nicht belastet und die Miete fehlt; Konto ...465 wurde fälschlicherweise belastet. Beide Kunden haben Anspruch auf proaktive Information. Warten erhöht das Risiko: fehlende Mietzahlung, mögliche Overdraft-Situation beim falsch belasteten Kunden.",
+        warum:
+          "Die Bank haftet für operative Fehler. Verzögerte Korrektur kann Folgeprobleme verursachen. Fehlerkultur: Ein entdeckter Fehler muss sofort gemeldet werden – auch wenn es unbequem ist. Gute Praxis: Fehler melden → eskalieren → korrigieren → kommunizieren – in dieser Reihenfolge und ohne Verzögerung.",
+        inDerPraxis:
+          "Operative Fehler (Tippfehler, Doppelklicks, Verwechslungen) kommen trotz Vier-Augen-Prinzip vor. Sie müssen ins interne Fehlermanagementsystem eingetragen werden. Kunden werden schriftlich über die Korrektur informiert. Keine Vertuschung – jeder Fehler ist dokumentationspflichtig und kann bei Revisionen geprüft werden.",
+        merksatz:
+          "Eigener Fehler entdeckt: Sofort melden, sofort korrigieren, sofort beide Kunden informieren. Keine Verzögerung.",
+        glossarTerm: "Operative Fehlerkorrektur",
+        rechtsgrundlage: "OR Art. 398 (Sorgfaltspflicht des Beauftragten) / Interne Qualitätssicherung",
       },
     ],
   },
@@ -320,7 +374,37 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         merksatz:
           "Zahlungsauftrag-Prüfung: IBAN, Betrag, Valuta (frühestens heute), BIC (Ausland), Deckung. Alle Fehler auf einmal kommunizieren.",
         glossarTerm: "Valuta",
-        rechtsgrundlage: "GwG Art. 9 Abs. 1 (Meldepflicht) / GwG Art. 10 (Transaktionsverbot)",
+        rechtsgrundlage: "OR Art. 466 ff. (Auftragsverhältnis) / SIC-Reglement Art. 12",
+      },
+      {
+        id: "3.4",
+        level: 3,
+        briefing:
+          "Du bearbeitest einen Zahlungsauftrag: CHF 45'000 an ein Unternehmen in Russland. Das AML-System löst einen Alarm aus – der Empfänger erscheint auf der SECO-Sanktionsliste. Der Auftraggeber ist ein langjähriger Firmenkunde ohne bisherige Auffälligkeiten.",
+        question: "Was machst du?",
+        options: [
+          {
+            key: "A",
+            text: "Zahlung trotzdem ausführen – Auftraggeber ist ein vertrauenswürdiger Stammkunde",
+          },
+          {
+            key: "B",
+            text: "Zahlung sofort stoppen, Compliance eskalieren, Kunden NICHT informieren, alles dokumentieren.",
+          },
+          { key: "C", text: "Kunden anrufen und erklären, warum die Zahlung gestoppt wurde" },
+          { key: "D", text: "Zahlung auf nächsten Monat verschieben und abwarten" },
+        ],
+        correct: "B",
+        feedback:
+          "Sanktionslisten-Treffer bedeutet sofortiger Zahlungsstopp – ohne Ausnahme. SECO-Sanktionen sind gesetzlich bindend; die Vertrauenswürdigkeit des Kunden spielt keine Rolle. Kritisch: Der Kunde darf NICHT informiert werden (Informationsverbot, analog GwG Art. 10a). Compliance übernimmt die weitere Bearbeitung und entscheidet über eine MROS-Meldung.",
+        warum:
+          "Sanktionen (SECO, EU, USA/OFAC, UN) sind absolute Verbote – kein Ermessensspielraum. Auch indirekte Transaktionen über Korrespondenzbanken können zur Haftung führen. Das Informationsverbot ist zentral: Würde der Kunde wissen, dass sein Zahlungsempfänger auf der Sanktionsliste steht, könnte er Gegenmaßnahmen ergreifen und Beweise vernichten.",
+        inDerPraxis:
+          "Alle Schweizer Banken betreiben automatisiertes Sanktions-Screening aller ausgehenden Zahlungen gegen SECO-, EU-, OFAC- und UN-Listen. Ein Treffer wird sofort im System gesperrt. Compliance prüft Falsch-Positive (gleicher Name, andere Person) und gibt diese frei. Echte Treffer werden an MROS und ggf. die Aufsichtsbehörden gemeldet. Jeder Schritt wird lückenlos dokumentiert.",
+        merksatz:
+          "Sanktionslisten-Treffer: Stopp. Compliance. Kein Wort zum Kunden. Dokumentieren.",
+        glossarTerm: "Sanktionen / SECO",
+        rechtsgrundlage: "EmbG (Embargogesetz) / SECO-Verordnungen / GwG Art. 10a (Informationsverbot)",
       },
     ],
   },
