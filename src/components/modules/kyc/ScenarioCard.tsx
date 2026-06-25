@@ -27,7 +27,7 @@ export function ScenarioCard({
   return (
     <div className="mx-auto max-w-2xl">
       <div className="rounded-DEFAULT bg-surface p-6 shadow-card">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-5 flex items-center justify-between">
           <Badge variant={levelConfig.badgeVariant}>
             Level {scenario.level} – {levelConfig.label}
           </Badge>
@@ -36,7 +36,7 @@ export function ScenarioCard({
           </span>
         </div>
 
-        <div className="mb-6 rounded-DEFAULT bg-background p-4">
+        <div className="mb-5 rounded-DEFAULT bg-background p-4">
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
             Situation
           </p>
@@ -45,7 +45,7 @@ export function ScenarioCard({
 
         <p className="mb-4 font-semibold text-text-primary">{scenario.question}</p>
 
-        <div className="mb-6 flex flex-col gap-3">
+        <div className="mb-5 flex flex-col gap-3">
           {scenario.options.map((opt) => (
             <button
               key={opt.key}

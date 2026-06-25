@@ -14,7 +14,8 @@ interface LevelSelectorProps {
 
 export function LevelSelector({ completedLevels, levelScores, onSelectLevel }: LevelSelectorProps) {
   return (
-    <div className="grid gap-4 sm:grid-cols-3">
+    <div className="mx-auto max-w-2xl space-y-6">
+      <div className="grid gap-4 sm:grid-cols-3">
       {KYC_LEVELS.map(({ level, label, badgeVariant, scenarios }) => {
         const isLocked = level > 1 && !completedLevels.has((level - 1) as LevelNum);
         const isCompleted = completedLevels.has(level);
@@ -61,6 +62,7 @@ export function LevelSelector({ completedLevels, levelScores, onSelectLevel }: L
           </div>
         );
       })}
+      </div>
     </div>
   );
 }

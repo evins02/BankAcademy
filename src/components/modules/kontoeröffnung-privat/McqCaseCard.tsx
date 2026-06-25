@@ -78,7 +78,7 @@ export function McqCaseCard({
       </div>
 
       <Button onClick={onSubmit} disabled={!selected} className="w-full">
-        Antwort einreichen
+        Antwort bestätigen
       </Button>
     </div>
   );

@@ -48,7 +48,7 @@ function FieldRow({ label, required, children, note }: FieldRowProps) {
 function SectionHeader({ num, title }: { num: string; title: string }) {
   return (
     <div className="flex items-center gap-3 px-6 py-3 border-b border-border"
-      style={{ background: "var(--surface-2, #f9fafb)" }}
+      style={{ background: "var(--background)" }}
     >
       <span
         className="flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold text-white"
@@ -170,7 +170,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm"
-              style={{ background: "var(--primary, #0D1B4B)" }}
+              style={{ background: "#6b7280" }}
             >
               TK
             </div>

@@ -95,7 +95,7 @@ export function ChatPhase({ messages, isLoading, onSend, onFinish }: ChatPhasePr
                       borderBottomRightRadius: 4,
                     }
                   : {
-                      background: "var(--surface, #f9fafb)",
+                      background: "var(--surface)",
                       color: "var(--text-primary)",
                       border: "1px solid var(--border)",
                       borderBottomLeftRadius: 4,
@@ -118,7 +118,7 @@ export function ChatPhase({ messages, isLoading, onSend, onFinish }: ChatPhasePr
             <div
               className="rounded-2xl px-4 py-3 flex gap-1.5 items-center"
               style={{
-                background: "var(--surface, #f9fafb)",
+                background: "var(--surface)",
                 border: "1px solid var(--border)",
                 borderBottomLeftRadius: 4,
               }}
