@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Sidebar } from "./Sidebar";
 import { GlossarProvider } from "@/context/GlossarContext";
 import { FocusModeProvider, useFocusMode } from "@/context/FocusModeContext";
@@ -21,6 +22,18 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("fullAccess") === "true") {
+      setReady(true);
+    } else {
+      window.location.replace("/demo");
+    }
+  }, []);
+
+  if (!ready) return null;
+
   return (
     <GlossarProvider>
       <FocusModeProvider>

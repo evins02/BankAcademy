@@ -1,9 +1,40 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Lock } from "lucide-react";
 
 export function LockedModuleOverlay({ onBack }: { onBack: () => void }) {
+  const [code, setCode] = useState("");
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!code || loading) return;
+    setLoading(true);
+    setError(false);
+    try {
+      const res = await fetch("/api/validate-access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json();
+      if (data.valid) {
+        localStorage.setItem("fullAccess", "true");
+        window.location.replace("/dashboard");
+      } else {
+        setError(true);
+        setCode("");
+      }
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div
       style={{
@@ -54,35 +85,64 @@ export function LockedModuleOverlay({ onBack }: { onBack: () => void }) {
             lineHeight: 1.35,
           }}
         >
-          Dieses Modul ist im Demo Modus nicht verfügbar.
+          Vollzugang erforderlich
         </h2>
         <p
           style={{
-            margin: "0 0 32px",
+            margin: "0 0 28px",
             fontSize: 14,
             color: "#6b7280",
             lineHeight: 1.65,
           }}
         >
-          Erhalte Zugang zu allen 6 Modulen, 105+ Szenarien und dem LAP Modus.
+          Gib deinen Zugangscode ein, um alle Module freizuschalten.
         </p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <Link
-            href="/kontakt"
+
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <input
+            type="password"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            value={code}
+            onChange={(e) => { setCode(e.target.value); setError(false); }}
+            disabled={loading}
             style={{
-              display: "block",
+              width: "100%",
+              padding: "12px 16px",
+              borderRadius: 10,
+              border: error ? "1px solid #ef4444" : "1px solid #e5e7eb",
+              fontSize: 14,
+              color: "#0D1B4B",
+              background: "#f9fafb",
+              outline: "none",
+              boxSizing: "border-box",
+            }}
+          />
+          {error && (
+            <p style={{ margin: 0, fontSize: 13, color: "#ef4444", textAlign: "left" }}>
+              Code ungültig
+            </p>
+          )}
+          <button
+            type="submit"
+            disabled={!code || loading}
+            style={{
               padding: "13px 24px",
               borderRadius: 100,
-              background: "#0D1B4B",
+              background: !code || loading ? "#9ca3af" : "#0D1B4B",
               color: "#fff",
               fontSize: 14,
               fontWeight: 700,
-              textDecoration: "none",
+              border: "none",
+              cursor: !code || loading ? "not-allowed" : "pointer",
             }}
           >
-            Vollzugang anfragen →
-          </Link>
+            {loading ? "Prüfen…" : "Freischalten"}
+          </button>
           <button
+            type="button"
             onClick={onBack}
             style={{
               padding: "13px 24px",
@@ -97,7 +157,14 @@ export function LockedModuleOverlay({ onBack }: { onBack: () => void }) {
           >
             Zurück
           </button>
-        </div>
+        </form>
+
+        <p style={{ margin: "20px 0 0", fontSize: 12, color: "#9ca3af" }}>
+          Noch keinen Code?{" "}
+          <Link href="/kontakt" style={{ color: "#6b7280", textDecoration: "underline" }}>
+            Vollzugang anfragen →
+          </Link>
+        </p>
       </div>
     </div>
   );
