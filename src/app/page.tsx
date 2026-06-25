@@ -104,7 +104,6 @@ const NAV_ITEMS: { label: string; id?: string; href?: string }[] = [
   { label: "Features", id: "features" },
   { label: "Module", id: "module" },
   { label: "Für Banken", id: "fuer-banken" },
-  { label: "Preise", id: "preise" },
   { label: "Kontakt", href: "/kontakt" },
 ];
 
@@ -628,7 +627,7 @@ function Hero() {
           }}
         >
           Realistische Szenarien, typische Fehler und operative Denkweise –
-          für Lernende, Praktikanten und Quereinsteiger im Schweizer Banking.
+          für Lernende im Schweizer Banking.
         </p>
 
         {/* Buttons */}
@@ -690,24 +689,6 @@ function Hero() {
           <p style={{ margin: 0, fontSize: 12, color: WM, fontStyle: "italic" }}>
             Entwickelt von einem Banklehrling mit Praxiserfahrung bei einer Schweizer Bank
           </p>
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 6 }}>
-            {["GwG", "VSB 20", "KKG", "FIDLEG", "OR", "BVG"].map((law) => (
-              <span
-                key={law}
-                style={{
-                  padding: "3px 10px",
-                  borderRadius: 100,
-                  border: `1px solid ${BR}`,
-                  fontSize: 11,
-                  fontWeight: 600,
-                  color: WM,
-                  letterSpacing: "0.02em",
-                }}
-              >
-                {law}
-              </span>
-            ))}
-          </div>
         </div>
       </div>
 
