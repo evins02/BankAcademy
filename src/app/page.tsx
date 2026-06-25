@@ -113,12 +113,14 @@ function Navbar({
   onToggle,
   onNav,
   onLoginOpen,
+  onStart,
 }: {
   scrolled: boolean;
   mobileOpen: boolean;
   onToggle: () => void;
   onNav: (id: string) => void;
   onLoginOpen: () => void;
+  onStart: () => void;
 }) {
   return (
     <header
@@ -236,7 +238,7 @@ function Navbar({
             Einloggen
           </button>
           <button
-            onClick={() => { window.location.href = "/dashboard"; }}
+            onClick={onStart}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -347,7 +349,7 @@ function Navbar({
                 Einloggen
               </button>
               <button
-                onClick={() => { window.location.href = "/dashboard"; }}
+                onClick={onStart}
                 style={{
                   display: "block",
                   width: "100%",
@@ -519,7 +521,7 @@ function AppMockup() {
 
 /* ─── Section: Hero ───────────────────────────────────────────────────────── */
 
-function Hero() {
+function Hero({ onStart }: { onStart: () => void }) {
   return (
     <section
       style={{
@@ -633,7 +635,7 @@ function Hero() {
         {/* Buttons */}
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12, marginBottom: 28 }}>
           <button
-            onClick={() => { window.location.href = "/dashboard"; }}
+            onClick={onStart}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -1058,7 +1060,7 @@ function ModuleItem({ emoji, title, desc }: { emoji: string; title: string; desc
   );
 }
 
-function Modules() {
+function Modules({ onStart }: { onStart: () => void }) {
   return (
     <section id="module" style={{ background: NM, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
@@ -1115,8 +1117,8 @@ function Modules() {
         </div>
 
         <FadeIn style={{ textAlign: "center", marginTop: 44 }} delay={0.35}>
-          <Link
-            href="/dashboard"
+          <button
+            onClick={onStart}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -1127,14 +1129,15 @@ function Modules() {
               fontWeight: 700,
               background: CY,
               color: N,
-              textDecoration: "none",
+              border: "none",
+              cursor: "pointer",
               transition: "transform 0.15s",
             }}
             onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
           >
             Alle Module entdecken <ChevronRight size={15} />
-          </Link>
+          </button>
         </FadeIn>
       </div>
     </section>
@@ -1228,7 +1231,7 @@ function ForBanks() {
 
 /* ─── Section: Final CTA ──────────────────────────────────────────────────── */
 
-function FinalCTA() {
+function FinalCTA({ onStart }: { onStart: () => void }) {
   return (
     <section
       id="preise"
@@ -1278,7 +1281,7 @@ function FinalCTA() {
             Starte jetzt und trainiere Banking wie es wirklich ist.
           </p>
           <button
-            onClick={() => { window.location.href = "/dashboard"; }}
+            onClick={onStart}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -1308,6 +1311,171 @@ function FinalCTA() {
         </div>
       </FadeIn>
     </section>
+  );
+}
+
+/* ─── Access Code Modal ──────────────────────────────────────────────────── */
+function AccessCodeModal({ onClose }: { onClose: () => void }) {
+  const [code, setCode] = useState("");
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!code || loading) return;
+    setLoading(true);
+    setError(false);
+    try {
+      const res = await fetch("/api/validate-access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json();
+      if (data.valid) {
+        localStorage.setItem("fullAccess", "true");
+        window.location.replace("/dashboard");
+      } else {
+        setError(true);
+        setCode("");
+      }
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.6)",
+        backdropFilter: "blur(8px)",
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 24,
+        animation: "modalFadeIn 0.22s ease",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#fff",
+          borderRadius: 20,
+          boxShadow: "0 32px 96px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06)",
+          width: "100%",
+          maxWidth: 400,
+          padding: "40px 36px 32px",
+          position: "relative",
+          animation: "modalSlideIn 0.25s cubic-bezier(0.34,1.56,0.64,1)",
+        }}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Schliessen"
+          style={{
+            position: "absolute",
+            top: 16,
+            right: 16,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 8,
+            borderRadius: 8,
+            color: "#9ca3af",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "color 0.15s, background 0.15s",
+          }}
+          onMouseEnter={(e) => {
+            const btn = e.currentTarget as HTMLButtonElement;
+            btn.style.color = "#374151";
+            btn.style.background = "#f3f4f6";
+          }}
+          onMouseLeave={(e) => {
+            const btn = e.currentTarget as HTMLButtonElement;
+            btn.style.color = "#9ca3af";
+            btn.style.background = "none";
+          }}
+        >
+          <X size={18} />
+        </button>
+
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <p style={{ margin: "0 0 18px", fontSize: 21, fontWeight: 800, letterSpacing: "-0.5px", color: "#0D1B4B" }}>
+            Bank<span style={{ color: "#00C9B1" }}>Academy</span>
+          </p>
+          <h2 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 700, color: "#111827", letterSpacing: "-0.3px" }}>
+            Zugangscode eingeben
+          </h2>
+          <p style={{ margin: 0, fontSize: 14, color: "#6b7280", lineHeight: 1.5 }}>
+            Gib deinen Code ein, um alle Module freizuschalten.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <input
+            type="password"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            value={code}
+            onChange={(e) => { setCode(e.target.value); setError(false); }}
+            disabled={loading}
+            style={{
+              width: "100%",
+              padding: "12px 16px",
+              borderRadius: 10,
+              border: error ? "1.5px solid #ef4444" : "1.5px solid #e5e7eb",
+              fontSize: 15,
+              color: "#111827",
+              background: "#fff",
+              outline: "none",
+              boxSizing: "border-box",
+              transition: "border-color 0.15s",
+            }}
+            onFocus={(e) => { if (!error) e.currentTarget.style.borderColor = "#0D1B4B"; }}
+            onBlur={(e) => { if (!error) e.currentTarget.style.borderColor = "#e5e7eb"; }}
+          />
+          {error && (
+            <p style={{ margin: 0, fontSize: 13, color: "#ef4444" }}>Code ungültig</p>
+          )}
+          <button
+            type="submit"
+            disabled={!code || loading}
+            style={{
+              width: "100%",
+              padding: "13px 24px",
+              borderRadius: 100,
+              border: "none",
+              background: !code || loading ? "#9ca3af" : "#0D1B4B",
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 700,
+              cursor: !code || loading ? "not-allowed" : "pointer",
+              transition: "background 0.15s",
+              marginTop: 4,
+            }}
+          >
+            {loading ? "Prüfen…" : "Freischalten →"}
+          </button>
+        </form>
+
+        <p style={{ margin: "20px 0 0", fontSize: 12, color: "#9ca3af", textAlign: "center" }}>
+          Noch keinen Code?{" "}
+          <a href="/kontakt" style={{ color: "#6b7280", textDecoration: "underline" }}>
+            Vollzugang anfragen →
+          </a>
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -1664,6 +1832,7 @@ export default function LandingPage() {
   const scrolled = useScrolled();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [accessOpen, setAccessOpen] = useState(false);
 
   function scrollTo(id: string) {
     setMobileOpen(false);
@@ -1687,6 +1856,7 @@ export default function LandingPage() {
       `}</style>
 
       {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
+      {accessOpen && <AccessCodeModal onClose={() => setAccessOpen(false)} />}
 
       <div style={{ minHeight: "100vh", background: N }}>
         <Navbar
@@ -1695,15 +1865,16 @@ export default function LandingPage() {
           onToggle={() => setMobileOpen((v) => !v)}
           onNav={scrollTo}
           onLoginOpen={() => { setMobileOpen(false); setLoginOpen(true); }}
+          onStart={() => { setMobileOpen(false); setAccessOpen(true); }}
         />
-        <Hero />
+        <Hero onStart={() => setAccessOpen(true)} />
         <StatsBar />
         <ProblemSolution />
         <HowItWorks />
         <Features />
-        <Modules />
+        <Modules onStart={() => setAccessOpen(true)} />
         <ForBanks />
-        <FinalCTA />
+        <FinalCTA onStart={() => setAccessOpen(true)} />
         <Footer onNav={scrollTo} />
       </div>
     </>
