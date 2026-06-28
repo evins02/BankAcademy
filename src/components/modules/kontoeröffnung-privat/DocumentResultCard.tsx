@@ -4,6 +4,7 @@ import { CheckCircle2, XCircle, MinusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { scoreDocumentCase, type DocumentCase } from "@/lib/kontoeröffnung-privat";
+import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
 
 interface DocumentResultCardProps {
   c: DocumentCase;
@@ -144,6 +145,7 @@ export function DocumentResultCard({
         <p className="text-sm leading-relaxed text-text-primary">{c.generalFeedback}</p>
       </div>
 
+      <ActiveRecallPrompt />
       <Button onClick={onNext} className="w-full">
         {isLastCase ? "Zum Abschluss" : "Weiter →"}
       </Button>
