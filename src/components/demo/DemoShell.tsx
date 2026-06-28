@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { DemoBanner } from "./DemoBanner";
 import { DemoSidebar } from "./DemoSidebar";
 import { LockedModuleOverlay } from "./LockedModuleOverlay";
@@ -9,12 +9,6 @@ import { ThemeApplier } from "@/components/shared/ThemeApplier";
 
 export function DemoShell({ children }: { children: React.ReactNode }) {
   const [locked, setLocked] = useState(false);
-
-  useEffect(() => {
-    if (localStorage.getItem("fullAccess") === "true") {
-      window.location.replace("/dashboard");
-    }
-  }, []);
 
   return (
     <>
