@@ -7,6 +7,9 @@ import { CaseCard } from "./CaseCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { type CaseResult } from "./LevelComplete";
 import { ZV_LEVELS, type LevelNum, type OptionKey } from "@/lib/zahlungsverkehr";
+import { LückentextCard } from "@/components/shared/LückentextCard";
+import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
+import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
 import { LevelCelebration } from "@/components/shared/LevelCelebration";
 import { ModuleComplete } from "@/components/shared/ModuleComplete";
 import { FirstTimeTutorial } from "@/components/shared/FirstTimeTutorial";
@@ -29,6 +32,7 @@ export function ZahlungsverkehrRunner() {
   const [caseIndex, setCaseIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<OptionKey | null>(null);
   const [sessionResults, setSessionResults] = useState<CaseResult[]>([]);
+  const [lückentextAnswer, setLückentextAnswer] = useState("");
 
   const [wrongStreak, setWrongStreak] = useState(0);
   const [showSmartTip, setShowSmartTip] = useState(false);
@@ -44,11 +48,15 @@ export function ZahlungsverkehrRunner() {
   const total = levelConfig.cases.length;
   const isLastCase = caseIndex === total - 1;
 
+  const isLt = (c: unknown): c is LückentextCase =>
+    typeof c === "object" && c !== null && (c as LückentextCase).type === "lückentext";
+
   const handleSelectLevel = useCallback((level: LevelNum) => {
     setActiveLevel(level);
     setCaseIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
+    setLückentextAnswer("");
     setWrongStreak(0);
     setShowSmartTip(false);
     setView("lernblock");
@@ -64,12 +72,15 @@ export function ZahlungsverkehrRunner() {
   }, []);
 
   const handleNext = useCallback(() => {
-    if (!selectedOption) return;
+    const isLückentext = isLt(currentCase);
+    if (!isLückentext && !selectedOption) return;
 
-    const isCorrect = selectedOption === currentCase.correct;
+    const isCorrect = isLückentext
+      ? checkLückentextAnswer(lückentextAnswer, (currentCase as LückentextCase).answer, (currentCase as LückentextCase).tolerance)
+      : selectedOption === (currentCase as { correct: OptionKey }).correct;
     const newResults: CaseResult[] = [
       ...sessionResults,
-      { caseId: currentCase.id, correct: isCorrect, selectedOption },
+      { caseId: currentCase.id, correct: isCorrect, selectedOption: selectedOption ?? "" },
     ];
     setSessionResults(newResults);
 
@@ -118,14 +129,16 @@ export function ZahlungsverkehrRunner() {
     } else {
       setCaseIndex((i) => i + 1);
       setSelectedOption(null);
+      setLückentextAnswer("");
       setView("playing");
     }
-  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, wrongStreak, levelStartTime]);
+  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, wrongStreak, levelStartTime, lückentextAnswer]);
 
   const handleRetry = useCallback(() => {
     setCaseIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
+    setLückentextAnswer("");
     setWrongStreak(0);
     setShowSmartTip(false);
     setView("lernblock");
@@ -137,6 +150,7 @@ export function ZahlungsverkehrRunner() {
       setCaseIndex(0);
       setSelectedOption(null);
       setSessionResults([]);
+      setLückentextAnswer("");
       setWrongStreak(0);
       setShowSmartTip(false);
       setLevelElapsed(undefined);
@@ -177,27 +191,55 @@ export function ZahlungsverkehrRunner() {
       )}
 
       {view === "playing" && currentCase && (
-        <CaseCard
-          zvCase={currentCase}
-          caseIndex={caseIndex}
-          total={total}
-          selectedOption={selectedOption}
-          onSelect={setSelectedOption}
-          onSubmit={handleSubmit}
-          onOpenNote={() => setNoteOpen(true)}
-          levelStartTime={timerEnabled ? levelStartTime : undefined}
-        />
+        isLt(currentCase) ? (
+          <LückentextCard
+            c={currentCase}
+            caseIndex={caseIndex}
+            total={total}
+            levelLabel={levelConfig.label}
+            badgeVariant={levelConfig.badgeVariant}
+            answer={lückentextAnswer}
+            onAnswerChange={setLückentextAnswer}
+            onSubmit={handleSubmit}
+          />
+        ) : (
+          <CaseCard
+            zvCase={currentCase}
+            caseIndex={caseIndex}
+            total={total}
+            selectedOption={selectedOption}
+            onSelect={setSelectedOption}
+            onSubmit={handleSubmit}
+            onOpenNote={() => setNoteOpen(true)}
+            levelStartTime={timerEnabled ? levelStartTime : undefined}
+          />
+        )
       )}
 
-      {view === "feedback" && currentCase && selectedOption && (
-        <FeedbackPanel
-          zvCase={currentCase}
-          selectedOption={selectedOption}
-          caseIndex={caseIndex}
-          total={total}
-          isLastCase={isLastCase}
-          onNext={handleNext}
-        />
+      {view === "feedback" && currentCase && (selectedOption || isLt(currentCase)) && (
+        isLt(currentCase) ? (
+          <LückentextResultCard
+            c={currentCase}
+            studentAnswer={lückentextAnswer}
+            isCorrect={checkLückentextAnswer(lückentextAnswer, currentCase.answer, currentCase.tolerance)}
+            caseIndex={caseIndex}
+            total={total}
+            levelLabel={levelConfig.label}
+            badgeVariant={levelConfig.badgeVariant}
+            isLastCase={isLastCase}
+            nextLabel={isLastCase ? "Level abschliessen" : undefined}
+            onNext={handleNext}
+          />
+        ) : (
+          <FeedbackPanel
+            zvCase={currentCase}
+            selectedOption={selectedOption!}
+            caseIndex={caseIndex}
+            total={total}
+            isLastCase={isLastCase}
+            onNext={handleNext}
+          />
+        )
       )}
 
       {view === "level-complete" && (

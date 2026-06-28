@@ -6,6 +6,9 @@ import { ScenarioCard } from "./ScenarioCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LevelComplete, type ScenarioResult } from "./LevelComplete";
 import { SK_LEVELS, type LevelNum, type OptionKey } from "@/lib/sparen-konto";
+import { LückentextCard } from "@/components/shared/LückentextCard";
+import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
+import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
 
 type View = "selector" | "playing" | "feedback" | "level-complete";
 
@@ -18,17 +21,22 @@ export function SparenKontoRunner() {
   const [scenarioIndex, setScenarioIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<OptionKey | null>(null);
   const [sessionResults, setSessionResults] = useState<ScenarioResult[]>([]);
+  const [lückentextAnswer, setLückentextAnswer] = useState("");
 
   const levelConfig = SK_LEVELS.find((l) => l.level === activeLevel)!;
   const currentScenario = levelConfig.scenarios[scenarioIndex];
   const total = levelConfig.scenarios.length;
   const isLastScenario = scenarioIndex === total - 1;
 
+  const isLt = (c: unknown): c is LückentextCase =>
+    typeof c === "object" && c !== null && (c as LückentextCase).type === "lückentext";
+
   const handleSelectLevel = useCallback((level: LevelNum) => {
     setActiveLevel(level);
     setScenarioIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
+    setLückentextAnswer("");
     setView("playing");
   }, []);
 
@@ -37,12 +45,15 @@ export function SparenKontoRunner() {
   }, []);
 
   const handleNext = useCallback(() => {
-    if (!selectedOption) return;
+    const isLückentext = isLt(currentScenario);
+    if (!isLückentext && !selectedOption) return;
 
-    const isCorrect = selectedOption === currentScenario.correct;
+    const isCorrect = isLückentext
+      ? checkLückentextAnswer(lückentextAnswer, (currentScenario as LückentextCase).answer, (currentScenario as LückentextCase).tolerance)
+      : selectedOption === (currentScenario as { correct: OptionKey }).correct;
     const newResults: ScenarioResult[] = [
       ...sessionResults,
-      { scenarioId: currentScenario.id, correct: isCorrect, selectedOption },
+      { scenarioId: currentScenario.id, correct: isCorrect, selectedOption: selectedOption ?? "" },
     ];
     setSessionResults(newResults);
 
@@ -58,14 +69,16 @@ export function SparenKontoRunner() {
     } else {
       setScenarioIndex((i) => i + 1);
       setSelectedOption(null);
+      setLückentextAnswer("");
       setView("playing");
     }
-  }, [selectedOption, currentScenario, sessionResults, isLastScenario, activeLevel]);
+  }, [selectedOption, currentScenario, sessionResults, isLastScenario, activeLevel, lückentextAnswer]);
 
   const handleRetry = useCallback(() => {
     setScenarioIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
+    setLückentextAnswer("");
     setView("playing");
   }, []);
 
@@ -84,25 +97,53 @@ export function SparenKontoRunner() {
       )}
 
       {view === "playing" && currentScenario && (
-        <ScenarioCard
-          scenario={currentScenario}
-          scenarioIndex={scenarioIndex}
-          total={total}
-          selectedOption={selectedOption}
-          onSelect={setSelectedOption}
-          onSubmit={handleSubmit}
-        />
+        isLt(currentScenario) ? (
+          <LückentextCard
+            c={currentScenario}
+            caseIndex={scenarioIndex}
+            total={total}
+            levelLabel={levelConfig.label}
+            badgeVariant={levelConfig.badgeVariant}
+            answer={lückentextAnswer}
+            onAnswerChange={setLückentextAnswer}
+            onSubmit={handleSubmit}
+          />
+        ) : (
+          <ScenarioCard
+            scenario={currentScenario}
+            scenarioIndex={scenarioIndex}
+            total={total}
+            selectedOption={selectedOption}
+            onSelect={setSelectedOption}
+            onSubmit={handleSubmit}
+          />
+        )
       )}
 
-      {view === "feedback" && currentScenario && selectedOption && (
-        <FeedbackPanel
-          scenario={currentScenario}
-          selectedOption={selectedOption}
-          scenarioIndex={scenarioIndex}
-          total={total}
-          isLastScenario={isLastScenario}
-          onNext={handleNext}
-        />
+      {view === "feedback" && currentScenario && (selectedOption || isLt(currentScenario)) && (
+        isLt(currentScenario) ? (
+          <LückentextResultCard
+            c={currentScenario}
+            studentAnswer={lückentextAnswer}
+            isCorrect={checkLückentextAnswer(lückentextAnswer, currentScenario.answer, currentScenario.tolerance)}
+            caseIndex={scenarioIndex}
+            total={total}
+            levelLabel={levelConfig.label}
+            badgeVariant={levelConfig.badgeVariant}
+            isLastCase={isLastScenario}
+            nextLabel={isLastScenario ? "Level abschliessen" : undefined}
+            onNext={handleNext}
+          />
+        ) : (
+          <FeedbackPanel
+            scenario={currentScenario}
+            selectedOption={selectedOption!}
+            scenarioIndex={scenarioIndex}
+            total={total}
+            isLastScenario={isLastScenario}
+            onNext={handleNext}
+          />
+        )
       )}
 
       {view === "level-complete" && (

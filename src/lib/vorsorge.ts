@@ -1,3 +1,5 @@
+import { type LückentextCase } from "./lückentext";
+
 export type LevelNum = 1 | 2 | 3;
 
 export interface VorsorgeOption {
@@ -40,7 +42,7 @@ export interface VorsorgeLevel {
   level: LevelNum;
   label: string;
   badgeVariant: "green" | "orange" | "red";
-  cases: VorsorgeCase[];
+  cases: (VorsorgeCase | LückentextCase)[];
 }
 
 // ─────────────────────────────────────────────────────────
@@ -252,31 +254,15 @@ const L3_CASES: VorsorgeCase[] = [
       "Neue Regelung ab 2026: Beitragslücken ab dem Jahr 2025 können nachgeholt werden. Bedingung: Der aktuelle Maximalbetrag (CHF 7'258) muss im laufenden Jahr zuerst vollständig ausgeschöpft sein. Lücken vor 2025 sind nicht nachholbar. Nachzahlungen sind ebenfalls steuerlich abzugsfähig!",
   },
   {
+    type: "lückentext",
     id: "3.3",
     level: 3,
-    title: "Optimale 3a-Strategie – Selbständiger",
-    situation:
+    briefing:
       "Neukunde, selbständig erwerbend, kein PK-Anschluss, Jahreseinkommen CHF 180'000. Fragt nach optimaler 3a-Strategie.",
-    question: "Was empfiehlst du?",
-    options: [
-      {
-        key: "A",
-        text: "\"Gleich wie Angestellte – CHF 7'258 einzahlen\"",
-      },
-      {
-        key: "B",
-        text: "\"Als Selbständiger ohne PK können Sie bis zu 20% des Nettoeinkommens einzahlen – Maximum CHF 36'288. Bei CHF 180'000 Einkommen: CHF 36'000 möglich. Empfehlung: Mehrere 3a-Konten für gestaffelte Bezüge.\"",
-      },
-      {
-        key: "C",
-        text: "\"Selbständige dürfen keine Säule 3a einzahlen\"",
-      },
-      {
-        key: "D",
-        text: "\"Maximum CHF 7'258 – wie alle anderen auch\"",
-      },
-    ],
-    correct: "B",
+    question:
+      "Selbständige ohne PK-Anschluss können bis zu ___ % des Nettoeinkommens in die Säule 3a einzahlen.",
+    answer: "20",
+    unit: "%",
     feedback:
       "Selbständige ohne PK-Anschluss haben ein höheres 3a-Maximum: 20% des Nettoeinkommens, maximal CHF 36'288. Bei CHF 180'000 Einkommen: CHF 36'000 möglich. Die Steuerersparnis ist enorm! Mehrere Konten für gestaffelte Bezüge bei Pensionierung sind sehr empfehlenswert.",
   },

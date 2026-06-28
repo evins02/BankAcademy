@@ -9,7 +9,7 @@ import { KYC_LEVELS, type LevelNum, type OptionKey } from "@/lib/kyc";
 export interface ScenarioResult {
   scenarioId: string;
   correct: boolean;
-  selectedOption: OptionKey;
+  selectedOption?: OptionKey | string;
 }
 
 interface LevelCompleteProps {
@@ -84,7 +84,7 @@ export function LevelComplete({ level, results, onNext, onRetry }: LevelComplete
                 <span className="flex-1 text-text-primary">Szenario {scenario.id}</span>
                 {!result?.correct && (
                   <span className="text-xs text-text-secondary">
-                    Richtig: {scenario.correct}
+                    Richtig: {"correct" in scenario ? scenario.correct : scenario.answer}
                   </span>
                 )}
               </div>

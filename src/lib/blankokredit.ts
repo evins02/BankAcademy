@@ -1,3 +1,5 @@
+import { type LückentextCase } from "./lückentext";
+
 export type OptionKey = "A" | "B" | "C" | "D";
 export type LevelNum = 1 | 2 | 3;
 
@@ -33,7 +35,7 @@ export interface BlankokreditLevelConfig {
   level: LevelNum;
   label: string;
   badgeVariant: "green" | "orange" | "red";
-  cases: BlankokreditCase[];
+  cases: (BlankokreditCase | LückentextCase)[];
 }
 
 export const MERKSATZ =
@@ -228,21 +230,15 @@ export const BK_LEVELS: BlankokreditLevelConfig[] = [
           "Bei Ehepaaren wird der proportionale Anteil des Kreditnehmers berechnet. Nicht das volle Gesamteinkommen und nicht nur sein eigenes Einkommen.",
       },
       {
+        type: "lückentext",
         id: "2.2",
         level: 2,
         briefing:
           "Kunde möchte Kredit CHF 40'000 mit Laufzeit 5 Jahre. Er sagt: «Bei 5 Jahren sind das nur CHF 667 pro Monat – das ist doch günstig!»",
-        question: "Was ist falsch an dieser Aussage?",
-        options: [
-          { key: "A", text: "Nichts – 5 Jahre ist korrekt" },
-          {
-            key: "B",
-            text: "Für die Kreditfähigkeitsprüfung rechnen wir immer mit 3 Jahren (36 Monate) – unabhängig von der Vertragslaufzeit. CHF 40'000 ÷ 36 = CHF 1'111 / Monat.",
-          },
-          { key: "C", text: "Der Kredit ist zu hoch" },
-          { key: "D", text: "Die Vertragslaufzeit muss 3 Jahre sein" },
-        ],
-        correct: "B",
+        question:
+          "Die Kreditfähigkeitsprüfung erfolgt immer über ___ Monate – unabhängig von der Vertragslaufzeit.",
+        answer: "36",
+        unit: "Monate",
         feedback:
           "WICHTIG: Die Amortisationsprüfung erfolgt IMMER über 36 Monate – auch wenn der Vertrag 5 Jahre läuft. Das ist eine klassische Trickfrage in der LAP!",
       },
@@ -348,18 +344,16 @@ export const BK_LEVELS: BlankokreditLevelConfig[] = [
           "Trotz gutem Einkommen: Hohe Fixkosten, Unterhalt und bestehende Kredite fressen den Freibetrag auf. Ablehnung zwingend. ZEK-Einträge sorgfältig prüfen!",
       },
       {
+        type: "lückentext",
         id: "3.2",
         level: 3,
         briefing:
           "Freibetrag: CHF 800. Keine bestehenden Kredite. Kunde fragt: «Wie viel Kredit kann ich maximal bekommen?»",
-        question: "Was ist der maximale Kreditbetrag?",
-        options: [
-          { key: "A", text: "CHF 800 × 12 = CHF 9'600" },
-          { key: "B", text: "CHF 800 × 36 = CHF 28'800" },
-          { key: "C", text: "CHF 800 × 60 = CHF 48'000" },
-          { key: "D", text: "Kann nicht berechnet werden" },
-        ],
-        correct: "B",
+        question:
+          "Maximaler Kredit = CHF 800 × 36 Monate = CHF ___",
+        answer: "28800",
+        unit: "CHF",
+        tolerance: 1,
         feedback:
           "Maximaler Kredit = Freibetrag × 36 Monate. CHF 800 × 36 = CHF 28'800. Das ist die Obergrenze der Kreditfähigkeit.",
       },

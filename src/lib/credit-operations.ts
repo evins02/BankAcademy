@@ -1,3 +1,5 @@
+import { type LückentextCase } from "./lückentext";
+
 export type OptionKey = "A" | "B" | "C" | "D";
 export type LevelNum = 1 | 2 | 3;
 
@@ -33,7 +35,7 @@ export interface CreditOpsLevelConfig {
   level: LevelNum;
   label: string;
   badgeVariant: "green" | "orange" | "red";
-  scenarios: CreditOpsScenario[];
+  scenarios: (CreditOpsScenario | LückentextCase)[];
 }
 
 export const CO_LEVELS: CreditOpsLevelConfig[] = [
@@ -106,40 +108,17 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
     badgeVariant: "orange",
     scenarios: [
       {
+        type: "lückentext",
         id: "2.1",
         level: 2,
-        situation:
+        briefing:
           "Hypothek CHF 700'000 auf Objekt Verkehrswert CHF 900'000. Berechne den Blankoanteil.",
-        calculator: [
-          {
-            heading: "Belehnungsberechnung",
-            rows: [
-              { type: "data", label: "Hypothek", value: "CHF 700'000" },
-              { type: "data", label: "Verkehrswert", value: "CHF 900'000" },
-              { type: "data", label: "Belehnung", value: "700'000 ÷ 900'000 = 77.8%" },
-              { type: "divider" },
-              { type: "data", label: "1. Hypothek (bis 65%)", value: "CHF 585'000" },
-              { type: "total", label: "2. Hypothek / Blankoanteil", value: "CHF 115'000" },
-            ],
-            verdict: {
-              text: "Blankoanteil CHF 115'000 – muss innert 15 Jahren amortisiert werden",
-              ok: true,
-            },
-          },
-        ],
-        question: "Was ist dein Entscheid?",
-        options: [
-          { key: "A", text: "Kein Blankoanteil" },
-          {
-            key: "B",
-            text: "Blankoanteil CHF 115'000 – über 65% Belehnung. Muss innert 15 Jahren amortisiert werden.",
-          },
-          { key: "C", text: "CHF 200'000 Blankoanteil" },
-          { key: "D", text: "Blankoanteil nicht relevant" },
-        ],
-        correct: "B",
+        question:
+          "Die 1. Hypothek deckt bis zu ___ % des Verkehrswertes.",
+        answer: "65",
+        unit: "%",
         feedback:
-          "Alles über 65% Belehnung ist 2. Hypothek = Blankoanteil. Muss innert 15 Jahren zurückbezahlt werden – direkt oder indirekt via 3a.",
+          "Alles über 65% Belehnung ist 2. Hypothek = Blankoanteil. Dieser Blankoanteil muss innert 15 Jahren zurückbezahlt werden – direkt oder indirekt via 3a.",
       },
       {
         id: "2.2",

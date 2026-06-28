@@ -9,7 +9,7 @@ import { BK_LEVELS, type LevelNum, type OptionKey } from "@/lib/blankokredit";
 export interface CaseResult {
   caseId: string;
   correct: boolean;
-  selectedOption: OptionKey;
+  selectedOption?: OptionKey | string;
 }
 
 interface LevelCompleteProps {
@@ -82,7 +82,7 @@ export function LevelComplete({ level, results, onNext, onRetry }: LevelComplete
                 <span className="flex-1 text-text-primary">Fall {c.id}</span>
                 {!result?.correct && (
                   <span className="text-xs text-text-secondary">
-                    Richtig: {c.correct}
+                    Richtig: {"correct" in c ? c.correct : c.answer}
                   </span>
                 )}
               </div>

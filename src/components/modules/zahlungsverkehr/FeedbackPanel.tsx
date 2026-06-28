@@ -12,6 +12,7 @@ import { addXP } from "@/lib/xpData";
 import { InlineRating } from "@/components/shared/StarRating";
 import { FeedbackEnhancement } from "@/components/shared/FeedbackEnhancement";
 import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
+import { BegründungsPrompt } from "@/components/shared/BegründungsPrompt";
 
 interface FeedbackPanelProps {
   zvCase: ZvCase;
@@ -144,6 +145,8 @@ export function FeedbackPanel({
                 </button>
                 <InlineRating scenarioId={`zv-${zvCase.id}`} label="Szenario bewerten:" />
               </div>
+
+              <BegründungsPrompt explanation={zvCase.feedback} />
 
               <WeiterButton
                 onNext={onNext}

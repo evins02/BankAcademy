@@ -9,6 +9,7 @@ import { MW_LEVELS, type MwCase, type OptionKey } from "@/lib/mahnwesen";
 import { Confetti } from "@/components/shared/Confetti";
 import { addXP } from "@/lib/xpData";
 import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
+import { BegründungsPrompt } from "@/components/shared/BegründungsPrompt";
 
 interface FeedbackPanelProps {
   mwCase: MwCase;
@@ -121,6 +122,8 @@ export function FeedbackPanel({
                 </p>
                 <p className="text-sm leading-relaxed text-text-primary">{mwCase.feedback}</p>
               </div>
+
+              <BegründungsPrompt explanation={mwCase.feedback} />
 
               <Button onClick={onNext} className="w-full">
                 {isLastCase ? "Level abschliessen" : "Nächster Fall"}

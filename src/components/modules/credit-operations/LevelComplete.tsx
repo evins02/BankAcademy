@@ -9,7 +9,7 @@ import { CO_LEVELS, type LevelNum, type OptionKey } from "@/lib/credit-operation
 export interface ScenarioResult {
   scenarioId: string;
   correct: boolean;
-  selectedOption: OptionKey;
+  selectedOption?: OptionKey | string;
 }
 
 interface LevelCompleteProps {
@@ -81,7 +81,7 @@ export function LevelComplete({ level, results, onNext, onRetry }: LevelComplete
                 )}
                 <span className="flex-1 text-text-primary">Szenario {s.id}</span>
                 {!result?.correct && (
-                  <span className="text-xs text-text-secondary">Richtig: {s.correct}</span>
+                  <span className="text-xs text-text-secondary">Richtig: {"correct" in s ? s.correct : s.answer}</span>
                 )}
               </div>
             );

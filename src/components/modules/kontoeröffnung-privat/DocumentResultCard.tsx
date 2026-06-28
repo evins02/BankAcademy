@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { scoreDocumentCase, type DocumentCase } from "@/lib/kontoeröffnung-privat";
 import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
+import { BegründungsPrompt } from "@/components/shared/BegründungsPrompt";
 
 interface DocumentResultCardProps {
   c: DocumentCase;
@@ -147,6 +148,8 @@ export function DocumentResultCard({
             </p>
             <p className="text-sm leading-relaxed text-text-primary">{c.generalFeedback}</p>
           </div>
+
+          <BegründungsPrompt explanation={c.generalFeedback} />
 
           <Button onClick={onNext} className="w-full">
             {isLastCase ? "Zum Abschluss" : "Weiter →"}

@@ -9,6 +9,7 @@ import { BK_LEVELS, type BlankokreditCase, type OptionKey } from "@/lib/blankokr
 import { Confetti } from "@/components/shared/Confetti";
 import { addXP } from "@/lib/xpData";
 import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
+import { BegründungsPrompt } from "@/components/shared/BegründungsPrompt";
 
 interface FeedbackPanelProps {
   bkCase: BlankokreditCase;
@@ -124,6 +125,8 @@ export function FeedbackPanel({
                 </p>
                 <p className="text-sm leading-relaxed text-text-primary">{bkCase.feedback}</p>
               </div>
+
+              <BegründungsPrompt explanation={bkCase.feedback} />
 
               <Button onClick={onNext} className="w-full">
                 {isLastCase ? "Level abschliessen" : "Nächster Fall"}

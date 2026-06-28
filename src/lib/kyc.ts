@@ -1,3 +1,5 @@
+import { type LückentextCase } from "./lückentext";
+
 export type OptionKey = "A" | "B" | "C" | "D";
 export type LevelNum = 1 | 2 | 3;
 
@@ -20,7 +22,7 @@ export interface KycLevelConfig {
   level: LevelNum;
   label: string;
   badgeVariant: "green" | "orange" | "red";
-  scenarios: KycScenario[];
+  scenarios: (KycScenario | LückentextCase)[];
 }
 
 export const KYC_LEVELS: KycLevelConfig[] = [
@@ -120,21 +122,16 @@ export const KYC_LEVELS: KycLevelConfig[] = [
           "Ein US-Geburtsort begründet grundsätzlich eine US-Staatsbürgerschaft – und damit FATCA-Pflicht. Die Eigenerklärung muss sofort aktualisiert werden. Der Kunde muss entweder eine US-Steuernummer (TIN) liefern oder den Nachweis über den Verzicht auf die US-Staatsbürgerschaft vorlegen (Certificate of Loss of Nationality, CLN). FATCA ist keine einmalige Eröffnungsroutine – das Dossier muss bei jedem neuen relevanten Hinweis aktualisiert werden.",
       },
       {
+        type: "lückentext",
         id: "2.3",
         level: 2,
-        situation:
+        briefing:
           "Ein Neukunde möchte CHF 30'000 in bar einzahlen. Er erklärt, das Geld stamme aus dem Verkauf seines Autos.",
-        question: "Was musst du gemäss VSB tun?",
-        options: [
-          { key: "A", text: "Einzahlung akzeptieren – der Kunde hat eine Erklärung gegeben" },
-          { key: "B", text: "Einzahlung ablehnen – Bargeld ist immer verdächtig" },
-          {
-            key: "C",
-            text: "Identifikation prüfen und Herkunft der Mittel dokumentieren – Betrag über CHF 25'000",
-          },
-          { key: "D", text: "Nur den Vorgesetzten informieren" },
-        ],
-        correct: "C",
+        question:
+          "Gemäss VSB muss die Herkunft der Mittel bei Bareinzahlungen über CHF ___ dokumentiert werden.",
+        answer: "25000",
+        unit: "CHF",
+        tolerance: 1,
         feedback:
           "Gemäss VSB müssen bei Handelsgeschäften und Einzahlungen über CHF 25'000 die Identität geprüft und die Herkunft der Mittel dokumentiert werden. Der Kunde muss die Herkunft glaubhaft belegen können, z.B. mit einem Kaufvertrag für das Auto.",
       },

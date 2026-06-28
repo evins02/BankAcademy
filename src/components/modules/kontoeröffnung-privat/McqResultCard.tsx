@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { McqCase } from "@/lib/kontoeröffnung-privat";
 import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
+import { BegründungsPrompt } from "@/components/shared/BegründungsPrompt";
 
 interface McqResultCardProps {
   c: McqCase;
@@ -104,6 +105,8 @@ export function McqResultCard({ c, selected, isLastCase, onNext }: McqResultCard
             </p>
             <p className="text-sm leading-relaxed text-text-primary">{c.feedback}</p>
           </div>
+
+          <BegründungsPrompt explanation={c.feedback} />
 
           <Button onClick={onNext} className="w-full">
             {isLastCase ? "Zum Abschluss" : "Weiter →"}

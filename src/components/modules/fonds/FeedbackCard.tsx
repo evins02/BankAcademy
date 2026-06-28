@@ -12,6 +12,7 @@ import { addXP } from "@/lib/xpData";
 import { InlineRating } from "@/components/shared/StarRating";
 import { FeedbackEnhancement } from "@/components/shared/FeedbackEnhancement";
 import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
+import { BegründungsPrompt } from "@/components/shared/BegründungsPrompt";
 
 interface FeedbackCardProps {
   fondsCase: FondsCase;
@@ -144,6 +145,8 @@ export function FeedbackCard({
                 </button>
                 <InlineRating scenarioId={`fonds-${fondsCase.id}`} label="Szenario bewerten:" />
               </div>
+
+              <BegründungsPrompt explanation={fondsCase.feedback} />
 
               <WeiterButton
                 onNext={onNext}

@@ -9,6 +9,7 @@ import { KYC_LEVELS, type KycScenario, type OptionKey } from "@/lib/kyc";
 import { Confetti } from "@/components/shared/Confetti";
 import { addXP } from "@/lib/xpData";
 import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
+import { BegründungsPrompt } from "@/components/shared/BegründungsPrompt";
 
 interface FeedbackPanelProps {
   scenario: KycScenario;
@@ -121,6 +122,8 @@ export function FeedbackPanel({
                 </p>
                 <p className="text-sm leading-relaxed text-text-primary">{scenario.feedback}</p>
               </div>
+
+              <BegründungsPrompt explanation={scenario.feedback} />
 
               <Button onClick={onNext} className="w-full">
                 {isLastScenario ? "Level abschliessen" : "Nächstes Szenario"}

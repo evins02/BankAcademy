@@ -1,3 +1,5 @@
+import { type LückentextCase } from "./lückentext";
+
 export type OptionKey = "A" | "B" | "C" | "D";
 export type LevelNum = 1 | 2 | 3;
 
@@ -25,7 +27,7 @@ export interface ZvLevelConfig {
   level: LevelNum;
   label: string;
   badgeVariant: "green" | "orange" | "red";
-  cases: ZvCase[];
+  cases: (ZvCase | LückentextCase)[];
 }
 
 export const ZV_LERNBLOCK_STEPS = [
@@ -63,31 +65,17 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
     badgeVariant: "green",
     cases: [
       {
+        type: "lückentext",
         id: "1.1",
         level: 1,
         briefing:
           "Du bearbeitest einen Zahlungsauftrag. Der Kunde möchte CHF 2'500 überweisen. Die IBAN hat 22 Stellen statt 21.",
-        question: "Was machst du?",
-        options: [
-          { key: "A", text: "Zahlung trotzdem ausführen" },
-          {
-            key: "B",
-            text: "Zahlung zurückweisen – IBAN ungültig. Kunde muss korrekte IBAN nachliefern.",
-          },
-          { key: "C", text: "Fehlende Stelle selbst ergänzen" },
-          { key: "D", text: "Vorgesetzten fragen" },
-        ],
-        correct: "B",
+        question:
+          "Eine Schweizer IBAN hat immer genau ___ Stellen.",
+        answer: "21",
+        unit: "Stellen",
         feedback:
-          "Schweizer IBAN hat immer 21 Stellen (CH + 2 Prüfziffern + 17 Stellen). Ungültige IBAN = Zahlung kann nicht ausgeführt werden. Immer zurückweisen und Kunden informieren.",
-        warum:
-          "Schweizer IBAN ist strikt normiert: CH (2) + 2 Prüfziffern + 17-stellige Kontonummer = genau 21 Zeichen. Eine IBAN mit 22 Stellen ist mathematisch ungültig – das System lehnt sie automatisch ab. Selbst ergänzen ist verboten: Du kennst die fehlende oder überschüssige Stelle nicht, und ein Fehler führt zu einer Zahlung auf das falsche Konto.",
-        inDerPraxis:
-          "IBAN-Fehler sind einer der häufigsten Gründe für Rückweisungen im Backoffice. Das Kernsystem prüft die Prüfziffer automatisch, aber der Mitarbeiter muss die Rückweisung fachlich kommunizieren. Wichtig: Nie selbst 'raten' oder ergänzen – das ist ein Fehler, der haftbar macht. Kunden informieren und korrekte IBAN anfordern.",
-        merksatz:
-          "Schweizer IBAN: immer genau 21 Stellen. Keine Ausnahmen. Kein Ergänzen. Zurückweisen und Kunden fragen.",
-        glossarTerm: "IBAN",
-        rechtsgrundlage: "OR Art. 466 ff. (Auftragsverhältnis)",
+          "Schweizer IBAN: CH (2) + 2 Prüfziffern + 17-stellige Kontonummer = genau 21 Zeichen. Eine IBAN mit 22 Stellen ist mathematisch ungültig. Zahlung zurückweisen, Kunde muss korrekte IBAN nachliefern.",
       },
       {
         id: "1.2",

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ZV_FO_LEVELS, type ZvFoCase } from "@/lib/zahlungsverkehr-privat";
 import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
+import { BegründungsPrompt } from "@/components/shared/BegründungsPrompt";
 
 interface FeedbackCardProps {
   zvCase: ZvFoCase;
@@ -106,6 +107,8 @@ export function FeedbackCard({
               </p>
               <p className="text-sm leading-relaxed text-text-primary">{zvCase.feedback}</p>
             </div>
+
+            <BegründungsPrompt explanation={zvCase.feedback} />
 
             <Button onClick={onNext} className="w-full">
               {isLastCase ? "Level abschliessen" : "Nächster Fall"}

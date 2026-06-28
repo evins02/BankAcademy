@@ -1,3 +1,5 @@
+import { type LückentextCase } from "./lückentext";
+
 export type OptionKey = "A" | "B" | "C" | "D";
 export type LevelNum = 1 | 2 | 3;
 
@@ -20,7 +22,7 @@ export interface MwLevelConfig {
   level: LevelNum;
   label: string;
   badgeVariant: "green" | "orange" | "red";
-  cases: MwCase[];
+  cases: (MwCase | LückentextCase)[];
 }
 
 export const MAHNPROZESS_STUFEN = [
@@ -63,23 +65,17 @@ export const MW_LEVELS: MwLevelConfig[] = [
     badgeVariant: "green",
     cases: [
       {
+        type: "lückentext",
         id: "1.1",
         level: 1,
         briefing:
           "Hypothekarzins CHF 2'400 war am 01. Mai fällig. Heute ist der 15. Mai. Keine Zahlung eingegangen.",
-        question: "Was ist die richtige nächste Aktion?",
-        options: [
-          { key: "A", text: "Sofort Betreibung einleiten" },
-          {
-            key: "B",
-            text: "Zahlungserinnerung senden – 10 Tage nach Fälligkeit, erste Kontaktaufnahme.",
-          },
-          { key: "C", text: "Kredit kündigen" },
-          { key: "D", text: "Noch abwarten" },
-        ],
-        correct: "B",
+        question:
+          "Die Zahlungserinnerung wird ___ Tage nach Fälligkeit verschickt.",
+        answer: "10",
+        unit: "Tage",
         feedback:
-          "15 Tage nach Fälligkeit = Zahlungserinnerung ist korrekt. Freundliche Erinnerung, noch keine Mahngebühr. Ziel: Kunde zahlt ohne weitere Eskalation.",
+          "Die Zahlungserinnerung erfolgt 10 Tage nach Fälligkeit – freundliche erste Kontaktaufnahme, noch keine Mahngebühr. Ziel: Kunde zahlt ohne weitere Eskalation.",
       },
       {
         id: "1.2",
@@ -229,21 +225,15 @@ export const MW_LEVELS: MwLevelConfig[] = [
           "Bei Hypotheken mit genügend Deckung immer zuerst Lösung suchen. Zwangsverwertung ist für alle teuer und langwierig. Verkauf durch Kunden selbst ist oft bessere Lösung. Erst wenn keine Einigung = Betreibung auf Pfandverwertung.",
       },
       {
+        type: "lückentext",
         id: "3.3",
         level: 3,
         briefing:
           "Eine offene Forderung aus 2019 von CHF 2'800 wurde nie betrieben. Kunde taucht wieder auf und möchte ein neues Konto eröffnen.",
-        question: "Was gilt für die alte Forderung?",
-        options: [
-          { key: "A", text: "Forderung ist verjährt – kann nicht mehr eingefordert werden, Konto wird eröffnet" },
-          {
-            key: "B",
-            text: "Konsumkreditforderung: 5 Jahre Verjährungsfrist. 2019 + 5 = 2024, Forderung ist verjährt. Neue Geschäftsbeziehung separat beurteilen (Bonität, ZEK-Eintrag).",
-          },
-          { key: "C", text: "Forderung bleibt ewig bestehen – Konto ablehnen" },
-          { key: "D", text: "Kunde muss zuerst zahlen bevor Konto eröffnet wird" },
-        ],
-        correct: "B",
+        question:
+          "Konsumkreditforderungen verjähren nach ___ Jahren.",
+        answer: "5",
+        unit: "Jahre",
         feedback:
           "Konsumkreditforderungen verjähren nach 5 Jahren. Verjährte Forderung kann rechtlich nicht mehr eingefordert werden. Neue Geschäftsbeziehung wird separat geprüft – Bonität und ZEK-Eintrag beachten.",
       },

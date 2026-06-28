@@ -1,3 +1,5 @@
+import { type LückentextCase } from "./lückentext";
+
 export type OptionKey = "A" | "B" | "C" | "D";
 export type LevelNum = 1 | 2 | 3;
 
@@ -20,7 +22,7 @@ export interface SkLevelConfig {
   level: LevelNum;
   label: string;
   badgeVariant: "green" | "orange" | "red";
-  scenarios: SkScenario[];
+  scenarios: (SkScenario | LückentextCase)[];
 }
 
 export const SK_LEVELS: SkLevelConfig[] = [
@@ -146,23 +148,18 @@ export const SK_LEVELS: SkLevelConfig[] = [
     badgeVariant: "red",
     scenarios: [
       {
+        type: "lückentext",
         id: "3.1",
         level: 3,
-        situation:
+        briefing:
           "Kundin Sabine, 32 Jahre, zahlt CHF 200 pro Monat in 3a. Sie hat bereits CHF 52'000 auf einem 3a-Konto.",
-        question: "Was fällt dir auf?",
-        options: [
-          { key: "A", text: "«Alles bestens»" },
-          {
-            key: "B",
-            text: "«Maximalbetrag nicht ausgeschöpft (CHF 7'258/Jahr = CHF 604/Monat). Ab CHF 50'000 zweites 3a-Konto empfehlen»",
-          },
-          { key: "C", text: "«Aufhören einzuzahlen»" },
-          { key: "D", text: "«Alles aufs Privatkonto»" },
-        ],
-        correct: "B",
+        question:
+          "Der 3a-Maximalbetrag 2026 beträgt CHF ___ pro Jahr.",
+        answer: "7258",
+        unit: "CHF",
+        tolerance: 5,
         feedback:
-          "3a-Maximalbetrag 2026: CHF 7'258/Jahr (CHF 604.80/Monat). Sabine zahlt nur CHF 2'400 – verschenkt CHF 4'858 Steuerersparnis. Ab CHF 50'000 zweites Konto für gestaffelte Bezüge.",
+          "3a-Maximalbetrag 2026: CHF 7'258/Jahr (CHF 604.80/Monat). Sabine zahlt nur CHF 2'400 – verschenkt CHF 4'858 Steuerersparnis. Ab CHF 50'000 zweites Konto für gestaffelte Bezüge empfehlen.",
       },
       {
         id: "3.2",
@@ -184,21 +181,16 @@ export const SK_LEVELS: SkLevelConfig[] = [
           "Neu ab 2026: Beitragslücken ab 2025 können rückwirkend nachgeholt werden. Bedingung: aktueller Maximalbetrag muss zuerst ausgeschöpft sein. Lücken vor 2025 nicht möglich.",
       },
       {
+        type: "lückentext",
         id: "3.3",
         level: 3,
-        situation:
+        briefing:
           "Kundin hat CHF 180'000 auf Sparkonto. Sie fragt nervös: «Ist mein Geld sicher?»",
-        question: "Was erklärst du und was empfiehlst du?",
-        options: [
-          { key: "A", text: "«100% sicher – kein Problem»" },
-          {
-            key: "B",
-            text: "«Einlegerschutz CHF 100'000 pro Bank. CHF 80'000 ungeschützt – auf zwei Banken aufteilen»",
-          },
-          { key: "C", text: "«Schweizer Banken können nie Konkurs gehen»" },
-          { key: "D", text: "«Sofort abheben und zuhause aufbewahren»" },
-        ],
-        correct: "B",
+        question:
+          "Die Einlagensicherung schützt CHF ___ pro Kunde und Bank.",
+        answer: "100000",
+        unit: "CHF",
+        tolerance: 1,
         feedback:
           "Einlagensicherung schützt CHF 100'000 pro Kunde und Bank. CHF 80'000 sind ungeschützt. Empfehlung: Beträge über CHF 100'000 auf mehrere Banken aufteilen.",
       },

@@ -7,6 +7,9 @@ import { CaseCard } from "./CaseCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LevelComplete, type CaseResult } from "./LevelComplete";
 import { BK_LEVELS, type LevelNum, type OptionKey } from "@/lib/blankokredit";
+import { LückentextCard } from "@/components/shared/LückentextCard";
+import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
+import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
@@ -19,17 +22,22 @@ export function BlankokreditRunner() {
   const [caseIndex, setCaseIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<OptionKey | null>(null);
   const [sessionResults, setSessionResults] = useState<CaseResult[]>([]);
+  const [lückentextAnswer, setLückentextAnswer] = useState("");
 
   const levelConfig = BK_LEVELS.find((l) => l.level === activeLevel)!;
   const currentCase = levelConfig.cases[caseIndex];
   const total = levelConfig.cases.length;
   const isLastCase = caseIndex === total - 1;
 
+  const isLt = (c: unknown): c is LückentextCase =>
+    typeof c === "object" && c !== null && (c as LückentextCase).type === "lückentext";
+
   const handleSelectLevel = useCallback((level: LevelNum) => {
     setActiveLevel(level);
     setCaseIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
+    setLückentextAnswer("");
     setView("lernblock");
   }, []);
 
@@ -42,12 +50,15 @@ export function BlankokreditRunner() {
   }, []);
 
   const handleNext = useCallback(() => {
-    if (!selectedOption) return;
+    const isLückentext = isLt(currentCase);
+    if (!isLückentext && !selectedOption) return;
 
-    const isCorrect = selectedOption === currentCase.correct;
+    const isCorrect = isLückentext
+      ? checkLückentextAnswer(lückentextAnswer, (currentCase as LückentextCase).answer, (currentCase as LückentextCase).tolerance)
+      : selectedOption === (currentCase as { correct: OptionKey }).correct;
     const newResults: CaseResult[] = [
       ...sessionResults,
-      { caseId: currentCase.id, correct: isCorrect, selectedOption },
+      { caseId: currentCase.id, correct: isCorrect, selectedOption: selectedOption ?? "" },
     ];
     setSessionResults(newResults);
 
@@ -63,14 +74,16 @@ export function BlankokreditRunner() {
     } else {
       setCaseIndex((i) => i + 1);
       setSelectedOption(null);
+      setLückentextAnswer("");
       setView("playing");
     }
-  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel]);
+  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, lückentextAnswer]);
 
   const handleRetry = useCallback(() => {
     setCaseIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
+    setLückentextAnswer("");
     setView("lernblock");
   }, []);
 
@@ -93,25 +106,53 @@ export function BlankokreditRunner() {
       )}
 
       {view === "playing" && currentCase && (
-        <CaseCard
-          bkCase={currentCase}
-          caseIndex={caseIndex}
-          total={total}
-          selectedOption={selectedOption}
-          onSelect={setSelectedOption}
-          onSubmit={handleSubmit}
-        />
+        isLt(currentCase) ? (
+          <LückentextCard
+            c={currentCase}
+            caseIndex={caseIndex}
+            total={total}
+            levelLabel={levelConfig.label}
+            badgeVariant={levelConfig.badgeVariant}
+            answer={lückentextAnswer}
+            onAnswerChange={setLückentextAnswer}
+            onSubmit={handleSubmit}
+          />
+        ) : (
+          <CaseCard
+            bkCase={currentCase}
+            caseIndex={caseIndex}
+            total={total}
+            selectedOption={selectedOption}
+            onSelect={setSelectedOption}
+            onSubmit={handleSubmit}
+          />
+        )
       )}
 
-      {view === "feedback" && currentCase && selectedOption && (
-        <FeedbackPanel
-          bkCase={currentCase}
-          selectedOption={selectedOption}
-          caseIndex={caseIndex}
-          total={total}
-          isLastCase={isLastCase}
-          onNext={handleNext}
-        />
+      {view === "feedback" && currentCase && (selectedOption || isLt(currentCase)) && (
+        isLt(currentCase) ? (
+          <LückentextResultCard
+            c={currentCase}
+            studentAnswer={lückentextAnswer}
+            isCorrect={checkLückentextAnswer(lückentextAnswer, currentCase.answer, currentCase.tolerance)}
+            caseIndex={caseIndex}
+            total={total}
+            levelLabel={levelConfig.label}
+            badgeVariant={levelConfig.badgeVariant}
+            isLastCase={isLastCase}
+            nextLabel={isLastCase ? "Level abschliessen" : undefined}
+            onNext={handleNext}
+          />
+        ) : (
+          <FeedbackPanel
+            bkCase={currentCase}
+            selectedOption={selectedOption!}
+            caseIndex={caseIndex}
+            total={total}
+            isLastCase={isLastCase}
+            onNext={handleNext}
+          />
+        )
       )}
 
       {view === "level-complete" && (

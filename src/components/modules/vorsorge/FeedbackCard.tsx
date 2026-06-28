@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { VORSORGE_LEVELS, type VorsorgeCase } from "@/lib/vorsorge";
 import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
+import { BegründungsPrompt } from "@/components/shared/BegründungsPrompt";
 
 interface FeedbackCardProps {
   vorsorgeCase: VorsorgeCase;
@@ -106,6 +107,8 @@ export function FeedbackCard({
               </p>
               <p className="text-sm leading-relaxed text-text-primary">{vorsorgeCase.feedback}</p>
             </div>
+
+            <BegründungsPrompt explanation={vorsorgeCase.feedback} />
 
             <Button onClick={onNext} className="w-full">
               {isLastCase ? "Level abschliessen" : "Nächster Fall"}
