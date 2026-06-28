@@ -35,6 +35,7 @@ export function FeedbackPanel({
   const xp = isCorrect ? 100 : 10;
   const { open: openGlossar } = useGlossar();
   const [showConfetti, setShowConfetti] = useState(isCorrect);
+  const [recallDone, setRecallDone] = useState(false);
 
   useEffect(() => {
     addXP(xp);
@@ -58,7 +59,6 @@ export function FeedbackPanel({
             </span>
           </div>
 
-          {/* Large result indicator */}
           <div
             className={cn(
               "mb-5 flex flex-col items-center gap-2 rounded-DEFAULT p-5 animate-scale-in",
@@ -76,78 +76,82 @@ export function FeedbackPanel({
             )}
           </div>
 
-          <div className="mb-5 flex flex-col gap-2">
-            {zvCase.options.map((opt) => {
-              const isSelected = opt.key === selectedOption;
-              const isCorrectOpt = opt.key === zvCase.correct;
-              return (
-                <div
-                  key={opt.key}
-                  className={cn(
-                    "flex items-start gap-3 rounded-DEFAULT border p-4 text-sm",
-                    isCorrectOpt
-                      ? "border-2 border-primary bg-primary-light text-text-primary font-medium"
-                      : isSelected
-                        ? "border-red-300 bg-red-50 text-text-primary animate-shake"
-                        : "border-border bg-surface text-text-secondary opacity-30"
-                  )}
+          <ActiveRecallPrompt onComplete={() => setRecallDone(true)} />
+          {recallDone && (
+            <>
+              <div className="mb-5 flex flex-col gap-2">
+                {zvCase.options.map((opt) => {
+                  const isSelected = opt.key === selectedOption;
+                  const isCorrectOpt = opt.key === zvCase.correct;
+                  return (
+                    <div
+                      key={opt.key}
+                      className={cn(
+                        "flex items-start gap-3 rounded-DEFAULT border p-4 text-sm",
+                        isCorrectOpt
+                          ? "border-2 border-primary bg-primary-light text-text-primary font-medium"
+                          : isSelected
+                            ? "border-red-300 bg-red-50 text-text-primary animate-shake"
+                            : "border-border bg-surface text-text-secondary opacity-30"
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold",
+                          isCorrectOpt
+                            ? "bg-primary text-white"
+                            : isSelected
+                              ? "bg-red-500 text-white"
+                              : "bg-gray-100 text-text-secondary"
+                        )}
+                      >
+                        {opt.key}
+                      </span>
+                      <span className="flex-1">{opt.text}</span>
+                      {isCorrectOpt && (
+                        <CheckCircle2 size={14} className="ml-auto shrink-0 self-center text-primary" />
+                      )}
+                      {isSelected && !isCorrectOpt && (
+                        <XCircle size={14} className="ml-auto shrink-0 self-center text-red-500" />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mb-4 rounded-DEFAULT border border-border bg-background p-4">
+                <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
+                  Das solltest du wissen
+                </p>
+                <p className="text-sm leading-relaxed text-text-primary">{zvCase.feedback}</p>
+              </div>
+
+              <FeedbackEnhancement
+                warum={zvCase.warum}
+                inDerPraxis={zvCase.inDerPraxis}
+                merksatz={zvCase.merksatz}
+                glossarTerm={zvCase.glossarTerm}
+                rechtsgrundlage={zvCase.rechtsgrundlage}
+              />
+
+              <div className="mb-4 mt-4 flex items-center justify-between">
+                <button
+                  onClick={openGlossar}
+                  className="flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
                 >
-                  <span
-                    className={cn(
-                      "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold",
-                      isCorrectOpt
-                        ? "bg-primary text-white"
-                        : isSelected
-                          ? "bg-red-500 text-white"
-                          : "bg-gray-100 text-text-secondary"
-                    )}
-                  >
-                    {opt.key}
-                  </span>
-                  <span className="flex-1">{opt.text}</span>
-                  {isCorrectOpt && (
-                    <CheckCircle2 size={14} className="ml-auto shrink-0 self-center text-primary" />
-                  )}
-                  {isSelected && !isCorrectOpt && (
-                    <XCircle size={14} className="ml-auto shrink-0 self-center text-red-500" />
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                  <BookOpen size={13} />
+                  Glossar öffnen
+                </button>
+                <InlineRating scenarioId={`zv-${zvCase.id}`} label="Szenario bewerten:" />
+              </div>
 
-          <div className="mb-4 rounded-DEFAULT border border-border bg-background p-4">
-            <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
-              Das solltest du wissen
-            </p>
-            <p className="text-sm leading-relaxed text-text-primary">{zvCase.feedback}</p>
-          </div>
-
-          <FeedbackEnhancement
-            warum={zvCase.warum}
-            inDerPraxis={zvCase.inDerPraxis}
-            merksatz={zvCase.merksatz}
-            glossarTerm={zvCase.glossarTerm}
-            rechtsgrundlage={zvCase.rechtsgrundlage}
-          />
-
-          <div className="mb-4 mt-4 flex items-center justify-between">
-            <button
-              onClick={openGlossar}
-              className="flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
-            >
-              <BookOpen size={13} />
-              Glossar öffnen
-            </button>
-            <InlineRating scenarioId={`zv-${zvCase.id}`} label="Szenario bewerten:" />
-          </div>
-
-          <ActiveRecallPrompt />
-          <WeiterButton
-            onNext={onNext}
-            label={isLastCase ? "Level abschliessen" : "Nächster Fall"}
-            className="w-full"
-          />
+              <WeiterButton
+                onNext={onNext}
+                label={isLastCase ? "Level abschliessen" : "Nächster Fall"}
+                className="w-full"
+              />
+            </>
+          )}
         </div>
       </div>
     </>

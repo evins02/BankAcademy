@@ -2,9 +2,24 @@
 
 import { useState } from "react";
 
-export function ActiveRecallPrompt() {
+interface ActiveRecallPromptProps {
+  onComplete?: () => void;
+}
+
+export function ActiveRecallPrompt({ onComplete }: ActiveRecallPromptProps) {
   const [text, setText] = useState("");
   const [saved, setSaved] = useState(false);
+
+  function handleSave() {
+    if (!text.trim()) return;
+    setSaved(true);
+    onComplete?.();
+  }
+
+  function handleSkip() {
+    setSaved(true);
+    onComplete?.();
+  }
 
   return (
     <div className="mb-4 rounded-DEFAULT border border-primary/20 bg-primary-light/40 p-4">
@@ -24,14 +39,14 @@ export function ActiveRecallPrompt() {
           />
           <div className="mt-2 flex items-center justify-between">
             <button
-              onClick={() => { if (text.trim()) setSaved(true); }}
+              onClick={handleSave}
               disabled={!text.trim()}
               className="text-xs font-semibold text-primary disabled:opacity-40 hover:underline"
             >
               Speichern
             </button>
             <button
-              onClick={() => setSaved(true)}
+              onClick={handleSkip}
               className="text-xs text-text-secondary hover:text-text-primary"
             >
               Überspringen →

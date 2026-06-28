@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { CheckCircle2, XCircle, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ export function FeedbackCard({
 }: FeedbackCardProps) {
   const isCorrect = selectedOption === vorsorgeCase.correct;
   const levelConfig = VORSORGE_LEVELS.find((l) => l.level === vorsorgeCase.level)!;
+  const [recallDone, setRecallDone] = useState(false);
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -55,58 +57,62 @@ export function FeedbackCard({
           </p>
         </div>
 
-        <div className="mb-5 flex flex-col gap-2">
-          {vorsorgeCase.options.map((opt) => {
-            const isSelected = opt.key === selectedOption;
-            const isCorrectOpt = opt.key === vorsorgeCase.correct;
-            return (
-              <div
-                key={opt.key}
-                className={cn(
-                  "flex items-start gap-3 rounded-DEFAULT border p-4 text-sm",
-                  isCorrectOpt
-                    ? "border-2 border-primary bg-primary-light text-text-primary font-medium"
-                    : isSelected
-                      ? "border-red-300 bg-red-50 text-text-primary"
-                      : "border-border bg-surface text-text-secondary opacity-30"
-                )}
-              >
-                <span
-                  className={cn(
-                    "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold",
-                    isCorrectOpt
-                      ? "bg-primary text-white"
-                      : isSelected
-                        ? "bg-red-500 text-white"
-                        : "bg-gray-100 text-text-secondary"
-                  )}
-                >
-                  {opt.key}
-                </span>
-                <span className="flex-1">{opt.text}</span>
-                {isCorrectOpt && (
-                  <CheckCircle2 size={14} className="ml-auto shrink-0 self-center text-primary" />
-                )}
-                {isSelected && !isCorrectOpt && (
-                  <XCircle size={14} className="ml-auto shrink-0 self-center text-red-500" />
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <ActiveRecallPrompt onComplete={() => setRecallDone(true)} />
+        {recallDone && (
+          <>
+            <div className="mb-5 flex flex-col gap-2">
+              {vorsorgeCase.options.map((opt) => {
+                const isSelected = opt.key === selectedOption;
+                const isCorrectOpt = opt.key === vorsorgeCase.correct;
+                return (
+                  <div
+                    key={opt.key}
+                    className={cn(
+                      "flex items-start gap-3 rounded-DEFAULT border p-4 text-sm",
+                      isCorrectOpt
+                        ? "border-2 border-primary bg-primary-light text-text-primary font-medium"
+                        : isSelected
+                          ? "border-red-300 bg-red-50 text-text-primary"
+                          : "border-border bg-surface text-text-secondary opacity-30"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold",
+                        isCorrectOpt
+                          ? "bg-primary text-white"
+                          : isSelected
+                            ? "bg-red-500 text-white"
+                            : "bg-gray-100 text-text-secondary"
+                      )}
+                    >
+                      {opt.key}
+                    </span>
+                    <span className="flex-1">{opt.text}</span>
+                    {isCorrectOpt && (
+                      <CheckCircle2 size={14} className="ml-auto shrink-0 self-center text-primary" />
+                    )}
+                    {isSelected && !isCorrectOpt && (
+                      <XCircle size={14} className="ml-auto shrink-0 self-center text-red-500" />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
 
-        <div className="mb-6 rounded-DEFAULT border border-border bg-background p-4">
-          <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
-            Erklärung
-          </p>
-          <p className="text-sm leading-relaxed text-text-primary">{vorsorgeCase.feedback}</p>
-        </div>
+            <div className="mb-6 rounded-DEFAULT border border-border bg-background p-4">
+              <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
+                Erklärung
+              </p>
+              <p className="text-sm leading-relaxed text-text-primary">{vorsorgeCase.feedback}</p>
+            </div>
 
-        <ActiveRecallPrompt />
-        <Button onClick={onNext} className="w-full">
-          {isLastCase ? "Level abschliessen" : "Nächster Fall"}
-          <ChevronRight size={14} />
-        </Button>
+            <Button onClick={onNext} className="w-full">
+              {isLastCase ? "Level abschliessen" : "Nächster Fall"}
+              <ChevronRight size={14} />
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

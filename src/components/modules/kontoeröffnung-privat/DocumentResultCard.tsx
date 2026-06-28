@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { CheckCircle2, XCircle, MinusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -32,6 +33,7 @@ export function DocumentResultCard({
   onNext,
 }: DocumentResultCardProps) {
   const { score, correct } = scoreDocumentCase(c, selected);
+  const [recallDone, setRecallDone] = useState(false);
 
   const requiredMissed = c.documents.filter(
     (d) => d.status === "required" && !selected.has(d.id)
@@ -69,86 +71,88 @@ export function DocumentResultCard({
         </div>
       </div>
 
-      {/* Per-document feedback */}
-      <div className="rounded-DEFAULT bg-surface p-5 shadow-card">
-        <h3 className="mb-4 text-sm font-semibold text-text-primary">Auswertung pro Dokument</h3>
-        <div className="space-y-2">
-          {/* Correctly selected required docs */}
-          {requiredHit.map((doc) => (
-            <div key={doc.id} className="flex items-start gap-3 rounded-DEFAULT bg-green-50 p-3">
-              <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-green-600" />
-              <div>
-                <p className="text-xs font-semibold text-green-800">{doc.label}</p>
-                <p className="text-xs text-green-700">{doc.feedbackSelected}</p>
-              </div>
-            </div>
-          ))}
+      {/* Active recall before the breakdown is revealed */}
+      <ActiveRecallPrompt onComplete={() => setRecallDone(true)} />
 
-          {/* Optional selected docs */}
-          {optionalSelected.map((doc) => (
-            <div key={doc.id} className="flex items-start gap-3 rounded-DEFAULT bg-blue-50 p-3">
-              <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-blue-500" />
-              <div>
-                <p className="text-xs font-semibold text-blue-800">{doc.label}</p>
-                <p className="text-xs text-blue-700">{doc.feedbackSelected}</p>
-              </div>
-            </div>
-          ))}
-
-          {/* Forbidden docs that were selected */}
-          {forbiddenSelected.map((doc) => (
-            <div key={doc.id} className="flex items-start gap-3 rounded-DEFAULT bg-red-50 p-3">
-              <XCircle size={16} className="mt-0.5 shrink-0 text-red-600" />
-              <div>
-                <p className="text-xs font-semibold text-red-800">{doc.label}</p>
-                <p className="text-xs text-red-700">{doc.feedbackSelected}</p>
-              </div>
-            </div>
-          ))}
-
-          {/* Required docs that were missed */}
-          {requiredMissed.map((doc) => (
-            <div key={doc.id} className="flex items-start gap-3 rounded-DEFAULT bg-red-50 p-3">
-              <MinusCircle size={16} className="mt-0.5 shrink-0 text-red-500" />
-              <div>
-                <p className="text-xs font-semibold text-red-800">{doc.label} – nicht ausgewählt</p>
-                <p className="text-xs text-red-700">{doc.feedbackNotSelected}</p>
-              </div>
-            </div>
-          ))}
-
-          {/* Unsatisfied requiredOneOf groups */}
-          {unsatisfiedGroups.map((group, i) => {
-            const labels = group.map(
-              (id) => c.documents.find((d) => d.id === id)?.label ?? id
-            );
-            return (
-              <div key={i} className="flex items-start gap-3 rounded-DEFAULT bg-red-50 p-3">
-                <XCircle size={16} className="mt-0.5 shrink-0 text-red-600" />
-                <div>
-                  <p className="text-xs font-semibold text-red-800">Mindestens eines erforderlich</p>
-                  <p className="text-xs text-red-700">
-                    Sie müssen mindestens eines auswählen: {labels.join(" ODER ")}
-                  </p>
+      {/* Full breakdown — only after recall is done */}
+      {recallDone && (
+        <>
+          {/* Per-document feedback */}
+          <div className="rounded-DEFAULT bg-surface p-5 shadow-card">
+            <h3 className="mb-4 text-sm font-semibold text-text-primary">Auswertung pro Dokument</h3>
+            <div className="space-y-2">
+              {requiredHit.map((doc) => (
+                <div key={doc.id} className="flex items-start gap-3 rounded-DEFAULT bg-green-50 p-3">
+                  <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-green-600" />
+                  <div>
+                    <p className="text-xs font-semibold text-green-800">{doc.label}</p>
+                    <p className="text-xs text-green-700">{doc.feedbackSelected}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+              ))}
 
-      {/* General feedback */}
-      <div className="rounded-DEFAULT border border-border bg-background p-4">
-        <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
-          Erklärung
-        </p>
-        <p className="text-sm leading-relaxed text-text-primary">{c.generalFeedback}</p>
-      </div>
+              {optionalSelected.map((doc) => (
+                <div key={doc.id} className="flex items-start gap-3 rounded-DEFAULT bg-blue-50 p-3">
+                  <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-blue-500" />
+                  <div>
+                    <p className="text-xs font-semibold text-blue-800">{doc.label}</p>
+                    <p className="text-xs text-blue-700">{doc.feedbackSelected}</p>
+                  </div>
+                </div>
+              ))}
 
-      <ActiveRecallPrompt />
-      <Button onClick={onNext} className="w-full">
-        {isLastCase ? "Zum Abschluss" : "Weiter →"}
-      </Button>
+              {forbiddenSelected.map((doc) => (
+                <div key={doc.id} className="flex items-start gap-3 rounded-DEFAULT bg-red-50 p-3">
+                  <XCircle size={16} className="mt-0.5 shrink-0 text-red-600" />
+                  <div>
+                    <p className="text-xs font-semibold text-red-800">{doc.label}</p>
+                    <p className="text-xs text-red-700">{doc.feedbackSelected}</p>
+                  </div>
+                </div>
+              ))}
+
+              {requiredMissed.map((doc) => (
+                <div key={doc.id} className="flex items-start gap-3 rounded-DEFAULT bg-red-50 p-3">
+                  <MinusCircle size={16} className="mt-0.5 shrink-0 text-red-500" />
+                  <div>
+                    <p className="text-xs font-semibold text-red-800">{doc.label} – nicht ausgewählt</p>
+                    <p className="text-xs text-red-700">{doc.feedbackNotSelected}</p>
+                  </div>
+                </div>
+              ))}
+
+              {unsatisfiedGroups.map((group, i) => {
+                const labels = group.map(
+                  (id) => c.documents.find((d) => d.id === id)?.label ?? id
+                );
+                return (
+                  <div key={i} className="flex items-start gap-3 rounded-DEFAULT bg-red-50 p-3">
+                    <XCircle size={16} className="mt-0.5 shrink-0 text-red-600" />
+                    <div>
+                      <p className="text-xs font-semibold text-red-800">Mindestens eines erforderlich</p>
+                      <p className="text-xs text-red-700">
+                        Sie müssen mindestens eines auswählen: {labels.join(" ODER ")}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* General feedback */}
+          <div className="rounded-DEFAULT border border-border bg-background p-4">
+            <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
+              Erklärung
+            </p>
+            <p className="text-sm leading-relaxed text-text-primary">{c.generalFeedback}</p>
+          </div>
+
+          <Button onClick={onNext} className="w-full">
+            {isLastCase ? "Zum Abschluss" : "Weiter →"}
+          </Button>
+        </>
+      )}
     </div>
   );
 }
