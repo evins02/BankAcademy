@@ -193,7 +193,7 @@ const L2_CASES: VorsorgeCase[] = [
 // LEVEL 3 – LAP-Niveau
 // ─────────────────────────────────────────────────────────
 
-const L3_CASES: VorsorgeCase[] = [
+const L3_CASES: (VorsorgeCase | LückentextCase)[] = [
   {
     id: "3.1",
     level: 3,

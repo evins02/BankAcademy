@@ -6,7 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { FONDS_LEVELS } from "@/lib/fonds";
-import { ZV_LEVELS } from "@/lib/zahlungsverkehr";
+import { ZV_LEVELS, type ZvCase } from "@/lib/zahlungsverkehr";
 import { addXP } from "@/lib/xpData";
 import { ScenarioTimer } from "@/components/shared/ScenarioTimer";
 import { ShareCard } from "@/components/shared/ShareCard";
@@ -24,7 +24,9 @@ interface LapCase {
 
 function buildCases(): LapCase[] {
   const fondsL3 = FONDS_LEVELS.find((l) => l.level === 3)?.cases ?? [];
-  const zvL3 = ZV_LEVELS.find((l) => l.level === 3)?.cases ?? [];
+  const zvL3 = (ZV_LEVELS.find((l) => l.level === 3)?.cases ?? []).filter(
+    (c): c is ZvCase => !("type" in c && (c as { type?: string }).type === "lückentext")
+  );
 
   const fonds: LapCase[] = fondsL3.map((c) => ({
     id: `fonds-${c.id}`,

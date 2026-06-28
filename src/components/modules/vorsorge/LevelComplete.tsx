@@ -79,7 +79,7 @@ export function LevelComplete({ level, results, onNext, onRetry }: LevelComplete
                 ) : (
                   <XCircle size={16} className="shrink-0 text-red-500" />
                 )}
-                <span className="flex-1 text-text-primary">{c.title}</span>
+                <span className="flex-1 text-text-primary">{"title" in c ? c.title : c.id}</span>
                 {!result?.correct && (
                   <span className="text-xs text-text-secondary">Richtig: {"correct" in c ? c.correct : c.answer}</span>
                 )}
