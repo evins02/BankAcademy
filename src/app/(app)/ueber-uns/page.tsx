@@ -152,7 +152,7 @@ export default function UeberUnsPage() {
           </section>
 
           <p className="text-center text-xs text-text-secondary">
-            © 2026 BankAcademy · Entwickelt in der Schweiz 🇨🇭
+            © 2026 BankAcademy · Entwickelt in der Schweiz
           </p>
         </div>
       </div>

@@ -13,7 +13,7 @@ export default function ImpressumPage() {
             </h2>
             <div className="space-y-1 text-sm text-text-primary">
               <p className="font-semibold text-base">BankAcademy</p>
-              <p>Schweiz 🇨🇭</p>
+              <p>Schweiz</p>
             </div>
           </section>
 

@@ -271,7 +271,7 @@ export default function KontaktPage() {
 
         {/* Footer */}
         <footer style={{ textAlign: "center", padding: "24px", fontSize: 13, color: "#9ca3af", borderTop: "1px solid #e5e7eb", background: "#fff" }}>
-          © 2026 BankAcademy · Der digitale Praxisausbildner für die Banklehre 🇨🇭
+          © 2026 BankAcademy · Der digitale Praxisausbildner für die Banklehre
         </footer>
       </div>
 

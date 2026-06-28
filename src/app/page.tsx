@@ -590,7 +590,7 @@ function Hero({ onStart }: { onStart: () => void }) {
               animation: "pulseDot 2.2s ease-in-out infinite",
             }}
           />
-          🇨🇭 Der digitale Praxisausbildner für die Banklehre
+          Der digitale Praxisausbildner für die Banklehre
         </div>
 
         {/* Headline */}
@@ -724,7 +724,6 @@ function StatsBar() {
     { value: `${c1}+`, label: "Szenarien" },
     { value: String(c2), label: "Module" },
     { value: String(c3), label: "Schwierigkeitsstufen" },
-    { value: "🇨🇭", label: "Swiss Made" },
   ];
 
   return (
@@ -737,16 +736,16 @@ function StatsBar() {
         padding: "40px 24px",
       }}
     >
-      <div style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "32px 0" }} className="sm:grid-cols-4">
+      <div style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "32px 0" }} className="sm:grid-cols-3">
         {STATS.map((s, i) => (
           <div
             key={s.label}
             style={{
               textAlign: "center",
-              borderRight: i < 3 ? `1px solid ${BR}` : "none",
+              borderRight: i < 2 ? `1px solid ${BR}` : "none",
               padding: "0 16px",
             }}
-            className={i === 1 ? "sm:border-r" : ""}
+            className=""
           >
             <p style={{ margin: 0, fontSize: "clamp(28px,4vw,48px)", fontWeight: 800, color: CY }}>
               {s.value}
@@ -1764,7 +1763,7 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
             <p style={{ margin: "0 0 4px", fontSize: 13, color: WD, lineHeight: 1.5 }}>
               Der digitale Praxisausbildner
               <br />
-              für die Banklehre 🇨🇭
+              für die Banklehre
             </p>
             <p style={{ margin: "8px 0 0", fontSize: 12, color: WM }}>© 2026 BankAcademy</p>
           </div>

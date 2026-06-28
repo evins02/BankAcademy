@@ -115,10 +115,9 @@ export default function ZertifikatPage() {
               </p>
             </div>
 
-            {/* Swiss cross */}
+            {/* Swiss banking label */}
             <div style={{ textAlign: "right" }}>
-              <span style={{ fontSize: 32 }}>🇨🇭</span>
-              <p style={{ margin: "4px 0 0", fontSize: 10, color: "#9ca3af", fontFamily: "system-ui, sans-serif" }}>
+              <p style={{ margin: 0, fontSize: 10, color: "#9ca3af", fontFamily: "system-ui, sans-serif" }}>
                 Swiss Banking Education
               </p>
             </div>
@@ -210,7 +209,7 @@ export default function ZertifikatPage() {
           {/* Divider */}
           <div style={{ borderTop: "1px solid #e5e7eb", paddingTop: 12, textAlign: "center" }}>
             <p style={{ margin: 0, fontSize: 10, color: "#9ca3af", fontFamily: "system-ui, sans-serif" }}>
-              Dieses Zertifikat wurde digital ausgestellt durch BankAcademy – Der digitale Praxisausbildner für die Banklehre 🇨🇭
+              Dieses Zertifikat wurde digital ausgestellt durch BankAcademy – Der digitale Praxisausbildner für die Banklehre
             </p>
           </div>
         </div>

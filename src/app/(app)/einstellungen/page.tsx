@@ -333,7 +333,7 @@ export default function EinstellungenPage() {
                     </div>
                     ${modules.length > 0 ? `<div class="section"><p class="section-title">Module</p>${modules.map(m => `<div class="row"><span>${m.id}</span><strong>${m.completed} Szenarien · ${m.accuracy}% Genauigkeit</strong></div>`).join("")}</div>` : ""}
                     ${earned.length > 0 ? `<div class="section"><p class="section-title">Badges</p><div style="display:flex;flex-wrap:wrap;gap:8px">${earned.map(b => `<span class="badge">${b.title || b.id}</span>`).join("")}</div></div>` : ""}
-                    <div class="footer"><span>BankAcademy – Der digitale Praxisausbildner für die Banklehre 🇨🇭</span><span>${date}</span></div>
+                    <div class="footer"><span>BankAcademy – Der digitale Praxisausbildner für die Banklehre</span><span>${date}</span></div>
                   </body></html>`);
                   win.document.close();
                   win.print();
