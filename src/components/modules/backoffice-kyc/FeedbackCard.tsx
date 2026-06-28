@@ -142,10 +142,10 @@ export function FeedbackCard({
                   className={cn(
                     "flex items-start gap-3 rounded-DEFAULT border p-3 text-xs",
                     isCorrectOpt
-                      ? "border-primary bg-primary-light text-text-primary"
+                      ? "border-2 border-primary bg-primary-light text-text-primary font-medium"
                       : isSelected
                         ? "border-red-300 bg-red-50 text-text-primary"
-                        : "border-border bg-surface text-text-secondary opacity-50"
+                        : "border-border bg-surface text-text-secondary opacity-30"
                   )}
                 >
                   <span

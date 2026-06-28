@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ZV_FO_LEVELS, type ZvFoCase } from "@/lib/zahlungsverkehr-privat";
+import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
 
 interface FeedbackCardProps {
   zvCase: ZvFoCase;
@@ -64,10 +65,10 @@ export function FeedbackCard({
                 className={cn(
                   "flex items-start gap-3 rounded-DEFAULT border p-4 text-sm",
                   isCorrectOpt
-                    ? "border-primary bg-primary-light text-text-primary"
+                    ? "border-2 border-primary bg-primary-light text-text-primary font-medium"
                     : isSelected
                       ? "border-red-300 bg-red-50 text-text-primary"
-                      : "border-border bg-surface text-text-secondary opacity-50"
+                      : "border-border bg-surface text-text-secondary opacity-30"
                 )}
               >
                 <span
@@ -101,6 +102,7 @@ export function FeedbackCard({
           <p className="text-sm leading-relaxed text-text-primary">{zvCase.feedback}</p>
         </div>
 
+        <ActiveRecallPrompt />
         <Button onClick={onNext} className="w-full">
           {isLastCase ? "Level abschliessen" : "Nächster Fall"}
           <ChevronRight size={14} />

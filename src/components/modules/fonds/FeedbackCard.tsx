@@ -11,6 +11,7 @@ import { useGlossar } from "@/context/GlossarContext";
 import { addXP } from "@/lib/xpData";
 import { InlineRating } from "@/components/shared/StarRating";
 import { FeedbackEnhancement } from "@/components/shared/FeedbackEnhancement";
+import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
 
 interface FeedbackCardProps {
   fondsCase: FondsCase;
@@ -85,10 +86,10 @@ export function FeedbackCard({
                   className={cn(
                     "flex items-start gap-3 rounded-DEFAULT border p-4 text-sm",
                     isCorrectOpt
-                      ? "border-primary bg-primary-light text-text-primary"
+                      ? "border-2 border-primary bg-primary-light text-text-primary font-medium"
                       : isSelected
                         ? "border-red-300 bg-red-50 text-text-primary animate-shake"
-                        : "border-border bg-surface text-text-secondary opacity-50"
+                        : "border-border bg-surface text-text-secondary opacity-30"
                   )}
                 >
                   <span
@@ -141,6 +142,7 @@ export function FeedbackCard({
             <InlineRating scenarioId={`fonds-${fondsCase.id}`} label="Szenario bewerten:" />
           </div>
 
+          <ActiveRecallPrompt />
           <WeiterButton
             onNext={onNext}
             label={isLastCase ? "Level abschliessen" : "Nächster Fall"}

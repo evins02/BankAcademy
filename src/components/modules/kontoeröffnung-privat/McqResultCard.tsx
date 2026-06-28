@@ -4,6 +4,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { McqCase } from "@/lib/kontoeröffnung-privat";
+import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
 
 interface McqResultCardProps {
   c: McqCase;
@@ -60,10 +61,10 @@ export function McqResultCard({ c, selected, isLastCase, onNext }: McqResultCard
                 className={cn(
                   "rounded-DEFAULT border p-3",
                   isRight
-                    ? "border-green-200 bg-green-50"
+                    ? "border-2 border-green-300 bg-green-50 font-medium"
                     : wasChosen
                       ? "border-red-200 bg-red-50"
-                      : "border-border bg-background"
+                      : "border-border bg-background opacity-30"
                 )}
               >
                 <div className="flex items-start gap-2">
@@ -107,6 +108,7 @@ export function McqResultCard({ c, selected, isLastCase, onNext }: McqResultCard
         <p className="text-sm leading-relaxed text-text-primary">{c.feedback}</p>
       </div>
 
+      <ActiveRecallPrompt />
       <Button onClick={onNext} className="w-full">
         {isLastCase ? "Zum Abschluss" : "Weiter →"}
       </Button>
