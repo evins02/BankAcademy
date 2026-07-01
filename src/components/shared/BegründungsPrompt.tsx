@@ -11,6 +11,7 @@ export function BegründungsPrompt({ explanation }: BegründungsPromptProps) {
   const [text, setText] = useState("");
   const [status, setStatus] = useState<"idle" | "checking" | "done">("idle");
   const [feedback, setFeedback] = useState("");
+  const [isError, setIsError] = useState(false);
 
   async function handleSave() {
     if (!text.trim()) return;
@@ -21,10 +22,12 @@ export function BegründungsPrompt({ explanation }: BegründungsPromptProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ explanation, studentText: text }),
       });
+      if (!res.ok) throw new Error("api-error");
       const data = await res.json();
       setFeedback(data.feedback || "Gut erklärt! ✓");
     } catch {
-      setFeedback("Gut erklärt! ✓");
+      setIsError(true);
+      setFeedback("Bewertung momentan nicht verfügbar – deine Antwort wurde gespeichert.");
     }
     setStatus("done");
   }
@@ -36,11 +39,11 @@ export function BegründungsPrompt({ explanation }: BegründungsPromptProps) {
 
   if (status === "done") {
     return (
-      <div className="mb-4 rounded-DEFAULT border border-primary/20 bg-primary-light/40 p-4">
+      <div className={`mb-4 rounded-DEFAULT p-4 ${isError ? "border border-amber-200 bg-amber-50" : "border border-primary/20 bg-primary-light/40"}`}>
         <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
           Deine Begründung
         </p>
-        <p className="text-sm font-medium text-primary">{feedback}</p>
+        <p className={`text-sm font-medium ${isError ? "text-amber-700" : "text-primary"}`}>{feedback}</p>
       </div>
     );
   }
