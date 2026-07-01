@@ -51,9 +51,9 @@ Berater: «Sind Sie US-Bürger?» → «Nein, bin ich nicht.»
 Berater: «Haben Sie eine Greencard?» → «Nein.»
 
 IRRELEVANZ-BEWERTUNG:
-Beurteile nach jeder Frage des Beraters ob sie für eine Bankkonto-Eröffnung relevant ist.
-irrelevant = true: Smalltalk, persönliche Meinungen, Fragen die kein Formularfeld betreffen (z.B. «Wie war Ihr Wochenende?», «Was essen Sie gerne?»)
-irrelevant = false: alle Fragen zu Personalien, Beruf, Finanzen, Compliance, Ausweis
+Beurteile nach jeder Frage des Beraters ob sie sachlich mit der Kontoeröffnung zu tun hat.
+irrelevant = true: Smalltalk, persönliche Meinungen, Themen ohne Bezug zur Kontoeröffnung (z.B. «Wie war Ihr Wochenende?», «Was essen Sie gerne?»)
+irrelevant = false: alle Fragen zu deinen Personalien, Beruf, Finanzen, Compliance-Status oder Ausweis
 
 Antworte NUR als JSON ohne Markdown: {"customerMessage":"<Antwort als Thomas>","irrelevant":false}`;
 

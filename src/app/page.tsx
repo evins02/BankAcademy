@@ -1863,7 +1863,14 @@ export default function LandingPage() {
           mobileOpen={mobileOpen}
           onToggle={() => setMobileOpen((v) => !v)}
           onNav={scrollTo}
-          onLoginOpen={() => { setMobileOpen(false); setLoginOpen(true); }}
+          onLoginOpen={() => {
+            setMobileOpen(false);
+            if (typeof window !== "undefined" && localStorage.getItem("fullAccess") === "true") {
+              window.location.href = "/dashboard";
+            } else {
+              setAccessOpen(true);
+            }
+          }}
           onStart={() => { setMobileOpen(false); setAccessOpen(true); }}
         />
         <Hero onStart={() => setAccessOpen(true)} />

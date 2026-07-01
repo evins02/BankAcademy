@@ -10,7 +10,7 @@ const UNLOCKED_MODULES = [
     title: "Kontoeröffnung",
     description:
       "Lerne alle Schritte der Kontoeröffnung für Privatkunden – KYC, Legitimation und Dokumentation.",
-    href: "/privatkunde/basis/kontoeröffnung",
+    href: "/demo/privatkunde/basis/kontoeröffnung",
     tag: "Privatkunde · Basis",
     xp: "+50 XP",
     color: "#00C9B1",
@@ -19,7 +19,7 @@ const UNLOCKED_MODULES = [
     title: "Sparen & Konto",
     description:
       "Kontenarten, Zinsen, Sparpläne und Sparstrategien im Überblick.",
-    href: "/privatkunde/basis/sparen-konto",
+    href: "/demo/privatkunde/basis/sparen-konto",
     tag: "Privatkunde · Basis",
     xp: "+40 XP",
     color: "#6C63FF",
@@ -28,7 +28,7 @@ const UNLOCKED_MODULES = [
     title: "KYC / Compliance",
     description:
       "Know Your Customer – Sorgfaltspflichten, GwG und Beneficial Owner in der Praxis.",
-    href: "/backoffice/banking-operations/kyc",
+    href: "/demo/backoffice/banking-operations/kyc",
     tag: "Back Office · Banking Operations",
     xp: "+80 XP",
     color: "#10b981",

@@ -159,14 +159,15 @@ export function DemoSidebar({ onLock }: { onLock: () => void }) {
                               )}
                               {section.items.map((sub) => {
                                 const unlocked = isUnlocked(sub.href);
+                                const demoSubHref = "/demo" + sub.href;
                                 const subActive =
-                                  pathname === sub.href ||
-                                  pathname.startsWith(sub.href + "/");
+                                  pathname === demoSubHref ||
+                                  pathname.startsWith(demoSubHref + "/");
                                 if (unlocked) {
                                   return (
                                     <Link
                                       key={sub.href}
-                                      href={sub.href}
+                                      href={demoSubHref}
                                       className={cn(
                                         "flex items-center gap-2 rounded-pill px-2 py-1.5 text-xs transition-colors",
                                         subActive
