@@ -281,11 +281,11 @@ const BACKOFFICE: OverviewConfig = {
       ],
     },
     {
-      label: "Credit Operations",
+      label: "Kreditgeschäft",
       items: [
         {
           id: "credit-operations",
-          title: "Credit Operations",
+          title: "Kreditgeschäft",
           description: "Kreditbearbeitung und Risikoprüfung",
           href: "/backoffice/credit-operations",
           emoji: "⚙️",

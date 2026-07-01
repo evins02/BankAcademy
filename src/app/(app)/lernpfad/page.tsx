@@ -17,7 +17,7 @@ const STEPS = [
   { id: "firmenkunde", label: "Firmenkunde", sub: "Front Office", href: "/firmenkunde", moduleId: "firmenkunde", icon: "🏢" },
   { id: "anlagekunde", label: "Anlagekunde", sub: "Front Office", href: "/anlagekunde", moduleId: "anlagekunde", icon: "📈" },
   { id: "banking-ops", label: "Banking Operations", sub: "Back Office", href: "/backoffice", moduleId: "banking-operations", icon: "⚙️" },
-  { id: "credit-ops", label: "Credit Operations", sub: "Back Office", href: "/backoffice/credit-operations", moduleId: "credit-operations", icon: "💳" },
+  { id: "credit-ops", label: "Kreditgeschäft", sub: "Back Office", href: "/backoffice/credit-operations", moduleId: "credit-operations", icon: "💳" },
 ];
 
 // ─── Types ────────────────────────────────────────────────────────────────────

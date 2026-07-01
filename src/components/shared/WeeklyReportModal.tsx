@@ -38,7 +38,7 @@ function computeWeekStats(): WeekStats {
     firmenkunde: "Firmenkunde",
     anlagekunde: "Anlagekunde",
     "banking-operations": "Banking Operations",
-    "credit-operations": "Credit Operations",
+    "credit-operations": "Kreditgeschäft",
   };
 
   return {

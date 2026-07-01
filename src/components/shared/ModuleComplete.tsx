@@ -22,7 +22,7 @@ const NEXT_MODULES = [
   { id: "anlagekunde", label: "Anlagekunde", emoji: "📈", href: "/anlagekunde/anlegerprofil", reason: "Vertiefung: Anlageberatung" },
   { id: "firmenkunde", label: "Firmenkunde", emoji: "🏢", href: "/firmenkunde", reason: "Firmenkundenlösungen" },
   { id: "banking-operations", label: "Banking Operations", emoji: "🏦", href: "/backoffice", reason: "Back Office Operationen" },
-  { id: "credit-operations", label: "Credit Operations", emoji: "⚙️", href: "/backoffice/credit-operations", reason: "Kreditbearbeitung" },
+  { id: "credit-operations", label: "Kreditgeschäft", emoji: "⚙️", href: "/backoffice/credit-operations", reason: "Kreditbearbeitung" },
 ];
 
 function getRecommendations(skipModuleIds: string[]) {

@@ -8,7 +8,7 @@ const SOURCE_ICONS: Record<string, React.ReactNode> = {
   "Credit Office Erfahrung": <Building2 size={11} />,
   "Compliance Abteilung": <ShieldCheck size={11} />,
   "Banking Operations": <Building2 size={11} />,
-  "Credit Operations": <Building2 size={11} />,
+  "Kreditgeschäft": <Building2 size={11} />,
 };
 
 const SOURCE_COLORS: Record<string, string> = {
@@ -16,7 +16,7 @@ const SOURCE_COLORS: Record<string, string> = {
   "Credit Office Erfahrung": "bg-violet-100 text-violet-700",
   "Compliance Abteilung": "bg-amber-100 text-amber-700",
   "Banking Operations": "bg-blue-100 text-blue-700",
-  "Credit Operations": "bg-indigo-100 text-indigo-700",
+  "Kreditgeschäft": "bg-indigo-100 text-indigo-700",
 };
 
 interface PraxisTippsProps {

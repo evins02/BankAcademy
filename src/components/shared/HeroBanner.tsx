@@ -8,7 +8,7 @@ const ALL_MODULES = [
   { id: "firmenkunde", label: "Firmenkunde", total: 7 },
   { id: "anlagekunde", label: "Anlagekunde", total: 4 },
   { id: "banking-operations", label: "Banking Operations", total: 4 },
-  { id: "credit-operations", label: "Credit Operations", total: 5 },
+  { id: "credit-operations", label: "Kreditgeschäft", total: 5 },
 ];
 
 const TOTAL = ALL_MODULES.reduce((s, m) => s + m.total, 0);

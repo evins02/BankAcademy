@@ -11,7 +11,7 @@ const MODULE_NAMES: Record<string, string> = {
   firmenkunde: "Firmenkunde",
   anlagekunde: "Anlagekunde",
   "banking-operations": "Banking Operations",
-  "credit-operations": "Credit Operations",
+  "credit-operations": "Kreditgeschäft",
 };
 
 function formatDate(iso: string) {

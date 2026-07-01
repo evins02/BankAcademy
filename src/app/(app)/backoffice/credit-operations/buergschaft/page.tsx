@@ -68,11 +68,11 @@ export default function BuergschaftPage() {
 
   return (
     <>
-      <Header title="Bürgschaften" subtitle="Credit Operations · Back Office" />
+      <Header title="Bürgschaften" subtitle="Kreditgeschäft · Back Office" />
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
-          { label: "Credit Operations", href: "/backoffice/credit-operations" },
+          { label: "Kreditgeschäft", href: "/backoffice/credit-operations" },
           { label: "Bürgschaften" },
         ]}
       />

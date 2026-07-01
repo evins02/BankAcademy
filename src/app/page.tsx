@@ -1090,7 +1090,7 @@ function Modules({ onStart }: { onStart: () => void }) {
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <ModuleItem emoji="⚙️" title="Banking Operations" desc="KYC / Compliance, Zahlungsverkehr, Mahnwesen" />
-              <ModuleItem emoji="💳" title="Credit Operations" desc="Vertragserstellung, Auszahlung, Verlängerung, Kündigung" />
+              <ModuleItem emoji="💳" title="Kreditgeschäft" desc="Vertragserstellung, Auszahlung, Verlängerung, Kündigung" />
             </div>
           </FadeIn>
 

@@ -75,7 +75,7 @@ Bei Jahresabschlüssen: Schau nicht nur auf den Gewinn. Cashflow und Eigenkapita
     tips: [
       {
         text: "HR-Auszug immer auf Datum prüfen – nicht älter als 3 Monate. Zeichnungsberechtigte können sich ändern und ältere Dokumente sind ungültig.",
-        source: "Credit Operations",
+        source: "Kreditgeschäft",
       },
       {
         text: "Bei Jahresabschluss: Schau nicht nur auf den Gewinn. Cashflow und EK-Quote sagen viel mehr über die echte finanzielle Lage aus.",
@@ -151,7 +151,7 @@ Der beste Back Office Mitarbeiter ist jemand der Probleme sieht bevor sie entste
       },
       {
         text: "Bei Auszahlungen: Checkliste komplett abhaken bevor du klickst. Einmal ausgezahlt ist ausgezahlt – Rückforderungen sind mühsam.",
-        source: "Credit Operations",
+        source: "Kreditgeschäft",
       },
       {
         text: "Fristen im Kalender eintragen sobald ein Fall reinkommt. Verpasste Fristen sind die häufigste Fehlerquelle im Backoffice.",

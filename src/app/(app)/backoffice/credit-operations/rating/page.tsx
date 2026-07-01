@@ -178,11 +178,11 @@ export default function RatingPage() {
 
   return (
     <>
-      <Header title="Rating erfassen" subtitle="Credit Operations · Back Office" />
+      <Header title="Rating erfassen" subtitle="Kreditgeschäft · Back Office" />
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
-          { label: "Credit Operations", href: "/backoffice/credit-operations" },
+          { label: "Kreditgeschäft", href: "/backoffice/credit-operations" },
           { label: "Rating erfassen" },
         ]}
       />

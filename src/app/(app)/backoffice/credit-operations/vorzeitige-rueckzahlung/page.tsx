@@ -42,7 +42,7 @@ const SCENARIOS = [
     num: 3,
     level: "Level 3 – Experte",
     situation: "Kunde hat die Hypothek vollständig zurückbezahlt. Schuldbrief CHF 500'000 liegt bei der Bank. Kredit ist abgeschlossen.",
-    question: "Was sind die nächsten Schritte von Credit Operations?",
+    question: "Was sind die nächsten Schritte von Kreditgeschäft?",
     options: [
       { key: "A", text: "Akte schliessen – fertig" },
       {
@@ -63,11 +63,11 @@ export default function VorzeitigeRueckzahlungPage() {
 
   return (
     <>
-      <Header title="Vorzeitige Rückzahlung" subtitle="Credit Operations · Back Office" />
+      <Header title="Vorzeitige Rückzahlung" subtitle="Kreditgeschäft · Back Office" />
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
-          { label: "Credit Operations", href: "/backoffice/credit-operations" },
+          { label: "Kreditgeschäft", href: "/backoffice/credit-operations" },
           { label: "Vorzeitige Rückzahlung" },
         ]}
       />

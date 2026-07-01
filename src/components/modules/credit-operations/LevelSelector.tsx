@@ -16,7 +16,7 @@ export function LevelSelector({ completedLevels, levelScores, onSelectLevel }: L
   return (
     <div className="mx-auto max-w-2xl">
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-text-primary">Credit Operations – Grundlagen</h2>
+        <h2 className="text-xl font-bold text-text-primary">Kreditgeschäft – Grundlagen</h2>
         <p className="mt-1 text-sm text-text-secondary">
           Prüfe Kreditauszahlungsvoraussetzungen, Sicherheiten und Wiedervorlagen.
         </p>

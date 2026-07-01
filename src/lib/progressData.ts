@@ -133,7 +133,7 @@ const MODULE_TOTALS: Record<string, { name: string; total: number }> = {
   firmenkunde: { name: "Firmenkunde", total: 7 },
   anlagekunde: { name: "Anlagekunde", total: 4 },
   "banking-operations": { name: "Banking Operations", total: 4 },
-  "credit-operations": { name: "Credit Operations", total: 5 },
+  "credit-operations": { name: "Kreditgeschäft", total: 5 },
 };
 
 export function generateSmartNotifications() {

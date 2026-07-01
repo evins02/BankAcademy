@@ -122,7 +122,7 @@ export const NAV_GROUPS: NavGroup[] = [
         ],
       },
       {
-        label: "Credit Operations",
+        label: "Kreditgeschäft",
         icon: "Settings2",
         sections: [
           {

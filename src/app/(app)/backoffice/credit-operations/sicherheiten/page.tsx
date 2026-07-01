@@ -70,12 +70,12 @@ export default function SicherheitenPage() {
     <>
       <Header
         title="Sicherheitenverwaltung"
-        subtitle="Credit Operations · Back Office"
+        subtitle="Kreditgeschäft · Back Office"
       />
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
-          { label: "Credit Operations", href: "/backoffice/credit-operations" },
+          { label: "Kreditgeschäft", href: "/backoffice/credit-operations" },
           { label: "Sicherheitenverwaltung" },
         ]}
       />

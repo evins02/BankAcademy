@@ -67,7 +67,7 @@ const BACK_OFFICE_MODULES = [
     totalScenarios: 4,
   },
   {
-    title: "Credit Operations",
+    title: "Kreditgeschäft",
     description: "Kreditbearbeitung und Risikoprüfung.",
     href: "/backoffice/credit-operations",
     icon: Settings2,
