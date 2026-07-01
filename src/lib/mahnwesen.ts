@@ -1,4 +1,6 @@
 import { type LückentextCase } from "./lückentext";
+import { type OffeneFrageCase } from "./offene-frage";
+import { OF_CASES_MAHNWESEN } from "./offene-fragen";
 
 export type OptionKey = "A" | "B" | "C" | "D";
 export type LevelNum = 1 | 2 | 3;
@@ -22,7 +24,7 @@ export interface MwLevelConfig {
   level: LevelNum;
   label: string;
   badgeVariant: "green" | "orange" | "red";
-  cases: (MwCase | LückentextCase)[];
+  cases: (MwCase | LückentextCase | OffeneFrageCase)[];
 }
 
 export const MAHNPROZESS_STUFEN = [
@@ -240,3 +242,7 @@ export const MW_LEVELS: MwLevelConfig[] = [
     ],
   },
 ];
+
+OF_CASES_MAHNWESEN.forEach((c) => {
+  MW_LEVELS.find((l) => l.level === c.level)!.cases.push(c);
+});

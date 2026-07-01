@@ -10,6 +10,9 @@ import { BK_LEVELS, type LevelNum, type OptionKey } from "@/lib/blankokredit";
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
+import { OffeneFrageCard } from "@/components/shared/OffeneFrageCard";
+import { OffeneFrageResultCard } from "@/components/shared/OffeneFrageResultCard";
+import { type OffeneFrageCase } from "@/lib/offene-frage";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
@@ -23,6 +26,7 @@ export function BlankokreditRunner() {
   const [selectedOption, setSelectedOption] = useState<OptionKey | null>(null);
   const [sessionResults, setSessionResults] = useState<CaseResult[]>([]);
   const [lückentextAnswer, setLückentextAnswer] = useState("");
+  const [offeneFrageAnswer, setOffeneFrageAnswer] = useState("");
 
   const levelConfig = BK_LEVELS.find((l) => l.level === activeLevel)!;
   const currentCase = levelConfig.cases[caseIndex];
@@ -31,6 +35,8 @@ export function BlankokreditRunner() {
 
   const isLt = (c: unknown): c is LückentextCase =>
     typeof c === "object" && c !== null && (c as LückentextCase).type === "lückentext";
+  const isOf = (c: unknown): c is OffeneFrageCase =>
+    typeof c === "object" && c !== null && (c as OffeneFrageCase).type === "offene-frage";
 
   const handleSelectLevel = useCallback((level: LevelNum) => {
     setActiveLevel(level);
@@ -38,6 +44,7 @@ export function BlankokreditRunner() {
     setSelectedOption(null);
     setSessionResults([]);
     setLückentextAnswer("");
+    setOffeneFrageAnswer("");
     setView("lernblock");
   }, []);
 
@@ -51,10 +58,13 @@ export function BlankokreditRunner() {
 
   const handleNext = useCallback(() => {
     const isLückentext = isLt(currentCase);
-    if (!isLückentext && !selectedOption) return;
+    const isOffeneFrage = isOf(currentCase);
+    if (!isLückentext && !isOffeneFrage && !selectedOption) return;
 
     const isCorrect = isLückentext
       ? checkLückentextAnswer(lückentextAnswer, (currentCase as LückentextCase).answer, (currentCase as LückentextCase).tolerance)
+      : isOffeneFrage
+      ? true
       : selectedOption === (currentCase as { correct: OptionKey }).correct;
     const newResults: CaseResult[] = [
       ...sessionResults,
@@ -75,15 +85,17 @@ export function BlankokreditRunner() {
       setCaseIndex((i) => i + 1);
       setSelectedOption(null);
       setLückentextAnswer("");
+      setOffeneFrageAnswer("");
       setView("playing");
     }
-  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, lückentextAnswer]);
+  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, lückentextAnswer, offeneFrageAnswer]);
 
   const handleRetry = useCallback(() => {
     setCaseIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
     setLückentextAnswer("");
+    setOffeneFrageAnswer("");
     setView("lernblock");
   }, []);
 
@@ -117,6 +129,17 @@ export function BlankokreditRunner() {
             onAnswerChange={setLückentextAnswer}
             onSubmit={handleSubmit}
           />
+        ) : isOf(currentCase) ? (
+          <OffeneFrageCard
+            c={currentCase}
+            caseIndex={caseIndex}
+            total={total}
+            levelLabel={levelConfig.label}
+            badgeVariant={levelConfig.badgeVariant}
+            answer={offeneFrageAnswer}
+            onAnswerChange={setOffeneFrageAnswer}
+            onSubmit={handleSubmit}
+          />
         ) : (
           <CaseCard
             bkCase={currentCase}
@@ -129,12 +152,24 @@ export function BlankokreditRunner() {
         )
       )}
 
-      {view === "feedback" && currentCase && (selectedOption || isLt(currentCase)) && (
+      {view === "feedback" && currentCase && (selectedOption || isLt(currentCase) || isOf(currentCase)) && (
         isLt(currentCase) ? (
           <LückentextResultCard
             c={currentCase}
             studentAnswer={lückentextAnswer}
             isCorrect={checkLückentextAnswer(lückentextAnswer, currentCase.answer, currentCase.tolerance)}
+            caseIndex={caseIndex}
+            total={total}
+            levelLabel={levelConfig.label}
+            badgeVariant={levelConfig.badgeVariant}
+            isLastCase={isLastCase}
+            nextLabel={isLastCase ? "Level abschliessen" : undefined}
+            onNext={handleNext}
+          />
+        ) : isOf(currentCase) ? (
+          <OffeneFrageResultCard
+            c={currentCase}
+            studentAnswer={offeneFrageAnswer}
             caseIndex={caseIndex}
             total={total}
             levelLabel={levelConfig.label}

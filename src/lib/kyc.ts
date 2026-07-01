@@ -1,4 +1,6 @@
 import { type LückentextCase } from "./lückentext";
+import { type OffeneFrageCase } from "./offene-frage";
+import { OF_CASES_KYC } from "./offene-fragen";
 
 export type OptionKey = "A" | "B" | "C" | "D";
 export type LevelNum = 1 | 2 | 3;
@@ -22,7 +24,7 @@ export interface KycLevelConfig {
   level: LevelNum;
   label: string;
   badgeVariant: "green" | "orange" | "red";
-  scenarios: (KycScenario | LückentextCase)[];
+  scenarios: (KycScenario | LückentextCase | OffeneFrageCase)[];
 }
 
 export const KYC_LEVELS: KycLevelConfig[] = [
@@ -202,3 +204,7 @@ export const KYC_LEVELS: KycLevelConfig[] = [
     ],
   },
 ];
+
+OF_CASES_KYC.forEach((c) => {
+  KYC_LEVELS.find((l) => l.level === c.level)!.scenarios.push(c);
+});

@@ -1,4 +1,6 @@
 import { type LückentextCase } from "./lückentext";
+import { type OffeneFrageCase } from "./offene-frage";
+import { OF_CASES_ZAHLUNGSVERKEHR } from "./offene-fragen";
 
 export type OptionKey = "A" | "B" | "C" | "D";
 export type LevelNum = 1 | 2 | 3;
@@ -27,7 +29,7 @@ export interface ZvLevelConfig {
   level: LevelNum;
   label: string;
   badgeVariant: "green" | "orange" | "red";
-  cases: (ZvCase | LückentextCase)[];
+  cases: (ZvCase | LückentextCase | OffeneFrageCase)[];
 }
 
 export const ZV_LERNBLOCK_STEPS = [
@@ -397,3 +399,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
     ],
   },
 ];
+
+OF_CASES_ZAHLUNGSVERKEHR.forEach((c) => {
+  ZV_LEVELS.find((l) => l.level === c.level)!.cases.push(c);
+});

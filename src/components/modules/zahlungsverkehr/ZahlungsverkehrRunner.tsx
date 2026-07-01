@@ -10,6 +10,9 @@ import { ZV_LEVELS, type LevelNum, type OptionKey } from "@/lib/zahlungsverkehr"
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
+import { OffeneFrageCard } from "@/components/shared/OffeneFrageCard";
+import { OffeneFrageResultCard } from "@/components/shared/OffeneFrageResultCard";
+import { type OffeneFrageCase } from "@/lib/offene-frage";
 import { LevelCelebration } from "@/components/shared/LevelCelebration";
 import { ModuleComplete } from "@/components/shared/ModuleComplete";
 import { FirstTimeTutorial } from "@/components/shared/FirstTimeTutorial";
@@ -33,6 +36,7 @@ export function ZahlungsverkehrRunner() {
   const [selectedOption, setSelectedOption] = useState<OptionKey | null>(null);
   const [sessionResults, setSessionResults] = useState<CaseResult[]>([]);
   const [lückentextAnswer, setLückentextAnswer] = useState("");
+  const [offeneFrageAnswer, setOffeneFrageAnswer] = useState("");
 
   const [wrongStreak, setWrongStreak] = useState(0);
   const [showSmartTip, setShowSmartTip] = useState(false);
@@ -51,12 +55,16 @@ export function ZahlungsverkehrRunner() {
   const isLt = (c: unknown): c is LückentextCase =>
     typeof c === "object" && c !== null && (c as LückentextCase).type === "lückentext";
 
+  const isOf = (c: unknown): c is OffeneFrageCase =>
+    typeof c === "object" && c !== null && (c as OffeneFrageCase).type === "offene-frage";
+
   const handleSelectLevel = useCallback((level: LevelNum) => {
     setActiveLevel(level);
     setCaseIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
     setLückentextAnswer("");
+    setOffeneFrageAnswer("");
     setWrongStreak(0);
     setShowSmartTip(false);
     setView("lernblock");
@@ -73,11 +81,14 @@ export function ZahlungsverkehrRunner() {
 
   const handleNext = useCallback(() => {
     const isLückentext = isLt(currentCase);
-    if (!isLückentext && !selectedOption) return;
+    const isOffeneFrage = isOf(currentCase);
+    if (!isLückentext && !isOffeneFrage && !selectedOption) return;
 
-    const isCorrect = isLückentext
-      ? checkLückentextAnswer(lückentextAnswer, (currentCase as LückentextCase).answer, (currentCase as LückentextCase).tolerance)
-      : selectedOption === (currentCase as { correct: OptionKey }).correct;
+    const isCorrect = isOffeneFrage
+      ? true
+      : isLückentext
+        ? checkLückentextAnswer(lückentextAnswer, (currentCase as LückentextCase).answer, (currentCase as LückentextCase).tolerance)
+        : selectedOption === (currentCase as { correct: OptionKey }).correct;
     const newResults: CaseResult[] = [
       ...sessionResults,
       { caseId: currentCase.id, correct: isCorrect, selectedOption: selectedOption ?? "" },
@@ -130,15 +141,17 @@ export function ZahlungsverkehrRunner() {
       setCaseIndex((i) => i + 1);
       setSelectedOption(null);
       setLückentextAnswer("");
+      setOffeneFrageAnswer("");
       setView("playing");
     }
-  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, wrongStreak, levelStartTime, lückentextAnswer]);
+  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, wrongStreak, levelStartTime, lückentextAnswer, offeneFrageAnswer]);
 
   const handleRetry = useCallback(() => {
     setCaseIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
     setLückentextAnswer("");
+    setOffeneFrageAnswer("");
     setWrongStreak(0);
     setShowSmartTip(false);
     setView("lernblock");
@@ -151,6 +164,7 @@ export function ZahlungsverkehrRunner() {
       setSelectedOption(null);
       setSessionResults([]);
       setLückentextAnswer("");
+      setOffeneFrageAnswer("");
       setWrongStreak(0);
       setShowSmartTip(false);
       setLevelElapsed(undefined);
@@ -202,6 +216,17 @@ export function ZahlungsverkehrRunner() {
             onAnswerChange={setLückentextAnswer}
             onSubmit={handleSubmit}
           />
+        ) : isOf(currentCase) ? (
+          <OffeneFrageCard
+            c={currentCase}
+            caseIndex={caseIndex}
+            total={total}
+            levelLabel={levelConfig.label}
+            badgeVariant={levelConfig.badgeVariant}
+            answer={offeneFrageAnswer}
+            onAnswerChange={setOffeneFrageAnswer}
+            onSubmit={handleSubmit}
+          />
         ) : (
           <CaseCard
             zvCase={currentCase}
@@ -216,12 +241,24 @@ export function ZahlungsverkehrRunner() {
         )
       )}
 
-      {view === "feedback" && currentCase && (selectedOption || isLt(currentCase)) && (
+      {view === "feedback" && currentCase && (selectedOption || isLt(currentCase) || isOf(currentCase)) && (
         isLt(currentCase) ? (
           <LückentextResultCard
             c={currentCase}
             studentAnswer={lückentextAnswer}
             isCorrect={checkLückentextAnswer(lückentextAnswer, currentCase.answer, currentCase.tolerance)}
+            caseIndex={caseIndex}
+            total={total}
+            levelLabel={levelConfig.label}
+            badgeVariant={levelConfig.badgeVariant}
+            isLastCase={isLastCase}
+            nextLabel={isLastCase ? "Level abschliessen" : undefined}
+            onNext={handleNext}
+          />
+        ) : isOf(currentCase) ? (
+          <OffeneFrageResultCard
+            c={currentCase}
+            studentAnswer={offeneFrageAnswer}
             caseIndex={caseIndex}
             total={total}
             levelLabel={levelConfig.label}

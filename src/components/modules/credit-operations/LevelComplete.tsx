@@ -81,7 +81,7 @@ export function LevelComplete({ level, results, onNext, onRetry }: LevelComplete
                 )}
                 <span className="flex-1 text-text-primary">Szenario {s.id}</span>
                 {!result?.correct && (
-                  <span className="text-xs text-text-secondary">Richtig: {"correct" in s ? s.correct : s.answer}</span>
+                  <span className="text-xs text-text-secondary">Richtig: {"correct" in s ? s.correct : "answer" in s ? s.answer : "—"}</span>
                 )}
               </div>
             );

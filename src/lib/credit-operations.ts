@@ -1,4 +1,6 @@
 import { type LückentextCase } from "./lückentext";
+import { type OffeneFrageCase } from "./offene-frage";
+import { OF_CASES_CREDIT_OPERATIONS } from "./offene-fragen";
 
 export type OptionKey = "A" | "B" | "C" | "D";
 export type LevelNum = 1 | 2 | 3;
@@ -35,7 +37,7 @@ export interface CreditOpsLevelConfig {
   level: LevelNum;
   label: string;
   badgeVariant: "green" | "orange" | "red";
-  scenarios: (CreditOpsScenario | LückentextCase)[];
+  scenarios: (CreditOpsScenario | LückentextCase | OffeneFrageCase)[];
 }
 
 export const CO_LEVELS: CreditOpsLevelConfig[] = [
@@ -231,3 +233,7 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
     ],
   },
 ];
+
+OF_CASES_CREDIT_OPERATIONS.forEach((c) => {
+  CO_LEVELS.find((l) => l.level === c.level)!.scenarios.push(c);
+});

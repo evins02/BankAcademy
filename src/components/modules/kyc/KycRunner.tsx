@@ -9,6 +9,9 @@ import { KYC_LEVELS, type LevelNum, type OptionKey } from "@/lib/kyc";
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
+import { OffeneFrageCard } from "@/components/shared/OffeneFrageCard";
+import { OffeneFrageResultCard } from "@/components/shared/OffeneFrageResultCard";
+import { type OffeneFrageCase } from "@/lib/offene-frage";
 
 type View = "selector" | "playing" | "feedback" | "level-complete";
 
@@ -22,6 +25,7 @@ export function KycRunner() {
   const [selectedOption, setSelectedOption] = useState<OptionKey | null>(null);
   const [sessionResults, setSessionResults] = useState<ScenarioResult[]>([]);
   const [lückentextAnswer, setLückentextAnswer] = useState("");
+  const [offeneFrageAnswer, setOffeneFrageAnswer] = useState("");
 
   const levelConfig = KYC_LEVELS.find((l) => l.level === activeLevel)!;
   const currentScenario = levelConfig.scenarios[scenarioIndex];
@@ -31,12 +35,16 @@ export function KycRunner() {
   const isLt = (c: unknown): c is LückentextCase =>
     typeof c === "object" && c !== null && (c as LückentextCase).type === "lückentext";
 
+  const isOf = (c: unknown): c is OffeneFrageCase =>
+    typeof c === "object" && c !== null && (c as OffeneFrageCase).type === "offene-frage";
+
   const handleSelectLevel = useCallback((level: LevelNum) => {
     setActiveLevel(level);
     setScenarioIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
     setLückentextAnswer("");
+    setOffeneFrageAnswer("");
     setView("playing");
   }, []);
 
@@ -46,11 +54,14 @@ export function KycRunner() {
 
   const handleNext = useCallback(() => {
     const isLückentext = isLt(currentScenario);
-    if (!isLückentext && !selectedOption) return;
+    const isOffeneFrage = isOf(currentScenario);
+    if (!isLückentext && !isOffeneFrage && !selectedOption) return;
 
-    const isCorrect = isLückentext
-      ? checkLückentextAnswer(lückentextAnswer, (currentScenario as LückentextCase).answer, (currentScenario as LückentextCase).tolerance)
-      : selectedOption === (currentScenario as { correct: OptionKey }).correct;
+    const isCorrect = isOffeneFrage
+      ? true
+      : isLückentext
+        ? checkLückentextAnswer(lückentextAnswer, (currentScenario as LückentextCase).answer, (currentScenario as LückentextCase).tolerance)
+        : selectedOption === (currentScenario as { correct: OptionKey }).correct;
     const newResults: ScenarioResult[] = [
       ...sessionResults,
       { scenarioId: currentScenario.id, correct: isCorrect, selectedOption: selectedOption ?? "" },
@@ -66,15 +77,17 @@ export function KycRunner() {
       setScenarioIndex((i) => i + 1);
       setSelectedOption(null);
       setLückentextAnswer("");
+      setOffeneFrageAnswer("");
       setView("playing");
     }
-  }, [selectedOption, currentScenario, sessionResults, isLastScenario, activeLevel, lückentextAnswer]);
+  }, [selectedOption, currentScenario, sessionResults, isLastScenario, activeLevel, lückentextAnswer, offeneFrageAnswer]);
 
   const handleRetry = useCallback(() => {
     setScenarioIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
     setLückentextAnswer("");
+    setOffeneFrageAnswer("");
     setView("playing");
   }, []);
 
@@ -104,6 +117,17 @@ export function KycRunner() {
             onAnswerChange={setLückentextAnswer}
             onSubmit={handleSubmit}
           />
+        ) : isOf(currentScenario) ? (
+          <OffeneFrageCard
+            c={currentScenario}
+            caseIndex={scenarioIndex}
+            total={total}
+            levelLabel={levelConfig.label}
+            badgeVariant={levelConfig.badgeVariant}
+            answer={offeneFrageAnswer}
+            onAnswerChange={setOffeneFrageAnswer}
+            onSubmit={handleSubmit}
+          />
         ) : (
           <ScenarioCard
             scenario={currentScenario}
@@ -116,12 +140,24 @@ export function KycRunner() {
         )
       )}
 
-      {view === "feedback" && currentScenario && (selectedOption || isLt(currentScenario)) && (
+      {view === "feedback" && currentScenario && (selectedOption || isLt(currentScenario) || isOf(currentScenario)) && (
         isLt(currentScenario) ? (
           <LückentextResultCard
             c={currentScenario}
             studentAnswer={lückentextAnswer}
             isCorrect={checkLückentextAnswer(lückentextAnswer, currentScenario.answer, currentScenario.tolerance)}
+            caseIndex={scenarioIndex}
+            total={total}
+            levelLabel={levelConfig.label}
+            badgeVariant={levelConfig.badgeVariant}
+            isLastCase={isLastScenario}
+            nextLabel={isLastScenario ? "Level abschliessen" : undefined}
+            onNext={handleNext}
+          />
+        ) : isOf(currentScenario) ? (
+          <OffeneFrageResultCard
+            c={currentScenario}
+            studentAnswer={offeneFrageAnswer}
             caseIndex={scenarioIndex}
             total={total}
             levelLabel={levelConfig.label}

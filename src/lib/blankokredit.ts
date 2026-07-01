@@ -1,4 +1,6 @@
 import { type LückentextCase } from "./lückentext";
+import { type OffeneFrageCase } from "./offene-frage";
+import { OF_CASES_BLANKOKREDIT } from "./offene-fragen";
 
 export type OptionKey = "A" | "B" | "C" | "D";
 export type LevelNum = 1 | 2 | 3;
@@ -35,7 +37,7 @@ export interface BlankokreditLevelConfig {
   level: LevelNum;
   label: string;
   badgeVariant: "green" | "orange" | "red";
-  cases: (BlankokreditCase | LückentextCase)[];
+  cases: (BlankokreditCase | LückentextCase | OffeneFrageCase)[];
 }
 
 export const MERKSATZ =
@@ -398,3 +400,7 @@ export const BK_LEVELS: BlankokreditLevelConfig[] = [
     ],
   },
 ];
+
+OF_CASES_BLANKOKREDIT.forEach((c) => {
+  BK_LEVELS.find((l) => l.level === c.level)!.cases.push(c);
+});
