@@ -11,10 +11,11 @@ interface AiResult {
 
 interface ActiveRecallPromptProps {
   feedback?: string;
+  promptText?: string;
   onComplete?: () => void;
 }
 
-export function ActiveRecallPrompt({ feedback, onComplete }: ActiveRecallPromptProps) {
+export function ActiveRecallPrompt({ feedback, promptText, onComplete }: ActiveRecallPromptProps) {
   const [text, setText] = useState("");
   const [phase, setPhase] = useState<"input" | "loading" | "result" | "done">("input");
   const [aiResult, setAiResult] = useState<AiResult | null>(null);
@@ -62,7 +63,7 @@ export function ActiveRecallPrompt({ feedback, onComplete }: ActiveRecallPromptP
       {phase === "input" && (
         <>
           <p className="mb-2 text-sm text-text-primary">
-            Schreib die richtige Antwort in deinen eigenen Worten:
+            {promptText ?? "Schreib die richtige Antwort in deinen eigenen Worten:"}
           </p>
           <textarea
             value={text}

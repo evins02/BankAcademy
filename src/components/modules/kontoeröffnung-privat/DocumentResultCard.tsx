@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { scoreDocumentCase, type DocumentCase } from "@/lib/kontoeröffnung-privat";
 import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
-import { BegründungsPrompt } from "@/components/shared/BegründungsPrompt";
 
 interface DocumentResultCardProps {
   c: DocumentCase;
@@ -73,7 +72,11 @@ export function DocumentResultCard({
       </div>
 
       {/* Active recall before the breakdown is revealed */}
-      <ActiveRecallPrompt feedback={c.generalFeedback} onComplete={() => setRecallDone(true)} />
+      <ActiveRecallPrompt
+        feedback={c.generalFeedback}
+        promptText="Begründe in deinen eigenen Worten, warum diese Dokumente für die Kontoeröffnung notwendig sind:"
+        onComplete={() => setRecallDone(true)}
+      />
 
       {/* Full breakdown — only after recall is done */}
       {recallDone && (
@@ -148,8 +151,6 @@ export function DocumentResultCard({
             </p>
             <p className="text-sm leading-relaxed text-text-primary">{c.generalFeedback}</p>
           </div>
-
-          <BegründungsPrompt explanation={c.generalFeedback} />
 
           <Button onClick={onNext} className="w-full">
             {isLastCase ? "Zum Abschluss" : "Weiter →"}
