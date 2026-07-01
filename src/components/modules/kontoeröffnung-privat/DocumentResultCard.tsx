@@ -73,7 +73,7 @@ export function DocumentResultCard({
       </div>
 
       {/* Active recall before the breakdown is revealed */}
-      <ActiveRecallPrompt onComplete={() => setRecallDone(true)} />
+      <ActiveRecallPrompt feedback={c.generalFeedback} onComplete={() => setRecallDone(true)} />
 
       {/* Full breakdown — only after recall is done */}
       {recallDone && (

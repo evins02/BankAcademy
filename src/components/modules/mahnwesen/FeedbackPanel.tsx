@@ -73,7 +73,7 @@ export function FeedbackPanel({
             )}
           </div>
 
-          <ActiveRecallPrompt onComplete={() => setRecallDone(true)} />
+          <ActiveRecallPrompt feedback={mwCase.feedback} onComplete={() => setRecallDone(true)} />
           {recallDone && (
             <>
               <div className="mb-5 flex flex-col gap-2">

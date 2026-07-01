@@ -39,7 +39,7 @@ export function McqResultCard({ c, selected, isLastCase, onNext }: McqResultCard
       </div>
 
       {/* Active recall before the answer is revealed */}
-      <ActiveRecallPrompt onComplete={() => setRecallDone(true)} />
+      <ActiveRecallPrompt feedback={c.feedback} onComplete={() => setRecallDone(true)} />
 
       {/* Full breakdown — only after recall is done */}
       {recallDone && (

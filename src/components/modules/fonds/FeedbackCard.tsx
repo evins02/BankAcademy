@@ -77,7 +77,7 @@ export function FeedbackCard({
             )}
           </div>
 
-          <ActiveRecallPrompt onComplete={() => setRecallDone(true)} />
+          <ActiveRecallPrompt feedback={fondsCase.feedback} onComplete={() => setRecallDone(true)} />
           {recallDone && (
             <>
               <div className="mb-5 flex flex-col gap-2">
