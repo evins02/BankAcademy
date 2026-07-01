@@ -19,7 +19,7 @@ export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) 
     <>
       {/* Shown in light mode */}
       <Image
-        src="/logo-light.png"
+        src="/logo-light.webp"
         alt="BankAcademy"
         width={width}
         height={height}
@@ -30,7 +30,7 @@ export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) 
       />
       {/* Shown in dark mode */}
       <Image
-        src="/logo-dark.png"
+        src="/logo-dark.webp"
         alt="BankAcademy"
         width={width}
         height={height}
