@@ -29,18 +29,19 @@ export async function POST(req: NextRequest) {
       messages: [
         {
           role: "user",
-          content: `Du bist ein Banklehr-Coach. Bewerte die folgende Antwort eines Lernenden sachlich und konstruktiv.
+          content: `Du bist ein Banklehr-Coach. Bewerte die Antwort des Lernenden sachlich und konstruktiv auf Deutsch.
 
-Lerninhalt (korrekte Erklärung): "${feedback}"
+Musterlösung: "${feedback}"
 Antwort des Lernenden: "${studentText}"
 
 Antworte ausschliesslich mit einem JSON-Objekt (kein Markdown, keine Erklärungen darum):
-{"richtig":"Was der Lernende korrekt erfasst hat (1 Satz)","fehlt":"Was fehlt oder ungenau ist (1 Satz)","ideal":"Die ideale Kurz-Antwort (1 Satz)"}
+{"richtig":"Was der Lernende korrekt erfasst hat (1-2 Sätze)","fehlt":"Was fehlt oder ist ungenau (1-2 Sätze)","ideal":"Die ideale Kurz-Antwort (1-2 Sätze)"}
 
 Regeln:
-- Sei konstruktiv und wohlwollend
+- Halte das Feedback kurz und klar
 - Deutsch, Schweizer Schreibweise
-- Wenn die Antwort sehr gut ist: fehlt = "Vollständig – nichts Wesentliches fehlt."`,
+- Wenn die Antwort sehr gut ist: fehlt = "Vollständig – nichts Wesentliches fehlt."
+- Wenn der Lernende etwas überspringt oder nur oberflächlich antwortet, weise im fehlt-Feld darauf hin, dass das Verständnis der Begründungen im echten Bankalltag und in der LAP entscheidend ist`,
         },
       ],
     });

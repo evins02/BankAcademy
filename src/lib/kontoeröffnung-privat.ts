@@ -19,6 +19,7 @@ export interface DocumentCase {
   documents: KontoPrivatDoc[];
   requiredOneOf?: string[][];
   generalFeedback: string;
+  recallMusterlösung?: string;
 }
 
 export interface McqOption {
@@ -182,6 +183,8 @@ const L1_STANDARD: DocumentCase = {
   ],
   generalFeedback:
     "Beim Standardfall Schweizer Privatkunde benötigen Sie: Basisvertrag, gültiger CH-Ausweis, Eigenerklärung FATCA (natürliche Person) und Formular A (VSB 20 – wirtschaftlich Berechtigter). Firmendokumente, EDD, PEP-Formulare, Wohnsitzbestätigungen oder Unterschriftenproben gehören nicht zu den zwingenden regulatorischen Dokumenten dieses Standardfalls.",
+  recallMusterlösung:
+    "Basisvertrag: Rechtliche Grundlage der Geschäftsbeziehung zwischen Bank und Kunde. Ohne Basisvertrag keine gültige Vertragsbeziehung — die Bank darf kein Konto führen.\n\nGültiger CH-Ausweis / Reisepass: Gesetzliche Pflicht gemäss GwG Art. 3 — die Bank muss die Identität jedes Kunden zweifelsfrei feststellen. Ein abgelaufener Ausweis reicht nicht, da die Identifikation zum Zeitpunkt der Eröffnung gültig sein muss.\n\nEigenerklärung FATCA (natürliche Person): FATCA ist ein US-Steuergesetz, das Schweizer Banken verpflichtet zu prüfen, ob ein Kunde eine US-Person ist (Staatsbürgerschaft, Geburtsort USA, Green Card). Ohne diese Erklärung riskiert die Bank Strafzahlungen an die US-Steuerbehörde IRS.\n\nFormular A (wirtschaftlich Berechtigter, VSB 20): Gemäss VSB 20 muss die Bank wissen, wem das Geld wirtschaftlich gehört — auch wenn jemand anderes das Konto hält. Zentrales Instrument gegen Geldwäscherei und Terrorismusfinanzierung.",
 };
 
 const L1_AUSWEIS_ABGELAUFEN: DocumentCase = {
