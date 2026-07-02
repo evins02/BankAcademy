@@ -4,12 +4,11 @@ import { CheckCircle2, XCircle, ChevronRight, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { AL_LEVELS, type LevelNum, type OptionKey } from "@/lib/anlagekunde";
+import { AL_LEVELS, type LevelNum } from "@/lib/anlagekunde";
 
 export interface ScenarioResult {
   scenarioId: string;
   correct: boolean;
-  selectedOption: OptionKey;
 }
 
 interface LevelCompleteProps {
@@ -80,7 +79,7 @@ export function LevelComplete({ level, results, onNext, onRetry }: LevelComplete
                   <XCircle size={16} className="shrink-0 text-red-500" />
                 )}
                 <span className="flex-1 text-text-primary">Szenario {s.id}</span>
-                {!result?.correct && (
+                {!result?.correct && s.type === "multiple-choice" && (
                   <span className="text-xs text-text-secondary">Richtig: {s.correct}</span>
                 )}
               </div>
