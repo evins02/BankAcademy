@@ -12,7 +12,7 @@ import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext"
 import { OffeneFrageCard } from "@/components/shared/OffeneFrageCard";
 import { OffeneFrageResultCard } from "@/components/shared/OffeneFrageResultCard";
 import { type OffeneFrageCase } from "@/lib/offene-frage";
-import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
+import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 
 type View = "selector" | "playing" | "feedback" | "level-complete";

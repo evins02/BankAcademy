@@ -7,7 +7,7 @@ import { CaseCard } from "./CaseCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LevelComplete, type ScenarioResult } from "./LevelComplete";
 import { AL_LEVELS, type LevelNum, type OptionKey } from "@/lib/anlagekunde";
-import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
+import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";

@@ -6,7 +6,7 @@ import { DossierView } from "./DossierView";
 import { FeedbackCard } from "./FeedbackCard";
 import { LevelComplete, type LevelResult } from "./LevelComplete";
 import { BKO_KYC_LEVELS, type LevelNum, type SubmissionResult } from "@/lib/backoffice-kyc";
-import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
+import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 
 type View = "selector" | "playing" | "feedback" | "level-complete";

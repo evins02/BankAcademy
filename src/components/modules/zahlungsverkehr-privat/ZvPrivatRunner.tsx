@@ -7,7 +7,7 @@ import { CaseCard } from "./CaseCard";
 import { FeedbackCard } from "./FeedbackCard";
 import { LevelComplete, type CaseResult } from "./LevelComplete";
 import { ZV_FO_LEVELS, type LevelNum } from "@/lib/zahlungsverkehr-privat";
-import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
+import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
