@@ -31,6 +31,7 @@ export interface CreditOpsScenario {
   options: CreditOpsOption[];
   correct: OptionKey;
   feedback: string;
+  concepts?: string[];
 }
 
 export interface CreditOpsLevelConfig {

@@ -31,6 +31,7 @@ export interface BlankokreditCase {
   options: BlankokreditOption[];
   correct: OptionKey;
   feedback: string;
+  concepts?: string[];
 }
 
 export interface BlankokreditLevelConfig {

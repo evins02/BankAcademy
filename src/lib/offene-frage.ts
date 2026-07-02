@@ -6,6 +6,7 @@ export interface OffeneFrageCase {
   question: string;
   role: string;
   expectedApproach: string;
+  concepts?: string[];
 }
 
 export interface OffeneFrageEvalResult {

@@ -23,6 +23,7 @@ import {
   type ModuleProgress,
   type StreakData,
 } from "@/lib/progressData";
+import { getAllWeakConcepts } from "@/lib/conceptTracker";
 import { BadgeEarnAnimation, useNewlyEarnedBadge } from "@/components/shared/BadgeEarnAnimation";
 
 interface UserProfile {
@@ -120,6 +121,41 @@ function WeakModulesSection({ progress }: { progress: Record<string, ModuleProgr
           );
         })}
       </div>
+    </div>
+  );
+}
+
+function WeakConceptsBanner() {
+  const [concepts, setConcepts] = useState<{ concept: string; count: number }[]>([]);
+  useEffect(() => {
+    const top = getAllWeakConcepts().slice(0, 5);
+    setConcepts(top);
+  }, []);
+  if (concepts.length === 0) return null;
+  return (
+    <div className="mb-8 rounded-DEFAULT border border-accent/30 bg-accent-light/40 p-4">
+      <div className="mb-3 flex items-center gap-2">
+        <AlertTriangle size={15} className="text-accent" />
+        <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">
+          Deine Schwachstellen — diese Themen kommen öfter dran
+        </span>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {concepts.map(({ concept, count }) => (
+          <span
+            key={concept}
+            className="inline-flex items-center gap-1.5 rounded-full border border-accent/25 bg-surface px-3 py-1 text-xs font-medium text-text-primary"
+          >
+            {concept}
+            <span className="rounded-full bg-accent/15 px-1.5 py-0.5 text-[10px] font-bold text-accent">
+              {count}×
+            </span>
+          </span>
+        ))}
+      </div>
+      <p className="mt-3 text-[11px] text-text-secondary">
+        Szenarien zu diesen Themen werden beim nächsten Modulstart bevorzugt angezeigt.
+      </p>
     </div>
   );
 }
@@ -346,6 +382,8 @@ export default function DashboardPage() {
         )}
 
         <WeakModulesSection progress={progress} />
+
+        {loaded && <WeakConceptsBanner />}
 
         {loaded && <DailyChallenge />}
 

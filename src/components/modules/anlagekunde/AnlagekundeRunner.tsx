@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { LevelSelector } from "./LevelSelector";
 import { LernblockCard } from "./LernblockCard";
 import { CaseCard } from "./CaseCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LevelComplete, type ScenarioResult } from "./LevelComplete";
 import { AL_LEVELS, type LevelNum, type OptionKey } from "@/lib/anlagekunde";
+import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
+import { recordConceptError } from "@/lib/conceptTracker";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
@@ -21,8 +23,13 @@ export function AnlagekundeRunner() {
   const [sessionResults, setSessionResults] = useState<ScenarioResult[]>([]);
 
   const levelConfig = AL_LEVELS.find((l) => l.level === activeLevel)!;
-  const currentScenario = levelConfig.scenarios[scenarioIndex];
-  const total = levelConfig.scenarios.length;
+  const activeScenarios = useMemo(
+    () => resolveSessionCases("banking-operations-anlagekunde", activeLevel, levelConfig.scenarios),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeLevel],
+  );
+  const currentScenario = activeScenarios[scenarioIndex];
+  const total = activeScenarios.length;
   const isLastScenario = scenarioIndex === total - 1;
 
   const handleSelectLevel = useCallback((level: LevelNum) => {
@@ -47,6 +54,7 @@ export function AnlagekundeRunner() {
     ];
     setSessionResults(newResults);
 
+    if (!isCorrect && "concepts" in currentScenario) recordConceptError("banking-operations-anlagekunde", (currentScenario as {concepts?: string[]}).concepts ?? []);
     if (isLastScenario) {
       const score = newResults.filter((r) => r.correct).length;
       setCompletedLevels((prev) => {

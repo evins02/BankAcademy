@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { LevelSelector } from "./LevelSelector";
 import { DossierView } from "./DossierView";
 import { FeedbackCard } from "./FeedbackCard";
 import { LevelComplete, type LevelResult } from "./LevelComplete";
 import { BKO_KYC_LEVELS, type LevelNum, type SubmissionResult } from "@/lib/backoffice-kyc";
+import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
+import { recordConceptError } from "@/lib/conceptTracker";
 
 type View = "selector" | "playing" | "feedback" | "level-complete";
 
@@ -20,8 +22,13 @@ export function BkoKycRunner() {
   const [lastSubmission, setLastSubmission] = useState<SubmissionResult | null>(null);
 
   const levelConfig = BKO_KYC_LEVELS.find((l) => l.level === activeLevel)!;
-  const currentScenario = levelConfig.scenarios[scenarioIndex];
-  const total = levelConfig.scenarios.length;
+  const activeScenarios = useMemo(
+    () => resolveSessionCases("backoffice-kyc", activeLevel, levelConfig.scenarios),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeLevel],
+  );
+  const currentScenario = activeScenarios[scenarioIndex];
+  const total = activeScenarios.length;
   const isLastScenario = scenarioIndex === total - 1;
 
   const handleSelectLevel = useCallback((level: LevelNum) => {
@@ -46,6 +53,8 @@ export function BkoKycRunner() {
   );
 
   const handleNext = useCallback(() => {
+    if (lastSubmission && !lastSubmission.isCorrect && "concepts" in currentScenario)
+      recordConceptError("backoffice-kyc", (currentScenario as { concepts?: string[] }).concepts ?? []);
     if (isLastScenario) {
       const score = sessionResults.filter((r) => r.correct).length;
       setCompletedLevels((prev) => {

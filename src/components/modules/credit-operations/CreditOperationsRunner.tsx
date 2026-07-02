@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { LevelSelector } from "./LevelSelector";
 import { LernblockCard } from "./LernblockCard";
 import { CaseCard } from "./CaseCard";
@@ -13,6 +13,8 @@ import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext"
 import { OffeneFrageCard } from "@/components/shared/OffeneFrageCard";
 import { OffeneFrageResultCard } from "@/components/shared/OffeneFrageResultCard";
 import { type OffeneFrageCase } from "@/lib/offene-frage";
+import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
+import { recordConceptError } from "@/lib/conceptTracker";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
@@ -29,8 +31,13 @@ export function CreditOperationsRunner() {
   const [offeneFrageAnswer, setOffeneFrageAnswer] = useState("");
 
   const levelConfig = CO_LEVELS.find((l) => l.level === activeLevel)!;
-  const currentScenario = levelConfig.scenarios[scenarioIndex];
-  const total = levelConfig.scenarios.length;
+  const activeScenarios = useMemo(
+    () => resolveSessionCases("backoffice-credit-operations", activeLevel, levelConfig.scenarios),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeLevel],
+  );
+  const currentScenario = activeScenarios[scenarioIndex];
+  const total = activeScenarios.length;
   const isLastScenario = scenarioIndex === total - 1;
 
   const isLt = (c: unknown): c is LückentextCase =>
@@ -69,6 +76,7 @@ export function CreditOperationsRunner() {
     ];
     setSessionResults(newResults);
 
+    if (!isCorrect && "concepts" in currentScenario) recordConceptError("backoffice-credit-operations", (currentScenario as {concepts?: string[]}).concepts ?? []);
     if (isLastScenario) {
       const score = newResults.filter((r) => r.correct).length;
       setCompletedLevels((prev) => {

@@ -8,6 +8,7 @@ export interface LückentextCase {
   unit?: string;      // optional unit hint next to the input (e.g. "Monate")
   tolerance?: number; // allowed numerical deviation
   feedback: string;
+  concepts?: string[];
 }
 
 export function checkLückentextAnswer(

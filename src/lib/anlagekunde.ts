@@ -15,6 +15,7 @@ export interface AnlageScenario {
   options: AnlageOption[];
   correct: OptionKey;
   feedback: string;
+  concepts?: string[];
 }
 
 export interface AnlageLevelConfig {

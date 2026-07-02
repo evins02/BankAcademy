@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { LevelSelector } from "./LevelSelector";
 import { LernblockCard } from "./LernblockCard";
 import { CaseCard } from "./CaseCard";
@@ -21,6 +21,8 @@ import { NoteModal } from "@/components/shared/NoteModal";
 import { getProgress, saveProgress } from "@/lib/progressData";
 import { useGlossar } from "@/context/GlossarContext";
 import { getSettings } from "@/lib/settingsData";
+import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
+import { recordConceptError } from "@/lib/conceptTracker";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
 
@@ -48,8 +50,13 @@ export function ZahlungsverkehrRunner() {
   const { open: openGlossar } = useGlossar();
 
   const levelConfig = ZV_LEVELS.find((l) => l.level === activeLevel)!;
-  const currentCase = levelConfig.cases[caseIndex];
-  const total = levelConfig.cases.length;
+  const activeCases = useMemo(
+    () => resolveSessionCases("banking-operations-zahlungsverkehr", activeLevel, levelConfig.cases),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeLevel],
+  );
+  const currentCase = activeCases[caseIndex];
+  const total = activeCases.length;
   const isLastCase = caseIndex === total - 1;
 
   const isLt = (c: unknown): c is LückentextCase =>
@@ -98,6 +105,7 @@ export function ZahlungsverkehrRunner() {
     if (isCorrect) {
       setWrongStreak(0);
     } else {
+      if ("concepts" in currentCase) recordConceptError("banking-operations-zahlungsverkehr", (currentCase as {concepts?: string[]}).concepts ?? []);
       const newStreak = wrongStreak + 1;
       setWrongStreak(newStreak);
       if (newStreak >= 3) setShowSmartTip(true);
@@ -300,6 +308,7 @@ export function ZahlungsverkehrRunner() {
           moduleName="Zahlungsverkehr"
           accuracy={moduleAccuracy}
           onRestart={() => {
+            resetAllSessions("banking-operations-zahlungsverkehr");
             setCompletedLevels(new Set());
             setLevelScores({});
             setModuleAccuracy(undefined);

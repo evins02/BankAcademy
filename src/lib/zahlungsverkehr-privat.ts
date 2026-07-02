@@ -14,6 +14,7 @@ export interface ZvFoCase {
   options: ZvFoOption[];
   correct: string;
   feedback: string;
+  concepts?: string[];
 }
 
 export interface ZvFoLevel {

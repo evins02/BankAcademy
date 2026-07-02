@@ -23,6 +23,7 @@ export interface ZvCase {
   merksatz?: string;
   glossarTerm?: string;
   rechtsgrundlage?: string;
+  concepts?: string[];
 }
 
 export interface ZvLevelConfig {
@@ -78,6 +79,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         unit: "Stellen",
         feedback:
           "Schweizer IBAN: CH (2) + 2 Prüfziffern + 17-stellige Kontonummer = genau 21 Zeichen. Eine IBAN mit 22 Stellen ist mathematisch ungültig. Zahlung zurückweisen, Kunde muss korrekte IBAN nachliefern.",
+        concepts: ["IBAN-Prüfung"],
       },
       {
         id: "1.2",
@@ -105,6 +107,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Kein Geld = kein Dauerauftrag. Nicht verschoben, sondern storniert. Keine Teilzahlung.",
         glossarTerm: "Dauerauftrag",
         rechtsgrundlage: "OR Art. 466 (Auftragsverhältnis) / Bankinternes Dauerauftragsreglement",
+        concepts: ["Dauerauftrag", "Deckungspflicht"],
       },
       {
         id: "1.3",
@@ -132,6 +135,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Kartenverlust: Erst sperren (0800 80 40 40), dann alles andere. Keine Ausnahmen.",
         glossarTerm: "Kartensperrung",
         rechtsgrundlage: "SIX-Kartenreglement / OR Art. 402 (Aufwendungsersatz)",
+        concepts: ["Kartensperrung"],
       },
     ],
   },
@@ -166,6 +170,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Retour = Rückbuchung + Kundeninfo + neue Zahlungsdetails einholen. Nie nochmals ausführen.",
         glossarTerm: "Zahlungsretour",
         rechtsgrundlage: "OR Art. 466 ff. (Auftragsverhältnis) / SIC-Reglement",
+        concepts: ["Zahlungsretour"],
       },
       {
         id: "2.2",
@@ -193,6 +198,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Auslandzahlung ausserhalb SEPA: BIC + IBAN zwingend. Ohne BIC = Zahlung stoppen und Kunden informieren.",
         glossarTerm: "BIC/SWIFT",
         rechtsgrundlage: "OR Art. 466 ff. / SIC-Reglement Art. 12",
+        concepts: ["BIC/SWIFT", "Auslandzahlung"],
       },
       {
         id: "2.3",
@@ -220,6 +226,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Doppelzahlung: Sofort melden, sofort Rückbuchung einleiten, sofort Kunden informieren. Warten ist keine Option.",
         glossarTerm: "Rückbuchung",
         rechtsgrundlage: "OR Art. 117 ff. (Kontokorrent)",
+        concepts: ["Doppelzahlung", "Fehlerkorrektur"],
       },
       {
         id: "2.4",
@@ -247,6 +254,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Falschüberweisung: Recall-Anfrage stellen, Kunden realistisch informieren. Kein Automatismus, keine Garantie.",
         glossarTerm: "Rückruf / Recall",
         rechtsgrundlage: "OR Art. 62 ff. (Ungerechtfertigte Bereicherung) / SWIFT gpi Recall Standards",
+        concepts: ["Falschüberweisung", "Recall"],
       },
       {
         id: "2.5",
@@ -274,6 +282,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Eigener Fehler entdeckt: Sofort melden, sofort korrigieren, sofort beide Kunden informieren. Keine Verzögerung.",
         glossarTerm: "Operative Fehlerkorrektur",
         rechtsgrundlage: "OR Art. 398 (Sorgfaltspflicht des Beauftragten) / Interne Qualitätssicherung",
+        concepts: ["Fehlerkorrektur", "Fehlbuchung"],
       },
       {
         id: "2.6",
@@ -301,6 +310,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Karte noch vorhanden ≠ Karte sicher. Unautorisierte Transaktion: Sperren + Chargeback einleiten + Kundin informieren.",
         glossarTerm: "Kartensperrung",
         rechtsgrundlage: "SIX-Kartenreglement / Visa/Mastercard Chargeback-Regeln / OR Art. 402",
+        concepts: ["Kartensperrung", "Kartenmissbrauch"],
       },
       {
         id: "2.7",
@@ -328,6 +338,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Eingehende Recall: Kunden informieren, Zustimmung einholen. Ohne Zustimmung kein Geld zurück. Nie eigenmächtig zurückbuchen.",
         glossarTerm: "Rückruf / Recall",
         rechtsgrundlage: "OR Art. 62 ff. (Ungerechtfertigte Bereicherung) / SIC-Reglement / SCT Recall-Verfahren",
+        concepts: ["Recall", "Falschüberweisung"],
       },
       {
         id: "2.8",
@@ -355,6 +366,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Batch-Fehler: Sofort eskalieren, Sammelrückruf einleiten, Firmenkunden informieren. Zeit ist der entscheidende Faktor.",
         glossarTerm: "Rückbuchung",
         rechtsgrundlage: "OR Art. 62 ff. (Ungerechtfertigte Bereicherung) / SIC Bulk Recall / OR Art. 398 (Sorgfaltspflicht)",
+        concepts: ["Fehlerkorrektur", "Batch-Verarbeitung"],
       },
     ],
   },
@@ -389,6 +401,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Knapp unter CHF 10'000 in Serie = Structuring-Alarm. GwG Art. 6 Abklärungspflicht + MROS prüfen. Kunden NICHT informieren.",
         glossarTerm: "Geldwäscherei",
         rechtsgrundlage: "GwG Art. 6 Abs. 2 (Erhöhte Sorgfaltspflichten / PEP)",
+        concepts: ["GwG", "Structuring", "MROS"],
       },
       {
         id: "3.2",
@@ -416,6 +429,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "LSV-Widerspruch: 30-Tage-Frist, Mandat prüfen, Rückbuchung wenn berechtigt. Danach kein Rechtsmittel mehr.",
         glossarTerm: "LSV",
         rechtsgrundlage: "ZAG Art. 24 / Instant-Payment-Regeln SIC",
+        concepts: ["LSV", "Widerspruch"],
       },
       {
         id: "3.3",
@@ -446,6 +460,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Zahlungsauftrag-Prüfung: IBAN, Betrag, Valuta (frühestens heute), BIC (Ausland), Deckung. Alle Fehler auf einmal kommunizieren.",
         glossarTerm: "Valuta",
         rechtsgrundlage: "OR Art. 466 ff. (Auftragsverhältnis) / SIC-Reglement Art. 12",
+        concepts: ["Valuta", "Deckungspflicht"],
       },
       {
         id: "3.4",
@@ -476,6 +491,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Sanktionslisten-Treffer: Stopp. Compliance. Kein Wort zum Kunden. Dokumentieren.",
         glossarTerm: "Sanktionen / SECO",
         rechtsgrundlage: "EmbG (Embargogesetz) / SECO-Verordnungen / GwG Art. 10a (Informationsverbot)",
+        concepts: ["Sanktionen", "SECO"],
       },
       {
         id: "3.5",
@@ -503,6 +519,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Bareinzahlung ab CHF 15'000: Identifikation + wirtschaftlich Berechtigter + Herkunftsnachweis. «Haushaltsersparnisse» ohne Beleg reicht nicht.",
         glossarTerm: "Geldwäscherei",
         rechtsgrundlage: "GwG Art. 3 Abs. 2 (Identifikationspflicht Bargeschäfte) / GwG Art. 4 (wirtschaftlich Berechtigter) / GwG Art. 6 (erhöhte Sorgfalt)",
+        concepts: ["GwG", "Bareinzahlung", "Herkunftsnachweis"],
       },
       {
         id: "3.6",
@@ -530,6 +547,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "False Positive? Trotzdem Compliance entscheiden lassen. Nie selbst freigeben. Jeder Schritt muss dokumentiert sein.",
         glossarTerm: "Sanktionen / SECO",
         rechtsgrundlage: "EmbG (Embargogesetz) / SECO-Verordnungen / FINMA-RS 2013/3 (Sanktionen) / GwG Art. 10a (Informationsverbot)",
+        concepts: ["Sanktionen", "SECO"],
       },
     ],
   },

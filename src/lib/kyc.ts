@@ -18,6 +18,7 @@ export interface KycScenario {
   options: KycOption[];
   correct: OptionKey;
   feedback: string;
+  concepts?: string[];
 }
 
 export interface KycLevelConfig {

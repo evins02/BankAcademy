@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { LevelSelector } from "./LevelSelector";
 import { LernblockCard } from "./LernblockCard";
 import { CaseCard } from "./CaseCard";
@@ -13,6 +13,8 @@ import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext"
 import { OffeneFrageCard } from "@/components/shared/OffeneFrageCard";
 import { OffeneFrageResultCard } from "@/components/shared/OffeneFrageResultCard";
 import { type OffeneFrageCase } from "@/lib/offene-frage";
+import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
+import { recordConceptError } from "@/lib/conceptTracker";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
@@ -29,8 +31,13 @@ export function BlankokreditRunner() {
   const [offeneFrageAnswer, setOffeneFrageAnswer] = useState("");
 
   const levelConfig = BK_LEVELS.find((l) => l.level === activeLevel)!;
-  const currentCase = levelConfig.cases[caseIndex];
-  const total = levelConfig.cases.length;
+  const activeCases = useMemo(
+    () => resolveSessionCases("banking-operations-blankokredit", activeLevel, levelConfig.cases),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeLevel],
+  );
+  const currentCase = activeCases[caseIndex];
+  const total = activeCases.length;
   const isLastCase = caseIndex === total - 1;
 
   const isLt = (c: unknown): c is LückentextCase =>
@@ -72,6 +79,7 @@ export function BlankokreditRunner() {
     ];
     setSessionResults(newResults);
 
+    if (!isCorrect && "concepts" in currentCase) recordConceptError("banking-operations-blankokredit", (currentCase as {concepts?: string[]}).concepts ?? []);
     if (isLastCase) {
       const score = newResults.filter((r) => r.correct).length;
       setCompletedLevels((prev) => {

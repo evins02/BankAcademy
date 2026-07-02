@@ -18,6 +18,7 @@ export interface MwCase {
   options: MwOption[];
   correct: OptionKey;
   feedback: string;
+  concepts?: string[];
 }
 
 export interface MwLevelConfig {

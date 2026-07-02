@@ -23,6 +23,7 @@ export interface ChecklistScenario {
   checklistItems: ChecklistItem[];
   commentHint: string;
   feedback: string;
+  concepts?: string[];
 }
 
 export interface MCOption {
@@ -42,6 +43,7 @@ export interface MCScenario {
   correct: string;
   commentHint: string;
   feedback: string;
+  concepts?: string[];
 }
 
 export type BkoKycScenario = ChecklistScenario | MCScenario;

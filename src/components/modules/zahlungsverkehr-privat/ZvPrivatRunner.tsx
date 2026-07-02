@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { LevelSelector } from "./LevelSelector";
 import { LernblockCards } from "./LernblockCards";
 import { CaseCard } from "./CaseCard";
 import { FeedbackCard } from "./FeedbackCard";
 import { LevelComplete, type CaseResult } from "./LevelComplete";
 import { ZV_FO_LEVELS, type LevelNum } from "@/lib/zahlungsverkehr-privat";
+import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
+import { recordConceptError } from "@/lib/conceptTracker";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
@@ -21,8 +23,13 @@ export function ZvPrivatRunner() {
   const [sessionResults, setSessionResults] = useState<CaseResult[]>([]);
 
   const levelConfig = ZV_FO_LEVELS.find((l) => l.level === activeLevel)!;
-  const currentCase = levelConfig.cases[caseIndex];
-  const total = levelConfig.cases.length;
+  const activeCases = useMemo(
+    () => resolveSessionCases("privatkunde-zahlungsverkehr", activeLevel, levelConfig.cases),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeLevel],
+  );
+  const currentCase = activeCases[caseIndex];
+  const total = activeCases.length;
   const isLastCase = caseIndex === total - 1;
 
   const handleSelectLevel = useCallback((level: LevelNum) => {
@@ -51,6 +58,7 @@ export function ZvPrivatRunner() {
     ];
     setSessionResults(newResults);
 
+    if (!isCorrect && "concepts" in currentCase) recordConceptError("privatkunde-zahlungsverkehr", (currentCase as {concepts?: string[]}).concepts ?? []);
     if (isLastCase) {
       const score = newResults.filter((r) => r.correct).length;
       setCompletedLevels((prev) => {
