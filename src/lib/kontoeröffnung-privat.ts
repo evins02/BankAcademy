@@ -1204,6 +1204,329 @@ const L2_BEISTANDSCHAFT: DocumentCase = {
     "Beistandschaft nach ZGB kennt verschiedene Stufen: Begleit-Beistandschaft (Art. 393) lässt den Kunden voll handlungsfähig – die Beiständin unterstützt, hat aber kein Mitspracherecht bei Vertragsabschlüssen. Vertretungs-Beistandschaft (Art. 394) oder Umfassende Beistandschaft (Art. 398) schränken die Handlungsfähigkeit ein und würden ein anderes Vorgehen erfordern. Deshalb ist das Einsehen der Beistandsurkunde der entscheidende erste Schritt.",
 };
 
+const L2_KLEINKIND_SORGE: DocumentCase = {
+  id: "l2-kleinkind-elterliche-sorge",
+  type: "document-select",
+  level: 2,
+  title: "Sparkonto für Kleinkind – ungeklärte elterliche Sorge",
+  briefing:
+    "Herr Krause möchte für seine 3-jährige Tochter Mia ein Sparkonto eröffnen. Er ist mit der Kindsmutter nicht verheiratet und lebt von ihr getrennt. Auf die Frage nach dem Sorgerecht antwortet er: 'Das ist irgendwie gemeinsam geregelt, glaube ich – die Mutter weiss davon.' Die Kindsmutter ist nicht anwesend.",
+  documents: [
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – der Basisvertrag regelt die Geschäftsbeziehung und ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
+    },
+    {
+      id: "ausweis-mia",
+      label: "Ausweis / Pass von Mia (Kind)",
+      status: "required",
+      feedbackSelected: "Korrekt – auch für Kleinkinder muss ein amtliches Ausweisdokument zur Identifikation vorliegen.",
+      feedbackNotSelected: "Fehler: Auch ein Kleinkind benötigt ein gültiges Identifikationsdokument.",
+    },
+    {
+      id: "ausweis-krause",
+      label: "Ausweis / Pass von Herrn Krause",
+      status: "required",
+      feedbackSelected: "Korrekt – die Identität des handelnden gesetzlichen Vertreters muss geprüft werden.",
+      feedbackNotSelected: "Fehler: Herr Krause muss als handelnder Vertreter identifiziert werden.",
+    },
+    {
+      id: "nachweis-elterliche-sorge",
+      label: "Schriftlicher Nachweis der elterlichen Sorge (Auszug Zivilstandsregister / Sorgerechtsbescheinigung)",
+      status: "required",
+      feedbackSelected:
+        "Korrekt – da Herr Krause unverheiratet ist und sich beim Sorgerecht selbst unsicher zeigt, muss die Bank die elterliche Sorge amtlich belegen lassen, bevor sie ihn als Vertreter des Kindes akzeptiert.",
+      feedbackNotSelected:
+        "Schwerer Fehler: Eine unsichere mündliche Aussage zum Sorgerecht reicht nicht – die Bank muss die Vertretungsbefugnis amtlich prüfen.",
+    },
+    {
+      id: "zustimmung-kindsmutter",
+      label: "Schriftliche Zustimmung der Kindsmutter (bei gemeinsamer elterlicher Sorge)",
+      status: "required",
+      feedbackSelected:
+        "Korrekt – besteht gemeinsame elterliche Sorge, muss die nicht anwesende Kindsmutter der Kontoeröffnung schriftlich zustimmen.",
+      feedbackNotSelected:
+        "Fehler: Bei gemeinsamer elterlicher Sorge kann nicht ein Elternteil allein über eine Kontoeröffnung für das Kind entscheiden, ohne dass die Zustimmung des anderen Elternteils dokumentiert ist.",
+    },
+    {
+      id: "eigenerklarung-np",
+      label: "Eigenerklärung FATCA (natürliche Person) – für Mia",
+      status: "required",
+      feedbackSelected: "Korrekt – die FATCA-Abklärung ist bei jeder Kontoeröffnung zwingend, auch bei Kleinkindern.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen – sie gilt auch für minderjährige Kontoinhaber.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A ist auch bei Konten für Minderjährige zwingend.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20) ist bei jeder Kontoeröffnung obligatorisch.",
+    },
+    {
+      id: "muendliche-zusicherung-reicht",
+      label: "Mündliche Zusicherung 'die Mutter weiss davon' akzeptieren und Konto eröffnen",
+      status: "forbidden",
+      feedbackSelected: "Schwerer Fehler: Eine unbelegte mündliche Aussage ersetzt keinen Nachweis der Vertretungsbefugnis.",
+      feedbackNotSelected: "Korrekt – eine solche Aussage reicht nicht aus.",
+    },
+    {
+      id: "unterschrift-mia",
+      label: "Unterschrift von Mia auf dem Kontoeröffnungsantrag",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Ein Kleinkind kann keine rechtsgültige Unterschrift leisten; die gesetzlichen Vertreter unterzeichnen.",
+      feedbackNotSelected: "Korrekt – Mia unterschreibt nicht selbst.",
+    },
+    {
+      id: "vollmacht",
+      label: "Vollmacht",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Mia ist minderjährig und kann keine Vollmacht erteilen – die gesetzliche Vertretung ergibt sich aus der elterlichen Sorge.",
+      feedbackNotSelected: "Korrekt – keine Vollmacht relevant in diesem Fall.",
+    },
+    {
+      id: "herkunft-vermoegen",
+      label: "Herkunftsnachweis Vermögen",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Kein Risikomerkmal erkennbar – ein einfaches Sparkonto für ein Kind löst kein EDD aus.",
+      feedbackNotSelected: "Korrekt – kein erhöhtes Risiko, kein EDD nötig.",
+    },
+    {
+      id: "pep-formular",
+      label: "PEP-Prüfungsformular",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Kein Hinweis auf politisch exponierte Personen in diesem Fall.",
+      feedbackNotSelected: "Korrekt – kein PEP-Status erkennbar.",
+    },
+  ],
+  generalFeedback:
+    "Bei unverheirateten oder getrennten Eltern darf die Bank die elterliche Sorge nicht einfach mündlich abfragen, sondern muss sie amtlich belegen lassen (z.B. Auszug Zivilstandsregister). Besteht gemeinsame elterliche Sorge, braucht die Kontoeröffnung für das Kind die dokumentierte Zustimmung beider Elternteile – auch wenn nur einer persönlich erscheint. Die Standarddokumente (Basisvertrag, Ausweis des Kindes, FATCA, Formular A) bleiben zusätzlich zwingend.",
+};
+
+const L2_SCHEIDUNG: DocumentCase = {
+  id: "l2-scheidung-namensaenderung",
+  type: "document-select",
+  level: 2,
+  title: "Nach der Scheidung – Namensänderung und Kontotrennung",
+  briefing:
+    "Frau Meier (41, vormals 'Huber-Meier') war bis vor zwei Monaten mit Herrn Huber verheiratet und führte mit ihm ein gemeinsames Privatkonto. Die Scheidung ist rechtskräftig, sie trägt wieder ihren Ledignamen. Sie legt ihren neuen Ausweis mit dem Namen 'Meier' vor und möchte 1) den Namen auf dem bestehenden Konto anpassen lassen sowie 2) ein neues, alleiniges Privatkonto eröffnen.",
+  documents: [
+    {
+      id: "ausweis-neuer-name",
+      label: "Aktueller Ausweis mit neuem Namen 'Meier'",
+      status: "required",
+      feedbackSelected: "Korrekt – die Identifikation erfolgt anhand des aktuell gültigen Ausweises.",
+      feedbackNotSelected: "Fehler: Ohne aktuellen Ausweis kann weder die Identität noch die Namensänderung geprüft werden.",
+    },
+    {
+      id: "scheidungsurkunde",
+      label: "Rechtskräftiges Scheidungsurteil / Scheidungsurkunde",
+      status: "required",
+      feedbackSelected:
+        "Korrekt – die Namensänderung und die veränderte Rechtslage müssen mit dem Scheidungsurteil belegt werden.",
+      feedbackNotSelected:
+        "Fehler: Ohne Scheidungsurkunde kann die Bank die Namensänderung und die veränderte Rechtslage nicht nachvollziehen.",
+    },
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag (neues Einzelkonto)",
+      status: "required",
+      feedbackSelected: "Korrekt – der Basisvertrag ist bei jeder Kontoeröffnung zwingend, auch beim neuen Einzelkonto.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A ist auch beim neuen Einzelkonto zwingend.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20) ist bei jeder Kontoeröffnung obligatorisch.",
+    },
+    {
+      id: "eigenerklarung-np",
+      label: "Eigenerklärung FATCA (natürliche Person)",
+      status: "required",
+      feedbackSelected: "Korrekt – FATCA-Abklärung ist beim neuen Einzelkonto zwingend, unabhängig vom bisherigen Gemeinschaftskonto.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen – sie gilt für jede Neueröffnung.",
+    },
+    {
+      id: "zeichnungsberechtigung-ex-partner-loeschen",
+      label: "Zeichnungsberechtigung von Herrn Huber auf dem bisherigen Gemeinschaftskonto löschen bzw. anpassen",
+      status: "required",
+      feedbackSelected:
+        "Korrekt – nach der Scheidung muss die Zeichnungsberechtigung des Ex-Partners aktiv angepasst werden. Das geschieht nicht automatisch.",
+      feedbackNotSelected:
+        "Schwerer Fehler: Die Zeichnungsberechtigung des Ex-Partners bleibt ohne aktive Anpassung bestehen – ein häufig übersehenes Risiko.",
+    },
+    {
+      id: "altes-konto-unveraendert",
+      label: "Bestehendes Gemeinschaftskonto unverändert weiterlaufen lassen",
+      status: "forbidden",
+      feedbackSelected: "Schwerer Fehler: Der Ex-Partner bliebe weiterhin zeichnungsberechtigt – ein erhebliches Risiko für Frau Meier.",
+      feedbackNotSelected: "Korrekt – das alte Konto darf nicht unverändert bleiben.",
+    },
+    {
+      id: "namensaenderung-ohne-urkunde",
+      label: "Namensänderung allein aufgrund mündlicher Aussage vornehmen",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Eine Namensänderung im Kundenstamm erfordert immer ein amtliches Dokument, keine mündliche Aussage.",
+      feedbackNotSelected: "Korrekt – ohne Scheidungsurkunde keine Namensänderung.",
+    },
+    {
+      id: "neues-konto-alter-name",
+      label: "Neues Konto unter dem alten Namen 'Huber-Meier' eröffnen",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Der aktuelle Ausweis lautet auf 'Meier' – das neue Konto muss auf den aktuellen, amtlichen Namen lauten.",
+      feedbackNotSelected: "Korrekt – das Konto muss auf den aktuellen Namen lauten.",
+    },
+    {
+      id: "zustimmung-ex-mann-einholen",
+      label: "Zustimmung von Herrn Huber für das neue Einzelkonto einholen",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Für ein neues, alleiniges Konto von Frau Meier ist keine Zustimmung des Ex-Partners nötig.",
+      feedbackNotSelected: "Korrekt – Herr Huber hat mit dem neuen Konto nichts zu tun.",
+    },
+    {
+      id: "herkunft-vermoegen",
+      label: "Herkunftsnachweis Vermögen",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Kein Risikomerkmal erkennbar – Namensänderung nach Scheidung löst kein EDD aus.",
+      feedbackNotSelected: "Korrekt – kein erhöhtes Risiko, kein EDD nötig.",
+    },
+    {
+      id: "pep-formular",
+      label: "PEP-Prüfungsformular",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Kein Hinweis auf politisch exponierte Personen in diesem Fall.",
+      feedbackNotSelected: "Korrekt – kein PEP-Status erkennbar.",
+    },
+    {
+      id: "handelsregister",
+      label: "Handelsregisterauszug",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Handelsregisterauszüge sind nur für Firmenkunden relevant.",
+      feedbackNotSelected: "Korrekt – irrelevant bei Privatpersonen.",
+    },
+  ],
+  generalFeedback:
+    "Nach einer Scheidung sind zwei getrennte Schritte nötig: 1) Die Namensänderung im Kundenstamm erfolgt nur gestützt auf die Scheidungsurkunde und den neuen Ausweis. 2) Die Zeichnungsberechtigung des Ex-Partners auf dem bisherigen Gemeinschaftskonto muss aktiv gelöscht oder angepasst werden – sie erlischt nicht automatisch mit der Scheidung. Das neue Einzelkonto wird unabhängig vom Ex-Partner eröffnet.",
+};
+
+const L2_VERDAECHTIGES_VERHALTEN: DocumentCase = {
+  id: "l2-verdaechtiges-verhalten",
+  type: "document-select",
+  level: 2,
+  title: "Widersprüchliche Angaben – auffälliges Kundenverhalten",
+  briefing:
+    "Herr Roth (44) möchte ein Privatkonto eröffnen und eine Ersteinzahlung von CHF 15'000 per Überweisung aus dem Ausland vornehmen. Auf die Frage nach seiner beruflichen Tätigkeit antwortet er zunächst 'Berater', nennt auf Nachfrage nach der Branche innert weniger Minuten drei unterschiedliche Tätigkeiten. Er wirkt nervös, vermeidet Blickkontakt und drängt darauf, das Gespräch rasch zu beenden.",
+  documents: [
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – der Basisvertrag regelt die Geschäftsbeziehung und ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
+    },
+    {
+      id: "ausweis-pruefen",
+      label: "Ausweis genau prüfen und Kopie erstellen",
+      status: "required",
+      feedbackSelected: "Korrekt – besonders bei Auffälligkeiten ist die sorgfältige Identifikation entscheidend.",
+      feedbackNotSelected: "Fehler: Identifikation ist Pflicht – gerade bei auffälligem Verhalten.",
+    },
+    {
+      id: "eigenerklarung-np",
+      label: "Eigenerklärung FATCA (natürliche Person)",
+      status: "required",
+      feedbackSelected: "Korrekt – FATCA-Abklärung ist auch in diesem Fall zwingend.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A ist auch bei Auffälligkeiten zwingend auszufüllen.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20) ist immer erforderlich.",
+    },
+    {
+      id: "plausibilitaet-erwerbstaetigkeit-abklaeren",
+      label: "Plausibilität der Erwerbstätigkeit und Mittelherkunft schriftlich abklären (GwG Art. 6)",
+      status: "required",
+      feedbackSelected:
+        "Korrekt – widersprüchliche Angaben zur Tätigkeit sind ein Risikomerkmal und lösen die Abklärungspflicht nach GwG Art. 6 aus, unabhängig von der Höhe der Einzahlung.",
+      feedbackNotSelected:
+        "Schwerer Fehler: Widersprüchliche Angaben zur beruflichen Tätigkeit müssen abgeklärt werden – die Abklärungspflicht hängt nicht nur vom Betrag ab.",
+    },
+    {
+      id: "herkunftsnachweis",
+      label: "Herkunftsnachweis der Mittel (z.B. Lohnausweis, Vertragsunterlagen) einfordern",
+      status: "required",
+      feedbackSelected:
+        "Korrekt – bei unplausiblen Angaben zur Tätigkeit ist ein Beleg der Mittelherkunft angezeigt, auch bei moderaten Beträgen.",
+      feedbackNotSelected: "Fehler: Die widersprüchlichen Angaben sind ein konkretes Risikomerkmal, das einen Herkunftsnachweis erfordert.",
+    },
+    {
+      id: "edd-formular",
+      label: "Enhanced Due Diligence (EDD) Formular ausfüllen",
+      status: "required",
+      feedbackSelected: "Korrekt – widersprüchliches Verhalten und unplausible Angaben lösen verstärkte Sorgfaltspflichten (EDD) aus.",
+      feedbackNotSelected: "Fehler: Bei konkreten Risikomerkmalen wie widersprüchlichen Angaben ist EDD zwingend.",
+    },
+    {
+      id: "vorgesetzte-informieren",
+      label: "Vorgesetzte/n und Compliance informieren",
+      status: "required",
+      feedbackSelected: "Korrekt – bei Verdachtsmomenten muss intern eskaliert werden.",
+      feedbackNotSelected: "Fehler: Interne Eskalation bei Auffälligkeiten ist zwingend – Sie dürfen nicht alleine entscheiden.",
+    },
+    {
+      id: "dokumentation",
+      label: "Beobachtungen und Abklärungsresultat intern dokumentieren",
+      status: "required",
+      feedbackSelected: "Korrekt – lückenlose Dokumentation ist ein zentrales GwG-Element.",
+      feedbackNotSelected: "Fehler: Dokumentation ist Pflicht und schützt die Bank.",
+    },
+    {
+      id: "konto-sofort-eroeffnen",
+      label: "Konto ohne weitere Abklärung sofort eröffnen",
+      status: "forbidden",
+      feedbackSelected: "Schwerer Fehler: Konto ohne Abklärung zu eröffnen verstösst gegen GwG Art. 6.",
+      feedbackNotSelected: "Korrekt – zuerst abklären, dann entscheiden.",
+    },
+    {
+      id: "verhalten-ignorieren",
+      label: "Nervosität und widersprüchliche Angaben als unbedeutend abtun",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Verhaltensauffälligkeiten und widersprüchliche Angaben sind relevante Risikoindikatoren und dürfen nicht ignoriert werden.",
+      feedbackNotSelected: "Korrekt – solche Signale dürfen nicht ignoriert werden.",
+    },
+    {
+      id: "sofort-ablehnen",
+      label: "Konto sofort und pauschal ablehnen ohne Prüfung",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Pauschalablehnung ist nicht korrekt. Erst vollständig prüfen, dann entscheiden.",
+      feedbackNotSelected: "Korrekt – Ablehnung ohne Prüfung ist nicht die richtige Reaktion.",
+    },
+    {
+      id: "sofort-polizei",
+      label: "Sofort die Polizei rufen",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Nicht die richtige Reihenfolge. Zuerst intern eskalieren, Compliance informieren. Ggf. MROS-Meldung via Compliance – nicht direkt Polizei.",
+      feedbackNotSelected: "Korrekt – direkte Polizei ist nicht der korrekte Weg.",
+    },
+    {
+      id: "pep-formular",
+      label: "PEP-Prüfungsformular",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Kein Hinweis auf politisch exponierte Stellung in diesem Fall.",
+      feedbackNotSelected: "Korrekt – kein PEP-Status erkennbar.",
+    },
+  ],
+  generalFeedback:
+    "Auch ohne grosse Bareinlage lösen widersprüchliche Angaben zur Erwerbstätigkeit und auffälliges Verhalten (Nervosität, Vermeiden von Blickkontakt, Drängen auf rasches Gesprächsende) die Abklärungspflicht nach GwG Art. 6 aus. Massgebend ist die Plausibilität der Angaben, nicht allein die Höhe des Betrags. Vorgehen: abklären, dokumentieren, Vorgesetzte/Compliance einbeziehen – keine Pauschalablehnung und keine sofortige Kontoeröffnung ohne Prüfung.",
+};
+
 // ─────────────────────────────────────────────────────────
 // LEVEL 3 – zusätzliche LAP-Fälle
 // ─────────────────────────────────────────────────────────
@@ -1351,6 +1674,223 @@ const L3_WIRTSCHAFTLICH_BERECHTIGTER_DRITTER: McqCase = {
   },
 };
 
+const L3_DOPPELBUERGER_FATCA: DocumentCase = {
+  id: "l3-doppelbuerger-fatca",
+  type: "document-select",
+  level: 3,
+  title: "Doppelbürgerin CH/USA – FATCA-Zusatzdokumentation",
+  briefing:
+    "Frau Wagner (29) möchte ein Privatkonto eröffnen. Sie legt ihren Schweizer Pass vor. Bei der FATCA-Abklärung gibt sie offen an, in Boston (USA) geboren zu sein und als Kind mit den Eltern in die Schweiz gezogen zu sein. Sie besitzt weiterhin die US-Staatsbürgerschaft, lebt aber seit über 25 Jahren ausschliesslich in der Schweiz.",
+  documents: [
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag",
+      status: "required",
+      feedbackSelected: "Korrekt – der Basisvertrag regelt die Geschäftsbeziehung und ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
+    },
+    {
+      id: "ausweis-ch",
+      label: "Gültiger CH-Ausweis / Reisepass",
+      status: "required",
+      feedbackSelected: "Korrekt – primäres Identifikationsdokument gemäss GwG.",
+      feedbackNotSelected: "Fehler: Identifikation mit gültigem Ausweis ist zwingend erforderlich.",
+    },
+    {
+      id: "eigenerklarung-np",
+      label: "Eigenerklärung FATCA (natürliche Person)",
+      status: "required",
+      feedbackSelected:
+        "Korrekt – die FATCA-Grunderklärung ist immer der erste Schritt; sie deckt hier auf, dass Frau Wagner als in den USA Geborene eine US-Person ist.",
+      feedbackNotSelected: "Fehler: Ohne die FATCA-Grunderklärung wird die US-Personen-Eigenschaft gar nicht erst erkannt.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A ist unabhängig vom FATCA-Status bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20) ist bei jeder Kontoeröffnung obligatorisch.",
+    },
+    {
+      id: "w9-formular",
+      label: "W-9 Formular / US-Steueridentifikationsnummer (TIN) erfassen",
+      status: "required",
+      feedbackSelected:
+        "Korrekt – als US-Person (Geburtsort USA) muss Frau Wagner unabhängig von ihrem Wohnsitz ihre US-TIN angeben; das W-9 Formular dokumentiert dies.",
+      feedbackNotSelected: "Schwerer Fehler: US-Staatsbürgerschaft löst unabhängig vom Wohnsitz die Pflicht zur Erfassung der US-TIN aus.",
+    },
+    {
+      id: "us-person-kennzeichnung",
+      label: "Konto intern als US-Person kennzeichnen (FATCA-Reporting an IRS vorbereiten)",
+      status: "required",
+      feedbackSelected: "Korrekt – US-Personen-Konten müssen dem IRS gemeldet werden (FATCA-Reportingpflicht der Schweizer Bank).",
+      feedbackNotSelected: "Fehler: Ohne interne Kennzeichnung als US-Person wird die jährliche IRS-Meldepflicht verletzt.",
+    },
+    {
+      id: "geburtsort-ignorieren",
+      label: "Geburtsort USA im System nicht vermerken, da Kundin nur den Schweizer Pass vorlegt",
+      status: "forbidden",
+      feedbackSelected:
+        "Schwerer FATCA-Verstoss: Der Geburtsort in den USA macht Frau Wagner unabhängig vom vorgelegten Pass zu einer US-Person – dies zu verschweigen verletzt die FATCA-Sorgfaltspflicht der Bank.",
+      feedbackNotSelected: "Korrekt – der Geburtsort muss immer erfasst und ausgewertet werden.",
+    },
+    {
+      id: "konto-ablehnen-us-person",
+      label: "Kontoeröffnung ablehnen, weil Kundin US-Staatsbürgerin ist",
+      status: "forbidden",
+      feedbackSelected:
+        "Fehler: Eine US-Staatsbürgerschaft ist kein automatischer Ablehnungsgrund. Korrekt ist die vollständige FATCA-Dokumentation, nicht die pauschale Ablehnung.",
+      feedbackNotSelected: "Korrekt – keine pauschale Ablehnung, sondern korrekte Dokumentation.",
+    },
+    {
+      id: "eigenerklarung-jur-fatca",
+      label: "Eigenerklärung FATCA (juristische Person)",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Frau Wagner ist eine natürliche Person – die Erklärung für juristische Personen ist hier falsch.",
+      feedbackNotSelected: "Korrekt nicht ausgewählt – nicht zutreffend bei einer natürlichen Person.",
+    },
+    {
+      id: "handelsregister",
+      label: "Handelsregisterauszug",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Handelsregisterauszüge sind nur für Firmenkunden relevant.",
+      feedbackNotSelected: "Korrekt – irrelevant bei Privatpersonen.",
+    },
+    {
+      id: "jahresabschluss",
+      label: "Jahresabschluss / Bilanz",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Nur für Geschäfts- und Firmenkonten zutreffend.",
+      feedbackNotSelected: "Korrekt – nicht zutreffend bei Privatkonto.",
+    },
+    {
+      id: "pep-formular",
+      label: "PEP-Prüfungsformular",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Kein Hinweis auf politisch exponierte Stellung.",
+      feedbackNotSelected: "Korrekt – kein PEP-Status erkennbar.",
+    },
+    {
+      id: "herkunft-vermoegen",
+      label: "Herkunftsnachweis Vermögen",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Kein erhöhtes GwG-Risiko erkennbar – die FATCA-Pflicht ist unabhängig von einem Vermögensrisiko.",
+      feedbackNotSelected: "Korrekt – Standardfall ohne GwG-Risikomerkmale, kein EDD nötig.",
+    },
+  ],
+  generalFeedback:
+    "FATCA definiert 'US Person' über die Staatsbürgerschaft bzw. den Geburtsort, nicht über den Wohnsitz. Auch wer seit Jahrzehnten ausschliesslich in der Schweiz lebt und nur den Schweizer Pass vorlegt, bleibt als in den USA geborene Person FATCA-pflichtig: W-9-Formular mit US-TIN und interne Kennzeichnung fürs IRS-Reporting sind zwingend zusätzlich zur Standard-Eigenerklärung. Eine pauschale Ablehnung ist nicht der korrekte Weg.",
+};
+
+const L3_VORSORGEAUFTRAG: DocumentCase = {
+  id: "l3-vorsorgeauftrag",
+  type: "document-select",
+  level: 3,
+  title: "Vorsorgeauftrag – Handeln für eine urteilsunfähige Person",
+  briefing:
+    "Frau Bucher legt einen Vorsorgeauftrag vor, mit dem sie von ihrem Onkel, Herrn Wyss (79), als Vorsorgebeauftragte eingesetzt wurde. Herr Wyss ist seit einem Schlaganfall vor vier Monaten urteilsunfähig. Frau Bucher legt zudem eine Bestätigung der Kindes- und Erwachsenenschutzbehörde (KESB) über die Wirksamkeit des Vorsorgeauftrags vor und möchte für Herrn Wyss ein neues Sparkonto eröffnen.",
+  documents: [
+    {
+      id: "vorsorgeauftrag",
+      label: "Vorsorgeauftrag (Original oder beglaubigte Kopie)",
+      status: "required",
+      feedbackSelected: "Korrekt – der Vorsorgeauftrag regelt, wer im Fall der Urteilsunfähigkeit handeln darf.",
+      feedbackNotSelected: "Fehler: Ohne den Vorsorgeauftrag selbst kann der Umfang der Vertretungsbefugnis nicht geprüft werden.",
+    },
+    {
+      id: "kesb-wirksamkeitsbestaetigung",
+      label: "Bestätigung der KESB über die Wirksamkeit des Vorsorgeauftrags",
+      status: "required",
+      feedbackSelected:
+        "Korrekt – ein Vorsorgeauftrag entfaltet erst mit der Wirksamkeitsbestätigung der KESB rechtliche Wirkung (Art. 360 ff. ZGB). Ohne diese Bestätigung darf die Bank Frau Bucher nicht als Vertreterin anerkennen.",
+      feedbackNotSelected:
+        "Schwerer Fehler: Der Vorsorgeauftrag allein genügt nicht – die KESB muss seine Wirksamkeit förmlich bestätigen, bevor die Bank ihn anerkennen darf.",
+    },
+    {
+      id: "ausweis-bucher",
+      label: "Ausweis / Pass von Frau Bucher (Vorsorgebeauftragte)",
+      status: "required",
+      feedbackSelected: "Korrekt – die Identität der handelnden Vorsorgebeauftragten muss geprüft werden.",
+      feedbackNotSelected: "Fehler: Frau Bucher muss als handelnde Vertreterin identifiziert werden.",
+    },
+    {
+      id: "ausweis-wyss",
+      label: "Ausweis / Pass von Herrn Wyss (Kontoinhaber)",
+      status: "required",
+      feedbackSelected: "Korrekt – Herr Wyss bleibt Kontoinhaber und muss identifiziert werden, auch wenn er selbst nicht handeln kann.",
+      feedbackNotSelected: "Fehler: Auch bei Vertretung muss der Kontoinhaber selbst identifiziert werden.",
+    },
+    {
+      id: "basisvertrag",
+      label: "Basisvertrag (unterzeichnet durch Frau Bucher als Vorsorgebeauftragte)",
+      status: "required",
+      feedbackSelected: "Korrekt – der Basisvertrag ist bei jeder Kontoeröffnung zwingend.",
+      feedbackNotSelected: "Fehler: Der Basisvertrag ist das Grunddokument jeder Kontoeröffnung und darf nicht fehlen.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "required",
+      feedbackSelected: "Korrekt – Formular A ist auch bei Vertretung durch eine Vorsorgebeauftragte zwingend.",
+      feedbackNotSelected: "Fehler: Formular A (VSB 20) ist bei jeder Kontoeröffnung obligatorisch.",
+    },
+    {
+      id: "eigenerklarung-np",
+      label: "Eigenerklärung FATCA (natürliche Person) – für Herrn Wyss, unterzeichnet durch die Vorsorgebeauftragte",
+      status: "required",
+      feedbackSelected: "Korrekt – FATCA-Abklärung ist zwingend; die Vorsorgebeauftragte unterzeichnet an Stelle von Herrn Wyss.",
+      feedbackNotSelected: "Fehler: FATCA-Abklärung nicht vergessen – sie gilt auch bei Vertretung.",
+    },
+    {
+      id: "konto-ohne-kesb-bestaetigung",
+      label: "Konto allein gestützt auf den Vorsorgeauftrag eröffnen, ohne KESB-Bestätigung",
+      status: "forbidden",
+      feedbackSelected:
+        "Schwerer Fehler: Ohne die förmliche Wirksamkeitsbestätigung der KESB ist der Vorsorgeauftrag noch nicht rechtswirksam.",
+      feedbackNotSelected: "Korrekt – ohne KESB-Bestätigung darf das Konto nicht eröffnet werden.",
+    },
+    {
+      id: "wyss-muss-unterschreiben",
+      label: "Herr Wyss muss die Kontoeröffnung persönlich mitunterzeichnen",
+      status: "forbidden",
+      feedbackSelected:
+        "Fehler: Herr Wyss ist urteilsunfähig und kann keine rechtsgültige Unterschrift mehr leisten – genau dafür wurde der Vorsorgeauftrag wirksam.",
+      feedbackNotSelected: "Korrekt – Herr Wyss kann urteilsunfähig nicht mehr selbst unterzeichnen.",
+    },
+    {
+      id: "bucher-als-kontoinhaberin",
+      label: "Frau Bucher als Kontoinhaberin erfassen",
+      status: "forbidden",
+      feedbackSelected: "Schwerer Fehler: Das Konto gehört Herrn Wyss – Frau Bucher handelt nur als Vertreterin, nicht als Kontoinhaberin.",
+      feedbackNotSelected: "Korrekt – Herr Wyss ist der Kontoinhaber.",
+    },
+    {
+      id: "beistandsurkunde",
+      label: "Beistandsurkunde einfordern",
+      status: "forbidden",
+      feedbackSelected:
+        "Fehler: Hier liegt kein behördlich angeordnetes Beistandsverhältnis vor, sondern ein privater Vorsorgeauftrag – die KESB-Wirksamkeitsbestätigung ersetzt die Beistandsurkunde.",
+      feedbackNotSelected: "Korrekt – in diesem Fall ist keine Beistandsurkunde relevant, sondern die KESB-Wirksamkeitsbestätigung.",
+    },
+    {
+      id: "pep-formular",
+      label: "PEP-Prüfungsformular",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Kein Hinweis auf politisch exponierte Personen in diesem Fall.",
+      feedbackNotSelected: "Korrekt – kein PEP-Status erkennbar.",
+    },
+    {
+      id: "herkunft-vermoegen",
+      label: "Herkunftsnachweis Vermögen",
+      status: "forbidden",
+      feedbackSelected: "Fehler: Die Urteilsunfähigkeit allein ist kein GwG-Risikomerkmal – kein EDD erforderlich.",
+      feedbackNotSelected: "Korrekt – kein erhöhtes Risiko, kein EDD nötig.",
+    },
+  ],
+  generalFeedback:
+    "Ein Vorsorgeauftrag (Art. 360 ff. ZGB) ist eine private Vorausverfügung für den Fall der Urteilsunfähigkeit. Er entfaltet aber erst Wirkung, wenn die KESB die Urteilsunfähigkeit feststellt und die Wirksamkeit des Auftrags bestätigt – erst dann darf die Bank die vorsorgebeauftragte Person als Vertreterin anerkennen. Der urteilsunfähige Kontoinhaber bleibt Vertragspartei, unterschreibt aber nicht mehr selbst; die Vorsorgebeauftragte handelt in seinem Namen.",
+};
+
 // ─────────────────────────────────────────────────────────
 // LEVEL CONFIG
 // ─────────────────────────────────────────────────────────
@@ -1366,15 +1906,35 @@ export const KONTO_PRIVAT_LEVELS: KontoPrivatLevel[] = [
   {
     level: 2,
     label: "Spezialfälle",
-    description: "Ausländer, GwG-Risiko, Minderjährige, Beistandschaft",
+    description: "Ausländer, GwG-Risiko, Minderjährige, Beistandschaft, Scheidung",
     badgeVariant: "orange",
-    cases: [L2_AUSLAENDER, L2_BAREINLAGE, L2_MINDERJAEHRIG, L2_PEP_SCHMID, L2_ERBSCHAFT_KELLER, L2_NIEDERLASSUNGSBEWILLIGUNG_C, L2_BEISTANDSCHAFT],
+    cases: [
+      L2_AUSLAENDER,
+      L2_BAREINLAGE,
+      L2_MINDERJAEHRIG,
+      L2_PEP_SCHMID,
+      L2_ERBSCHAFT_KELLER,
+      L2_NIEDERLASSUNGSBEWILLIGUNG_C,
+      L2_BEISTANDSCHAFT,
+      L2_KLEINKIND_SORGE,
+      L2_SCHEIDUNG,
+      L2_VERDAECHTIGES_VERHALTEN,
+    ],
   },
   {
     level: 3,
     label: "LAP-Niveau",
-    description: "Gemeinschaftskonto, US-Persons, Selbständige, Trickfragen, PEP / EDD",
+    description: "Gemeinschaftskonto, US-Persons, Selbständige, Vorsorgeauftrag, Trickfragen, PEP / EDD",
     badgeVariant: "red",
-    cases: [L3_GEMEINSCHAFTSKONTO, L3_AUSWEIS_TRICK_MCQ, L3_HOCHRISIKO_PEP, L3_US_STAATSBUERGER_MCQ, L3_SELBSTAENDIGER, L3_WIRTSCHAFTLICH_BERECHTIGTER_DRITTER],
+    cases: [
+      L3_GEMEINSCHAFTSKONTO,
+      L3_AUSWEIS_TRICK_MCQ,
+      L3_HOCHRISIKO_PEP,
+      L3_US_STAATSBUERGER_MCQ,
+      L3_SELBSTAENDIGER,
+      L3_WIRTSCHAFTLICH_BERECHTIGTER_DRITTER,
+      L3_DOPPELBUERGER_FATCA,
+      L3_VORSORGEAUFTRAG,
+    ],
   },
 ];
