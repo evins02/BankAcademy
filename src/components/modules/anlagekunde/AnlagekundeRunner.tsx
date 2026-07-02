@@ -5,8 +5,10 @@ import { LevelSelector } from "./LevelSelector";
 import { LernblockCard } from "./LernblockCard";
 import { CaseCard } from "./CaseCard";
 import { FeedbackPanel } from "./FeedbackPanel";
+import { DocumentCaseCard } from "./DocumentCaseCard";
+import { DocumentFeedbackPanel } from "./DocumentFeedbackPanel";
 import { LevelComplete, type ScenarioResult } from "./LevelComplete";
-import { AL_LEVELS, type LevelNum, type OptionKey } from "@/lib/anlagekunde";
+import { AL_LEVELS, scoreDocumentCase, type LevelNum, type OptionKey } from "@/lib/anlagekunde";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
@@ -18,6 +20,7 @@ export function AnlagekundeRunner() {
   const [activeLevel, setActiveLevel] = useState<LevelNum>(1);
   const [scenarioIndex, setScenarioIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<OptionKey | null>(null);
+  const [selectedDocs, setSelectedDocs] = useState<Set<string>>(new Set());
   const [sessionResults, setSessionResults] = useState<ScenarioResult[]>([]);
 
   const levelConfig = AL_LEVELS.find((l) => l.level === activeLevel)!;
@@ -29,8 +32,18 @@ export function AnlagekundeRunner() {
     setActiveLevel(level);
     setScenarioIndex(0);
     setSelectedOption(null);
+    setSelectedDocs(new Set());
     setSessionResults([]);
     setView("lernblock");
+  }, []);
+
+  const handleToggleDoc = useCallback((id: string) => {
+    setSelectedDocs((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   }, []);
 
   const handleSubmit = useCallback(() => {
@@ -38,12 +51,14 @@ export function AnlagekundeRunner() {
   }, []);
 
   const handleNext = useCallback(() => {
-    if (!selectedOption) return;
+    const isCorrect =
+      currentScenario.type === "document-select"
+        ? scoreDocumentCase(currentScenario, selectedDocs).correct
+        : selectedOption === currentScenario.correct;
 
-    const isCorrect = selectedOption === currentScenario.correct;
     const newResults: ScenarioResult[] = [
       ...sessionResults,
-      { scenarioId: currentScenario.id, correct: isCorrect, selectedOption },
+      { scenarioId: currentScenario.id, correct: isCorrect },
     ];
     setSessionResults(newResults);
 
@@ -59,13 +74,15 @@ export function AnlagekundeRunner() {
     } else {
       setScenarioIndex((i) => i + 1);
       setSelectedOption(null);
+      setSelectedDocs(new Set());
       setView("playing");
     }
-  }, [selectedOption, currentScenario, sessionResults, isLastScenario, activeLevel]);
+  }, [selectedOption, selectedDocs, currentScenario, sessionResults, isLastScenario, activeLevel]);
 
   const handleRetry = useCallback(() => {
     setScenarioIndex(0);
     setSelectedOption(null);
+    setSelectedDocs(new Set());
     setSessionResults([]);
     setView("lernblock");
   }, []);
@@ -86,7 +103,17 @@ export function AnlagekundeRunner() {
       {view === "lernblock" && (
         <LernblockCard level={activeLevel} onContinue={() => setView("playing")} />
       )}
-      {view === "playing" && currentScenario && (
+      {view === "playing" && currentScenario && currentScenario.type === "document-select" && (
+        <DocumentCaseCard
+          scenario={currentScenario}
+          scenarioIndex={scenarioIndex}
+          total={total}
+          selectedDocs={selectedDocs}
+          onToggle={handleToggleDoc}
+          onSubmit={handleSubmit}
+        />
+      )}
+      {view === "playing" && currentScenario && currentScenario.type === "multiple-choice" && (
         <CaseCard
           scenario={currentScenario}
           scenarioIndex={scenarioIndex}
@@ -96,7 +123,17 @@ export function AnlagekundeRunner() {
           onSubmit={handleSubmit}
         />
       )}
-      {view === "feedback" && currentScenario && selectedOption && (
+      {view === "feedback" && currentScenario && currentScenario.type === "document-select" && (
+        <DocumentFeedbackPanel
+          scenario={currentScenario}
+          selectedDocs={selectedDocs}
+          scenarioIndex={scenarioIndex}
+          total={total}
+          isLastScenario={isLastScenario}
+          onNext={handleNext}
+        />
+      )}
+      {view === "feedback" && currentScenario && currentScenario.type === "multiple-choice" && selectedOption && (
         <FeedbackPanel
           scenario={currentScenario}
           selectedOption={selectedOption}
