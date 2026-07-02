@@ -275,6 +275,87 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         glossarTerm: "Operative Fehlerkorrektur",
         rechtsgrundlage: "OR Art. 398 (Sorgfaltspflicht des Beauftragten) / Interne Qualitätssicherung",
       },
+      {
+        id: "2.6",
+        level: 2,
+        briefing:
+          "Kundin Elisabeth Keller ruft an: Ihre Debitkarte liegt vor ihr auf dem Tisch – sie hat sie nie verloren. Trotzdem erscheinen heute Morgen drei Transaktionen à CHF 78.50 bei einem ausländischen Online-Händler, den sie nie benutzt hat.",
+        question: "Wie gehst du vor?",
+        options: [
+          { key: "A", text: "Nichts tun – die Karte ist physisch vorhanden, also kein Missbrauch möglich" },
+          {
+            key: "B",
+            text: "Karte sofort sperren, Chargeback-Verfahren einleiten, Kundin über nächste Schritte informieren.",
+          },
+          { key: "C", text: "Kundin direkt an den Online-Händler verweisen – die Bank ist nicht zuständig" },
+          { key: "D", text: "Abwarten ob weitere Transaktionen kommen, dann entscheiden" },
+        ],
+        correct: "B",
+        feedback:
+          "Karte physisch vorhanden ≠ Karte sicher. Kartendaten können ohne physischen Kartenverlust gestohlen werden (Phishing, Datenleck beim Händler, Skimming). Sofortmassnahmen: Karte sperren, Chargeback-Antrag stellen, Kundin beraten. Die Bank prüft die Rückforderung beim Händler über das Kartennetzwerk.",
+        warum:
+          "Kartenmissbrauch ohne physischen Verlust geschieht durch Datenlecks bei Online-Händlern, Phishing oder Skimming – dabei werden Kartennummer, Ablaufdatum und CVV kompromittiert, nicht die physische Karte. Deshalb muss die Karte trotzdem gesperrt werden: Solange die Daten bekannt sind, kann der Angreifer weiter belasten. Das Chargeback-Verfahren läuft über das Kartennetzwerk (Visa/Mastercard) und ermöglicht die Rückforderung nicht autorisierter Transaktionen.",
+        inDerPraxis:
+          "Unautorisierte Online-Transaktionen sind heute der häufigste Kartenbetrugsmodus. Die Bank prüft im Chargeback-Verfahren, ob eine Transaktion wirklich nicht autorisiert war (3DS-Authentifizierung, IP-Adresse, Gerätefingerabdruck). Die Kundin muss schriftlich bestätigen, die Transaktionen nicht ausgeführt zu haben. Nach der Sperrung erhält sie eine neue Karte mit neuen Daten und einer neuen Kartennummer.",
+        merksatz:
+          "Karte noch vorhanden ≠ Karte sicher. Unautorisierte Transaktion: Sperren + Chargeback einleiten + Kundin informieren.",
+        glossarTerm: "Kartensperrung",
+        rechtsgrundlage: "SIX-Kartenreglement / Visa/Mastercard Chargeback-Regeln / OR Art. 402",
+      },
+      {
+        id: "2.7",
+        level: 2,
+        briefing:
+          "Du erhältst eine formelle Recall-Anfrage der PostFinance: CHF 6'200 wurden am Montag irrtümlich auf das Konto eures Kunden Thomas Gerber (Konto ...712) überwiesen – ein Buchungsfehler der PostFinance. Gerbers Kontostand beträgt CHF 14'800. Er ist ein langjähriger Bestandeskunde ohne Auffälligkeiten.",
+        question: "Wie gehst du vor?",
+        options: [
+          { key: "A", text: "Betrag sofort zurückbuchen – das Geld gehört dem Kunden nicht" },
+          {
+            key: "B",
+            text: "Thomas Gerber informieren und seine Zustimmung zur Rückbuchung einholen. Ohne Zustimmung kein Rückzug möglich.",
+          },
+          { key: "C", text: "Recall-Anfrage ablehnen – die Bank ist nicht verpflichtet zu helfen" },
+          { key: "D", text: "Nichts tun – PostFinance soll sich direkt an den Kunden wenden" },
+        ],
+        correct: "B",
+        feedback:
+          "Bei einer eingehenden Recall-Anfrage darf die Bank das Kundenkonto NICHT ohne dessen Zustimmung belasten – auch wenn der Betrag irrtümlich überwiesen wurde. Die Bank informiert den Kunden, erklärt die Situation und holt seine Zustimmung ein. Stimmt er zu: Rückbuchung. Verweigert er: PostFinance muss zivilrechtlich vorgehen (ungerechtfertigte Bereicherung OR Art. 62).",
+        warum:
+          "Das Kontoguthaben des Kunden ist sein Eigentum – auch wenn es durch den Fehler eines Dritten entstanden ist. Die Bank handelt als Treuhänderin und kann nicht eigenmächtig darüber verfügen. Das Recht auf Rückforderung wegen ungerechtfertigter Bereicherung liegt bei der zahlenden Bank; sie muss es bei Verweigerung zivilrechtlich durchsetzen. Die empfangende Bank informiert und vermittelt, kann aber nicht erzwingen.",
+        inDerPraxis:
+          "In der Praxis stimmen Kunden bei klaren Buchungsfehlern meist freiwillig zur Rückgabe zu. Problematisch wird es wenn der Betrag bereits ausgegeben ist, der Kunde die Zustimmung verweigert oder Insolvenz vorliegt. In solchen Fällen muss die anfragende Bank den Rechtsweg einschlagen. Wichtig: Beide Seiten proaktiv über den Status informieren und alle Schritte dokumentieren.",
+        merksatz:
+          "Eingehende Recall: Kunden informieren, Zustimmung einholen. Ohne Zustimmung kein Geld zurück. Nie eigenmächtig zurückbuchen.",
+        glossarTerm: "Rückruf / Recall",
+        rechtsgrundlage: "OR Art. 62 ff. (Ungerechtfertigte Bereicherung) / SIC-Reglement / SCT Recall-Verfahren",
+      },
+      {
+        id: "2.8",
+        level: 2,
+        briefing:
+          "Beim Monatsabschluss stellst du fest: Ein Firmenkunde hat seinen Lohnlauf für 38 Mitarbeitende zweimal ausgelöst – einmal manuell, einmal automatisch via Dauerauftrag. Total doppelt ausgeführt: CHF 187'400. Die zweite Ausführung ist 4 Stunden her.",
+        question: "Was sind die zwingenden nächsten Schritte?",
+        options: [
+          { key: "A", text: "Abwarten – der Firmenkunde soll die Situation mit seinen Mitarbeitenden klären" },
+          {
+            key: "B",
+            text: "Sofort intern eskalieren, Sammelrückruf einleiten, Firmenkunden informieren, alle Buchungen dokumentieren.",
+          },
+          { key: "C", text: "Nur den Firmenkunden anrufen – den Rückruf soll er selbst organisieren" },
+          { key: "D", text: "Doppelte Löhne direkt von den Mitarbeiterkonten abbuchen ohne Rücksprache" },
+        ],
+        correct: "B",
+        feedback:
+          "Bei Batch-Fehlern gilt: Sofort eskalieren und Sammelrückruf einleiten. 4 Stunden sind wenig – die Zahlungen sind möglicherweise noch nicht wertgestellt. Firmenkunden sofort informieren: Er muss seine Mitarbeitenden ansprechen und zur freiwilligen Rückgabe auffordern. Individuelle Rückbuchungen ohne Zustimmung der Empfänger sind nicht zulässig.",
+        warum:
+          "Je früher ein Batch-Recall eingeleitet wird, desto höher die Chance, Zahlungen noch vor Wertstellung zu stoppen. Nach Wertstellung sind Rückbuchungen nur mit Zustimmung der jeweiligen Empfänger möglich. Der Firmenkunde trägt die Verantwortung für den Doppelauslöser, aber die Bank unterstützt aktiv beim Rückruf. Verweigern Mitarbeitende die Rückgabe: OR Art. 62 (ungerechtfertigte Bereicherung) als Rechtsgrundlage.",
+        inDerPraxis:
+          "Lohnlauf-Doppelverarbeitungen entstehen durch technische Fehler oder Bedienungsfehler (Doppelklick, parallele Batch-Ausführung). Banken haben spezifische Bulk-Recall-Prozesse für solche Fälle. Kritisches Zeitfenster: Innerhalb weniger Stunden kann oft noch direkt gestoppt werden. Nach Wertstellung wird der Rückruf zum langwierigen Einzelfall-Prozess, falls einzelne Mitarbeitende nicht kooperieren.",
+        merksatz:
+          "Batch-Fehler: Sofort eskalieren, Sammelrückruf einleiten, Firmenkunden informieren. Zeit ist der entscheidende Faktor.",
+        glossarTerm: "Rückbuchung",
+        rechtsgrundlage: "OR Art. 62 ff. (Ungerechtfertigte Bereicherung) / SIC Bulk Recall / OR Art. 398 (Sorgfaltspflicht)",
+      },
     ],
   },
   {
@@ -395,6 +476,60 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Sanktionslisten-Treffer: Stopp. Compliance. Kein Wort zum Kunden. Dokumentieren.",
         glossarTerm: "Sanktionen / SECO",
         rechtsgrundlage: "EmbG (Embargogesetz) / SECO-Verordnungen / GwG Art. 10a (Informationsverbot)",
+      },
+      {
+        id: "3.5",
+        level: 3,
+        briefing:
+          "Kundin Sonja Bauer kommt mit einem Kuvert an den Schalter und möchte CHF 24'800 in bar einzahlen. Sie ist seit 2 Jahren Kundin mit einem normalen Privatkonto (monatlicher Lohneingang CHF 4'200). Es ist ihre erste Bareinzahlung dieser Grösse. Auf Nachfrage sagt sie: «Das sind Ersparnisse aus dem Haushalt.»",
+        question: "Was sind deine Pflichten gemäss GwG?",
+        options: [
+          { key: "A", text: "Geld annehmen und normal buchen – die Kundin ist bekannt" },
+          { key: "B", text: "Einzahlung verweigern – Bargeld über CHF 10'000 ist nicht erlaubt" },
+          {
+            key: "C",
+            text: "Identität bestätigen, wirtschaftlich Berechtigten feststellen, Herkunft der Mittel plausibilisieren und dokumentieren. Bei unklarer Herkunft: MROS prüfen.",
+          },
+          { key: "D", text: "Höchstens CHF 15'000 annehmen, Rest ablehnen" },
+        ],
+        correct: "C",
+        feedback:
+          "Bei Bareinzahlungen ab CHF 15'000 greift GwG Art. 3 Abs. 2 (Identifikationspflicht). Dazu kommt GwG Art. 4 (wirtschaftlich Berechtigter). Eine ungewöhnliche Transaktion ausserhalb des Kundenprofils löst die erhöhte Sorgfaltspflicht nach GwG Art. 6 aus. «Haushaltsersparnisse» für fast CHF 25'000 bei einem Monatslohn von CHF 4'200 ist nicht plausibel – die Herkunft muss belegt und dokumentiert werden.",
+        warum:
+          "Die Schwelle für die erhöhte Identifikationspflicht bei Bargeldtransaktionen liegt in der Schweiz bei CHF 15'000 (GwG Art. 3 Abs. 2). Eine langjährige Kundenbeziehung senkt das Risiko, hebt aber die GwG-Pflichten nicht auf. CHF 24'800 entsprechen fast 6 Netto-Monatslöhnen – das ist für sich allein schon unplausibel. Bei fehlendem Herkunftsnachweis und bleibendem Verdacht ist eine MROS-Meldung zu prüfen; parallel gilt das Informationsverbot gegenüber der Kundin.",
+        inDerPraxis:
+          "Bareinzahlungen über CHF 15'000 lösen in allen Schweizer Banken standardmässig eine erhöhte Prüfung aus. Akzeptable Herkunftsbelege sind: Fahrzeug- oder Liegenschaftsverkaufsvertrag, Erbschaftsnachweis, Lotteriebescheinigung, Schenkungsvertrag. Compliance muss involviert werden, wenn die Herkunft nicht plausibel erklärt werden kann. Typisches Geldwäschereimuster: Bareinzahlungen knapp unter oder über dem Schwellwert von CHF 15'000.",
+        merksatz:
+          "Bareinzahlung ab CHF 15'000: Identifikation + wirtschaftlich Berechtigter + Herkunftsnachweis. «Haushaltsersparnisse» ohne Beleg reicht nicht.",
+        glossarTerm: "Geldwäscherei",
+        rechtsgrundlage: "GwG Art. 3 Abs. 2 (Identifikationspflicht Bargeschäfte) / GwG Art. 4 (wirtschaftlich Berechtigter) / GwG Art. 6 (erhöhte Sorgfalt)",
+      },
+      {
+        id: "3.6",
+        level: 3,
+        briefing:
+          "Das AML-System blockiert eine ausgehende Überweisung über CHF 12'000 an «Ahmed Al-Farsi» in den Vereinigten Arabischen Emiraten. Auf der SECO-Sanktionsliste steht ein «Ahmed Al-Farsi», geboren 1956 in Syrien. Euer Zahlungsempfänger ist laut Kundendossier «Ahmed Al-Farsi», geboren 1988 in Dubai, mit verifizierter Emirates-ID und langjähriger Geschäftsbeziehung.",
+        question: "Wie gehst du vor?",
+        options: [
+          { key: "A", text: "Zahlung freigeben – Geburtsjahr und Nationalität stimmen eindeutig nicht überein" },
+          { key: "B", text: "Zahlung dauerhaft ablehnen – Sanktionsliste hat immer Priorität" },
+          {
+            key: "C",
+            text: "Zahlung gesperrt lassen, Fall an Compliance übergeben. Freigabe nur durch Compliance nach dokumentierter Verifikation. Kunden vorerst nicht informieren.",
+          },
+          { key: "D", text: "Kunden fragen ob sein Kontakt wirklich nicht auf der Sanktionsliste steht" },
+        ],
+        correct: "C",
+        feedback:
+          "Bei einem Sanktionslisten-Treffer – auch bei einem offensichtlichen False Positive – darf kein Frontoffice-Mitarbeiter die Zahlung eigenmächtig freigeben. Compliance prüft: Name, Geburtsdatum, Nationalität, Adresse und weitere Identifikationsmerkmale. Stimmt ausser dem Namen nichts überein, liegt ein False Positive vor. Compliance gibt frei, dokumentiert den Entscheid und benachrichtigt dann den Kunden. Informationsverbot gilt bis zur Compliance-Freigabe.",
+        warum:
+          "Sanktionslisten enthalten oft häufige Namen aus bestimmten Regionen – False Positives sind ein bekanntes und häufiges Problem. Trotzdem: Die Entscheidung, ob ein Treffer ein False Positive ist, liegt ausschliesslich bei Compliance. Eine falsche Freigabe eines echten Sanktionsfalls kann zu schwerwiegenden Konsequenzen führen (Bussen, Lizenzentzug). Korrekte Dokumentation des False-Positive-Entscheids ist für allfällige Revisorprüfungen zwingend.",
+        inDerPraxis:
+          "False Positives machen bei Banken mit hohem Auslandszahlungsvolumen bis zu 98% aller Sanktionsalarme aus. Spezialisierte AML-Analysten in Compliance prüfen diese Treffer schnell und qualifiziert. Gute Dossierführung (Geburtsdatum, Nationalität, ID-Dokument im System hinterlegt) verkürzt die Prüfungszeit erheblich. Alle Schritte – Alarm, Prüfung, Entscheid, Freigabe – werden lückenlos im System dokumentiert.",
+        merksatz:
+          "False Positive? Trotzdem Compliance entscheiden lassen. Nie selbst freigeben. Jeder Schritt muss dokumentiert sein.",
+        glossarTerm: "Sanktionen / SECO",
+        rechtsgrundlage: "EmbG (Embargogesetz) / SECO-Verordnungen / FINMA-RS 2013/3 (Sanktionen) / GwG Art. 10a (Informationsverbot)",
       },
     ],
   },
