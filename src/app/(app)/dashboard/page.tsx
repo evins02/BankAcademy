@@ -29,6 +29,9 @@ import { BadgeEarnAnimation, useNewlyEarnedBadge } from "@/components/shared/Bad
 interface UserProfile {
   name?: string;
   role?: string;
+  abteilung?: string;
+  lehrjahr?: string;
+  ziel?: string;
 }
 
 const FRONT_OFFICE_MODULES = [
@@ -121,6 +124,50 @@ function WeakModulesSection({ progress }: { progress: Record<string, ModuleProgr
           );
         })}
       </div>
+    </div>
+  );
+}
+
+function PersonalizedBanner({
+  profile,
+  recommended,
+}: {
+  profile: UserProfile;
+  recommended: { title: string; href: string; icon: LucideIcon };
+}) {
+  if (!profile.abteilung || profile.abteilung === "keine") return null;
+
+  const ABTEILUNG_LABELS: Record<string, string> = {
+    privatkunde: "Privatkunde",
+    firmenkunde: "Firmenkunde",
+    anlagekunde: "Anlagekunde",
+    backoffice: "Backoffice & Zahlungsverkehr",
+    kreditgeschaeft: "Kreditgeschäft",
+    "credit-office": "Credit Office",
+  };
+
+  const abteilungLabel = ABTEILUNG_LABELS[profile.abteilung] ?? profile.abteilung;
+  const RecommendedIcon = recommended.icon;
+
+  return (
+    <div className="mb-6 rounded-xl border border-primary/20 bg-primary-light p-4">
+      <div className="flex items-center gap-1.5 mb-3">
+        <Sparkles size={13} className="text-primary" />
+        <p className="text-xs font-bold uppercase tracking-wider text-primary">
+          Dein Bereich · {abteilungLabel}
+        </p>
+      </div>
+      <Link href={recommended.href}>
+        <div className="flex items-center gap-3 rounded-lg border border-primary/15 bg-white/60 px-4 py-3 transition-all hover:bg-white hover:shadow-sm">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg" style={{ background: "#E8EBF7" }}>
+            <RecommendedIcon size={18} style={{ color: "#0D1B4B" }} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-text-primary">{recommended.title}</p>
+            <p className="text-xs text-text-secondary">Direkt zu deinem Schwerpunkt →</p>
+          </div>
+        </div>
+      </Link>
     </div>
   );
 }
@@ -234,14 +281,18 @@ export default function DashboardPage() {
   // Empty state: new user with no progress yet
   const isEmptyState = loaded && totalCompleted === 0;
 
-  // Recommend first module based on role
-  const roleToModule: Record<string, { title: string; href: string; icon: LucideIcon }> = {
-    Privatkunde: { title: "Privatkunde", href: "/privatkunde", icon: User },
-    Firmenkunde: { title: "Firmenkunde", href: "/firmenkunde", icon: Building2 },
-    "Back Office": { title: "Banking Operations", href: "/backoffice", icon: Landmark },
+  // Recommend module based on onboarding abteilung (falls back to role-based)
+  const abteilungToModule: Record<string, { title: string; href: string; icon: LucideIcon }> = {
+    privatkunde: { title: "Privatkunde", href: "/privatkunde", icon: User },
+    firmenkunde: { title: "Firmenkunde", href: "/firmenkunde", icon: Building2 },
+    anlagekunde: { title: "Anlagekunde", href: "/anlagekunde", icon: TrendingUp },
+    backoffice: { title: "Banking Operations", href: "/backoffice", icon: Landmark },
+    kreditgeschaeft: { title: "Kreditgeschäft", href: "/backoffice/credit-operations", icon: Settings2 },
+    "credit-office": { title: "Credit Office", href: "/backoffice/credit-office/hypothek", icon: Settings2 },
   };
   const recommended: { title: string; href: string; icon: LucideIcon } =
-    (profile.role ? roleToModule[profile.role] : undefined) ?? { title: "Privatkunde", href: "/privatkunde", icon: User };
+    (profile.abteilung ? abteilungToModule[profile.abteilung] : undefined) ??
+    { title: "Privatkunde", href: "/privatkunde", icon: User };
 
   const allModulesList = [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES];
   const completedModulesList = allModulesList.filter((m) => {
@@ -386,6 +437,10 @@ export default function DashboardPage() {
         {loaded && <WeakConceptsBanner />}
 
         {loaded && <DailyChallenge />}
+
+        {loaded && (
+          <PersonalizedBanner profile={profile} recommended={recommended} />
+        )}
 
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
           Front Office

@@ -1333,7 +1333,8 @@ function AccessCodeModal({ onClose }: { onClose: () => void }) {
       const data = await res.json();
       if (data.valid) {
         localStorage.setItem("fullAccess", "true");
-        window.location.replace("/dashboard");
+        const hasOnboarding = localStorage.getItem("onboarding-complete");
+        window.location.replace(hasOnboarding ? "/dashboard" : "/onboarding");
       } else {
         setError(true);
         setCode("");
