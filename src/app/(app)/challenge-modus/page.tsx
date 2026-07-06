@@ -7,14 +7,30 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { FONDS_LEVELS } from "@/lib/fonds";
 import { ZV_LEVELS, type ZvCase } from "@/lib/zahlungsverkehr";
+import { AL_LEVELS, type AnlageScenario } from "@/lib/anlagekunde";
+import { KYC_LEVELS, type KycScenario } from "@/lib/kyc";
+import { MW_LEVELS, type MwCase } from "@/lib/mahnwesen";
+import { BK_LEVELS, type BlankokreditCase } from "@/lib/blankokredit";
+import { CO_LEVELS, type CreditOpsScenario } from "@/lib/credit-operations";
+import { ZV_FO_LEVELS, type ZvFoCase } from "@/lib/zahlungsverkehr-privat";
 import { addXP } from "@/lib/xpData";
 import { ScenarioTimer } from "@/components/shared/ScenarioTimer";
 import { ShareCard } from "@/components/shared/ShareCard";
 import { ArrowRight, Trophy, RotateCcw, CheckCircle2, XCircle } from "lucide-react";
 
+type SourceKey =
+  | "fonds"
+  | "zv"
+  | "anlagekunde"
+  | "kyc"
+  | "mahnwesen"
+  | "blankokredit"
+  | "credit-ops"
+  | "zv-privat";
+
 interface LapCase {
   id: string;
-  source: "fonds" | "zv";
+  source: SourceKey;
   question: string;
   options: { key: string; text: string }[];
   correct: string;
@@ -22,33 +38,60 @@ interface LapCase {
   context: string;
 }
 
+const SESSION_SIZE = 12;
+
+function isMcq(c: unknown): boolean {
+  return typeof c === "object" && c !== null && !("type" in c);
+}
+
 function buildCases(): LapCase[] {
   const fondsL3 = FONDS_LEVELS.find((l) => l.level === 3)?.cases ?? [];
   const zvL3 = (ZV_LEVELS.find((l) => l.level === 3)?.cases ?? []).filter(
-    (c): c is ZvCase => !("type" in c && (c as { type?: string }).type === "lückentext")
+    (c): c is ZvCase => isMcq(c)
   );
+  const alL3 = (AL_LEVELS.find((l) => l.level === 3)?.scenarios ?? []).filter(
+    (c): c is AnlageScenario => isMcq(c)
+  );
+  const kycL3 = (KYC_LEVELS.find((l) => l.level === 3)?.scenarios ?? []).filter(
+    (c): c is KycScenario => isMcq(c)
+  );
+  const mwL3 = (MW_LEVELS.find((l) => l.level === 3)?.cases ?? []).filter(
+    (c): c is MwCase => isMcq(c)
+  );
+  const bkL3 = (BK_LEVELS.find((l) => l.level === 3)?.cases ?? []).filter(
+    (c): c is BlankokreditCase => isMcq(c)
+  );
+  const coL3 = (CO_LEVELS.find((l) => l.level === 3)?.scenarios ?? []).filter(
+    (c): c is CreditOpsScenario => isMcq(c)
+  );
+  const zvPrivatL3 = (ZV_FO_LEVELS.find((l) => l.level === 3)?.cases ?? []) as ZvFoCase[];
 
-  const fonds: LapCase[] = fondsL3.map((c) => ({
-    id: `fonds-${c.id}`,
-    source: "fonds",
-    question: c.question,
-    options: c.options,
-    correct: c.correct,
-    feedback: c.feedback,
-    context: c.situation,
-  }));
+  function toCase<T extends { id: string; question: string; options: { key: string; text: string }[]; correct: string; feedback: string }>(
+    arr: T[],
+    source: SourceKey,
+    ctx: (c: T) => string
+  ): LapCase[] {
+    return arr.map((c) => ({
+      id: `${source}-${c.id}`,
+      source,
+      question: c.question,
+      options: c.options,
+      correct: c.correct,
+      feedback: c.feedback,
+      context: ctx(c),
+    }));
+  }
 
-  const zv: LapCase[] = zvL3.map((c) => ({
-    id: `zv-${c.id}`,
-    source: "zv",
-    question: c.question,
-    options: c.options,
-    correct: c.correct,
-    feedback: c.feedback,
-    context: c.briefing,
-  }));
-
-  return [...fonds, ...zv];
+  return [
+    ...toCase(fondsL3, "fonds", (c) => c.situation),
+    ...toCase(zvL3, "zv", (c) => c.briefing),
+    ...toCase(alL3, "anlagekunde", (c) => c.situation),
+    ...toCase(kycL3, "kyc", (c) => c.situation),
+    ...toCase(mwL3, "mahnwesen", (c) => c.briefing),
+    ...toCase(bkL3, "blankokredit", (c) => c.briefing),
+    ...toCase(coL3, "credit-ops", (c) => c.situation),
+    ...toCase(zvPrivatL3, "zv-privat", (c) => c.situation),
+  ];
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -60,10 +103,38 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-const SOURCE_LABELS: Record<string, string> = {
+const SOURCE_LABELS: Record<SourceKey, string> = {
   fonds: "Fonds",
   zv: "Zahlungsverkehr",
+  anlagekunde: "Anlagekunde",
+  kyc: "KYC / Compliance",
+  mahnwesen: "Mahnwesen",
+  blankokredit: "Blankokredit",
+  "credit-ops": "Kreditgeschäft",
+  "zv-privat": "ZV Privatkunde",
 };
+
+const SOURCE_BADGE: Record<SourceKey, string> = {
+  fonds: "bg-blue-100 text-blue-700",
+  zv: "bg-green-100 text-green-700",
+  anlagekunde: "bg-amber-100 text-amber-700",
+  kyc: "bg-purple-100 text-purple-700",
+  mahnwesen: "bg-rose-100 text-rose-700",
+  blankokredit: "bg-teal-100 text-teal-700",
+  "credit-ops": "bg-indigo-100 text-indigo-700",
+  "zv-privat": "bg-cyan-100 text-cyan-700",
+};
+
+const MODULE_CHIPS: { label: string; emoji: string; source: SourceKey }[] = [
+  { label: "Fonds", emoji: "📈", source: "fonds" },
+  { label: "Zahlungsverkehr", emoji: "💸", source: "zv" },
+  { label: "Anlagekunde", emoji: "💼", source: "anlagekunde" },
+  { label: "KYC / Compliance", emoji: "🔍", source: "kyc" },
+  { label: "Mahnwesen", emoji: "📬", source: "mahnwesen" },
+  { label: "Blankokredit", emoji: "🏦", source: "blankokredit" },
+  { label: "Kreditgeschäft", emoji: "⚙️", source: "credit-ops" },
+  { label: "ZV Privatkunde", emoji: "👤", source: "zv-privat" },
+];
 
 type View = "intro" | "quiz" | "results";
 
@@ -80,8 +151,8 @@ export default function LapModusPage() {
   const [showShare, setShowShare] = useState(false);
 
   function handleStart() {
-    const shuffled = shuffle(allCases);
-    setCases(shuffled);
+    const session = shuffle(allCases).slice(0, SESSION_SIZE);
+    setCases(session);
     setCaseIndex(0);
     setSelected(null);
     setSubmitted(false);
@@ -104,7 +175,6 @@ export default function LapModusPage() {
       setSelected(null);
       setSubmitted(false);
     } else {
-      // Compute final score including current answer
       const finalScore = selected === cases[caseIndex].correct ? score + 1 : score;
       const pct = Math.round((finalScore / cases.length) * 100);
       if (pct >= 80) addXP(500);
@@ -134,16 +204,17 @@ export default function LapModusPage() {
               <div className="mb-4 text-5xl">🎓</div>
               <h1 className="mb-2 text-2xl font-bold text-text-primary">Challenge-Modus</h1>
               <p className="text-sm text-text-secondary">
-                Echte Challenge-Prüfungsfragen aus Fonds und Zahlungsverkehr in zufälliger Reihenfolge.
-                Du brauchst <strong>80%</strong> um als prüfungsbereit zu gelten.
+                {SESSION_SIZE} Prüfungsfragen auf höchstem Niveau, zufällig aus{" "}
+                <strong>allen 8 Modulen</strong> gemischt. Du brauchst{" "}
+                <strong>80%</strong> um als prüfungsbereit zu gelten.
               </p>
             </div>
 
             <div className="mb-6 grid grid-cols-3 gap-3">
               {[
-                { label: "Fragen", value: allCases.length },
+                { label: "Fragen / Session", value: SESSION_SIZE },
                 { label: "Bestehensgrenze", value: "80%" },
-                { label: "Themen", value: "2" },
+                { label: "Module", value: MODULE_CHIPS.length },
               ].map((s) => (
                 <div key={s.label} className="rounded-xl border border-border bg-surface p-4 text-center">
                   <p className="text-2xl font-bold text-text-primary">{s.value}</p>
@@ -153,14 +224,18 @@ export default function LapModusPage() {
             </div>
 
             <div className="mb-6 rounded-xl border border-border bg-surface p-4 space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Enthaltene Module</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                Enthaltene Module (Level 3 · Challenge-Niveau)
+              </p>
               <div className="flex gap-2 flex-wrap">
-                <span className="rounded-full bg-primary-light px-3 py-1 text-xs font-medium text-primary">
-                  📈 Fonds (Level 3)
-                </span>
-                <span className="rounded-full bg-accent-light px-3 py-1 text-xs font-medium text-accent">
-                  💳 Zahlungsverkehr (Level 3)
-                </span>
+                {MODULE_CHIPS.map((m) => (
+                  <span
+                    key={m.source}
+                    className={`rounded-full px-3 py-1 text-xs font-medium ${SOURCE_BADGE[m.source]}`}
+                  >
+                    {m.emoji} {m.label}
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -225,7 +300,7 @@ export default function LapModusPage() {
             <div className="space-y-2">
               <Button onClick={handleStart} className="w-full gap-2">
                 <RotateCcw size={14} />
-                Nochmals versuchen
+                Neue Runde
               </Button>
               <Button variant="secondary" onClick={() => setShowShare(true)} className="w-full gap-2">
                 <Trophy size={14} />
@@ -267,7 +342,7 @@ export default function LapModusPage() {
             <div className="flex-1 h-2 rounded-full bg-gray-200 overflow-hidden">
               <div
                 className="h-full rounded-full bg-primary transition-all"
-                style={{ width: `${((caseIndex) / total) * 100}%` }}
+                style={{ width: `${(caseIndex / total) * 100}%` }}
               />
             </div>
             <div className="flex items-center gap-2 shrink-0">
@@ -280,20 +355,14 @@ export default function LapModusPage() {
 
           {/* Module badge */}
           <div className="mb-3">
-            <span
-              className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                currentCase.source === "fonds"
-                  ? "bg-primary-light text-primary"
-                  : "bg-accent-light text-accent"
-              }`}
-            >
+            <span className={`rounded-full px-3 py-1 text-xs font-semibold ${SOURCE_BADGE[currentCase.source]}`}>
               {SOURCE_LABELS[currentCase.source]}
             </span>
           </div>
 
           {/* Context */}
           <div className="mb-4 rounded-xl border border-border bg-surface p-4">
-            <p className="text-sm leading-relaxed text-text-secondary">{currentCase.context}</p>
+            <p className="text-sm leading-relaxed text-text-secondary whitespace-pre-line">{currentCase.context}</p>
           </div>
 
           {/* Question */}
