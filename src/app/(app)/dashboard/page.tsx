@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Sparkles, type LucideIcon } from "lucide-react";
-import { User, Building2, TrendingUp, Settings2, Landmark, Flame, Target, CheckCircle2, AlertTriangle } from "lucide-react";
+import { User, Building2, TrendingUp, Settings2, Landmark, Flame, Target, CheckCircle2, AlertTriangle, ClipboardCheck } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { HeroBanner } from "@/components/shared/HeroBanner";
 import { ModuleCard } from "@/components/modules/ModuleCard";
@@ -58,7 +58,7 @@ const FRONT_OFFICE_MODULES = [
     href: "/anlagekunde",
     icon: TrendingUp,
     moduleId: "anlagekunde",
-    totalScenarios: 4,
+    totalScenarios: 32,
   },
 ];
 
@@ -69,7 +69,7 @@ const BACK_OFFICE_MODULES = [
     href: "/backoffice",
     icon: Landmark,
     moduleId: "banking-operations",
-    totalScenarios: 4,
+    totalScenarios: 10,
   },
   {
     title: "Kreditgeschäft",
@@ -77,7 +77,15 @@ const BACK_OFFICE_MODULES = [
     href: "/backoffice/credit-operations",
     icon: Settings2,
     moduleId: "credit-operations",
-    totalScenarios: 5,
+    totalScenarios: 15,
+  },
+  {
+    title: "Credit Office",
+    description: "Kreditprüfungen und Kreditentscheide simulieren.",
+    href: "/backoffice/credit-office",
+    icon: ClipboardCheck,
+    moduleId: "credit-office",
+    totalScenarios: 4,
   },
 ];
 
@@ -498,7 +506,7 @@ export default function DashboardPage() {
         </h2>
         <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {!loaded
-            ? Array.from({ length: 2 }).map((_, i) => <SkeletonModuleCard key={i} />)
+            ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
             : backModules.map((m) => <ModuleCard key={m.title} {...m} />)}
         </div>
 
