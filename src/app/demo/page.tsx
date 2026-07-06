@@ -40,7 +40,7 @@ const LOCKED_MODULES = [
   { title: "Anlagekunde", description: "Anlageberatung, Obligationen, Aktien & ETF." },
   { title: "Credit Office", description: "Hypotheken, Blankokredit und periodische Prüfung." },
   { title: "Individual-Hypothek", description: "Hypothekarantrag prüfen und Tragbarkeit berechnen." },
-  { title: "LAP Modus", description: "Prüfungssimulation mit realistischen Falldossiers." },
+  { title: "Challenge-Modus", description: "Prüfungssimulation mit realistischen Falldossiers." },
   { title: "Leaderboard & Forum", description: "Community, Rangliste und Praxisfälle." },
 ];
 
@@ -89,7 +89,7 @@ export default function DemoPage() {
               Willkommen bei BankAcademy
             </h1>
             <p style={{ margin: "0 0 28px", fontSize: 15, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>
-              Starte mit den freigeschalteten Modulen. Für alle 6 Module, 105+ Szenarien und den LAP Modus kannst du Vollzugang anfragen.
+              Starte mit den freigeschalteten Modulen. Für alle 6 Module, 105+ Szenarien und den Challenge-Modus kannst du Vollzugang anfragen.
             </p>
             <Link
               href="/kontakt"
@@ -224,7 +224,7 @@ export default function DemoPage() {
                 Bereit für den Vollzugang?
               </h3>
               <p style={{ margin: 0, fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
-                Alle 6 Module · 105+ Szenarien · LAP Prüfungsmodus · Leaderboard
+                Alle 6 Module · 105+ Szenarien · Challenge-Modus · Leaderboard
               </p>
             </div>
             <Link

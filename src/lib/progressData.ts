@@ -333,7 +333,7 @@ const ALL_BADGES: Badge[] = [
   {
     id: "lap-bereit",
     title: "LAP Bereit",
-    description: "LAP Modus mit >80% abgeschlossen",
+    description: "Challenge-Modus mit >80% abgeschlossen",
     icon: "🎓",
     condition: "lap_80",
   },

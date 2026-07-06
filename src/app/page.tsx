@@ -1099,7 +1099,7 @@ function Modules({ onStart }: { onStart: () => void }) {
               LAP Vorbereitung
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <ModuleItem emoji="🎓" title="LAP Modus" desc="Prüfungsrelevante Level-3 Szenarien aller Module" />
+              <ModuleItem emoji="🎓" title="Challenge-Modus" desc="Prüfungsrelevante Level-3 Szenarien aller Module" />
               <ModuleItem emoji="🗺️" title="Lernpfad" desc="Strukturierter Pfad von Grundlagen bis zur Abschlussprüfung" />
             </div>
           </FadeIn>
@@ -1742,7 +1742,7 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
     Ressourcen: [
       { label: "Glossar", action: () => { window.location.href = "/glossar"; } },
       { label: "Community", action: () => { window.location.href = "/community"; } },
-      { label: "LAP Modus", action: () => { window.location.href = "/lap-modus"; } },
+      { label: "Challenge-Modus", action: () => { window.location.href = "/challenge-modus"; } },
     ],
     Legal: [
       { label: "Impressum", action: () => { window.location.href = "/impressum"; } },

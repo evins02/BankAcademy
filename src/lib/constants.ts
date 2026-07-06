@@ -10,7 +10,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { label: "Fehler Übersicht", icon: "AlertCircle", href: "/fehler-uebersicht" },
       { label: "Notizen", icon: "FileText", href: "/notizen" },
       { label: "Lesezeichen", icon: "Bookmark", href: "/lesezeichen" },
-      { label: "LAP Modus", icon: "GraduationCap", href: "/lap-modus" },
+      { label: "Challenge-Modus", icon: "GraduationCap", href: "/challenge-modus" },
       { label: "Lernpfad", icon: "Map", href: "/lernpfad" },
     ],
   },

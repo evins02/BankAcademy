@@ -121,18 +121,18 @@ export default function LapModusPage() {
   if (view === "intro") {
     return (
       <>
-        <Header title="LAP Modus" subtitle="Prüfungssimulation" />
+        <Header title="Challenge-Modus" subtitle="Prüfungssimulation" />
         <Breadcrumb
           items={[
             { label: "Dashboard", href: "/dashboard" },
-            { label: "LAP Modus" },
+            { label: "Challenge-Modus" },
           ]}
         />
         <div className="flex-1 overflow-y-auto p-6">
           <div className="mx-auto max-w-lg">
             <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-6 text-center">
               <div className="mb-4 text-5xl">🎓</div>
-              <h1 className="mb-2 text-2xl font-bold text-text-primary">LAP Modus</h1>
+              <h1 className="mb-2 text-2xl font-bold text-text-primary">Challenge-Modus</h1>
               <p className="text-sm text-text-secondary">
                 Echte LAP-Prüfungsfragen aus Fonds und Zahlungsverkehr in zufälliger Reihenfolge.
                 Du brauchst <strong>80%</strong> um als prüfungsbereit zu gelten.
@@ -185,7 +185,7 @@ export default function LapModusPage() {
   if (view === "results") {
     return (
       <>
-        <Header title="LAP Modus" subtitle="Ergebnis" />
+        <Header title="Challenge-Modus" subtitle="Ergebnis" />
         <div className="flex-1 overflow-y-auto p-6">
           <div className="mx-auto max-w-lg text-center">
             <div
@@ -244,10 +244,10 @@ export default function LapModusPage() {
         <ShareCard
           open={showShare}
           onClose={() => setShowShare(false)}
-          title="LAP Modus – Prüfungssimulation"
+          title="Challenge-Modus – Prüfungssimulation"
           score={score}
           total={total}
-          moduleName="LAP Modus"
+          moduleName="Challenge-Modus"
           xpEarned={pruefungsbereit ? 500 : 100}
         />
       </>
@@ -259,7 +259,7 @@ export default function LapModusPage() {
 
   return (
     <>
-      <Header title="LAP Modus" subtitle={`Frage ${caseIndex + 1} von ${total}`} />
+      <Header title="Challenge-Modus" subtitle={`Frage ${caseIndex + 1} von ${total}`} />
       <div className="flex-1 overflow-y-auto p-6">
         <div className="mx-auto max-w-2xl">
           {/* Progress bar */}
