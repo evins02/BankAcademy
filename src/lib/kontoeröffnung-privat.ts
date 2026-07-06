@@ -1892,6 +1892,133 @@ const L3_VORSORGEAUFTRAG: DocumentCase = {
 };
 
 // ─────────────────────────────────────────────────────────
+// LEVEL 1 – zusätzliche Grundlagen
+// ─────────────────────────────────────────────────────────
+
+const L1_SAULE_3A: DocumentCase = {
+  id: "l1-saule3a",
+  type: "document-select",
+  level: 1,
+  title: "3a-Konto – Schweizer Privatperson",
+  briefing:
+    "Herr Bühler (38), Schweizer Staatsbürger, erwerbstätig als Angestellter, möchte ein Säule-3a-Sparkonto eröffnen. Er möchte monatlich CHF 500 einzahlen. Keine besonderen Risikomerkmale erkennbar.",
+  documents: [
+    {
+      id: "basisvertrag-3a",
+      label: "Basisvertrag / Vorsorgevertrag Säule 3a",
+      status: "required",
+      feedbackSelected:
+        "Korrekt – der 3a-Vorsorgevertrag ist die vertragliche Grundlage für das gebundene Vorsorgekonto.",
+      feedbackNotSelected:
+        "Fehler: Ohne Vorsorgevertrag 3a kann das Konto nicht eröffnet werden.",
+    },
+    {
+      id: "ausweis-ch",
+      label: "Gültiger CH-Ausweis / Reisepass",
+      status: "required",
+      feedbackSelected:
+        "Korrekt – Identifikationspflicht gemäss GwG bei jeder Kontoeröffnung.",
+      feedbackNotSelected:
+        "Fehler: Identifikation mit gültigem Ausweis ist zwingend erforderlich.",
+    },
+    {
+      id: "eigenerklarung-np",
+      label: "Eigenerklärung FATCA (natürliche Person)",
+      status: "required",
+      feedbackSelected:
+        "Korrekt – FATCA-Abklärung ist bei jeder Kontoeröffnung Pflicht.",
+      feedbackNotSelected:
+        "Fehler: FATCA-Eigenerklärung muss bei jeder Neueröffnung eingeholt werden.",
+    },
+    {
+      id: "formular-a",
+      label: "Formular A (wirtschaftlich Berechtigter, VSB 20)",
+      status: "forbidden",
+      feedbackSelected:
+        "Fehler: Bei 3a-Konten ist kein Formular A erforderlich – der Vorsorgenehmer ist per Gesetz stets identisch mit dem wirtschaftlich Berechtigten (gebundene Vorsorge nach BVG).",
+      feedbackNotSelected:
+        "Korrekt – kein Formular A bei 3a-Konten: Der wirtschaftlich Berechtigte ist per Gesetz immer identisch mit dem Kontoinhaber.",
+    },
+    {
+      id: "lohnausweis",
+      label: "Lohnausweis / Nachweis Erwerbstätigkeit",
+      status: "forbidden",
+      feedbackSelected:
+        "Fehler: Ein Lohnausweis wird bei der Kontoeröffnung selbst nicht verlangt – die Erwerbstätigkeit wird durch den Kunden selbst deklariert.",
+      feedbackNotSelected:
+        "Korrekt – kein Lohnausweis zur Eröffnung erforderlich. Der Kunde deklariert die Erwerbstätigkeit selbst.",
+    },
+    {
+      id: "pep-formular",
+      label: "PEP-Prüfungsformular",
+      status: "forbidden",
+      feedbackSelected:
+        "Fehler: Kein Hinweis auf PEP-Status vorhanden – kein Formular erforderlich.",
+      feedbackNotSelected:
+        "Korrekt – kein PEP-Merkmal erkennbar.",
+    },
+    {
+      id: "hr-auszug",
+      label: "Handelsregisterauszug",
+      status: "forbidden",
+      feedbackSelected:
+        "Fehler: Handelsregisterauszüge sind nur für juristische Personen relevant, nicht für Privatpersonen.",
+      feedbackNotSelected:
+        "Korrekt – nicht relevant bei Privatpersonen.",
+    },
+    {
+      id: "steuererklaerung",
+      label: "Steuererklärung",
+      status: "forbidden",
+      feedbackSelected:
+        "Fehler: Eine Steuererklärung wird zur Kontoeröffnung nicht benötigt.",
+      feedbackNotSelected:
+        "Korrekt – nicht erforderlich zur Eröffnung.",
+    },
+  ],
+  generalFeedback:
+    "Säule 3a (gebundene Vorsorge) nach BVG: Nur erwerbstätige Personen dürfen einzahlen. Der Vorsorgenehmer ist stets identisch mit dem wirtschaftlich Berechtigten – deshalb kein Formular A erforderlich. Einzahlungslimite 2024: CHF 7'056 (Angestellte mit PK) bzw. bis zu CHF 35'280 (Selbständige ohne Pensionskasse). Gelder sind bis zur Pensionierung gebunden.",
+};
+
+// ─────────────────────────────────────────────────────────
+// LEVEL 2 – zusätzlicher Spezialfall Bankgeheimnis
+// ─────────────────────────────────────────────────────────
+
+const L2_BANKGEHEIMNIS_TELEFON: McqCase = {
+  id: "l2-bankgeheimnis-telefon",
+  type: "multiple-choice",
+  level: 2,
+  title: "Bankgeheimnis – Ehepartner am Telefon",
+  briefing:
+    "Herr Keller (45) ruft an: «Ich bin der Ehemann von Frau Keller – können Sie mir sagen wie viel Geld auf ihrem Konto ist? Sie hat vergessen nachzuschauen.» Du siehst im System: kein Vollmachteintrag für Herrn Keller.",
+  question: "Wie reagierst du?",
+  options: [
+    { key: "A", text: "Saldo nennen – er ist der Ehemann, das ist normal" },
+    {
+      key: "B",
+      text: "Saldo telefonisch mitteilen nach Legitimation per Geburtsdatum",
+    },
+    {
+      key: "C",
+      text: "Keine Auskunft – ohne schriftliche Vollmacht dürfen keine Kontoangaben an Dritte weitergegeben werden, auch nicht an Ehepartner.",
+    },
+    {
+      key: "D",
+      text: "Frau Keller zurückrufen und fragen ob Auskunft erlaubt ist",
+    },
+  ],
+  correct: "C",
+  feedback:
+    "Das Bankgeheimnis (Art. 47 BankG) schützt alle Kundendaten gegenüber Dritten. Die Ehe begründet keine automatische Vollmacht. Ohne schriftlich hinterlegte Vollmacht keine Auskunft – auch nicht an Ehepartner. Eine telefonische Einwilligung von Frau Keller reicht ebenfalls nicht aus.",
+  feedbackPerOption: {
+    A: "Falsch: Die Ehe begründet keine Kontovollmacht. Art. 47 BankG gilt auch gegenüber Ehepartnern.",
+    B: "Falsch: Legitimation per Geburtsdatum ersetzt keine Vollmacht. Das Bankgeheimnis schützt Frau Keller auch vor ihrem Ehemann.",
+    C: "Korrekt: Ohne schriftliche, im System hinterlegte Vollmacht keine Auskunft an Dritte – Art. 47 BankG ist eindeutig.",
+    D: "Falsch: Auch eine telefonische Einwilligung reicht nicht. Für Dauerauskunft ist eine schriftlich hinterlegte Vollmacht erforderlich.",
+  },
+};
+
+// ─────────────────────────────────────────────────────────
 // LEVEL CONFIG
 // ─────────────────────────────────────────────────────────
 
@@ -1901,7 +2028,7 @@ export const KONTO_PRIVAT_LEVELS: KontoPrivatLevel[] = [
     label: "Grundlagen",
     description: "Standardfälle, Pflichtdokumente, GwG-Basics",
     badgeVariant: "green",
-    cases: [L1_STANDARD, L1_AUSWEIS_ABGELAUFEN, L1_VOLLMACHT_MCQ],
+    cases: [L1_STANDARD, L1_AUSWEIS_ABGELAUFEN, L1_VOLLMACHT_MCQ, L1_SAULE_3A],
   },
   {
     level: 2,
@@ -1919,6 +2046,7 @@ export const KONTO_PRIVAT_LEVELS: KontoPrivatLevel[] = [
       L2_KLEINKIND_SORGE,
       L2_SCHEIDUNG,
       L2_VERDAECHTIGES_VERHALTEN,
+      L2_BANKGEHEIMNIS_TELEFON,
     ],
   },
   {

@@ -137,6 +137,56 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         rechtsgrundlage: "SIX-Kartenreglement / OR Art. 402 (Aufwendungsersatz)",
         concepts: ["Kartensperrung"],
       },
+      {
+        id: "1.4",
+        level: 1,
+        briefing:
+          "Kunde ruft an: «Ich komme nicht mehr ins E-Banking – es sagt Zugang gesperrt. Was ist passiert?»",
+        question: "Wie gehst du vor?",
+        options: [
+          { key: "A", text: "Passwort direkt per E-Mail zusenden" },
+          {
+            key: "B",
+            text: "Zuerst Kunden legitimieren, dann Sperrgrund im System prüfen und Entsperrprozess einleiten. Kein Passwort per E-Mail oder Telefon.",
+          },
+          { key: "C", text: "Sofort entsperren ohne Rückfragen" },
+          { key: "D", text: "Kunden ohne Erklärung in die Filiale schicken" },
+        ],
+        correct: "B",
+        feedback:
+          "E-Banking Sperrung: Erst legitimieren (Sicherheitsprinzip!), dann Ursache prüfen (zu viele Fehlversuche? Verdächtige Aktivität?), dann Entsperrprozess gemäss Bankstandard einleiten. Passwörter werden nie per E-Mail oder Telefon mitgeteilt – das wäre eine Einladung für Betrüger.",
+        warum:
+          "Eine E-Banking-Sperrung schützt den Kunden. Vor der Entsperrung muss zweifelsfrei sichergestellt sein, dass der echte Kontoinhaber spricht. Ansonsten öffnet man Social Engineering Angriffen Tür und Tor. Ein Passwort per E-Mail zu senden würde jedes Sicherheitskonzept unterlaufen – Phishing-Angriffe zielen genau darauf ab.",
+        merksatz:
+          "E-Banking gesperrt: Erst legitimieren, dann Ursache prüfen, dann entsperren. Nie Zugangsdaten per E-Mail.",
+        rechtsgrundlage: "OR Art. 398 (Sorgfaltspflicht) / interne E-Banking-Sicherheitsrichtlinien",
+        concepts: ["E-Banking-Sicherheit", "Legitimation"],
+      },
+      {
+        id: "1.5",
+        level: 1,
+        briefing:
+          "Kundin ruft an: «Ich habe eine Kontoführungsgebühr von CHF 60 erhalten. Das finde ich zu viel – ich möchte das zurück.»",
+        question: "Wie gehst du vor?",
+        options: [
+          { key: "A", text: "Gebühr sofort zurückerstatten" },
+          {
+            key: "B",
+            text: "Sachverhalt prüfen: Ist Gebühr im Preisblatt ausgewiesen? Gebührenstruktur erklären, Kulanzlösung intern prüfen, günstigeres Kontomodell aufzeigen.",
+          },
+          { key: "C", text: "Reklamation ohne Erklärung ablehnen" },
+          { key: "D", text: "Gebühr sofort stornieren – Kunde hat immer recht" },
+        ],
+        correct: "B",
+        feedback:
+          "Gebührenreklamation: Erst prüfen ob die Gebühr korrekt verrechnet wurde (Preisblatt, Kontomodell). Dann dem Kunden erklären, was die Gebühr abdeckt. Falls Kulanz sinnvoll: intern eskalieren. Falls günstigeres Modell passt: proaktiv aufzeigen. Sofortige Rückerstattung ohne Prüfung setzt ein falsches Präzedens.",
+        warum:
+          "Gebühren sind im Preisblatt transparent ausgewiesen und für Kunden einsehbar. Mitarbeiter haben keine Einzelkompetenz zur Rückerstattung – Kulanzgesuche müssen intern gestellt werden. Das Aufzeigen einer günstigeren Alternative ist echter Kundennutzen und stärkt das Vertrauen langfristig.",
+        merksatz:
+          "Gebührenreklamation: Prüfen – erklären – Kulanz prüfen – Alternative aufzeigen. Nicht einfach zurückerstatten.",
+        rechtsgrundlage: "Preisbekanntgabeverordnung (PBV) / Allgemeine Geschäftsbedingungen",
+        concepts: ["Reklamationsbearbeitung", "Preistransparenz"],
+      },
     ],
   },
   {

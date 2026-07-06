@@ -88,6 +88,26 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
         feedback:
           "Risikoaufklärung ist Hauptpflicht der Bank – vor jeder Anlageempfehlung! Broschüre abgeben, Erhalt bestätigen. Bei Verletzung dieser Pflicht haftet die Bank.",
       },
+      {
+        id: "1.4",
+        level: 1,
+        situation:
+          "Kunde ruft an: «Ich habe eine Depotgebühr von CHF 350 erhalten. Ich habe das nie vereinbart!» Du siehst im System: Depoteröffnung vor 6 Monaten, Preisliste bei Eröffnung mitgegeben und quittiert.",
+        question: "Wie gehst du vor?",
+        options: [
+          { key: "A", text: "Gebühr sofort gutschreiben – Kunde ist König" },
+          {
+            key: "B",
+            text: "Sachverhalt prüfen, Gebührenstruktur erklären, Kulanzlösung prüfen, bei Bedarf günstigeres Kontomodell aufzeigen.",
+          },
+          { key: "C", text: "Reklamation ablehnen – Vertrag ist Vertrag" },
+          { key: "D", text: "Vorgesetzten fragen ohne eigene Einschätzung" },
+        ],
+        correct: "B",
+        feedback:
+          "Reklamationsbearbeitung: Zuerst prüfen (war Preisliste abgegeben und quittiert?), dann erklären (welche Leistungen deckt die Gebühr ab?), Kulanzlösung prüfen und Alternative aufzeigen. Sofortige Gutschrift ohne Prüfung ist genauso falsch wie sofortige Ablehnung.",
+        concepts: ["Reklamationsbearbeitung", "Preistransparenz"],
+      },
     ],
   },
   {
@@ -158,6 +178,46 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
         correct: "B",
         feedback:
           "Vor Depoteröffnung zwingend: Identifikation, Anlegerprofil, Anlagerichtlinien unterschrieben, Risikobroschüre abgegeben. Erst dann können Wertschriften gehandelt werden.",
+      },
+      {
+        id: "2.4",
+        level: 2,
+        situation:
+          "Neukunde (45) kommt zum Erstgespräch Anlageberatung. Er sagt: «Ich habe CHF 200'000 – was soll ich kaufen?» Du weisst noch nichts über seine persönliche Situation.",
+        question: "Was machst du zuerst?",
+        options: [
+          { key: "A", text: "Aktien empfehlen – bei 200k passt das" },
+          {
+            key: "B",
+            text: "Ist-Analyse: Einnahmen, Ausgaben, Verpflichtungen, Anlagehorizont, Risikobereitschaft und bestehende Vorsorge erfassen – erst dann Anlegerprofil erstellen.",
+          },
+          { key: "C", text: "3a Einzahlung empfehlen – sicher" },
+          { key: "D", text: "Depot sofort eröffnen und Startpaket zusammenstellen" },
+        ],
+        correct: "B",
+        feedback:
+          "FIDLEG Pflicht: Know Your Customer vor jeder Empfehlung. Ohne vollständige Ist-Analyse kann keine geeignete Strategie empfohlen werden. Produktempfehlung ohne Kenntnis der Kundensituation ist eine Sorgfaltspflichtverletzung – unabhängig davon wie gut die Produkte klingen.",
+        concepts: ["FIDLEG", "Know Your Customer", "Anlegerprofil"],
+      },
+      {
+        id: "2.5",
+        level: 2,
+        situation:
+          "Kundin fragt: «Ich fahre nächste Woche nach Frankreich – soll ich jetzt EUR kaufen oder warten bis der Kurs besser wird?»",
+        question: "Was antwortest du?",
+        options: [
+          { key: "A", text: "Jetzt kaufen – EUR wird sicher steigen" },
+          { key: "B", text: "Warten – der Kurs fällt immer vor Feiertagen" },
+          {
+            key: "C",
+            text: "Keine Kursprognose möglich – Kursentwicklung ist unvorhersehbar. Brief-/Geldkurs erklären, aktuellen Kurs zeigen, Entscheid beim Kunden lassen.",
+          },
+          { key: "D", text: "Termingeschäft abschliessen für den Reisebetrag" },
+        ],
+        correct: "C",
+        feedback:
+          "Kursprognosen sind zu vermeiden (Haftungsrisiko, keine Garantie). Berater erklärt: Briefkurs = Kunde kauft Devisen, Geldkurs = Kunde verkauft Devisen, Spread = Marge der Bank. Termingeschäft ist für kleine Reisebeträge unverhältnismässig. Der Entscheid liegt beim Kunden.",
+        concepts: ["Devisenhandel", "Brief-/Geldkurs"],
       },
     ],
   },
