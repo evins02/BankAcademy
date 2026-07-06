@@ -186,7 +186,7 @@ export const MW_LEVELS: MwLevelConfig[] = [
   },
   {
     level: 3,
-    label: "LAP-Niveau",
+    label: "Challenge-Niveau",
     badgeVariant: "red",
     cases: [
       {

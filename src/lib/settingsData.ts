@@ -5,7 +5,7 @@ export interface AppSettings {
   autoAdvance: boolean;
   sounds: boolean;
   keyboardShortcuts: boolean;
-  difficultyPreference: "einsteiger" | "alle" | "lap";
+  difficultyPreference: "einsteiger" | "alle" | "challenge";
   theme: "light" | "dark" | "system";
   avatarColor: string;
 }

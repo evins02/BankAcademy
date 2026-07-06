@@ -106,5 +106,5 @@ const L3_CASES: SubmoduleCase[] = [
 export const OBLIGATIONEN_LEVELS: SubmoduleLevel[] = [
   { level: 1, label: "Einsteiger", badgeVariant: "green", cases: L1_CASES },
   { level: 2, label: "Fortgeschritten", badgeVariant: "orange", cases: L2_CASES },
-  { level: 3, label: "LAP-Niveau", badgeVariant: "red", cases: L3_CASES },
+  { level: 3, label: "Challenge-Niveau", badgeVariant: "red", cases: L3_CASES },
 ];

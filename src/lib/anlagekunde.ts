@@ -163,7 +163,7 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
   },
   {
     level: 3,
-    label: "LAP-Niveau",
+    label: "Challenge-Niveau",
     badgeVariant: "red",
     scenarios: [
       {

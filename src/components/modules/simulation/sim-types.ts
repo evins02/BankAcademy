@@ -1,5 +1,5 @@
 export type Mood = "positive" | "neutral" | "negative";
-export type Difficulty = "einsteiger" | "fortgeschritten" | "lap";
+export type Difficulty = "einsteiger" | "fortgeschritten" | "challenge";
 
 export interface ScoreBreakdown {
   professionalism: number;

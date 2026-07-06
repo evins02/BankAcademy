@@ -52,7 +52,7 @@ const DIFFICULTY_SUFFIX: Record<Difficulty, string> = {
     "\n\nSCHWIERIGKEITSSTUFE EINSTEIGER: Du bist geduldig und freundlich. Du stellst einfache Fragen, akzeptierst gute erste Antworten sofort und bist verständnisvoll. Sei eher dankbar für Erklärungen.",
   fortgeschritten:
     "\n\nSCHWIERIGKEITSSTUFE FORTGESCHRITTEN: Normales Verhalten wie oben beschrieben.",
-  lap: "\n\nSCHWIERIGKEITSSTUFE LAP-NIVEAU: Du bist sehr anspruchsvoll. Du hinterfragst jede Antwort kritisch, verweist auf Konkurrenzangebote ('Bei der Postfinance wäre das günstiger...'), stellst technische Fragen zu GwG Art. 3 und VSB16, und akzeptierst nur vollständige, präzise Antworten. Bei schlechten Antworten sagst du: 'Das ist nicht sehr überzeugend.'",
+  challenge: "\n\nSCHWIERIGKEITSSTUFE CHALLENGE-NIVEAU: Du bist sehr anspruchsvoll. Du hinterfragst jede Antwort kritisch, verweist auf Konkurrenzangebote ('Bei der Postfinance wäre das günstiger...'), stellst technische Fragen zu GwG Art. 3 und VSB16, und akzeptierst nur vollständige, präzise Antworten. Bei schlechten Antworten sagst du: 'Das ist nicht sehr überzeugend.'",
 };
 
 export async function POST(req: Request) {

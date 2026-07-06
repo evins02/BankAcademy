@@ -372,7 +372,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
   },
   {
     level: 3,
-    label: "LAP-Niveau",
+    label: "Challenge-Niveau",
     badgeVariant: "red",
     cases: [
       {

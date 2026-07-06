@@ -92,8 +92,8 @@ function CategoryBar({ label, score }: { label: string; score: number }) {
 
 const DIFF_NEXT: Record<Difficulty, Difficulty> = {
   einsteiger: "fortgeschritten",
-  fortgeschritten: "lap",
-  lap: "lap",
+  fortgeschritten: "challenge",
+  challenge: "challenge",
 };
 
 export function AiResultsScreen({
@@ -115,7 +115,7 @@ export function AiResultsScreen({
   const studentMessages = messages.filter((m) => m.role === "student");
   const thomasMessages = messages.filter((m) => m.role === "thomas" && m.score !== undefined);
 
-  const canIncrease = difficulty !== "lap";
+  const canIncrease = difficulty !== "challenge";
 
   return (
     <div className="flex flex-1 items-start justify-center overflow-y-auto p-6">

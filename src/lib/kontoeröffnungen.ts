@@ -549,7 +549,7 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     },
   },
 
-  // ─── GmbH PEP-Gesellschafter (schwer / LAP) ───────────────────────────────
+  // ─── GmbH PEP-Gesellschafter (schwer / Challenge) ───────────────────────────────
   {
     id: "gmbh-pep-gesellschafter",
     title: "GmbH-Gesellschafterin mit PEP-Verbindung – EDD übersehen",
@@ -624,7 +624,7 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
     },
   },
 
-  // ─── Holding-Tochter-Trick (schwer / LAP) ─────────────────────────────────
+  // ─── Holding-Tochter-Trick (schwer / Challenge) ─────────────────────────────────
   {
     id: "holding-tochter-trick",
     title: "Schweizer GmbH – 100% Tochter einer Offshore-Holding (Cayman Islands)",

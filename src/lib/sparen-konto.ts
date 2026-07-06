@@ -144,7 +144,7 @@ export const SK_LEVELS: SkLevelConfig[] = [
   },
   {
     level: 3,
-    label: "LAP-Niveau",
+    label: "Challenge-Niveau",
     badgeVariant: "red",
     scenarios: [
       {

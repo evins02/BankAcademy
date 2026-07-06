@@ -225,7 +225,7 @@ const L2_CASES: FondsCase[] = [
 ];
 
 // ─────────────────────────────────────────────────────────
-// LEVEL 3 – LAP-Niveau
+// LEVEL 3 – Challenge-Niveau
 // ─────────────────────────────────────────────────────────
 
 const L3_CASES: FondsCase[] = [
@@ -291,7 +291,7 @@ const L3_CASES: FondsCase[] = [
   {
     id: "3.3",
     level: 3,
-    title: "LAP-Trickfall: Effektiver Horizont",
+    title: "Challenge-Trickfall: Effektiver Horizont",
     situation:
       "Kunde, 38 Jahre, möchte CHF 30'000 anlegen. Anlegerprofil: Wachstum. Horizont laut Profil: 7 Jahre. Er sagt aber: 'Ich brauche das Geld spätestens in 3 Jahren für einen Hauskauf.'",
     question: "Was machst du?",
@@ -328,5 +328,5 @@ const L3_CASES: FondsCase[] = [
 export const FONDS_LEVELS: FondsLevel[] = [
   { level: 1, label: "Einsteiger", badgeVariant: "green", cases: L1_CASES },
   { level: 2, label: "Fortgeschritten", badgeVariant: "orange", cases: L2_CASES },
-  { level: 3, label: "LAP-Niveau", badgeVariant: "red", cases: L3_CASES },
+  { level: 3, label: "Challenge-Niveau", badgeVariant: "red", cases: L3_CASES },
 ];

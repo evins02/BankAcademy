@@ -789,7 +789,7 @@ const L2_ERBSCHAFT_KELLER: DocumentCase = {
 };
 
 // ─────────────────────────────────────────────────────────
-// LEVEL 3 – LAP-Niveau
+// LEVEL 3 – Challenge-Niveau
 // ─────────────────────────────────────────────────────────
 
 const L3_GEMEINSCHAFTSKONTO: DocumentCase = {
@@ -898,7 +898,7 @@ const L3_AUSWEIS_TRICK_MCQ: McqCase = {
   id: "l3-ausweis-trickfall-mcq",
   type: "multiple-choice",
   level: 3,
-  title: "LAP-Trickfall: Ausweis seit 5 Tagen abgelaufen",
+  title: "Challenge-Trickfall: Ausweis seit 5 Tagen abgelaufen",
   briefing:
     "Heute ist der 20.06.2026. Herr Novak legt seinen Ausweis vor. Sie prüfen das Ablaufdatum: 15.06.2026 – also exakt 5 Tage abgelaufen. Herr Novak argumentiert: 'Das ist fast noch gültig, nur 5 Tage! Das Foto stimmt doch noch.'",
   today: "20.06.2026",
@@ -1528,14 +1528,14 @@ const L2_VERDAECHTIGES_VERHALTEN: DocumentCase = {
 };
 
 // ─────────────────────────────────────────────────────────
-// LEVEL 3 – zusätzliche LAP-Fälle
+// LEVEL 3 – zusätzliche Challenge-Fälle
 // ─────────────────────────────────────────────────────────
 
 const L3_US_STAATSBUERGER_MCQ: McqCase = {
   id: "l3-us-staatsbuerger-mcq",
   type: "multiple-choice",
   level: 3,
-  title: "LAP-Trickfall: Doppelstaatsbürger CH / USA",
+  title: "Challenge-Trickfall: Doppelstaatsbürger CH / USA",
   briefing:
     "Herr Thompson (42) möchte ein Privatkonto eröffnen. Er legt sowohl seinen Schweizer als auch seinen amerikanischen Pass vor. Auf die FATCA-Frage antwortet er: 'Ich wohne und zahle meine Steuern ausschliesslich in der Schweiz. Ich bin doch Schweizer – das FATCA-Thema betrifft mich nicht.'",
   question: "Was ist aus FATCA-Sicht korrekt?",
@@ -1634,14 +1634,14 @@ const L3_SELBSTAENDIGER: DocumentCase = {
     },
   ],
   generalFeedback:
-    "Der zentrale LAP-Lernpunkt: Ein Einzelunternehmer (Selbständigerwerbender) ist immer eine natürliche Person – steuerlich und im Sinne des GwG. Für sein Privatkonto gelten exakt die gleichen Regeln wie für jeden anderen Schweizer Privatkunden. Kein HR-Auszug, kein Jahresabschluss, und vor allem: FATCA-Eigenerklärung für 'natürliche Person' – nicht für 'juristische Person'. Das ist der klassische LAP-Trickfehler.",
+    "Der zentrale Challenge-Lernpunkt: Ein Einzelunternehmer (Selbständigerwerbender) ist immer eine natürliche Person – steuerlich und im Sinne des GwG. Für sein Privatkonto gelten exakt die gleichen Regeln wie für jeden anderen Schweizer Privatkunden. Kein HR-Auszug, kein Jahresabschluss, und vor allem: FATCA-Eigenerklärung für 'natürliche Person' – nicht für 'juristische Person'. Das ist der klassische Challenge-Trickfehler.",
 };
 
 const L3_WIRTSCHAFTLICH_BERECHTIGTER_DRITTER: McqCase = {
   id: "l3-wirtschaftlich-berechtigter-dritter",
   type: "multiple-choice",
   level: 3,
-  title: "LAP-Fall: Wirtschaftlich Berechtigter ist Dritte Person",
+  title: "Challenge-Fall: Wirtschaftlich Berechtigter ist Dritte Person",
   briefing:
     "Herr Meier möchte ein Privatkonto eröffnen. Auf die Standardfrage 'Handeln Sie auf eigene Rechnung?' antwortet er: 'Nein – das Konto ist für meinen Bruder Bruno. Bruno lebt in Dubai und kann nicht persönlich kommen. Ich verwalte das Konto für ihn.'",
   question: "Was ist das korrekte Vorgehen gemäss VSB 20 / GwG?",
@@ -1923,7 +1923,7 @@ export const KONTO_PRIVAT_LEVELS: KontoPrivatLevel[] = [
   },
   {
     level: 3,
-    label: "LAP-Niveau",
+    label: "Challenge-Niveau",
     description: "Gemeinschaftskonto, US-Persons, Selbständige, Vorsorgeauftrag, Trickfragen, PEP / EDD",
     badgeVariant: "red",
     cases: [

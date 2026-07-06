@@ -956,7 +956,7 @@ const FEATURE_CARDS = [
   { emoji: "⚠️", title: "Typische Fehler", text: "Lerne die häufigsten Fehler kennen bevor du sie in der Praxis machst" },
   { emoji: "🧠", title: "Operative Denkweise", text: "Verstehe wie erfahrene Banker denken – nicht nur was sie tun" },
   { emoji: "📊", title: "Messbarer Fortschritt", text: "XP, Streaks, Badges und detaillierte Lernstatistiken" },
-  { emoji: "🎓", title: "LAP-Vorbereitung", text: "Spezifische Level-3 Szenarien für die Abschlussprüfung" },
+  { emoji: "🎓", title: "Challenge-Vorbereitung", text: "Spezifische Level-3 Szenarien für die Abschlussprüfung" },
   { emoji: "💬", title: "Community", text: "Tausch dich mit anderen Lernenden aus und lerne voneinander" },
 ];
 
@@ -1096,7 +1096,7 @@ function Modules({ onStart }: { onStart: () => void }) {
 
           <FadeIn delay={0.25}>
             <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: WM }}>
-              LAP Vorbereitung
+              Challenge-Vorbereitung
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <ModuleItem emoji="🎓" title="Challenge-Modus" desc="Prüfungsrelevante Level-3 Szenarien aller Module" />

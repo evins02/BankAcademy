@@ -262,7 +262,7 @@ export function DemoSidebar({ onLock }: { onLock: () => void }) {
           Vollzugang anfragen →
         </Link>
         <p className="mt-2 text-center text-[10px] text-text-secondary">
-          Alle 6 Module · 105+ Szenarien · LAP
+          Alle 6 Module · 105+ Szenarien · Challenge-Modus
         </p>
       </div>
     </aside>

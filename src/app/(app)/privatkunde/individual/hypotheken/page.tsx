@@ -126,7 +126,7 @@ export default function HypothekenPage() {
             >
               <div className="absolute top-0 left-0 right-0 h-0.5 bg-red-500" />
               <div className="flex items-start justify-between">
-                <Badge variant="red">Level 3 – LAP</Badge>
+                <Badge variant="red">Level 3 – Challenge</Badge>
                 <ClipboardCheck size={18} className="text-text-secondary shrink-0" />
               </div>
               <div className="flex-1">

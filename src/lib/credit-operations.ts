@@ -165,7 +165,7 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
   },
   {
     level: 3,
-    label: "LAP-Niveau",
+    label: "Challenge-Niveau",
     badgeVariant: "red",
     scenarios: [
       {

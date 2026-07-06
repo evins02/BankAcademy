@@ -190,7 +190,7 @@ const L2_CASES: VorsorgeCase[] = [
 ];
 
 // ─────────────────────────────────────────────────────────
-// LEVEL 3 – LAP-Niveau
+// LEVEL 3 – Challenge-Niveau
 // ─────────────────────────────────────────────────────────
 
 const L3_CASES: (VorsorgeCase | LückentextCase)[] = [
@@ -275,5 +275,5 @@ const L3_CASES: (VorsorgeCase | LückentextCase)[] = [
 export const VORSORGE_LEVELS: VorsorgeLevel[] = [
   { level: 1, label: "Einsteiger", badgeVariant: "green", cases: L1_CASES },
   { level: 2, label: "Fortgeschritten", badgeVariant: "orange", cases: L2_CASES },
-  { level: 3, label: "LAP-Niveau", badgeVariant: "red", cases: L3_CASES },
+  { level: 3, label: "Challenge-Niveau", badgeVariant: "red", cases: L3_CASES },
 ];

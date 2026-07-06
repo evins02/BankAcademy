@@ -142,7 +142,7 @@ export const KYC_LEVELS: KycLevelConfig[] = [
   },
   {
     level: 3,
-    label: "LAP-Niveau",
+    label: "Challenge-Niveau",
     badgeVariant: "red",
     scenarios: [
       {

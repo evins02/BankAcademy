@@ -21,7 +21,7 @@ const STRATEGY_MINI = [
 const DIFFICULTY = {
   1: { emoji: "🟢", label: "Einsteiger", xp: 100, time: "~2 min" },
   2: { emoji: "🟡", label: "Fortgeschritten", xp: 100, time: "~3 min" },
-  3: { emoji: "🔴", label: "LAP-Niveau", xp: 100, time: "~4 min" },
+  3: { emoji: "🔴", label: "Challenge-Niveau", xp: 100, time: "~4 min" },
 } as const;
 
 interface CaseCardProps {

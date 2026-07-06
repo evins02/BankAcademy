@@ -41,7 +41,7 @@ Regeln:
 - Halte das Feedback kurz und klar
 - Deutsch, Schweizer Schreibweise
 - Wenn die Antwort sehr gut ist: fehlt = "Vollständig – nichts Wesentliches fehlt."
-- Wenn der Lernende etwas überspringt oder nur oberflächlich antwortet, weise im fehlt-Feld darauf hin, dass das Verständnis der Begründungen im echten Bankalltag und in der LAP entscheidend ist`,
+- Wenn der Lernende etwas überspringt oder nur oberflächlich antwortet, weise im fehlt-Feld darauf hin, dass das Verständnis der Begründungen im echten Bankalltag und in der Prüfung entscheidend ist`,
         },
       ],
     });

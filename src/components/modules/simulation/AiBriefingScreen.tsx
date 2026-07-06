@@ -29,9 +29,9 @@ const DIFFICULTIES: {
     description: "Thomas ist normal – fragt nach, braucht Überzeugungsarbeit.",
   },
   {
-    key: "lap",
+    key: "challenge",
     dot: "bg-red-500",
-    label: "LAP-Niveau",
+    label: "Challenge-Niveau",
     description: "Thomas ist sehr anspruchsvoll, verweist auf Konkurrenzbanken.",
   },
 ];

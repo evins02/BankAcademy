@@ -24,7 +24,7 @@ const OPENINGS: Record<Difficulty, string[]> = {
     "Hallo, ich wurde an Sie verwiesen. Ich brauche dringend ein Konto.",
     "Guten Tag. Ich hoffe das dauert nicht lange, ich habe nicht viel Zeit.",
   ],
-  lap: [
+  challenge: [
     "Guten Tag. Ich brauche ein Konto – mein Gehalt kommt nächste Woche und ich habe online nicht die besten Bewertungen über Ihre Bank gelesen. Überzeugen Sie mich.",
     "Hallo. Ich habe mich bei drei Banken informiert. Was macht Ihre Bank besser als die Konkurrenz? Ich brauche ein Konto schnell.",
   ],

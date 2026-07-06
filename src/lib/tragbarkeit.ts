@@ -323,7 +323,7 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
         ],
         correct: "B",
         feedback:
-          "Das ist ein klassischer Prüfungspunkt in der LAP. Renditeobjekt = Objektertrag zuerst. Selbstgenutzt = Kreditnehmer zuerst. Nie verwechseln!",
+          "Das ist ein klassischer Prüfungspunkt in der Abschlussprüfung. Renditeobjekt = Objektertrag zuerst. Selbstgenutzt = Kreditnehmer zuerst. Nie verwechseln!",
       },
     ],
   },

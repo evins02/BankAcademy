@@ -243,7 +243,7 @@ export const BK_LEVELS: BlankokreditLevelConfig[] = [
         answer: "36",
         unit: "Monate",
         feedback:
-          "WICHTIG: Die Amortisationsprüfung erfolgt IMMER über 36 Monate – auch wenn der Vertrag 5 Jahre läuft. Das ist eine klassische Trickfrage in der LAP!",
+          "WICHTIG: Die Amortisationsprüfung erfolgt IMMER über 36 Monate – auch wenn der Vertrag 5 Jahre läuft. Das ist eine klassische Trickfrage in der Prüfung!",
       },
       {
         id: "2.3",
@@ -282,7 +282,7 @@ export const BK_LEVELS: BlankokreditLevelConfig[] = [
   },
   {
     level: 3,
-    label: "LAP-Niveau",
+    label: "Challenge-Niveau",
     badgeVariant: "red",
     cases: [
       {

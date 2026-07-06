@@ -134,7 +134,7 @@ export default function LapModusPage() {
               <div className="mb-4 text-5xl">🎓</div>
               <h1 className="mb-2 text-2xl font-bold text-text-primary">Challenge-Modus</h1>
               <p className="text-sm text-text-secondary">
-                Echte LAP-Prüfungsfragen aus Fonds und Zahlungsverkehr in zufälliger Reihenfolge.
+                Echte Challenge-Prüfungsfragen aus Fonds und Zahlungsverkehr in zufälliger Reihenfolge.
                 Du brauchst <strong>80%</strong> um als prüfungsbereit zu gelten.
               </p>
             </div>

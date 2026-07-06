@@ -94,14 +94,14 @@ export default function UeberUnsPage() {
             <p className="mb-4 text-sm leading-relaxed text-text-secondary">
               BankAcademy ist als Ergänzung zu bestehenden Lehrplänen konzipiert und orientiert sich
               an den Ausbildungszielen des Schweizerischen Bankenverbands (SBVg) sowie an den
-              Lehrmitteln von Compendio. Die Szenarien sind auf das LAP-Niveau abgestimmt und
+              Lehrmitteln von Compendio. Die Szenarien sind auf das Challenge-Niveau abgestimmt und
               decken alle relevanten Kompetenzbereiche ab.
             </p>
             <div className="flex flex-wrap gap-2">
               {[
                 "GwG-konform",
                 "FIDLEG-konform",
-                "LAP-Niveau",
+                "Challenge-Niveau",
                 "VSB 20",
                 "OR-Grundlagen",
                 "BVG/Vorsorge",

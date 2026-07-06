@@ -216,7 +216,7 @@ export default function EinstellungenPage() {
               >
                 <option value="einsteiger">Einsteiger</option>
                 <option value="alle">Alle Level</option>
-                <option value="lap">LAP-Niveau</option>
+                <option value="challenge">Challenge-Niveau</option>
               </select>
             </SettingsRow>
           </section>

@@ -286,7 +286,7 @@ export const BKO_KYC_LEVELS: BkoKycLevelConfig[] = [
   },
   {
     level: 3,
-    label: "LAP-Niveau",
+    label: "Challenge-Niveau",
     badgeVariant: "red",
     scenarios: [
       {
