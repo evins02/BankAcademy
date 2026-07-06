@@ -232,7 +232,7 @@ export default function OnboardingPage() {
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 style={{ background: "#0D1B4B" }}
               >
-                Los geht's <ChevronRight size={15} />
+                Los geht&apos;s <ChevronRight size={15} />
               </button>
             </form>
           )}
