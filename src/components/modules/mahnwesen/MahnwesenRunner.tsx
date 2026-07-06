@@ -16,6 +16,7 @@ import { OffeneFrageResultCard } from "@/components/shared/OffeneFrageResultCard
 import { type OffeneFrageCase } from "@/lib/offene-frage";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
+import { addAttemptRecord } from "@/lib/error-tracking";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
@@ -82,6 +83,22 @@ export function MahnwesenRunner() {
     setSessionResults(newResults);
 
     if (!isCorrect && "concepts" in currentCase) recordConceptError("banking-operations-mahnwesen", (currentCase as {concepts?: string[]}).concepts ?? []);
+    if (!isOffeneFrage) {
+      const _c = currentCase as unknown as Record<string, unknown>;
+      addAttemptRecord({
+        moduleId: "banking-operations-mahnwesen",
+        levelNum: activeLevel,
+        caseId: currentCase.id,
+        caseTitle: String(_c.title ?? _c.label ?? _c.question ?? currentCase.id),
+        attempt: 1,
+        timestamp: Date.now(),
+        score: isCorrect ? 100 : 0,
+        correct: isCorrect,
+        errors: isCorrect ? [] : isLückentext
+          ? [{ type: "wrong" as const, documentId: "lückentext", documentLabel: lückentextAnswer }]
+          : selectedOption ? [{ type: "wrong" as const, documentId: selectedOption, documentLabel: selectedOption }] : [],
+      });
+    }
     if (isLastCase) {
       const score = newResults.filter((r) => r.correct).length;
       setCompletedLevels((prev) => {

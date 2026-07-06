@@ -14,6 +14,7 @@ import { OffeneFrageResultCard } from "@/components/shared/OffeneFrageResultCard
 import { type OffeneFrageCase } from "@/lib/offene-frage";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
+import { addAttemptRecord } from "@/lib/error-tracking";
 
 type View = "selector" | "playing" | "feedback" | "level-complete";
 
@@ -76,6 +77,22 @@ export function KycRunner() {
     setSessionResults(newResults);
 
     if (!isCorrect && "concepts" in currentScenario) recordConceptError("banking-operations-kyc", (currentScenario as {concepts?: string[]}).concepts ?? []);
+    if (!isOffeneFrage) {
+      const _c = currentScenario as unknown as Record<string, unknown>;
+      addAttemptRecord({
+        moduleId: "banking-operations-kyc",
+        levelNum: activeLevel,
+        caseId: currentScenario.id,
+        caseTitle: String(_c.title ?? _c.label ?? _c.question ?? currentScenario.id),
+        attempt: 1,
+        timestamp: Date.now(),
+        score: isCorrect ? 100 : 0,
+        correct: isCorrect,
+        errors: isCorrect ? [] : isLückentext
+          ? [{ type: "wrong" as const, documentId: "lückentext", documentLabel: lückentextAnswer }]
+          : selectedOption ? [{ type: "wrong" as const, documentId: selectedOption, documentLabel: selectedOption }] : [],
+      });
+    }
     if (isLastScenario) {
       const score = newResults.filter((r) => r.correct).length;
       setCompletedLevels((prev) => new Set([...prev, activeLevel]));

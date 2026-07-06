@@ -9,6 +9,7 @@ import { LevelComplete, type CaseResult } from "./LevelComplete";
 import { ZV_FO_LEVELS, type LevelNum } from "@/lib/zahlungsverkehr-privat";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
+import { addAttemptRecord } from "@/lib/error-tracking";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
@@ -59,6 +60,17 @@ export function ZvPrivatRunner() {
     setSessionResults(newResults);
 
     if (!isCorrect && "concepts" in currentCase) recordConceptError("privatkunde-zahlungsverkehr", (currentCase as {concepts?: string[]}).concepts ?? []);
+    addAttemptRecord({
+      moduleId: "privatkunde-zahlungsverkehr",
+      levelNum: activeLevel,
+      caseId: currentCase.id,
+      caseTitle: String((currentCase as unknown as Record<string, unknown>).title ?? (currentCase as unknown as Record<string, unknown>).label ?? currentCase.id),
+      attempt: 1,
+      timestamp: Date.now(),
+      score: isCorrect ? 100 : 0,
+      correct: isCorrect,
+      errors: !isCorrect && selectedOption ? [{ type: "wrong" as const, documentId: selectedOption, documentLabel: selectedOption }] : [],
+    });
     if (isLastCase) {
       const score = newResults.filter((r) => r.correct).length;
       setCompletedLevels((prev) => {

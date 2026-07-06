@@ -24,6 +24,7 @@ import {
   type StreakData,
 } from "@/lib/progressData";
 import { getAllWeakConcepts } from "@/lib/conceptTracker";
+import { getWeakScenarios, type WeakScenario } from "@/lib/error-tracking";
 import { BadgeEarnAnimation, useNewlyEarnedBadge } from "@/components/shared/BadgeEarnAnimation";
 
 interface UserProfile {
@@ -203,6 +204,45 @@ function WeakConceptsBanner() {
       <p className="mt-3 text-[11px] text-text-secondary">
         Szenarien zu diesen Themen werden beim nächsten Modulstart bevorzugt angezeigt.
       </p>
+    </div>
+  );
+}
+
+function WeakScenariosBanner() {
+  const [scenarios, setScenarios] = useState<WeakScenario[]>([]);
+  useEffect(() => {
+    setScenarios(getWeakScenarios(3));
+  }, []);
+  if (scenarios.length === 0) return null;
+  return (
+    <div className="mb-8 rounded-xl border border-red-200 bg-red-50 p-4">
+      <div className="mb-3 flex items-center gap-2">
+        <AlertTriangle size={15} className="text-red-500" />
+        <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">
+          Top Schwachstellen
+        </span>
+        <Link href="/fehler-uebersicht" className="ml-auto text-xs text-text-secondary hover:text-text-primary transition-colors">
+          Alle anzeigen →
+        </Link>
+      </div>
+      <div className="space-y-2">
+        {scenarios.map((s) => (
+          <Link key={`${s.moduleId}:${s.caseId}`} href={s.moduleHref}>
+            <div className="flex items-center gap-3 rounded-lg border border-red-100 bg-white/70 px-3 py-2.5 transition-colors hover:bg-white">
+              <div className="flex-1 min-w-0">
+                <p className="truncate text-sm font-medium text-text-primary">{s.caseTitle}</p>
+                <p className="text-xs text-text-secondary">{s.moduleLabel}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-2">
+                <span className="rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-600">
+                  {s.errorCount}× falsch
+                </span>
+                <span className="text-xs font-semibold" style={{ color: "#0D1B4B" }}>Üben →</span>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
@@ -435,6 +475,8 @@ export default function DashboardPage() {
         <WeakModulesSection progress={progress} />
 
         {loaded && <WeakConceptsBanner />}
+
+        {loaded && <WeakScenariosBanner />}
 
         {loaded && <DailyChallenge />}
 
