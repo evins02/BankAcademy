@@ -169,8 +169,16 @@ export default function StartPage() {
 
           {/* DSG-Hinweis */}
           <p className="mt-5 text-center text-[11px] leading-relaxed text-gray-400">
-            Deine Daten werden ausschliesslich für den August-Testlauf 2025
-            verwendet und nicht an Dritte weitergegeben.
+            Deine Daten werden nur für BankAcademy verwendet und nicht an Dritte
+            weitergegeben.{" "}
+            <a
+              href="/datenschutz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-gray-600"
+            >
+              Datenschutzerklärung
+            </a>
           </p>
         </div>
       </div>
