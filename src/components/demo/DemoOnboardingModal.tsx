@@ -65,7 +65,7 @@ export function DemoOnboardingModal() {
             lineHeight: 1.7,
           }}
         >
-          Du hast Zugang zu 3 ausgewählten Modulen.
+          Du hast Zugang zu 8 Modulen aus Front Office und Back Office.
           <br />
           Erlebe wie BankAcademy funktioniert.
         </p>
