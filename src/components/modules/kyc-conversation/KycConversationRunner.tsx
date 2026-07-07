@@ -65,7 +65,7 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
           ...prev,
           {
             role: "customer" as const,
-            content: `[Verbindungsfehler – ${msg}. Bitte erneut versuchen.]`,
+            content: `[Verbindungsproblem – Bitte nochmals senden.]`,
           },
         ]);
       } finally {
