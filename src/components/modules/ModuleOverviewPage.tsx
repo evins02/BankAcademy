@@ -142,7 +142,7 @@ const FIRMENKUNDE: OverviewConfig = {
   title: "Firmenkunde",
   description: "Firmenkonten, Tragbarkeit und Kreditengagements",
   emoji: "🏢",
-  totalScenarios: 7,
+  totalScenarios: 19,
   groups: [
     {
       label: "Kontoeröffnung",
@@ -150,10 +150,10 @@ const FIRMENKUNDE: OverviewConfig = {
         {
           id: "firmenkunde-kontoeröffnung-firma",
           title: "Kontoeröffnung Firma",
-          description: "Kontoeröffnung für Kapitalgesellschaften",
+          description: "GmbH, AG, Kollektivgesellschaft, PEP, Holding – 9 Szenarien",
           href: "/firmenkunde/kontoeröffnung-firma",
           emoji: "📋",
-          totalScenarios: 2,
+          totalScenarios: 9,
         },
         {
           id: "firmenkunde-sitzgesellschaft",
@@ -182,7 +182,7 @@ const FIRMENKUNDE: OverviewConfig = {
           description: "Tragbarkeit bei Renditeobjekten",
           href: "/firmenkunde/tragbarkeit/renditeobjekt",
           emoji: "🏗️",
-          totalScenarios: 1,
+          totalScenarios: 3,
         },
         {
           id: "firmenkunde-gesamtengagement",
@@ -190,7 +190,7 @@ const FIRMENKUNDE: OverviewConfig = {
           description: "Kreditportfolio und Gesamtengagement",
           href: "/firmenkunde/tragbarkeit/gesamtengagement",
           emoji: "📊",
-          totalScenarios: 1,
+          totalScenarios: 3,
         },
         {
           id: "firmenkunde-etp",
@@ -198,7 +198,7 @@ const FIRMENKUNDE: OverviewConfig = {
           description: "Eigenkapital und Tragbarkeitsplafond",
           href: "/firmenkunde/tragbarkeit/etp",
           emoji: "📐",
-          totalScenarios: 1,
+          totalScenarios: 3,
         },
         {
           id: "firmenkunde-gewerbe",
@@ -206,7 +206,20 @@ const FIRMENKUNDE: OverviewConfig = {
           description: "Selbstgenutzte Gewerbeliegenschaften",
           href: "/firmenkunde/tragbarkeit/gewerbe",
           emoji: "🔨",
-          totalScenarios: 1,
+          totalScenarios: 2,
+        },
+      ],
+    },
+    {
+      label: "Kreditvergabe",
+      items: [
+        {
+          id: "firmenkunde-bonitaet",
+          title: "Bonitätsprüfung & Firmenkredit",
+          description: "Deckungsgrad, EK-Quote, Sicherheiten – 4 Szenarien",
+          href: "/firmenkunde/bonitaet",
+          emoji: "🔎",
+          totalScenarios: 4,
         },
       ],
     },
