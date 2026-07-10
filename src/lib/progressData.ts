@@ -132,7 +132,7 @@ const MODULE_TOTALS: Record<string, { name: string; total: number }> = {
   privatkunde: { name: "Privatkunde", total: 10 },
   firmenkunde: { name: "Firmenkunde", total: 7 },
   anlagekunde: { name: "Anlagekunde", total: 4 },
-  "banking-operations": { name: "Banking Operations", total: 4 },
+  "banking-operations": { name: "Bankbetrieb", total: 4 },
   "credit-operations": { name: "Kreditgeschäft", total: 5 },
 };
 
@@ -458,7 +458,7 @@ export function seedMockDataIfEmpty() {
         {
           id: "e3",
           moduleId: "banking-operations",
-          moduleName: "Banking Operations",
+          moduleName: "Bankbetrieb",
           question: "In welchem Zeitfenster muss eine Zahlung widerrufen werden?",
           userAnswer: "72 Stunden",
           correctAnswer: "Bis zum Ende des Buchungstages",

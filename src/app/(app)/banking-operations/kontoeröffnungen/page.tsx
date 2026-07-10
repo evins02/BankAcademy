@@ -23,7 +23,7 @@ export default function KontoeröffnungenPage() {
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
-          { label: "Banking Operations", href: "/banking-operations" },
+          { label: "Bankbetrieb", href: "/banking-operations" },
           { label: "Kontoeröffnungen" },
         ]}
       />

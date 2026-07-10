@@ -7,7 +7,7 @@ const ALL_MODULES = [
   { id: "privatkunde", label: "Privatkunde", total: 10 },
   { id: "firmenkunde", label: "Firmenkunde", total: 7 },
   { id: "anlagekunde", label: "Anlagekunde", total: 4 },
-  { id: "banking-operations", label: "Banking Operations", total: 4 },
+  { id: "banking-operations", label: "Bankbetrieb", total: 4 },
   { id: "credit-operations", label: "Kreditgeschäft", total: 5 },
 ];
 

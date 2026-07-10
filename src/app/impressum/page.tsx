@@ -55,10 +55,21 @@ export default function ImpressumPage() {
 
           <Section title="Haftungsausschluss">
             <p>
-              Die Inhalte dieser Plattform dienen ausschliesslich zu Bildungszwecken. Trotz
-              sorgfältiger inhaltlicher Kontrolle übernimmt BankAcademy keine Haftung für die
-              Richtigkeit, Vollständigkeit und Aktualität der bereitgestellten Informationen.
-              Die Nutzung der Inhalte erfolgt auf eigene Verantwortung.
+              Die Inhalte dieser Plattform dienen ausschliesslich zu Lern- und Übungszwecken.
+              Sie ersetzen keine rechtsverbindliche Beratung und stellen keine offizielle
+              Auslegung von Gesetzen, Verordnungen oder bankinternen Weisungen dar.
+            </p>
+            <p>
+              Teile der Auswertungen und Rückmeldungen werden durch künstliche Intelligenz
+              generiert. BankAcademy übernimmt keine Gewähr für die Richtigkeit, Vollständigkeit
+              oder rechtliche Verbindlichkeit dieser KI-generierten Inhalte. Lernende sind
+              angehalten, alle Informationen mit offiziellen Quellen (VSB 20, GwG, FINMA-Rundschreiben)
+              zu vergleichen und kritisch zu hinterfragen.
+            </p>
+            <p>
+              Die Nutzung der Plattform und ihrer Inhalte erfolgt auf eigene Verantwortung.
+              BankAcademy haftet nicht für Schäden, die aus der Anwendung der auf dieser
+              Plattform vermittelten Inhalte in der beruflichen Praxis entstehen.
             </p>
           </Section>
 

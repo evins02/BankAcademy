@@ -7,7 +7,7 @@ const SOURCE_ICONS: Record<string, React.ReactNode> = {
   "Front Office Erfahrung": <LayoutGrid size={11} />,
   "Credit Office Erfahrung": <Building2 size={11} />,
   "Compliance Abteilung": <ShieldCheck size={11} />,
-  "Banking Operations": <Building2 size={11} />,
+  "Bankbetrieb": <Building2 size={11} />,
   "Kreditgeschäft": <Building2 size={11} />,
 };
 
@@ -15,7 +15,7 @@ const SOURCE_COLORS: Record<string, string> = {
   "Front Office Erfahrung": "bg-cyan-100 text-cyan-700",
   "Credit Office Erfahrung": "bg-violet-100 text-violet-700",
   "Compliance Abteilung": "bg-amber-100 text-amber-700",
-  "Banking Operations": "bg-blue-100 text-blue-700",
+  "Bankbetrieb": "bg-blue-100 text-blue-700",
   "Kreditgeschäft": "bg-indigo-100 text-indigo-700",
 };
 

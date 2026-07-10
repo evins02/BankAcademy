@@ -344,7 +344,7 @@ const BACKOFFICE: OverviewConfig = {
   totalScenarios: 46,
   groups: [
     {
-      label: "Banking Operations",
+      label: "Bankbetrieb",
       items: [
         {
           id: "backoffice-kontoeröffnungen",

@@ -64,7 +64,7 @@ const FRONT_OFFICE_MODULES = [
 
 const BACK_OFFICE_MODULES = [
   {
-    title: "Banking Operations",
+    title: "Bankbetrieb",
     description: "Kontoeröffnungen, Zahlungsverkehr, KYC und Mahnwesen.",
     href: "/backoffice",
     icon: Landmark,
@@ -334,7 +334,7 @@ export default function DashboardPage() {
     privatkunde: { title: "Privatkunde", href: "/privatkunde", icon: User },
     firmenkunde: { title: "Firmenkunde", href: "/firmenkunde", icon: Building2 },
     anlagekunde: { title: "Anlagekunde", href: "/anlagekunde", icon: TrendingUp },
-    backoffice: { title: "Banking Operations", href: "/backoffice", icon: Landmark },
+    backoffice: { title: "Bankbetrieb", href: "/backoffice", icon: Landmark },
     kreditgeschaeft: { title: "Kreditgeschäft", href: "/backoffice/credit-operations", icon: Settings2 },
     "credit-office": { title: "Credit Office", href: "/backoffice/credit-office/hypothek", icon: Settings2 },
   };

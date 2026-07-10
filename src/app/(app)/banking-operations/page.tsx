@@ -26,13 +26,13 @@ export default function BankingOperationsPage() {
   return (
     <>
       <Header
-        title="Banking Operations"
+        title="Bankbetrieb"
         subtitle="Konten, Zahlungen, Mahnwesen und Abwicklung"
       />
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
-          { label: "Banking Operations" },
+          { label: "Bankbetrieb" },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">

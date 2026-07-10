@@ -108,7 +108,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Back Office",
     items: [
       {
-        label: "Banking Operations",
+        label: "Bankbetrieb",
         icon: "Landmark",
         sections: [
           {

@@ -1089,7 +1089,7 @@ function Modules({ onStart }: { onStart: () => void }) {
               Back Office
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <ModuleItem emoji="⚙️" title="Banking Operations" desc="KYC / Compliance, Zahlungsverkehr, Mahnwesen" />
+              <ModuleItem emoji="⚙️" title="Bankbetrieb" desc="KYC / Compliance, Zahlungsverkehr, Mahnwesen" />
               <ModuleItem emoji="💳" title="Kreditgeschäft" desc="Vertragserstellung, Auszahlung, Verlängerung, Kündigung" />
             </div>
           </FadeIn>

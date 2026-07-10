@@ -5,12 +5,12 @@ import { ZahlungsverkehrRunner } from "@/components/modules/zahlungsverkehr/Zahl
 export default function DemoBkoZahlungsverkehrPage() {
   return (
     <>
-      <Header title="Zahlungsverkehr" subtitle="Back Office – Banking Operations" />
+      <Header title="Zahlungsverkehr" subtitle="Back Office – Bankbetrieb" />
       <Breadcrumb
         items={[
           { label: "Demo", href: "/demo" },
           { label: "Back Office" },
-          { label: "Banking Operations" },
+          { label: "Bankbetrieb" },
           { label: "Zahlungsverkehr" },
         ]}
       />

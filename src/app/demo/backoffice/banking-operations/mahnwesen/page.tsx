@@ -5,12 +5,12 @@ import { MahnwesenRunner } from "@/components/modules/mahnwesen/MahnwesenRunner"
 export default function DemoMahnwesenPage() {
   return (
     <>
-      <Header title="Mahnwesen" subtitle="Back Office – Banking Operations" />
+      <Header title="Mahnwesen" subtitle="Back Office – Bankbetrieb" />
       <Breadcrumb
         items={[
           { label: "Demo", href: "/demo" },
           { label: "Back Office" },
-          { label: "Banking Operations" },
+          { label: "Bankbetrieb" },
           { label: "Mahnwesen" },
         ]}
       />
