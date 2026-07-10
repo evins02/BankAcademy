@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Maximize2, Minimize2, User, Settings, RotateCcw, LogOut } from "lucide-react";
+import { Search, Maximize2, Minimize2, User, Settings, RotateCcw, LogOut, Menu } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import { NAV_GROUPS } from "@/lib/constants";
 import { getStreak } from "@/lib/progressData";
 import { getXP, getXPLevel, getXPProgress } from "@/lib/xpData";
 import { useFocusMode } from "@/context/FocusModeContext";
+import { useMobileMenu } from "@/context/MobileMenuContext";
 
 interface HeaderProps {
   title: string;
@@ -39,6 +40,7 @@ const ALL_LINKS = flatLinks();
 export function Header({ title, subtitle }: HeaderProps) {
   const router = useRouter();
   const { focusMode, toggleFocusMode } = useFocusMode();
+  const { toggleMobile } = useMobileMenu();
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -136,7 +138,14 @@ export function Header({ title, subtitle }: HeaderProps) {
   return (
     <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-surface px-6">
       {/* Left */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
+        <button
+          className="md:hidden rounded-lg p-1.5 text-text-secondary hover:bg-gray-100 transition-colors"
+          onClick={toggleMobile}
+          aria-label="Menü öffnen"
+        >
+          <Menu size={20} />
+        </button>
         <BankingLabLogo size="sm" />
         <div>
           <h1 className="text-lg font-semibold text-text-primary">{title}</h1>

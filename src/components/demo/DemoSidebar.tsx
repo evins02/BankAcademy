@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -58,7 +58,7 @@ function hasUnlockedChild(item: NavItem): boolean {
   return item.sections.some((s) => s.items.some((sub) => isUnlocked(sub.href)));
 }
 
-export function DemoSidebar({ onLock }: { onLock: () => void }) {
+export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?: () => void }) {
   const pathname = usePathname();
   const [openItems, setOpenItems] = useState<Set<string>>(() => {
     const open = new Set<string>();
@@ -69,6 +69,11 @@ export function DemoSidebar({ onLock }: { onLock: () => void }) {
     }
     return open;
   });
+
+  useEffect(() => {
+    onClose?.();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   function toggle(label: string) {
     setOpenItems((prev) => {
