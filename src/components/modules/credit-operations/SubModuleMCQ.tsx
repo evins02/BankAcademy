@@ -19,6 +19,7 @@ interface SubModuleMCQProps {
   correct: string;
   feedback: string;
   xp?: number;
+  onCorrect?: () => void;
 }
 
 export function SubModuleMCQ({
@@ -30,6 +31,7 @@ export function SubModuleMCQ({
   correct,
   feedback,
   xp = 20,
+  onCorrect,
 }: SubModuleMCQProps) {
   const [selected, setSelected] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -40,6 +42,7 @@ export function SubModuleMCQ({
     if (selected === correct && !xpAdded) {
       addXP(xp);
       setXpAdded(true);
+      onCorrect?.();
     }
   }
 
