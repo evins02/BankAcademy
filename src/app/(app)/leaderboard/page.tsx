@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trophy, Flame, CheckCircle2 } from "lucide-react";
+import { Trophy, Flame, CheckCircle2, Loader2 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
-import { getLeaderboard, type LeaderboardEntry } from "@/lib/progressData";
+import { getLeaderboard, getProgress, getStreak, type LeaderboardEntry } from "@/lib/progressData";
+import { getXP } from "@/lib/xpData";
 
 const RANK_LABELS = ["🥇", "🥈", "🥉"];
 
@@ -18,24 +19,93 @@ function RankBadge({ rank }: { rank: number }) {
   );
 }
 
+function anonymizeName(fullName: string): string {
+  const parts = fullName.trim().split(/\s+/);
+  if (parts.length <= 1) return parts[0] ?? "Anonym";
+  return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+}
+
 export default function LeaderboardPage() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isLive, setIsLive] = useState(false);
 
   useEffect(() => {
-    try {
+    async function init() {
       const raw = localStorage.getItem("user-profile");
-      const p = raw ? JSON.parse(raw) : {};
-      setEntries(getLeaderboard(p.name));
-    } catch {
-      setEntries(getLeaderboard());
+      const profile = raw ? JSON.parse(raw) : {};
+      const name: string = profile.name ?? "Anonym";
+      const email: string | null = localStorage.getItem("registered-email");
+
+      try {
+        const xp = getXP();
+        const streak = getStreak();
+        const progress = getProgress();
+        const scenariosCompleted = Object.values(progress).reduce(
+          (sum, m) => sum + ((m as { completed?: number }).completed ?? 0),
+          0
+        );
+
+        // Sync user data to DB (non-blocking)
+        if (email) {
+          fetch("/api/leaderboard", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email,
+              displayName: anonymizeName(name),
+              xp,
+              streak: streak.current,
+              scenariosCompleted,
+            }),
+          }).catch(() => {});
+        }
+
+        // Fetch real leaderboard
+        const res = await fetch(`/api/leaderboard${email ? `?email=${encodeURIComponent(email)}` : ""}`);
+        if (!res.ok) throw new Error("API failed");
+
+        const data = await res.json();
+        const mapped: LeaderboardEntry[] = (data.entries as Array<{
+          display_name: string;
+          xp: number;
+          streak: number;
+          scenarios_completed: number;
+          is_me: boolean;
+        }>).map((e, i) => ({
+          rank: i + 1,
+          name: e.display_name,
+          points: e.scenarios_completed * 10 + e.streak * 5,
+          completedModules: e.scenarios_completed,
+          streak: e.streak,
+          isMe: e.is_me,
+        }));
+
+        setEntries(mapped);
+        setIsLive(true);
+      } catch {
+        // Fallback to local fake leaderboard
+        try {
+          setEntries(getLeaderboard(name));
+        } catch {
+          setEntries(getLeaderboard());
+        }
+        setIsLive(false);
+      } finally {
+        setLoading(false);
+      }
     }
+    init();
   }, []);
 
   const myEntry = entries.find((e) => e.isMe);
 
   return (
     <>
-      <Header title="Leaderboard" subtitle="Diese Woche · Anonyme Rangliste" />
+      <Header
+        title="Leaderboard"
+        subtitle={isLive ? "Live · Alle Teilnehmenden" : "Diese Woche · Anonyme Rangliste"}
+      />
       <div className="flex-1 overflow-y-auto p-6">
 
         {/* My position callout */}
@@ -64,53 +134,61 @@ export default function LeaderboardPage() {
             <span>Punkte</span>
           </div>
 
-          {entries.map((entry) => (
-            <div
-              key={`${entry.rank}-${entry.name}`}
-              className={`grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-4 border-b border-border px-5 py-4 last:border-0 transition-colors ${
-                entry.isMe ? "bg-primary-light" : "hover:bg-gray-50"
-              }`}
-            >
-              <div className="w-8 flex justify-center">
-                <RankBadge rank={entry.rank} />
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
-                  style={{ background: entry.isMe ? "#16A34A" : "#0D1B4B" }}
-                >
-                  {entry.isMe ? "Du" : entry.name.slice(0, 2)}
-                </div>
-                <div>
-                  <p className={`text-sm font-semibold ${entry.isMe ? "text-primary" : "text-text-primary"}`}>
-                    {entry.isMe ? `${entry.name} (Du)` : entry.name}
-                  </p>
-                </div>
-              </div>
-
-              <div className="hidden items-center gap-1 sm:flex">
-                <CheckCircle2 size={13} className="text-text-secondary" />
-                <span className="text-sm text-text-secondary">{entry.completedModules}</span>
-              </div>
-
-              <div className="flex items-center gap-1">
-                <Flame size={13} className="text-accent" />
-                <span className="text-sm text-text-secondary">{entry.streak}</span>
-              </div>
-
-              <div className="flex items-center gap-1">
-                <Trophy size={13} className={entry.isMe ? "text-primary" : "text-text-secondary"} />
-                <span className={`text-sm font-semibold ${entry.isMe ? "text-primary" : "text-text-primary"}`}>
-                  {entry.points}
-                </span>
-              </div>
+          {loading ? (
+            <div className="flex items-center justify-center gap-2 py-12 text-sm text-text-secondary">
+              <Loader2 size={16} className="animate-spin" />
+              Laden…
             </div>
-          ))}
+          ) : (
+            entries.map((entry) => (
+              <div
+                key={`${entry.rank}-${entry.name}`}
+                className={`grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-4 border-b border-border px-5 py-4 last:border-0 transition-colors ${
+                  entry.isMe ? "bg-primary-light" : "hover:bg-gray-50"
+                }`}
+              >
+                <div className="w-8 flex justify-center">
+                  <RankBadge rank={entry.rank} />
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
+                    style={{ background: entry.isMe ? "#16A34A" : "#0D1B4B" }}
+                  >
+                    {entry.isMe ? "Du" : entry.name.slice(0, 2)}
+                  </div>
+                  <div>
+                    <p className={`text-sm font-semibold ${entry.isMe ? "text-primary" : "text-text-primary"}`}>
+                      {entry.isMe ? `${entry.name} (Du)` : entry.name}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="hidden items-center gap-1 sm:flex">
+                  <CheckCircle2 size={13} className="text-text-secondary" />
+                  <span className="text-sm text-text-secondary">{entry.completedModules}</span>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <Flame size={13} className="text-accent" />
+                  <span className="text-sm text-text-secondary">{entry.streak}</span>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <Trophy size={13} className={entry.isMe ? "text-primary" : "text-text-secondary"} />
+                  <span className={`text-sm font-semibold ${entry.isMe ? "text-primary" : "text-text-primary"}`}>
+                    {entry.points}
+                  </span>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
         <p className="mt-4 text-center text-xs text-text-secondary">
           Punkte: 10 pro Szenario + 5 pro Streak-Tag · Alle Namen anonymisiert
+          {isLive && " · Live-Daten"}
         </p>
       </div>
     </>
