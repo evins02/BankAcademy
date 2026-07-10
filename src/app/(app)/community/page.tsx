@@ -21,9 +21,6 @@ export default function CommunityPage() {
             <Button asChild variant="secondary">
               <Link href="/dashboard">Zurück zum Dashboard</Link>
             </Button>
-            <Button asChild>
-              <Link href="/leaderboard">Leaderboard anschauen</Link>
-            </Button>
           </div>
         </div>
       </div>

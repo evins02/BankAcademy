@@ -532,9 +532,6 @@ export default function DashboardPage() {
             <Link href="/badges">🏆 Meine Badges</Link>
           </Button>
           <Button asChild variant="secondary" size="sm">
-            <Link href="/leaderboard">📊 Leaderboard</Link>
-          </Button>
-          <Button asChild variant="secondary" size="sm">
             <Link href="/fehler-uebersicht">❌ Fehler Übersicht</Link>
           </Button>
           <Button asChild variant="secondary" size="sm">

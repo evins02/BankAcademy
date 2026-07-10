@@ -17,7 +17,6 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Community",
     items: [
-      { label: "Leaderboard", icon: "Trophy", href: "/leaderboard" },
       { label: "Forum", icon: "MessageSquare", href: "/community" },
       { label: "Praxisfälle", icon: "ClipboardList", href: "/community/cases" },
     ],

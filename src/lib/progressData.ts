@@ -42,15 +42,6 @@ export interface Badge {
   condition: string;
 }
 
-export interface LeaderboardEntry {
-  rank: number;
-  name: string;
-  points: number;
-  completedModules: number;
-  streak: number;
-  isMe?: boolean;
-}
-
 // ─── Storage helpers ──────────────────────────────────────────────────────────
 
 function read<T>(key: string, fallback: T): T {
@@ -504,34 +495,3 @@ export function seedMockDataIfEmpty() {
   localStorage.setItem("mock-seeded", "true");
 }
 
-// ─── Leaderboard (seeded anonymously) ────────────────────────────────────────
-
-export function getLeaderboard(myName?: string): LeaderboardEntry[] {
-  const progress = getProgress();
-  const streak = getStreak();
-  const modules = Object.values(progress);
-  const myCompleted = modules.reduce((s, m) => s + m.completed, 0);
-  const myPoints = myCompleted * 10 + (streak.current * 5);
-
-  const seed: LeaderboardEntry[] = [
-    { rank: 1, name: "S.K.", points: 420, completedModules: 18, streak: 14 },
-    { rank: 2, name: "M.B.", points: 390, completedModules: 16, streak: 9 },
-    { rank: 3, name: "L.H.", points: 350, completedModules: 15, streak: 21 },
-    { rank: 4, name: "T.W.", points: 290, completedModules: 12, streak: 5 },
-    { rank: 5, name: "A.R.", points: 240, completedModules: 10, streak: 3 },
-    { rank: 6, name: "J.M.", points: 210, completedModules: 9, streak: 0 },
-    { rank: 7, name: "F.G.", points: 180, completedModules: 7, streak: 2 },
-  ];
-
-  const myEntry: LeaderboardEntry = {
-    rank: 0,
-    name: myName ?? "Du",
-    points: myPoints,
-    completedModules: myCompleted,
-    streak: streak.current,
-    isMe: true,
-  };
-
-  const all = [...seed, myEntry].sort((a, b) => b.points - a.points);
-  return all.map((e, i) => ({ ...e, rank: i + 1 }));
-}
