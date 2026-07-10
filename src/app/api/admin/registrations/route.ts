@@ -3,7 +3,7 @@ import { sql } from "@/lib/db";
 
 export async function GET(req: NextRequest) {
   const code = req.headers.get("x-admin-code");
-  if (!code || code !== process.env.ACCESS_CODE) {
+  if (!code || code !== process.env.ADMIN_CODE) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
