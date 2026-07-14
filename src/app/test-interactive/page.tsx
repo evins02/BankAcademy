@@ -369,8 +369,8 @@ export default function TestInteractivePage() {
           </DocSection>
 
           <DocSection title="3. Finanzierungsstruktur">
-            {row("hypothek1", "Hypothek 1. Rang (66.7 %)", "CHF 633'000")}
-            {row("hypothek2", "Hypothek 2. Rang (15.4 %)", "CHF 146'000")}
+            {row("hypothek1", "1. Hypothek (66.7 %)", "CHF 633'000")}
+            {row("hypothek2", "2. Hypothek (15.4 %)", "CHF 146'000")}
             {row("gesamthypothek", "Gesamthypothek", "CHF 779'000")}
             {row("belehnung", "Belehnung (LTV)", <strong>78.0 %</strong>)}
             {row("eigenmittel-gesamt", "Eigenmittel gesamt", "CHF 171'000")}
@@ -388,8 +388,8 @@ export default function TestInteractivePage() {
           </DocSection>
 
           <DocSection title="4. Amortisation">
-            {row("amort-typ", "Typ", "Linear")}
-            {row("amort-rate", "Amortisationsrate p.a.", "CHF 9'733 (2. Rang über 15 Jahre)")}
+            {row("amort-typ", "Typ", "Direkt")}
+            {row("amort-rate", "Amortisationsrate p.a.", "CHF 9'733 (2. Hypothek über 15 Jahre)")}
             {row("amortisation", "Amortisationsplan (Dok.)", <strong>vorhanden</strong>)}
           </DocSection>
 
