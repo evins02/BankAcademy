@@ -33,7 +33,7 @@ export function CaseCard({
   useEffect(() => {
     const notes = getNotes();
     setHasNote(!!notes[`blankokredit-${bkCase.id}`]?.content?.trim());
-  }, [bkCase.id]);;
+  }, [bkCase.id]);
 
   return (
     <div className="mx-auto max-w-2xl">
