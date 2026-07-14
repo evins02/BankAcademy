@@ -17,6 +17,7 @@ type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete"
 export function AnlagekundeRunner() {
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
+  const [noteOpen, setNoteOpen] = useState(false);
 
   const [view, setView] = useState<View>("selector");
   const [activeLevel, setActiveLevel] = useState<LevelNum>(1);
@@ -115,6 +116,7 @@ export function AnlagekundeRunner() {
           selectedOption={selectedOption}
           onSelect={setSelectedOption}
           onSubmit={handleSubmit}
+          onOpenNote={() => setNoteOpen(true)}
         />
       )}
       {view === "feedback" && currentScenario && selectedOption && (
@@ -133,6 +135,14 @@ export function AnlagekundeRunner() {
           results={sessionResults}
           onNext={handleGoToSelector}
           onRetry={handleRetry}
+        />
+      )}
+      {noteOpen && currentScenario && (
+        <NoteModal
+          scenarioId={`anlagekunde-${currentScenario.id}`}
+          moduleId="banking-operations-anlagekunde"
+          moduleName="Anlagekunde"
+          onClose={() => setNoteOpen(false)}
         />
       )}
     </div>
