@@ -10,6 +10,7 @@ import { AL_LEVELS, type LevelNum, type OptionKey } from "@/lib/anlagekunde";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { addAttemptRecord } from "@/lib/error-tracking";
+import { NoteModal } from "@/components/shared/NoteModal";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 

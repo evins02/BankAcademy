@@ -16,6 +16,7 @@ import { type OffeneFrageCase } from "@/lib/offene-frage";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { addAttemptRecord } from "@/lib/error-tracking";
+import { NoteModal } from "@/components/shared/NoteModal";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
@@ -30,6 +31,7 @@ export function BlankokreditRunner() {
   const [sessionResults, setSessionResults] = useState<CaseResult[]>([]);
   const [lückentextAnswer, setLückentextAnswer] = useState("");
   const [offeneFrageAnswer, setOffeneFrageAnswer] = useState("");
+  const [noteOpen, setNoteOpen] = useState(false);
 
   const levelConfig = BK_LEVELS.find((l) => l.level === activeLevel)!;
   const activeCases = useMemo(
@@ -173,6 +175,7 @@ export function BlankokreditRunner() {
             selectedOption={selectedOption}
             onSelect={setSelectedOption}
             onSubmit={handleSubmit}
+            onOpenNote={() => setNoteOpen(true)}
           />
         )
       )}
@@ -221,6 +224,15 @@ export function BlankokreditRunner() {
           results={sessionResults}
           onNext={handleGoToSelector}
           onRetry={handleRetry}
+        />
+      )}
+
+      {noteOpen && currentCase && (
+        <NoteModal
+          scenarioId={`blankokredit-${currentCase.id}`}
+          moduleId="banking-operations-blankokredit"
+          moduleName="Blankokredit"
+          onClose={() => setNoteOpen(false)}
         />
       )}
     </div>

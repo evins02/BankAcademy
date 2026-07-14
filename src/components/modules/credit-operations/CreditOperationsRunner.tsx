@@ -16,12 +16,14 @@ import { type OffeneFrageCase } from "@/lib/offene-frage";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { addAttemptRecord } from "@/lib/error-tracking";
+import { NoteModal } from "@/components/shared/NoteModal";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
 export function CreditOperationsRunner() {
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
+  const [noteOpen, setNoteOpen] = useState(false);
 
   const [view, setView] = useState<View>("selector");
   const [activeLevel, setActiveLevel] = useState<LevelNum>(1);
@@ -168,6 +170,7 @@ export function CreditOperationsRunner() {
             selectedOption={selectedOption}
             onSelect={setSelectedOption}
             onSubmit={handleSubmit}
+            onOpenNote={() => setNoteOpen(true)}
           />
         )
       )}
@@ -214,6 +217,14 @@ export function CreditOperationsRunner() {
           results={sessionResults}
           onNext={handleGoToSelector}
           onRetry={handleRetry}
+        />
+      )}
+      {noteOpen && currentScenario && (
+        <NoteModal
+          scenarioId={`credit-ops-${currentScenario.id}`}
+          moduleId="backoffice-credit-operations"
+          moduleName="Credit Operations"
+          onClose={() => setNoteOpen(false)}
         />
       )}
     </div>
