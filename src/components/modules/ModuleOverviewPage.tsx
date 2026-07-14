@@ -167,7 +167,6 @@ const FIRMENKUNDE: OverviewConfig = {
           href: "/firmenkunde/dokument-pruefen",
           emoji: "📋",
           totalScenarios: 1,
-          comingSoon: true,
         },
       ],
     },
