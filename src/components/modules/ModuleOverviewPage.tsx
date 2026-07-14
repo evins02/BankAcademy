@@ -106,7 +106,6 @@ const PRIVATKUNDE: OverviewConfig = {
           href: "/privatkunde/dokument-pruefen",
           emoji: "📋",
           totalScenarios: 1,
-          comingSoon: true,
         },
       ],
     },
