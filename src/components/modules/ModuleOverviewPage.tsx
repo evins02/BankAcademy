@@ -256,7 +256,6 @@ const ANLAGEKUNDE: OverviewConfig = {
           href: "/anlagekunde/dokument-pruefen",
           emoji: "📋",
           totalScenarios: 1,
-          comingSoon: true,
         },
       ],
     },
