@@ -25,14 +25,15 @@ type Phase = "prüfen" | "auswertung";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const ACTUAL_ERRORS = new Set(["belehnung", "eigenmittel", "amortisation"]);
+const ACTUAL_ERRORS = new Set(["belehnung", "eigenmittel", "amort-rate"]);
 
 const ERROR_EXPLANATIONS: Record<string, string> = {
-  belehnung: "Rechenfehler: CHF 779'000 ÷ CHF 950'000 = 82.0 %, nicht 78.0 %.",
+  belehnung:
+    "Die Belehnung beträgt 82%, nicht 78%. Die Schweizer Obergrenze liegt bei 80% – der Antrag müsste in dieser Form abgelehnt werden.",
   eigenmittel:
-    "Klassifizierungsfehler: PK-Vorbezüge gelten gemäss FINMA nicht als echte Eigenmittel für die Mindestanforderung.",
-  amortisation:
-    "Dokumentationsfehler: Der Amortisationsplan liegt nicht im Dossier vor – Feld hätte «nicht angegeben» lauten sollen.",
+    "Bei PK-Vorbezug muss dokumentiert sein, dass mindestens 10% des Kaufpreises (CHF 95'000) aus echten Eigenmitteln ohne Pensionskasse stammen. Dieser Nachweis fehlt im Antrag.",
+  "amort-rate":
+    "Hans Müller ist 55 Jahre alt. Die 2. Hypothek muss bis zur Pensionierung (65) amortisiert sein – also in 10 Jahren, nicht 15. Die korrekte Jahresrate wäre CHF 14'600 statt CHF 9'733.",
 };
 
 const FIELD_IDS = [
@@ -249,10 +250,10 @@ export default function TestInteractivePage() {
   }
 
   const flaggedCount = FIELD_IDS.filter((id) => fields[id].flagged).length;
-  const foundErrors = (["belehnung", "eigenmittel", "amortisation"] as const).filter(
+  const foundErrors = (["belehnung", "eigenmittel", "amort-rate"] as const).filter(
     (id) => fields[id].flagged
   );
-  const missedErrors = (["belehnung", "eigenmittel", "amortisation"] as const).filter(
+  const missedErrors = (["belehnung", "eigenmittel", "amort-rate"] as const).filter(
     (id) => !fields[id].flagged
   );
   const wrongFlags = FIELD_IDS.filter((id) => fields[id].flagged && !ACTUAL_ERRORS.has(id));
@@ -353,7 +354,7 @@ export default function TestInteractivePage() {
           </div>
 
           <DocSection title="1. Antragsteller">
-            {row("ehemann", "Ehemann", "Hans Müller, geb. 12.03.1978, CH")}
+            {row("ehemann", "Ehemann", "Hans Müller, geb. 12.03.1971, CH")}
             {row("ehefrau", "Ehefrau", "Marie Müller-Bühler, geb. 04.07.1981, CH")}
             {row("wohnadresse", "Wohnadresse", "Seestrasse 45, 8200 Schaffhausen")}
             {row("familienstand", "Familienstand", "Verheiratet, 3 Kinder (2009 / 2012 / 2016)")}
