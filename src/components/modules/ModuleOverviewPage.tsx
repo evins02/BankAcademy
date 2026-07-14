@@ -97,6 +97,20 @@ const PRIVATKUNDE: OverviewConfig = {
       ],
     },
     {
+      label: "Dokument prüfen",
+      items: [
+        {
+          id: "privatkunde-dokument-pruefen",
+          title: "Dokument prüfen",
+          description: "Fehler in Bankdokumenten finden und analysieren",
+          href: "/privatkunde/dokument-pruefen",
+          emoji: "📋",
+          totalScenarios: 1,
+          comingSoon: true,
+        },
+      ],
+    },
+    {
       label: "Individual",
       items: [
         {
@@ -144,6 +158,20 @@ const FIRMENKUNDE: OverviewConfig = {
   emoji: "🏢",
   totalScenarios: 7,
   groups: [
+    {
+      label: "Dokument prüfen",
+      items: [
+        {
+          id: "firmenkunde-dokument-pruefen",
+          title: "Dokument prüfen",
+          description: "Fehler in Bankdokumenten finden und analysieren",
+          href: "/firmenkunde/dokument-pruefen",
+          emoji: "📋",
+          totalScenarios: 1,
+          comingSoon: true,
+        },
+      ],
+    },
     {
       label: "Kontoeröffnung",
       items: [
@@ -221,6 +249,20 @@ const ANLAGEKUNDE: OverviewConfig = {
   totalScenarios: 4,
   groups: [
     {
+      label: "Dokument prüfen",
+      items: [
+        {
+          id: "anlagekunde-dokument-pruefen",
+          title: "Dokument prüfen",
+          description: "Fehler in Bankdokumenten finden und analysieren",
+          href: "/anlagekunde/dokument-pruefen",
+          emoji: "📋",
+          totalScenarios: 1,
+          comingSoon: true,
+        },
+      ],
+    },
+    {
       label: "Anlageberatung",
       items: [
         {
@@ -243,6 +285,20 @@ const BACKOFFICE: OverviewConfig = {
   emoji: "🏦",
   totalScenarios: 9,
   groups: [
+    {
+      label: "Dokument prüfen",
+      items: [
+        {
+          id: "backoffice-dokument-pruefen",
+          title: "Dokument prüfen",
+          description: "Fehler in Bankdokumenten finden und analysieren",
+          href: "/backoffice/dokument-pruefen",
+          emoji: "📋",
+          totalScenarios: 1,
+          comingSoon: true,
+        },
+      ],
+    },
     {
       label: "Banking Operations",
       items: [
