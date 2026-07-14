@@ -13,6 +13,7 @@ import { OffeneFrageCard } from "@/components/shared/OffeneFrageCard";
 import { OffeneFrageResultCard } from "@/components/shared/OffeneFrageResultCard";
 import { type OffeneFrageCase } from "@/lib/offene-frage";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
+import { NoteModal } from "@/components/shared/NoteModal";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { addAttemptRecord } from "@/lib/error-tracking";
 
@@ -29,6 +30,7 @@ export function KycRunner() {
   const [sessionResults, setSessionResults] = useState<ScenarioResult[]>([]);
   const [lückentextAnswer, setLückentextAnswer] = useState("");
   const [offeneFrageAnswer, setOffeneFrageAnswer] = useState("");
+  const [noteOpen, setNoteOpen] = useState(false);
 
   const levelConfig = KYC_LEVELS.find((l) => l.level === activeLevel)!;
   const activeScenarios = useMemo(
@@ -161,6 +163,7 @@ export function KycRunner() {
             selectedOption={selectedOption}
             onSelect={setSelectedOption}
             onSubmit={handleSubmit}
+            onOpenNote={() => setNoteOpen(true)}
           />
         )
       )}
@@ -209,6 +212,15 @@ export function KycRunner() {
           results={sessionResults}
           onNext={handleGoToSelector}
           onRetry={handleRetry}
+        />
+      )}
+
+      {noteOpen && currentScenario && (
+        <NoteModal
+          scenarioId={`kyc-${currentScenario.id}`}
+          moduleId="banking-operations-kyc"
+          moduleName="KYC / Compliance"
+          onClose={() => setNoteOpen(false)}
         />
       )}
     </div>

@@ -17,6 +17,7 @@ import { type OffeneFrageCase } from "@/lib/offene-frage";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { addAttemptRecord } from "@/lib/error-tracking";
+import { NoteModal } from "@/components/shared/NoteModal";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
@@ -31,6 +32,7 @@ export function MahnwesenRunner() {
   const [sessionResults, setSessionResults] = useState<CaseResult[]>([]);
   const [lückentextAnswer, setLückentextAnswer] = useState("");
   const [offeneFrageAnswer, setOffeneFrageAnswer] = useState("");
+  const [noteOpen, setNoteOpen] = useState(false);
 
   const levelConfig = MW_LEVELS.find((l) => l.level === activeLevel)!;
   const activeCases = useMemo(
@@ -184,6 +186,7 @@ export function MahnwesenRunner() {
             selectedOption={selectedOption}
             onSelect={setSelectedOption}
             onSubmit={handleSubmit}
+            onOpenNote={() => setNoteOpen(true)}
           />
         )
       )}
@@ -232,6 +235,15 @@ export function MahnwesenRunner() {
           results={sessionResults}
           onNext={handleGoToSelector}
           onRetry={handleRetry}
+        />
+      )}
+
+      {noteOpen && currentCase && (
+        <NoteModal
+          scenarioId={`mahnwesen-${currentCase.id}`}
+          moduleId="banking-operations-mahnwesen"
+          moduleName="Mahnwesen"
+          onClose={() => setNoteOpen(false)}
         />
       )}
     </div>

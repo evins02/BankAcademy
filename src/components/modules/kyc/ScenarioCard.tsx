@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { StickyNote } from "lucide-react";
+import { getNotes } from "@/lib/notesData";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -12,6 +15,7 @@ interface ScenarioCardProps {
   selectedOption: OptionKey | null;
   onSelect: (key: OptionKey) => void;
   onSubmit: () => void;
+  onOpenNote: () => void;
 }
 
 export function ScenarioCard({
@@ -21,8 +25,15 @@ export function ScenarioCard({
   selectedOption,
   onSelect,
   onSubmit,
+  onOpenNote,
 }: ScenarioCardProps) {
   const levelConfig = KYC_LEVELS.find((l) => l.level === scenario.level)!;
+  const [hasNote, setHasNote] = useState(false);
+
+  useEffect(() => {
+    const notes = getNotes();
+    setHasNote(!!notes[`kyc-${scenario.id}`]?.content?.trim());
+  }, [scenario.id]);
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -31,6 +42,20 @@ export function ScenarioCard({
           <Badge variant={levelConfig.badgeVariant}>
             Level {scenario.level} – {levelConfig.label}
           </Badge>
+          <button
+            onClick={onOpenNote}
+            className={cn(
+              "flex items-center gap-1 rounded-lg border px-2 py-1 text-xs transition-colors",
+              hasNote
+                ? "border-amber-300 bg-amber-50 text-amber-700"
+                : "border-border text-text-secondary hover:border-primary/40 hover:text-primary"
+            )}
+            title="Notiz zu diesem Szenario"
+            aria-label="Notiz öffnen"
+          >
+            <StickyNote size={11} />
+            {hasNote ? "Notiz" : "📝"}
+          </button>
           <span className="text-xs text-text-secondary">
             Szenario {scenarioIndex + 1} von {total}
           </span>
