@@ -25,15 +25,15 @@ type Phase = "prüfen" | "auswertung";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const ACTUAL_ERRORS = new Set(["belehnung", "eigenmittel", "amort-rate"]);
+const ACTUAL_ERRORS = new Set(["belehnung", "amort-rate", "amort-frist"]);
 
 const ERROR_EXPLANATIONS: Record<string, string> = {
   belehnung:
     "Die Belehnung beträgt 82%, nicht 78%. Die Schweizer Obergrenze liegt bei 80% – der Antrag müsste in dieser Form abgelehnt werden.",
-  eigenmittel:
-    "Bei PK-Vorbezug muss dokumentiert sein, dass mindestens 10% des Kaufpreises (CHF 95'000) aus echten Eigenmitteln ohne Pensionskasse stammen. Dieser Nachweis fehlt im Antrag.",
   "amort-rate":
-    "Hans Müller ist 55 Jahre alt. Die 2. Hypothek muss bis zur Pensionierung (65) amortisiert sein – also in 10 Jahren, nicht 15. Die korrekte Jahresrate wäre CHF 14'600 statt CHF 9'733.",
+    "Die 2. Hypothek beträgt CHF 146'000, Laufzeit 15 Jahre. Die korrekte Jahresrate wäre CHF 146'000 ÷ 15 = CHF 9'733 – nicht CHF 7'733 wie im Formular angegeben.",
+  "amort-frist":
+    "Hans Müller ist 55 Jahre alt. Die 2. Hypothek muss bis zur Pensionierung (65) amortisiert sein – also in 10 Jahren, nicht 15. Die maximale Frist beträgt 10 Jahre.",
 };
 
 const FIELD_IDS = [
@@ -41,7 +41,7 @@ const FIELD_IDS = [
   "objektart", "adresse", "kaufpreis", "schaetzwert", "baujahr", "wohnflaeche",
   "hypothek1", "hypothek2", "gesamthypothek", "belehnung",
   "eigenmittel-gesamt", "bankguthaben", "eigenmittel",
-  "amort-typ", "amort-rate", "amortisation",
+  "amort-typ", "amort-rate", "amort-frist", "amortisation",
   "bruttoeinkommen", "hypothekarkosten", "tragbarkeit-amort", "nebenkosten",
   "wohnkosten-total", "tragbarkeit", "kreditentscheid",
   "kreditsachbearbeiter", "kreditkontrolle", "kreditkommission",
@@ -250,10 +250,10 @@ export default function TestInteractivePage() {
   }
 
   const flaggedCount = FIELD_IDS.filter((id) => fields[id].flagged).length;
-  const foundErrors = (["belehnung", "eigenmittel", "amort-rate"] as const).filter(
+  const foundErrors = (["belehnung", "amort-rate", "amort-frist"] as const).filter(
     (id) => fields[id].flagged
   );
-  const missedErrors = (["belehnung", "eigenmittel", "amort-rate"] as const).filter(
+  const missedErrors = (["belehnung", "amort-rate", "amort-frist"] as const).filter(
     (id) => !fields[id].flagged
   );
   const wrongFlags = FIELD_IDS.filter((id) => fields[id].flagged && !ACTUAL_ERRORS.has(id));
@@ -390,18 +390,19 @@ export default function TestInteractivePage() {
 
           <DocSection title="4. Amortisation">
             {row("amort-typ", "Typ", "Direkt")}
-            {row("amort-rate", "Amortisationsrate p.a.", "CHF 9'733 (2. Hypothek über 15 Jahre)")}
+            {row("amort-rate", "Amortisationsrate p.a.", <strong>CHF 7&apos;733</strong>)}
+            {row("amort-frist", "Amortisationsfrist (2. Hypothek)", "15 Jahre")}
             {row("amortisation", "Amortisationsplan (Dok.)", <strong>vorhanden</strong>)}
           </DocSection>
 
           <DocSection title="5. Tragbarkeitsberechnung (Referenzzins 5.0 %)">
             {row("bruttoeinkommen", "Bruttoeinkommen p.a.", "CHF 168'000")}
             {row("hypothekarkosten", "Hypothekarkosten (5.0 %)", "CHF 38'950")}
-            {row("tragbarkeit-amort", "Amortisation p.a.", "CHF 9'733")}
+            {row("tragbarkeit-amort", "Amortisation p.a.", "CHF 7'733")}
             {row("nebenkosten", "Nebenkosten (1.0 % Kaufpreis)", "CHF 9'500")}
-            {row("wohnkosten-total", "Total Wohnkosten p.a.", "CHF 58'183")}
-            {row("tragbarkeit", "Tragbarkeit", "34.6 % (Grenzwert: 33.0 %)")}
-            {row("kreditentscheid", "Kreditentscheid", "Abzulehnen – Tragbarkeit überschritten")}
+            {row("wohnkosten-total", "Total Wohnkosten p.a.", "CHF 56'183")}
+            {row("tragbarkeit", "Tragbarkeit", "33.4 % (Grenzwert: 33.0 %)")}
+            {row("kreditentscheid", "Kreditentscheid", "Abzulehnen – Belehnung überschreitet 80 %-Grenze")}
           </DocSection>
 
           <DocSection title="6. Visa / Unterschriften">

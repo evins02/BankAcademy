@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 
-type FieldId = "belehnung" | "eigenmittel" | "amort-rate";
+type FieldId = "belehnung" | "amort-rate" | "amort-frist";
 
 interface ErrorContext {
   field: string;
@@ -18,18 +18,18 @@ const ERROR_CONTEXT: Record<FieldId, ErrorContext> = {
       "82.0 % (CHF 779'000 ÷ CHF 950'000 = 0.820). Die Belehnung überschreitet zudem die Schweizer Obergrenze von 80 % – der Antrag müsste in dieser Form abgelehnt werden.",
     type: "Rechenfehler + Grenzwertverletzung (80%-Regel)",
   },
-  eigenmittel: {
-    field: "Pensionskassen-Vorbezug (BVG) – Eigenmittel-Dokumentation",
-    shown: "CHF 72'000 PK-Vorbezug mit ✓ Eigenmittel markiert",
-    correct:
-      "PK-Vorbezüge sind grundsätzlich als Eigenmittel zulässig. Es fehlt aber die Dokumentation, dass mindestens 10 % des Kaufpreises (CHF 95'000) aus echten Eigenmitteln ohne Pensionskasse stammen. Das Bankguthaben von CHF 99'000 erfüllt dies knapp, aber der 10%-Nachweis ist im Dossier nicht dokumentiert.",
-    type: "Dokumentationsfehler (10%-Eigenmittel-Nachweis fehlt)",
-  },
   "amort-rate": {
-    field: "Amortisationsrate p.a. – Laufzeit der 2. Hypothek",
-    shown: "CHF 9'733 (2. Hypothek über 15 Jahre)",
+    field: "Amortisationsrate p.a. (2. Hypothek)",
+    shown: "CHF 7'733 p.a.",
     correct:
-      "Hans Müller (geb. 12.03.1971) ist 55 Jahre alt und pensioniert sich mit 65. Die 2. Hypothek muss spätestens bei Pensionierung amortisiert sein – die maximale Frist beträgt daher 10 Jahre, nicht 15. Die korrekte Jahresrate wäre CHF 146'000 ÷ 10 = CHF 14'600 (statt CHF 9'733).",
+      "CHF 9'733 p.a. (CHF 146'000 ÷ 15 Jahre = CHF 9'733). Der im Formular eingetragene Wert von CHF 7'733 ist um CHF 2'000 zu tief – ein Rechenfehler.",
+    type: "Rechenfehler (Amortisationsrate zu tief berechnet)",
+  },
+  "amort-frist": {
+    field: "Amortisationsfrist (2. Hypothek)",
+    shown: "15 Jahre",
+    correct:
+      "Hans Müller (geb. 12.03.1971) ist 55 Jahre alt und pensioniert sich mit 65. Die 2. Hypothek muss spätestens bei Pensionierung vollständig amortisiert sein – die maximale Frist beträgt daher 10 Jahre, nicht 15.",
     type: "Fristfehler (Amortisationsfrist überschreitet Zeitraum bis Pensionierung)",
   },
 };
