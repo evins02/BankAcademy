@@ -77,7 +77,7 @@ interface ClickableRowProps {
 }
 
 function ClickableRow({
-  id, label, value, muted, state, phase, isError, errorExplanation,
+  label, value, muted, state, phase, isError, errorExplanation,
   onToggle, onComment, onFlag, onUnflag,
 }: ClickableRowProps) {
   const { expanded, comment, flagged, loading, feedback } = state;
