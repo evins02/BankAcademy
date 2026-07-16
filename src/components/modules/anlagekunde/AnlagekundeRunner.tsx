@@ -9,12 +9,15 @@ import { LevelComplete, type ScenarioResult } from "./LevelComplete";
 import { AL_LEVELS, type LevelNum, type OptionKey } from "@/lib/anlagekunde";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
+import { addAttemptRecord } from "@/lib/error-tracking";
+import { NoteModal } from "@/components/shared/NoteModal";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
 export function AnlagekundeRunner() {
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
+  const [noteOpen, setNoteOpen] = useState(false);
 
   const [view, setView] = useState<View>("selector");
   const [activeLevel, setActiveLevel] = useState<LevelNum>(1);
@@ -55,6 +58,17 @@ export function AnlagekundeRunner() {
     setSessionResults(newResults);
 
     if (!isCorrect && "concepts" in currentScenario) recordConceptError("banking-operations-anlagekunde", (currentScenario as {concepts?: string[]}).concepts ?? []);
+    addAttemptRecord({
+      moduleId: "banking-operations-anlagekunde",
+      levelNum: activeLevel,
+      caseId: currentScenario.id,
+      caseTitle: String((currentScenario as unknown as Record<string, unknown>).title ?? (currentScenario as unknown as Record<string, unknown>).label ?? currentScenario.id),
+      attempt: 1,
+      timestamp: Date.now(),
+      score: isCorrect ? 100 : 0,
+      correct: isCorrect,
+      errors: !isCorrect && selectedOption ? [{ type: "wrong" as const, documentId: selectedOption, documentLabel: selectedOption }] : [],
+    });
     if (isLastScenario) {
       const score = newResults.filter((r) => r.correct).length;
       setCompletedLevels((prev) => {
@@ -102,6 +116,7 @@ export function AnlagekundeRunner() {
           selectedOption={selectedOption}
           onSelect={setSelectedOption}
           onSubmit={handleSubmit}
+          onOpenNote={() => setNoteOpen(true)}
         />
       )}
       {view === "feedback" && currentScenario && selectedOption && (
@@ -120,6 +135,14 @@ export function AnlagekundeRunner() {
           results={sessionResults}
           onNext={handleGoToSelector}
           onRetry={handleRetry}
+        />
+      )}
+      {noteOpen && currentScenario && (
+        <NoteModal
+          scenarioId={`anlagekunde-${currentScenario.id}`}
+          moduleId="banking-operations-anlagekunde"
+          moduleName="Anlagekunde"
+          onClose={() => setNoteOpen(false)}
         />
       )}
     </div>

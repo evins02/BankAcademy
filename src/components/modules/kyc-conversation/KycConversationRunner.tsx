@@ -59,13 +59,12 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
         if (data.irrelevant) {
           setIrrelevantCount((n) => n + 1);
         }
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
+      } catch {
         setMessages((prev) => [
           ...prev,
           {
             role: "customer" as const,
-            content: `[Verbindungsfehler – ${msg}. Bitte erneut versuchen.]`,
+            content: `[Verbindungsproblem – Bitte nochmals senden.]`,
           },
         ]);
       } finally {

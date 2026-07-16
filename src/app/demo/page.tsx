@@ -25,19 +25,63 @@ const UNLOCKED_MODULES = [
     color: "#6C63FF",
   },
   {
+    title: "Zahlungsverkehr",
+    description:
+      "IBAN, Zahlungsaufträge, SEPA und SWIFT – Produkte kennen und Kunden richtig beraten.",
+    href: "/demo/privatkunde/basis/zahlungsverkehr",
+    tag: "Privatkunde · Basis",
+    xp: "+35 XP",
+    color: "#f59e0b",
+  },
+  {
+    title: "Fonds",
+    description:
+      "Anlagefonds, ETF und Anlagestrategien – Risikoprofil bestimmen und Produkte empfehlen.",
+    href: "/demo/privatkunde/basis/fonds",
+    tag: "Privatkunde · Basis",
+    xp: "+45 XP",
+    color: "#8b5cf6",
+  },
+  {
+    title: "Anlegerprofil & Beratung",
+    description:
+      "Kundenprofil aufnehmen, Risikobereitschaft einschätzen und passende Anlageempfehlungen abgeben.",
+    href: "/demo/anlagekunde/anlegerprofil",
+    tag: "Anlagekunde · Anlageberatung",
+    xp: "+60 XP",
+    color: "#06b6d4",
+  },
+  {
     title: "KYC / Compliance",
     description:
       "Know Your Customer – Sorgfaltspflichten, GwG und Beneficial Owner in der Praxis.",
     href: "/demo/backoffice/banking-operations/kyc",
-    tag: "Back Office · Banking Operations",
+    tag: "Back Office · Bankbetrieb",
     xp: "+80 XP",
     color: "#10b981",
+  },
+  {
+    title: "Zahlungsverkehr Back Office",
+    description:
+      "Zahlungsaufträge prüfen, Fehler erkennen und Buchungen korrekt verarbeiten.",
+    href: "/demo/backoffice/banking-operations/zahlungsverkehr",
+    tag: "Back Office · Bankbetrieb",
+    xp: "+55 XP",
+    color: "#3b82f6",
+  },
+  {
+    title: "Mahnwesen",
+    description:
+      "Mahnläufe, Zahlungsrückstände und Eskalationsstufen sicher bearbeiten.",
+    href: "/demo/backoffice/banking-operations/mahnwesen",
+    tag: "Back Office · Bankbetrieb",
+    xp: "+50 XP",
+    color: "#ef4444",
   },
 ];
 
 const LOCKED_MODULES = [
   { title: "Firmenkunde", description: "Kontoeröffnung, Tragbarkeit und Firmenkredit." },
-  { title: "Anlagekunde", description: "Anlageberatung, Obligationen, Aktien & ETF." },
   { title: "Credit Office", description: "Hypotheken, Blankokredit und periodische Prüfung." },
   { title: "Individual-Hypothek", description: "Hypothekarantrag prüfen und Tragbarkeit berechnen." },
   { title: "Challenge-Modus", description: "Prüfungssimulation mit realistischen Falldossiers." },
@@ -76,7 +120,7 @@ export default function DemoPage() {
                 marginBottom: 20,
               }}
             >
-              👀 Demo Modus · 3 von 6 Modulen freigeschaltet
+              👀 Demo Modus · 8 Module freigeschaltet
             </div>
             <h1
               style={{
@@ -89,7 +133,7 @@ export default function DemoPage() {
               Willkommen bei BankAcademy
             </h1>
             <p style={{ margin: "0 0 28px", fontSize: 15, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>
-              Starte mit den freigeschalteten Modulen. Für alle 6 Module, 105+ Szenarien und den Challenge-Modus kannst du Vollzugang anfragen.
+              Starte mit den 8 freigeschalteten Modulen. Für alle Module, 150+ Szenarien und den Challenge-Modus kannst du Vollzugang anfragen.
             </p>
             <Link
               href="/kontakt"
@@ -224,7 +268,7 @@ export default function DemoPage() {
                 Bereit für den Vollzugang?
               </h3>
               <p style={{ margin: 0, fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
-                Alle 6 Module · 105+ Szenarien · Challenge-Modus · Leaderboard
+                Alle Module · 150+ Szenarien · Challenge-Modus · Leaderboard
               </p>
             </div>
             <Link

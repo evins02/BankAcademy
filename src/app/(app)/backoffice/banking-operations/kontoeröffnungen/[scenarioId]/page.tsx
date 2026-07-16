@@ -19,7 +19,7 @@ export default function ScenarioPage({
         items={[
           { label: "Dashboard", href: "/dashboard" },
           { label: "Back Office" },
-          { label: "Banking Operations" },
+          { label: "Bankbetrieb" },
           { label: "Kontoeröffnungen", href: "/backoffice/banking-operations/kontoeröffnungen" },
           { label: scenario.customerType },
         ]}

@@ -155,7 +155,7 @@ const FIRMENKUNDE: OverviewConfig = {
   title: "Firmenkunde",
   description: "Firmenkonten, Tragbarkeit und Kreditengagements",
   emoji: "🏢",
-  totalScenarios: 7,
+  totalScenarios: 19,
   groups: [
     {
       label: "Dokument prüfen",
@@ -176,10 +176,10 @@ const FIRMENKUNDE: OverviewConfig = {
         {
           id: "firmenkunde-kontoeröffnung-firma",
           title: "Kontoeröffnung Firma",
-          description: "Kontoeröffnung für Kapitalgesellschaften",
+          description: "GmbH, AG, Kollektivgesellschaft, PEP, Holding – 9 Szenarien",
           href: "/firmenkunde/kontoeröffnung-firma",
           emoji: "📋",
-          totalScenarios: 2,
+          totalScenarios: 9,
         },
         {
           id: "firmenkunde-sitzgesellschaft",
@@ -208,7 +208,7 @@ const FIRMENKUNDE: OverviewConfig = {
           description: "Tragbarkeit bei Renditeobjekten",
           href: "/firmenkunde/tragbarkeit/renditeobjekt",
           emoji: "🏗️",
-          totalScenarios: 1,
+          totalScenarios: 3,
         },
         {
           id: "firmenkunde-gesamtengagement",
@@ -216,7 +216,7 @@ const FIRMENKUNDE: OverviewConfig = {
           description: "Kreditportfolio und Gesamtengagement",
           href: "/firmenkunde/tragbarkeit/gesamtengagement",
           emoji: "📊",
-          totalScenarios: 1,
+          totalScenarios: 3,
         },
         {
           id: "firmenkunde-etp",
@@ -224,7 +224,7 @@ const FIRMENKUNDE: OverviewConfig = {
           description: "Eigenkapital und Tragbarkeitsplafond",
           href: "/firmenkunde/tragbarkeit/etp",
           emoji: "📐",
-          totalScenarios: 1,
+          totalScenarios: 3,
         },
         {
           id: "firmenkunde-gewerbe",
@@ -232,7 +232,20 @@ const FIRMENKUNDE: OverviewConfig = {
           description: "Selbstgenutzte Gewerbeliegenschaften",
           href: "/firmenkunde/tragbarkeit/gewerbe",
           emoji: "🔨",
-          totalScenarios: 1,
+          totalScenarios: 2,
+        },
+      ],
+    },
+    {
+      label: "Kreditvergabe",
+      items: [
+        {
+          id: "firmenkunde-bonitaet",
+          title: "Bonitätsprüfung & Firmenkredit",
+          description: "Deckungsgrad, EK-Quote, Sicherheiten – 4 Szenarien",
+          href: "/firmenkunde/bonitaet",
+          emoji: "🔎",
+          totalScenarios: 4,
         },
       ],
     },
@@ -244,7 +257,7 @@ const ANLAGEKUNDE: OverviewConfig = {
   title: "Anlagekunde",
   description: "Anlageberatung und Kundenprofil",
   emoji: "📈",
-  totalScenarios: 4,
+  totalScenarios: 32,
   groups: [
     {
       label: "Dokument prüfen",
@@ -272,15 +285,115 @@ const ANLAGEKUNDE: OverviewConfig = {
         },
       ],
     },
+    {
+      label: "Märkte & Produkte",
+      items: [
+        {
+          id: "anlagekunde-obligationen",
+          title: "Obligationen",
+          description: "Ratings, Rendite & Zins-Kurs-Zusammenhang",
+          href: "/anlagekunde/obligationen",
+          emoji: "📊",
+          totalScenarios: 3,
+        },
+        {
+          id: "anlagekunde-aktien",
+          title: "Aktien & Kennzahlen",
+          description: "KGV, Dividendenrendite & Aktie vs. Obligation",
+          href: "/anlagekunde/aktien",
+          emoji: "📉",
+          totalScenarios: 3,
+        },
+        {
+          id: "anlagekunde-fonds",
+          title: "Anlagefonds & ETF",
+          description: "TER, ausschüttend/thesaurierend, aktiv vs. passiv",
+          href: "/anlagekunde/fonds",
+          emoji: "🌐",
+          totalScenarios: 3,
+        },
+        {
+          id: "anlagekunde-strukturierte-produkte",
+          title: "Strukturierte Produkte",
+          description: "Kapitalschutz, BRC und Partizipationsprodukte",
+          href: "/anlagekunde/strukturierte-produkte",
+          emoji: "🔧",
+          totalScenarios: 3,
+        },
+      ],
+    },
+    {
+      label: "Steuern & Nachhaltigkeit",
+      items: [
+        {
+          id: "anlagekunde-steuern",
+          title: "Steuerliche Aspekte",
+          description: "Verrechnungssteuer, Stempelabgabe, Kapitalgewinne",
+          href: "/anlagekunde/steuern",
+          emoji: "🧾",
+          totalScenarios: 3,
+        },
+        {
+          id: "anlagekunde-esg",
+          title: "Nachhaltige Anlagen (ESG)",
+          description: "Environmental, Social, Governance – Pflichtabfrage",
+          href: "/anlagekunde/esg",
+          emoji: "🌱",
+          totalScenarios: 3,
+        },
+        {
+          id: "anlagekunde-waehrungsrisiken",
+          title: "Währungsrisiken",
+          description: "Hedged vs. Unhedged, Währungseffekte berechnen",
+          href: "/anlagekunde/waehrungsrisiken",
+          emoji: "💱",
+          totalScenarios: 3,
+        },
+      ],
+    },
+    {
+      label: "Vorsorge & Depot",
+      items: [
+        {
+          id: "anlagekunde-vorsorge-anlage",
+          title: "Vorsorge & 3a im Anlagekontext",
+          description: "3a Konto vs. Fonds, Horizont und Bezugsvoraussetzungen",
+          href: "/anlagekunde/vorsorge-anlage",
+          emoji: "🔐",
+          totalScenarios: 3,
+        },
+        {
+          id: "anlagekunde-depotauszug",
+          title: "Depotauszug lesen",
+          description: "Marktwert, Performance CHF/% und Kennzahlen berechnen",
+          href: "/anlagekunde/depotauszug",
+          emoji: "📋",
+          totalScenarios: 3,
+        },
+      ],
+    },
+    {
+      label: "Simulation",
+      items: [
+        {
+          id: "anlagekunde-simulation",
+          title: "Simulation: Anlageberatung",
+          description: "Vollständiges Beratungsgespräch mit Andreas Keller",
+          href: "/anlagekunde/simulation",
+          emoji: "🎭",
+          totalScenarios: 1,
+        },
+      ],
+    },
   ],
 };
 
 const BACKOFFICE: OverviewConfig = {
   moduleId: "banking-operations",
   title: "Back Office",
-  description: "Kontoeröffnungen, Zahlungsverkehr, KYC und Mahnwesen",
+  description: "Kontoeröffnungen, Zahlungsverkehr, KYC, Mahnwesen und Kreditgeschäft",
   emoji: "🏦",
-  totalScenarios: 9,
+  totalScenarios: 46,
   groups: [
     {
       label: "Dokument prüfen",
@@ -296,7 +409,7 @@ const BACKOFFICE: OverviewConfig = {
       ],
     },
     {
-      label: "Banking Operations",
+      label: "Bankbetrieb",
       items: [
         {
           id: "backoffice-kontoeröffnungen",
@@ -337,11 +450,96 @@ const BACKOFFICE: OverviewConfig = {
       items: [
         {
           id: "credit-operations",
-          title: "Kreditgeschäft",
-          description: "Kreditbearbeitung und Risikoprüfung",
+          title: "Kreditgeschäft (Runner)",
+          description: "Kreditbearbeitung und Risikoprüfung – alle Level",
           href: "/backoffice/credit-operations",
           emoji: "⚙️",
-          totalScenarios: 5,
+          totalScenarios: 15,
+        },
+        {
+          id: "credit-operations-sicherheiten",
+          title: "Sicherheiten",
+          description: "Grundpfand, Bürgschaft und Wertschriften als Kreditsicherheiten",
+          href: "/backoffice/credit-operations/sicherheiten",
+          emoji: "🔒",
+          totalScenarios: 3,
+        },
+        {
+          id: "credit-operations-grundpfand",
+          title: "Grundpfand",
+          description: "Grundpfandrecht, Schuldbriefe und Faustpfand",
+          href: "/backoffice/credit-operations/grundpfand",
+          emoji: "🏠",
+          totalScenarios: 3,
+        },
+        {
+          id: "credit-operations-rating",
+          title: "Rating",
+          description: "Kreditwürdigkeitsprüfung und Bonitätsbeurteilung",
+          href: "/backoffice/credit-operations/rating",
+          emoji: "⭐",
+          totalScenarios: 2,
+        },
+        {
+          id: "credit-operations-schuldbrief",
+          title: "Schuldbrief",
+          description: "Papier- und Register-Schuldbrief im Kreditgeschäft",
+          href: "/backoffice/credit-operations/schuldbrief",
+          emoji: "📜",
+          totalScenarios: 3,
+        },
+        {
+          id: "credit-operations-buergschaft",
+          title: "Bürgschaft",
+          description: "Einfache, solidarische und Ausfallbürgschaft",
+          href: "/backoffice/credit-operations/buergschaft",
+          emoji: "🤝",
+          totalScenarios: 3,
+        },
+        {
+          id: "credit-operations-vorzeitige-rueckzahlung",
+          title: "Vorzeitige Rückzahlung",
+          description: "Vorfälligkeitsentschädigung und Auflösungskosten",
+          href: "/backoffice/credit-operations/vorzeitige-rueckzahlung",
+          emoji: "↩️",
+          totalScenarios: 3,
+        },
+      ],
+    },
+    {
+      label: "Credit Office",
+      items: [
+        {
+          id: "credit-office-hypothek",
+          title: "Hypothek",
+          description: "Vollständige Hypothekarkreditprüfung mit Fallstudie",
+          href: "/backoffice/credit-office/hypothek",
+          emoji: "🏡",
+          totalScenarios: 1,
+        },
+        {
+          id: "credit-office-blankokredit",
+          title: "Blankokredit",
+          description: "Blankokreditprüfung und Kreditentscheid",
+          href: "/backoffice/credit-office/blankokredit",
+          emoji: "💼",
+          totalScenarios: 1,
+        },
+        {
+          id: "credit-office-firmenkredit",
+          title: "Firmenkredit",
+          description: "Firmenkreditprüfung und Risikobeurteilung",
+          href: "/backoffice/credit-office/firmenkredit",
+          emoji: "🏢",
+          totalScenarios: 1,
+        },
+        {
+          id: "credit-office-neubewilligung",
+          title: "Neubewilligung",
+          description: "Neubewilligung und Kreditverlängerung",
+          href: "/backoffice/credit-office/neubewilligung",
+          emoji: "✅",
+          totalScenarios: 1,
         },
       ],
     },

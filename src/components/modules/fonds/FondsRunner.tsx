@@ -13,6 +13,7 @@ import { FirstTimeTutorial } from "@/components/shared/FirstTimeTutorial";
 import { SmartTipBanner } from "@/components/shared/SmartTipBanner";
 import { NoteModal } from "@/components/shared/NoteModal";
 import { getProgress, saveProgress } from "@/lib/progressData";
+import { addAttemptRecord } from "@/lib/error-tracking";
 import { useGlossar } from "@/context/GlossarContext";
 import { getSettings } from "@/lib/settingsData";
 
@@ -73,6 +74,17 @@ export function FondsRunner() {
     ];
     setSessionResults(newResults);
 
+    addAttemptRecord({
+      moduleId: "privatkunde-fonds",
+      levelNum: activeLevel,
+      caseId: currentCase.id,
+      caseTitle: currentCase.title ?? currentCase.id,
+      attempt: 1,
+      timestamp: Date.now(),
+      score: isCorrect ? 100 : 0,
+      correct: isCorrect,
+      errors: !isCorrect && selectedOption ? [{ type: "wrong" as const, documentId: selectedOption, documentLabel: selectedOption }] : [],
+    });
     if (isCorrect) {
       setWrongStreak(0);
     } else {

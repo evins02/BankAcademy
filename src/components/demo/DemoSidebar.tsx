@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -40,7 +40,12 @@ const ICONS: Record<string, LucideIcon> = {
 const DEMO_UNLOCKED = new Set([
   "/privatkunde/basis/kontoeröffnung",
   "/privatkunde/basis/sparen-konto",
+  "/privatkunde/basis/zahlungsverkehr",
+  "/privatkunde/basis/fonds",
+  "/anlagekunde/anlegerprofil",
   "/backoffice/banking-operations/kyc",
+  "/backoffice/banking-operations/zahlungsverkehr",
+  "/backoffice/banking-operations/mahnwesen",
   "/demo",
 ]);
 
@@ -53,7 +58,7 @@ function hasUnlockedChild(item: NavItem): boolean {
   return item.sections.some((s) => s.items.some((sub) => isUnlocked(sub.href)));
 }
 
-export function DemoSidebar({ onLock }: { onLock: () => void }) {
+export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?: () => void }) {
   const pathname = usePathname();
   const [openItems, setOpenItems] = useState<Set<string>>(() => {
     const open = new Set<string>();
@@ -64,6 +69,11 @@ export function DemoSidebar({ onLock }: { onLock: () => void }) {
     }
     return open;
   });
+
+  useEffect(() => {
+    onClose?.();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   function toggle(label: string) {
     setOpenItems((prev) => {
@@ -262,7 +272,7 @@ export function DemoSidebar({ onLock }: { onLock: () => void }) {
           Vollzugang anfragen →
         </Link>
         <p className="mt-2 text-center text-[10px] text-text-secondary">
-          Alle 6 Module · 105+ Szenarien · Challenge-Modus
+          Alle Module · 150+ Szenarien · Challenge-Modus
         </p>
       </div>
     </aside>

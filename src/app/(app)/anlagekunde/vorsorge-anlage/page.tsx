@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp, AlertTriangle, Lightbulb, BookOpen } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
+import { addXP } from "@/lib/xpData";
 
 const SCENARIOS = [
   {
@@ -59,6 +60,14 @@ const SCENARIOS = [
 
 export default function VorsorgeAnlagePage() {
   const [lernOpen, setLernOpen] = useState(true);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [bonusAwarded, setBonusAwarded] = useState(false);
+  useEffect(() => {
+    if (correctCount === SCENARIOS.length && !bonusAwarded) {
+      addXP(50);
+      setBonusAwarded(true);
+    }
+  }, [correctCount, bonusAwarded]);
 
   return (
     <>
@@ -143,10 +152,28 @@ export default function VorsorgeAnlagePage() {
             </ul>
           </div>
 
-          <p className="text-xs font-bold uppercase tracking-widest text-text-secondary pt-1">Szenarien</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-bold uppercase tracking-widest text-text-secondary pt-1">Szenarien</p>
+            <div className="flex items-center gap-1.5 pt-1">
+              {SCENARIOS.map((_, i) => (
+                <div key={i} className={`w-2 h-2 rounded-full transition-colors ${i < correctCount ? "bg-green-500" : "bg-gray-200"}`} />
+              ))}
+              <span className="text-xs text-text-secondary ml-1">{correctCount} / {SCENARIOS.length}</span>
+            </div>
+          </div>
           {SCENARIOS.map((s) => (
-            <SubModuleMCQ key={s.num} scenarioNum={s.num} levelLabel={s.level} situation={s.situation} question={s.question} options={s.options} correct={s.correct} feedback={s.feedback} />
+            <SubModuleMCQ key={s.num} scenarioNum={s.num} levelLabel={s.level} situation={s.situation} question={s.question} options={s.options} correct={s.correct} feedback={s.feedback} onCorrect={() => setCorrectCount(c => Math.min(c + 1, SCENARIOS.length))} />
           ))}
+          {correctCount === SCENARIOS.length && (
+            <div className="rounded-DEFAULT bg-green-50 border border-green-200 p-5 flex items-start gap-3">
+              <span className="text-xl shrink-0">🏆</span>
+              <div>
+                <p className="font-bold text-green-800 text-sm">Modul abgeschlossen!</p>
+                <p className="text-sm text-green-700 mt-0.5">Du hast alle {SCENARIOS.length} Szenarien korrekt beantwortet.</p>
+                <p className="text-xs font-bold text-green-600 mt-2">+50 XP Bonus erhalten</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

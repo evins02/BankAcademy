@@ -10,7 +10,7 @@ const MODULE_NAMES: Record<string, string> = {
   privatkunde: "Privatkunde",
   firmenkunde: "Firmenkunde",
   anlagekunde: "Anlagekunde",
-  "banking-operations": "Banking Operations",
+  "banking-operations": "Bankbetrieb",
   "credit-operations": "Kreditgeschäft",
 };
 

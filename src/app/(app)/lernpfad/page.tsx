@@ -8,7 +8,7 @@ import { getProgress, type ModuleProgress } from "@/lib/progressData";
 
 const STEPS = [
   { id: "kyc-kontoeröffnung", label: "Kontoeröffnung", sub: "Privatkunde Basis", href: "/privatkunde/basis/kontoeröffnung", moduleId: "privatkunde", icon: "🏦" },
-  { id: "kyc", label: "KYC / Compliance", sub: "Banking Operations", href: "/backoffice/banking-operations/kyc", moduleId: "banking-operations", icon: "🔍" },
+  { id: "kyc", label: "KYC / Compliance", sub: "Bankbetrieb", href: "/backoffice/banking-operations/kyc", moduleId: "banking-operations", icon: "🔍" },
   { id: "zahlungsverkehr", label: "Zahlungsverkehr", sub: "Privatkunde Basis", href: "/privatkunde/basis/zahlungsverkehr", moduleId: "privatkunde", icon: "💸" },
   { id: "sparen-konto", label: "Sparen & Konto", sub: "Privatkunde Basis", href: "/privatkunde/basis/sparen-konto", moduleId: "privatkunde", icon: "💰" },
   { id: "vorsorge", label: "3a / Vorsorge", sub: "Privatkunde Basis", href: "/privatkunde/basis/vorsorge", moduleId: "privatkunde", icon: "🏖️" },
@@ -16,7 +16,7 @@ const STEPS = [
   { id: "hypotheken", label: "Hypotheken", sub: "Privatkunde Individual", href: "/privatkunde/individual/hypotheken", moduleId: "privatkunde", icon: "🏠" },
   { id: "firmenkunde", label: "Firmenkunde", sub: "Front Office", href: "/firmenkunde", moduleId: "firmenkunde", icon: "🏢" },
   { id: "anlagekunde", label: "Anlagekunde", sub: "Front Office", href: "/anlagekunde", moduleId: "anlagekunde", icon: "📈" },
-  { id: "banking-ops", label: "Banking Operations", sub: "Back Office", href: "/backoffice", moduleId: "banking-operations", icon: "⚙️" },
+  { id: "banking-ops", label: "Bankbetrieb", sub: "Back Office", href: "/backoffice", moduleId: "banking-operations", icon: "⚙️" },
   { id: "credit-ops", label: "Kreditgeschäft", sub: "Back Office", href: "/backoffice/credit-operations", moduleId: "credit-operations", icon: "💳" },
 ];
 

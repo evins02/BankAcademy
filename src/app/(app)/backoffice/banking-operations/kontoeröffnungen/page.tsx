@@ -24,7 +24,7 @@ export default function KontoeröffnungenPage() {
         items={[
           { label: "Dashboard", href: "/dashboard" },
           { label: "Back Office" },
-          { label: "Banking Operations" },
+          { label: "Bankbetrieb" },
           { label: "Kontoeröffnungen" },
         ]}
       />

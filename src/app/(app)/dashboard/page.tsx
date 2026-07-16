@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Sparkles, type LucideIcon } from "lucide-react";
-import { User, Building2, TrendingUp, Settings2, Landmark, Flame, Target, CheckCircle2, AlertTriangle } from "lucide-react";
+import { User, Building2, TrendingUp, Settings2, Landmark, Flame, Target, CheckCircle2, AlertTriangle, ClipboardCheck } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { HeroBanner } from "@/components/shared/HeroBanner";
 import { ModuleCard } from "@/components/modules/ModuleCard";
@@ -24,11 +24,15 @@ import {
   type StreakData,
 } from "@/lib/progressData";
 import { getAllWeakConcepts } from "@/lib/conceptTracker";
+import { getWeakScenarios, type WeakScenario } from "@/lib/error-tracking";
 import { BadgeEarnAnimation, useNewlyEarnedBadge } from "@/components/shared/BadgeEarnAnimation";
 
 interface UserProfile {
   name?: string;
   role?: string;
+  abteilung?: string;
+  lehrjahr?: string;
+  ziel?: string;
 }
 
 const FRONT_OFFICE_MODULES = [
@@ -54,18 +58,18 @@ const FRONT_OFFICE_MODULES = [
     href: "/anlagekunde",
     icon: TrendingUp,
     moduleId: "anlagekunde",
-    totalScenarios: 4,
+    totalScenarios: 32,
   },
 ];
 
 const BACK_OFFICE_MODULES = [
   {
-    title: "Banking Operations",
+    title: "Bankbetrieb",
     description: "Kontoeröffnungen, Zahlungsverkehr, KYC und Mahnwesen.",
     href: "/backoffice",
     icon: Landmark,
     moduleId: "banking-operations",
-    totalScenarios: 4,
+    totalScenarios: 10,
   },
   {
     title: "Kreditgeschäft",
@@ -73,7 +77,15 @@ const BACK_OFFICE_MODULES = [
     href: "/backoffice/credit-operations",
     icon: Settings2,
     moduleId: "credit-operations",
-    totalScenarios: 5,
+    totalScenarios: 15,
+  },
+  {
+    title: "Credit Office",
+    description: "Kreditprüfungen und Kreditentscheide simulieren.",
+    href: "/backoffice/credit-office",
+    icon: ClipboardCheck,
+    moduleId: "credit-office",
+    totalScenarios: 4,
   },
 ];
 
@@ -125,6 +137,50 @@ function WeakModulesSection({ progress }: { progress: Record<string, ModuleProgr
   );
 }
 
+function PersonalizedBanner({
+  profile,
+  recommended,
+}: {
+  profile: UserProfile;
+  recommended: { title: string; href: string; icon: LucideIcon };
+}) {
+  if (!profile.abteilung || profile.abteilung === "keine") return null;
+
+  const ABTEILUNG_LABELS: Record<string, string> = {
+    privatkunde: "Privatkunde",
+    firmenkunde: "Firmenkunde",
+    anlagekunde: "Anlagekunde",
+    backoffice: "Backoffice & Zahlungsverkehr",
+    kreditgeschaeft: "Kreditgeschäft",
+    "credit-office": "Credit Office",
+  };
+
+  const abteilungLabel = ABTEILUNG_LABELS[profile.abteilung] ?? profile.abteilung;
+  const RecommendedIcon = recommended.icon;
+
+  return (
+    <div className="mb-6 rounded-xl border border-primary/20 bg-primary-light p-4">
+      <div className="flex items-center gap-1.5 mb-3">
+        <Sparkles size={13} className="text-primary" />
+        <p className="text-xs font-bold uppercase tracking-wider text-primary">
+          Dein Bereich · {abteilungLabel}
+        </p>
+      </div>
+      <Link href={recommended.href}>
+        <div className="flex items-center gap-3 rounded-lg border border-primary/15 bg-white/60 px-4 py-3 transition-all hover:bg-white hover:shadow-sm">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg" style={{ background: "#E8EBF7" }}>
+            <RecommendedIcon size={18} style={{ color: "#0D1B4B" }} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-text-primary">{recommended.title}</p>
+            <p className="text-xs text-text-secondary">Direkt zu deinem Schwerpunkt →</p>
+          </div>
+        </div>
+      </Link>
+    </div>
+  );
+}
+
 function WeakConceptsBanner() {
   const [concepts, setConcepts] = useState<{ concept: string; count: number }[]>([]);
   useEffect(() => {
@@ -156,6 +212,45 @@ function WeakConceptsBanner() {
       <p className="mt-3 text-[11px] text-text-secondary">
         Szenarien zu diesen Themen werden beim nächsten Modulstart bevorzugt angezeigt.
       </p>
+    </div>
+  );
+}
+
+function WeakScenariosBanner() {
+  const [scenarios, setScenarios] = useState<WeakScenario[]>([]);
+  useEffect(() => {
+    setScenarios(getWeakScenarios(3));
+  }, []);
+  if (scenarios.length === 0) return null;
+  return (
+    <div className="mb-8 rounded-xl border border-red-200 bg-red-50 p-4">
+      <div className="mb-3 flex items-center gap-2">
+        <AlertTriangle size={15} className="text-red-500" />
+        <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">
+          Top Schwachstellen
+        </span>
+        <Link href="/fehler-uebersicht" className="ml-auto text-xs text-text-secondary hover:text-text-primary transition-colors">
+          Alle anzeigen →
+        </Link>
+      </div>
+      <div className="space-y-2">
+        {scenarios.map((s) => (
+          <Link key={`${s.moduleId}:${s.caseId}`} href={s.moduleHref}>
+            <div className="flex items-center gap-3 rounded-lg border border-red-100 bg-white/70 px-3 py-2.5 transition-colors hover:bg-white">
+              <div className="flex-1 min-w-0">
+                <p className="truncate text-sm font-medium text-text-primary">{s.caseTitle}</p>
+                <p className="text-xs text-text-secondary">{s.moduleLabel}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-2">
+                <span className="rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-600">
+                  {s.errorCount}× falsch
+                </span>
+                <span className="text-xs font-semibold" style={{ color: "#0D1B4B" }}>Üben →</span>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
@@ -234,14 +329,18 @@ export default function DashboardPage() {
   // Empty state: new user with no progress yet
   const isEmptyState = loaded && totalCompleted === 0;
 
-  // Recommend first module based on role
-  const roleToModule: Record<string, { title: string; href: string; icon: LucideIcon }> = {
-    Privatkunde: { title: "Privatkunde", href: "/privatkunde", icon: User },
-    Firmenkunde: { title: "Firmenkunde", href: "/firmenkunde", icon: Building2 },
-    "Back Office": { title: "Banking Operations", href: "/backoffice", icon: Landmark },
+  // Recommend module based on onboarding abteilung (falls back to role-based)
+  const abteilungToModule: Record<string, { title: string; href: string; icon: LucideIcon }> = {
+    privatkunde: { title: "Privatkunde", href: "/privatkunde", icon: User },
+    firmenkunde: { title: "Firmenkunde", href: "/firmenkunde", icon: Building2 },
+    anlagekunde: { title: "Anlagekunde", href: "/anlagekunde", icon: TrendingUp },
+    backoffice: { title: "Bankbetrieb", href: "/backoffice", icon: Landmark },
+    kreditgeschaeft: { title: "Kreditgeschäft", href: "/backoffice/credit-operations", icon: Settings2 },
+    "credit-office": { title: "Credit Office", href: "/backoffice/credit-office/hypothek", icon: Settings2 },
   };
   const recommended: { title: string; href: string; icon: LucideIcon } =
-    (profile.role ? roleToModule[profile.role] : undefined) ?? { title: "Privatkunde", href: "/privatkunde", icon: User };
+    (profile.abteilung ? abteilungToModule[profile.abteilung] : undefined) ??
+    { title: "Privatkunde", href: "/privatkunde", icon: User };
 
   const allModulesList = [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES];
   const completedModulesList = allModulesList.filter((m) => {
@@ -385,7 +484,13 @@ export default function DashboardPage() {
 
         {loaded && <WeakConceptsBanner />}
 
+        {loaded && <WeakScenariosBanner />}
+
         {loaded && <DailyChallenge />}
+
+        {loaded && (
+          <PersonalizedBanner profile={profile} recommended={recommended} />
+        )}
 
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
           Front Office
@@ -401,7 +506,7 @@ export default function DashboardPage() {
         </h2>
         <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {!loaded
-            ? Array.from({ length: 2 }).map((_, i) => <SkeletonModuleCard key={i} />)
+            ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
             : backModules.map((m) => <ModuleCard key={m.title} {...m} />)}
         </div>
 
@@ -425,9 +530,6 @@ export default function DashboardPage() {
         <div className="flex flex-wrap gap-3">
           <Button asChild variant="secondary" size="sm">
             <Link href="/badges">🏆 Meine Badges</Link>
-          </Button>
-          <Button asChild variant="secondary" size="sm">
-            <Link href="/leaderboard">📊 Leaderboard</Link>
           </Button>
           <Button asChild variant="secondary" size="sm">
             <Link href="/fehler-uebersicht">❌ Fehler Übersicht</Link>

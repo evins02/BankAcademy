@@ -13,7 +13,7 @@ export default function DemoKycPage() {
         items={[
           { label: "Demo", href: "/demo" },
           { label: "Back Office" },
-          { label: "Banking Operations" },
+          { label: "Bankbetrieb" },
           { label: "KYC / Compliance" },
         ]}
       />

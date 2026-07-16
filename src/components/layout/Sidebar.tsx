@@ -35,6 +35,7 @@ import { cn } from "@/lib/utils";
 import { NAV_GROUPS } from "@/lib/constants";
 import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 import { useGlossar } from "@/context/GlossarContext";
+import { useMobileMenu } from "@/context/MobileMenuContext";
 import type { NavItem } from "@/types";
 
 const ICONS: Record<string, LucideIcon> = {
@@ -96,10 +97,19 @@ function flatNavLinks(): { label: string; href: string }[] {
 export function Sidebar() {
   const pathname = usePathname();
   const { open: openGlossar } = useGlossar();
+  const { closeMobile } = useMobileMenu();
   const [profile, setProfile] = useState<UserProfile>({});
   const [search, setSearch] = useState("");
   const [collapsed, setCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   useEffect(() => {
     try {
@@ -109,6 +119,12 @@ export function Sidebar() {
       if (saved === "true") setCollapsed(true);
     } catch {}
   }, []);
+
+  // Close mobile sidebar on navigation
+  useEffect(() => {
+    closeMobile();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   function toggleCollapse() {
     setCollapsed((v) => {
@@ -155,24 +171,26 @@ export function Sidebar() {
       ? flatNavLinks().filter((l) => l.label.toLowerCase().includes(search.toLowerCase()))
       : [];
 
+  const effectiveCollapsed = isMobile ? false : collapsed;
+
   return (
     <aside
       className="flex h-screen shrink-0 flex-col border-r border-border bg-surface overflow-hidden"
-      style={{ width: collapsed ? 60 : 240, transition: "width 250ms ease" }}
+      style={{ width: effectiveCollapsed ? 60 : 240, transition: "width 250ms ease" }}
     >
       {/* Logo + collapse toggle */}
       <div className="flex h-16 items-center border-b border-border px-3 gap-2">
-        {!collapsed && (
+        {!effectiveCollapsed && (
           <Link href="/dashboard" className="flex-1 min-w-0">
             <BankingLabLogo size="md" />
           </Link>
         )}
-        {collapsed && (
+        {effectiveCollapsed && (
           <Link href="/dashboard" className="flex h-8 w-8 items-center justify-center rounded-lg flex-shrink-0 mx-auto" style={{ background: "#0D1B4B" }}>
             <span className="text-[10px] font-black text-white">BA</span>
           </Link>
         )}
-        {!collapsed && (
+        {!effectiveCollapsed && (
           <button
             onClick={toggleCollapse}
             className="shrink-0 rounded-lg p-1.5 text-text-secondary hover:bg-gray-100 hover:text-text-primary transition-colors"
@@ -184,7 +202,7 @@ export function Sidebar() {
       </div>
 
       {/* Expand button (shown when collapsed) */}
-      {collapsed && (
+      {effectiveCollapsed && (
         <button
           onClick={toggleCollapse}
           className="flex items-center justify-center py-2 text-text-secondary hover:text-text-primary transition-colors border-b border-border"
@@ -195,7 +213,7 @@ export function Sidebar() {
       )}
 
       {/* Search (hidden when collapsed) */}
-      {!collapsed && (
+      {!effectiveCollapsed && (
         <div className="relative px-3 pt-3">
           <Search size={14} className="absolute left-6 top-1/2 mt-1.5 -translate-y-1/2 text-text-secondary pointer-events-none" />
           <input
@@ -217,7 +235,7 @@ export function Sidebar() {
       )}
 
       {/* Search results */}
-      {!collapsed && searchResults.length > 0 && (
+      {!effectiveCollapsed && searchResults.length > 0 && (
         <div className="mx-3 mt-1 rounded-lg border border-border bg-surface shadow-lg z-50">
           {searchResults.slice(0, 8).map((r) => (
             <Link
@@ -232,7 +250,7 @@ export function Sidebar() {
           ))}
         </div>
       )}
-      {!collapsed && search.trim().length > 0 && searchResults.length === 0 && (
+      {!effectiveCollapsed && search.trim().length > 0 && searchResults.length === 0 && (
         <p className="px-5 py-2 text-xs text-text-secondary">Keine Ergebnisse</p>
       )}
 
@@ -240,7 +258,7 @@ export function Sidebar() {
       <nav className="flex-1 overflow-y-auto px-2 py-3">
         {NAV_GROUPS.map((group) => (
           <div key={group.label} className="mb-4">
-            {!collapsed && (
+            {!effectiveCollapsed && (
               <p className="mb-1 px-2 text-[10px] font-bold uppercase tracking-widest text-text-secondary">
                 {group.label}
               </p>
@@ -253,11 +271,11 @@ export function Sidebar() {
                     title="Glossar"
                     className={cn(
                       "flex w-full items-center gap-3 rounded-pill px-2 py-2 text-sm font-semibold text-text-primary transition-colors hover:bg-gray-100",
-                      collapsed && "justify-center px-0"
+                      effectiveCollapsed && "justify-center px-0"
                     )}
                   >
                     <BookOpen size={18} className="shrink-0" />
-                    {!collapsed && <span className="flex-1 text-left">Glossar</span>}
+                    {!effectiveCollapsed && <span className="flex-1 text-left">Glossar</span>}
                   </button>
                 </li>
               )}
@@ -273,18 +291,18 @@ export function Sidebar() {
                   return (
                     <li key={item.label}>
                       <button
-                        onClick={() => { if (!collapsed) toggle(item.label); }}
+                        onClick={() => { if (!effectiveCollapsed) toggle(item.label); }}
                         title={item.label}
                         className={cn(
                           "flex w-full items-center gap-3 rounded-pill px-2 py-2 text-sm font-semibold transition-colors",
-                          collapsed && "justify-center px-0",
+                          effectiveCollapsed && "justify-center px-0",
                           hasActiveChild
                             ? "bg-text-primary text-white"
                             : "text-text-primary hover:bg-gray-100"
                         )}
                       >
                         {Icon && <Icon size={18} className="shrink-0" />}
-                        {!collapsed && (
+                        {!effectiveCollapsed && (
                           <>
                             <span className="flex-1 text-left">{item.label}</span>
                             {isOpen ? (
@@ -296,7 +314,7 @@ export function Sidebar() {
                         )}
                       </button>
 
-                      {!collapsed && isOpen && (
+                      {!effectiveCollapsed && isOpen && (
                         <div className="ml-3 mt-0.5 border-l-2 border-border pl-3">
                           {item.sections.map((section) => (
                             <div key={section.label || "_"} className="mb-1 mt-1">
@@ -338,14 +356,14 @@ export function Sidebar() {
                       title={item.label}
                       className={cn(
                         "flex items-center gap-3 rounded-pill px-2 py-2 text-sm font-semibold transition-colors",
-                        collapsed && "justify-center px-0",
+                        effectiveCollapsed && "justify-center px-0",
                         isDirectlyActive
                           ? "bg-text-primary text-white"
                           : "text-text-primary hover:bg-gray-100"
                       )}
                     >
                       {Icon && <Icon size={18} className="shrink-0" />}
-                      {!collapsed && <span className="flex-1">{item.label}</span>}
+                      {!effectiveCollapsed && <span className="flex-1">{item.label}</span>}
                     </Link>
                   </li>
                 );
@@ -357,7 +375,7 @@ export function Sidebar() {
 
       {/* Footer */}
       <div className="border-t border-border px-2 py-3">
-        {!collapsed && (
+        {!effectiveCollapsed && (
           <Link
             href="/einstellungen"
             className="flex items-center gap-3 rounded-pill px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-gray-100 hover:text-text-primary"
@@ -372,13 +390,13 @@ export function Sidebar() {
           title={profile.name || "Gast"}
           className={cn(
             "mt-1 flex items-center gap-3 rounded-pill px-2 py-2 transition-colors hover:bg-gray-100",
-            collapsed && "justify-center"
+            effectiveCollapsed && "justify-center"
           )}
         >
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-light text-xs font-semibold text-primary">
             {initials(profile.name)}
           </div>
-          {!collapsed && (
+          {!effectiveCollapsed && (
             <div className="min-w-0">
               <p className="truncate text-xs font-medium text-text-primary">
                 {profile.name || "Gast"}
@@ -390,7 +408,7 @@ export function Sidebar() {
           )}
         </Link>
 
-        {!collapsed && (
+        {!effectiveCollapsed && (
           <div className="mt-2 flex flex-wrap gap-3 px-3 pb-0.5">
             <Link href="/impressum" className="text-[10px] text-text-secondary transition-colors hover:text-text-primary">
               Impressum

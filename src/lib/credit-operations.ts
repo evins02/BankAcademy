@@ -103,6 +103,25 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
         feedback:
           "Wiedervorlage ist Pflicht bei jedem Kredit. Regelmässige Überprüfung der Bonität, Sicherheiten und Kundensituation. Bei ETP-Fällen ist die Wiedervorlage kürzer.",
       },
+      {
+        id: "1.4",
+        level: 1,
+        situation:
+          "Kunde möchte CHF 25'000 Konsumkredit für ein Occasionsauto. Er hat eine Festanstellung und fragt: «Wann bekomme ich das Geld?»",
+        question: "Was muss zwingend vor Auszahlung geprüft werden?",
+        options: [
+          { key: "A", text: "Nur Ausweis und Unterschrift reichen" },
+          {
+            key: "B",
+            text: "Kreditfähigkeitsprüfung gemäss KKG: Lohnausweise (mind. 3 Monate), Betreibungsregisterauszug, alle bestehenden Kreditverpflichtungen einrechnen. Kredit nur wenn nachweislich tragbar.",
+          },
+          { key: "C", text: "Genügt wenn Kunde seinen Lohn nennt" },
+          { key: "D", text: "Kreditprüfung ist optional bei gutem Eindruck" },
+        ],
+        correct: "B",
+        feedback:
+          "KKG Art. 22: Kreditfähigkeitsprüfung ist gesetzlich zwingend vor jedem Konsumkreditvertrag. Lohnausweise (mind. 3 Monate), Betreibungsregisterauszug, alle bestehenden Verbindlichkeiten einbeziehen. Ohne Prüfung ist der Kreditvertrag nichtig (KKG Art. 15) – die Bank trägt dann das volle Risiko.",
+      },
     ],
   },
   {
@@ -160,6 +179,82 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
         correct: "B",
         feedback:
           "Eigenmittel müssen vor Auszahlung belegt sein. Kontoauszug oder Depotauszug als Nachweis. Ohne Nachweis keine Auszahlung – egal was der Kunde sagt.",
+      },
+      {
+        id: "2.4",
+        level: 2,
+        situation:
+          "KMU-Inhaber beantragt CHF 150'000 Betriebskredit. Er sitzt vor dir und sagt: «Wir laufen gut – letztes Jahr 10% Wachstum.»",
+        question: "Welche Unterlagen verlangst du zwingend?",
+        options: [
+          { key: "A", text: "Reicht – 10% Wachstum klingt überzeugend" },
+          {
+            key: "B",
+            text: "Jahresrechnungen der letzten 2 Jahre, HR-Auszug, Betreibungsregister (Firma und Inhaber), aktuelle Liquiditätsplanung. Eigenkapitalquote und operativer Cashflow aus Zahlen ableiten.",
+          },
+          { key: "C", text: "Nur HR-Auszug und Ausweis des Inhabers" },
+          { key: "D", text: "Business Plan reicht als Kreditgrundlage" },
+        ],
+        correct: "B",
+        feedback:
+          "Firmenkredit: Jahresrechnungen (mind. 2 Jahre) für Trendanalyse, HR-Auszug für Zeichnungsberechtigung, Betreibungsregister Firma und Inhaber (bei Solidarhaftung), Liquiditätsplanung. Eigenkapitalquote >20% und positiver operativer Cashflow sind entscheidend – Wachstumsversprechen ersetzen keine Zahlen.",
+      },
+      {
+        id: "2.5",
+        level: 2,
+        situation:
+          "Kunde besitzt ein Wertschriftendepot mit Aktien im Wert von CHF 200'000. Er möchte einen Lombardkredit von CHF 150'000.",
+        question: "Was stellst du fest?",
+        options: [
+          { key: "A", text: "Kein Problem – das Depot ist mehr wert als der Kredit" },
+          {
+            key: "B",
+            text: "Belehnungswert Aktien max. 50–60% des Marktwertes = CHF 100'000–120'000. CHF 150'000 übersteigt den Belehnungswert. Pfandvertrag zwingend. Bei Kursrückgang droht Margin Call.",
+          },
+          { key: "C", text: "Lombardkredit wird immer zu 100% des Depotwertes gewährt" },
+          { key: "D", text: "Das Depot muss zuerst vollständig liquidiert werden" },
+        ],
+        correct: "B",
+        feedback:
+          "Belehnungswert abhängig von Anlageklasse: Aktien 50–60%, Obligationen 70–80%, Geldmarktfonds bis 90%. CHF 150'000 auf CHF 200'000 Aktien = 75% Belehnung – zu hoch. Pfandvertrag und Verpfändungsformular zwingend. Bei Kursrückgang unter Pfandwert: Margin Call – Kunde muss Zusatzsicherheiten stellen oder Kredit reduzieren.",
+      },
+      {
+        id: "2.6",
+        level: 2,
+        situation:
+          "Hypothekarkunde hat zwei aufeinanderfolgende Zinsraten nicht bezahlt. Gesamtrückstand CHF 4'500. Kein Kontakt seit 6 Wochen trotz Mahnschreiben.",
+        question: "Was sind die nächsten Schritte?",
+        options: [
+          { key: "A", text: "Abwarten – vielleicht zahlt er noch von selbst" },
+          {
+            key: "B",
+            text: "Einschreibebrief mit letzter Frist, Betreibung einleiten, Berater und Credit Office informieren. Jeden Schritt lückenlos dokumentieren.",
+          },
+          { key: "C", text: "Nochmals ein einfaches Mahnschreiben senden" },
+          { key: "D", text: "Kredit sofort kündigen ohne weitere Schritte" },
+        ],
+        correct: "B",
+        feedback:
+          "Mahnprozess bei Verzug: 1. Mahnschreiben (erfolgt), 2. Einschreibebrief mit letzter Zahlungsfrist, 3. Betreibung einleiten, 4. Kreditkündigung (nur als letztes Mittel nach Eskalation). Lückenlose Dokumentation jedes Schritts ist zwingend – Beweissicherung für allfällige Gerichtsverfahren.",
+      },
+      {
+        id: "2.7",
+        level: 2,
+        situation:
+          "Einzelunternehmer Max Huber (52) kauft eine Gewerbeliegenschaft für CHF 1'200'000. Er beantragt eine Hypothek von CHF 800'000 (Belehnung 67%).",
+        question: "Was stellst du fest?",
+        options: [
+          { key: "A", text: "Alles in Ordnung – 67% ist unter 80%" },
+          {
+            key: "B",
+            text: "Belehnung 67% überschreitet Maximalbelehnung bei Gewerbeliegenschaften (60–65%). Ausserdem: Einzelunternehmer = natürliche Person – FATCA-Eigenerklärung zwingend.",
+          },
+          { key: "C", text: "Nur die FATCA-Abklärung ist hier relevant" },
+          { key: "D", text: "67% Belehnung ist bei Gewerbe normal und zulässig" },
+        ],
+        correct: "B",
+        feedback:
+          "Gewerbeliegenschaften: Maximalbelehnung 60–65% (deutlich tiefer als Eigenheim mit 80%). CHF 800'000 / CHF 1'200'000 = 67% – zu hoch, ETP oder Ablehnung nötig. Einzelunternehmer gilt rechtlich als natürliche Person: FATCA-Eigenerklärung zwingend bei jeder Kontoverbindung.",
       },
     ],
   },
@@ -230,6 +325,25 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
         correct: "B",
         feedback:
           "Rangfolge ist entscheidend. 1. Grundpfand wird zuerst bedient. CHF 500'000 für 1. Pfand, restliche CHF 100'000 für 2. Pfand. CHF 100'000 der 2. Hypothek sind ungedeckt.",
+      },
+      {
+        id: "3.4",
+        level: 3,
+        situation:
+          "Jungunternehmer (28) hat ein Tech-Startup gegründet. Jahresumsatz: CHF 0 (Gründungsphase, 6 Monate alt). Er beantragt CHF 100'000 Betriebskredit, ohne Sicherheiten und ohne Jahresrechnung.",
+        question: "Was machst du?",
+        options: [
+          { key: "A", text: "Kredit gewähren – gute Idee braucht Kapital" },
+          {
+            key: "B",
+            text: "Kredit in dieser Form nicht möglich: keine Jahresrechnung, keine Sicherheiten. Alternativen aufzeigen: Bürgschaftsgenossenschaft BG Mitte, Innosuisse-Förderung, Crowdfunding, Eigenkapital-Runde. Kreditentscheid möglich sobald Jahresrechnung und Sicherheiten vorliegen.",
+          },
+          { key: "C", text: "Privatbürgschaft des Vaters als alleinige Lösung" },
+          { key: "D", text: "Kleinstkredit CHF 10'000 sofort gewähren" },
+        ],
+        correct: "B",
+        feedback:
+          "Ohne Jahresrechnung und ohne Sicherheiten ist ein Bankkredit banküblich nicht möglich – Kreditprüfung erfordert belegbare Finanzdaten. Gute Praxis: Alternativen aufzeigen (Bürgschaftsgenossenschaft BG Mitte, Innosuisse, Crowdfunding, Business Angels). Den Jungunternehmer fair behandeln und mit Perspektive abweisen ist besser als eine Kreditvergabe ohne Grundlage.",
       },
     ],
   },

@@ -15,12 +15,15 @@ import { OffeneFrageResultCard } from "@/components/shared/OffeneFrageResultCard
 import { type OffeneFrageCase } from "@/lib/offene-frage";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
+import { addAttemptRecord } from "@/lib/error-tracking";
+import { NoteModal } from "@/components/shared/NoteModal";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
 export function CreditOperationsRunner() {
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
+  const [noteOpen, setNoteOpen] = useState(false);
 
   const [view, setView] = useState<View>("selector");
   const [activeLevel, setActiveLevel] = useState<LevelNum>(1);
@@ -77,6 +80,22 @@ export function CreditOperationsRunner() {
     setSessionResults(newResults);
 
     if (!isCorrect && "concepts" in currentScenario) recordConceptError("backoffice-credit-operations", (currentScenario as {concepts?: string[]}).concepts ?? []);
+    if (!isOffeneFrage) {
+      const _c = currentScenario as unknown as Record<string, unknown>;
+      addAttemptRecord({
+        moduleId: "backoffice-credit-operations",
+        levelNum: activeLevel,
+        caseId: currentScenario.id,
+        caseTitle: String(_c.title ?? _c.label ?? _c.question ?? currentScenario.id),
+        attempt: 1,
+        timestamp: Date.now(),
+        score: isCorrect ? 100 : 0,
+        correct: isCorrect,
+        errors: isCorrect ? [] : isLückentext
+          ? [{ type: "wrong" as const, documentId: "lückentext", documentLabel: lückentextAnswer }]
+          : selectedOption ? [{ type: "wrong" as const, documentId: selectedOption, documentLabel: selectedOption }] : [],
+      });
+    }
     if (isLastScenario) {
       const score = newResults.filter((r) => r.correct).length;
       setCompletedLevels((prev) => {
@@ -151,6 +170,7 @@ export function CreditOperationsRunner() {
             selectedOption={selectedOption}
             onSelect={setSelectedOption}
             onSubmit={handleSubmit}
+            onOpenNote={() => setNoteOpen(true)}
           />
         )
       )}
@@ -197,6 +217,14 @@ export function CreditOperationsRunner() {
           results={sessionResults}
           onNext={handleGoToSelector}
           onRetry={handleRetry}
+        />
+      )}
+      {noteOpen && currentScenario && (
+        <NoteModal
+          scenarioId={`credit-ops-${currentScenario.id}`}
+          moduleId="backoffice-credit-operations"
+          moduleName="Credit Operations"
+          onClose={() => setNoteOpen(false)}
         />
       )}
     </div>

@@ -66,7 +66,7 @@ function SettingsRow({
 
 export default function EinstellungenPage() {
   const [settings, setSettings] = useState<AppSettings>(getSettings());
-  const [profile, setProfile] = useState({ name: "", role: "", focus: "", avatarColor: "#0D1B4B" });
+  const [profile, setProfile] = useState({ name: "", role: "", focus: "", avatarColor: "#0D1B4B", abteilung: "", lehrjahr: "", ziel: "" });
   const [saved, setSaved] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
 
@@ -88,6 +88,9 @@ export default function EinstellungenPage() {
           role: p.role ?? "",
           focus: p.focus ?? "",
           avatarColor: p.avatarColor ?? "#0D1B4B",
+          abteilung: p.abteilung ?? "",
+          lehrjahr: p.lehrjahr ?? "",
+          ziel: p.ziel ?? "",
         });
       }
     } catch {}
@@ -187,6 +190,64 @@ export default function EinstellungenPage() {
                   />
                 </div>
               ))}
+            </div>
+
+            {/* Onboarding-Angaben */}
+            <div className="mt-6 space-y-4">
+              <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                Lernprofil
+              </p>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                  Abteilung
+                </label>
+                <select
+                  value={profile.abteilung}
+                  onChange={(e) => setProfile((p) => ({ ...p, abteilung: e.target.value }))}
+                  className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="">– nicht gesetzt –</option>
+                  <option value="privatkunde">Privatkunde</option>
+                  <option value="firmenkunde">Firmenkunde</option>
+                  <option value="anlagekunde">Anlagekunde</option>
+                  <option value="backoffice">Backoffice &amp; Zahlungsverkehr</option>
+                  <option value="kreditgeschaeft">Kreditgeschäft</option>
+                  <option value="credit-office">Credit Office</option>
+                  <option value="keine">Noch nicht zugewiesen</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                  Lehrjahr
+                </label>
+                <select
+                  value={profile.lehrjahr}
+                  onChange={(e) => setProfile((p) => ({ ...p, lehrjahr: e.target.value }))}
+                  className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="">– nicht gesetzt –</option>
+                  <option value="lj1">1. Lehrjahr</option>
+                  <option value="lj2">2. Lehrjahr</option>
+                  <option value="lj3">3. Lehrjahr</option>
+                  <option value="quereinsteiger">Quereinsteiger / Praktikant</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                  Ziel
+                </label>
+                <select
+                  value={profile.ziel}
+                  onChange={(e) => setProfile((p) => ({ ...p, ziel: e.target.value }))}
+                  className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="">– nicht gesetzt –</option>
+                  <option value="neueinstieg">Neueinstieg – Grundlagen aufbauen</option>
+                  <option value="auffrischung">Auffrischung – Wissen festigen</option>
+                  <option value="pruefung">Prüfungsvorbereitung – gezielt üben</option>
+                  <option value="challenge">Challenge – alles auf höchstem Level</option>
+                </select>
+              </div>
             </div>
 
             <div className="mt-4 flex items-center gap-3">

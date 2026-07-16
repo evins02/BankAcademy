@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { NoteModal } from "@/components/shared/NoteModal";
 import { LevelSelector } from "./LevelSelector";
 import { ScenarioCard } from "./ScenarioCard";
 import { FeedbackPanel } from "./FeedbackPanel";
@@ -22,6 +23,7 @@ export function SparenKontoRunner() {
   const [selectedOption, setSelectedOption] = useState<OptionKey | null>(null);
   const [sessionResults, setSessionResults] = useState<ScenarioResult[]>([]);
   const [lückentextAnswer, setLückentextAnswer] = useState("");
+  const [noteOpen, setNoteOpen] = useState(false);
 
   const levelConfig = SK_LEVELS.find((l) => l.level === activeLevel)!;
   const currentScenario = levelConfig.scenarios[scenarioIndex];
@@ -116,6 +118,7 @@ export function SparenKontoRunner() {
             selectedOption={selectedOption}
             onSelect={setSelectedOption}
             onSubmit={handleSubmit}
+            onOpenNote={() => setNoteOpen(true)}
           />
         )
       )}
@@ -152,6 +155,15 @@ export function SparenKontoRunner() {
           results={sessionResults}
           onNext={handleGoToSelector}
           onRetry={handleRetry}
+        />
+      )}
+
+      {noteOpen && currentScenario && (
+        <NoteModal
+          scenarioId={`sparen-konto-${currentScenario.id}`}
+          moduleId="privatkunde-sparen-konto"
+          moduleName="Sparen & Konto"
+          onClose={() => setNoteOpen(false)}
         />
       )}
     </div>

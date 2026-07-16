@@ -13,7 +13,9 @@ import { OffeneFrageCard } from "@/components/shared/OffeneFrageCard";
 import { OffeneFrageResultCard } from "@/components/shared/OffeneFrageResultCard";
 import { type OffeneFrageCase } from "@/lib/offene-frage";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
+import { NoteModal } from "@/components/shared/NoteModal";
 import { recordConceptError } from "@/lib/conceptTracker";
+import { addAttemptRecord } from "@/lib/error-tracking";
 
 type View = "selector" | "playing" | "feedback" | "level-complete";
 
@@ -28,6 +30,7 @@ export function KycRunner() {
   const [sessionResults, setSessionResults] = useState<ScenarioResult[]>([]);
   const [lückentextAnswer, setLückentextAnswer] = useState("");
   const [offeneFrageAnswer, setOffeneFrageAnswer] = useState("");
+  const [noteOpen, setNoteOpen] = useState(false);
 
   const levelConfig = KYC_LEVELS.find((l) => l.level === activeLevel)!;
   const activeScenarios = useMemo(
@@ -76,6 +79,22 @@ export function KycRunner() {
     setSessionResults(newResults);
 
     if (!isCorrect && "concepts" in currentScenario) recordConceptError("banking-operations-kyc", (currentScenario as {concepts?: string[]}).concepts ?? []);
+    if (!isOffeneFrage) {
+      const _c = currentScenario as unknown as Record<string, unknown>;
+      addAttemptRecord({
+        moduleId: "banking-operations-kyc",
+        levelNum: activeLevel,
+        caseId: currentScenario.id,
+        caseTitle: String(_c.title ?? _c.label ?? _c.question ?? currentScenario.id),
+        attempt: 1,
+        timestamp: Date.now(),
+        score: isCorrect ? 100 : 0,
+        correct: isCorrect,
+        errors: isCorrect ? [] : isLückentext
+          ? [{ type: "wrong" as const, documentId: "lückentext", documentLabel: lückentextAnswer }]
+          : selectedOption ? [{ type: "wrong" as const, documentId: selectedOption, documentLabel: selectedOption }] : [],
+      });
+    }
     if (isLastScenario) {
       const score = newResults.filter((r) => r.correct).length;
       setCompletedLevels((prev) => new Set([...prev, activeLevel]));
@@ -144,6 +163,7 @@ export function KycRunner() {
             selectedOption={selectedOption}
             onSelect={setSelectedOption}
             onSubmit={handleSubmit}
+            onOpenNote={() => setNoteOpen(true)}
           />
         )
       )}
@@ -192,6 +212,15 @@ export function KycRunner() {
           results={sessionResults}
           onNext={handleGoToSelector}
           onRetry={handleRetry}
+        />
+      )}
+
+      {noteOpen && currentScenario && (
+        <NoteModal
+          scenarioId={`kyc-${currentScenario.id}`}
+          moduleId="banking-operations-kyc"
+          moduleName="KYC / Compliance"
+          onClose={() => setNoteOpen(false)}
         />
       )}
     </div>
