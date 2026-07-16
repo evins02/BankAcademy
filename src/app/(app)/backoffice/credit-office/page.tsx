@@ -1,7 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import { Home, CreditCard, Building2, RefreshCw, Clock, Star } from "lucide-react";
+import { Home, CreditCard, Building2, RefreshCw, Clock, Star, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const MODULES = [
@@ -68,22 +68,25 @@ export default function CreditOfficeHubPage() {
             du analysierst, erkennst Risiken und fällst den Entscheid.
           </p>
 
-          <div className="overflow-hidden rounded-xl border bg-white shadow-sm" style={{ borderLeftWidth: 4, borderLeftColor: "#e5e7eb" }}>
-            <div className="flex items-center gap-4 p-4 opacity-60">
-              <span className="shrink-0 text-2xl">📋</span>
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-gray-900">Dokument prüfen</p>
-                  <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-500">
-                    Bald verfügbar
-                  </span>
-                </div>
-                <p className="mt-0.5 text-xs text-gray-500">
-                  Fehler in Bankdokumenten finden und analysieren
-                </p>
+          <Link
+            href="/backoffice/credit-office/dokument-pruefen"
+            className="flex items-center gap-4 rounded-xl border bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+            style={{ borderLeftWidth: 4, borderLeftColor: "#1ddba0" }}
+          >
+            <span className="shrink-0 text-2xl">📋</span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold text-gray-900">Kreditprüfungsformular prüfen</p>
+                <span className="rounded-full px-2 py-0.5 text-[10px] font-bold" style={{ background: "#d1faf0", color: "#0a8a64" }}>
+                  Neu
+                </span>
               </div>
+              <p className="mt-0.5 text-xs text-gray-500">
+                Marco Bianchi – 3 versteckte Fehler im Kreditdossier aufspüren
+              </p>
             </div>
-          </div>
+            <ChevronRight size={14} className="shrink-0 text-gray-400" />
+          </Link>
 
           <div className="grid gap-4 sm:grid-cols-2">
             {MODULES.map((m) => {
