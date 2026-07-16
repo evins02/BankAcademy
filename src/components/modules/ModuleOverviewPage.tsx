@@ -292,7 +292,6 @@ const BACKOFFICE: OverviewConfig = {
           href: "/backoffice/dokument-pruefen",
           emoji: "📋",
           totalScenarios: 1,
-          comingSoon: true,
         },
       ],
     },
