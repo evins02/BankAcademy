@@ -42,10 +42,9 @@ const DEMO_UNLOCKED = new Set([
   "/privatkunde/basis/sparen-konto",
   "/privatkunde/basis/zahlungsverkehr",
   "/privatkunde/basis/fonds",
-  "/anlagekunde/anlegerprofil",
   "/backoffice/banking-operations/kyc",
   "/backoffice/banking-operations/zahlungsverkehr",
-  "/backoffice/banking-operations/mahnwesen",
+  "/backoffice/credit-operations/schuldbrief",
   "/demo",
 ]);
 
