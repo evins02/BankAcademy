@@ -762,19 +762,19 @@ function StatsBar() {
 /* ─── Section: Problem / Solution ────────────────────────────────────────── */
 
 const PROBLEMS = [
-  "Trockene Theorie ohne Praxisbezug",
-  "Keine sicheren Übungsmöglichkeiten",
-  "Lernstoff aus dem Schulbuch – nicht aus dem Berufsalltag",
-  "Kein Feedback bei Fehlern",
-  "Typische Fehler werden erst in der Praxis erkannt",
+  "Du sitzt im Unterricht und weisst nicht, was in der Bank wirklich läuft",
+  "Üben an echten Kunden? Keine Option.",
+  "Dein Schulbuch kennt keinen KYC-Prozess.",
+  "Fehler merkst du erst, wenn der Kunde schon draussen ist",
+  "Niemand zeigt dir wo die Fallen sind – bis du reinfällst",
 ];
 
 const SOLUTIONS = [
-  "Realistische Bankszenarien zum Üben",
-  "Typische Fehler kennen bevor sie passieren",
-  "Operative Denkweise von Experten lernen",
-  "Sofortiges erklärendes Feedback",
-  "Personalisiert auf Lehrjahr & Schwerpunkt",
+  "Echte Fälle. Kein Lehrbuch-Blabla.",
+  "Lern die Fallen kennen – bevor du reinfällst",
+  "Denken wie ein erfahrener Banker – ab Tag 1",
+  "Sofort sehen wo du falsch lagst – und warum",
+  "Passend zu deinem Lehrjahr und Schwerpunkt",
 ];
 
 function ProblemSolution() {
@@ -786,7 +786,7 @@ function ProblemSolution() {
             Warum BankAcademy
           </p>
           <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
-            Die bessere Art zu lernen.
+            Stop Theorie. Start Praxis.
           </h2>
         </FadeIn>
 
@@ -797,7 +797,7 @@ function ProblemSolution() {
                 Das Problem
               </span>
               <h3 style={{ margin: "0 0 24px", fontSize: 20, fontWeight: 700, color: WH }}>
-                Klassische Ausbildung hat Lücken.
+                Schule erklärt. Die Bank erwartet.
               </h3>
               <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
                 {PROBLEMS.map((p) => (
@@ -839,19 +839,19 @@ const HOW_STEPS = [
     num: "01",
     emoji: "📋",
     title: "Szenario erhalten",
-    text: "Du bekommst einen realistischen Fall aus dem Schweizer Banking-Alltag – KYC, Kredit, Zahlungsverkehr und mehr.",
+    text: "Ein realistischer Fall landet auf deinem Tisch – KYC, Kredit, Zahlungsverkehr. Wie in der echten Bank.",
   },
   {
     num: "02",
     emoji: "🤔",
     title: "Entscheidung treffen",
-    text: "Du analysierst den Fall und triffst Entscheidungen wie in der echten Bank – ohne Konsequenzen.",
+    text: "Du entscheidest wie ein echter Banker – aber ohne Konsequenzen wenn's mal schiefläuft.",
   },
   {
     num: "03",
     emoji: "💡",
     title: "Praxis verstehen",
-    text: "Du erhältst sofortiges Feedback mit bankinterner Begründung und der operativen Denkweise von Experten.",
+    text: "Sofortiges Feedback: Was war falsch? Warum? Und wie würde es ein Profi lösen?",
   },
 ];
 
@@ -864,7 +864,7 @@ function HowItWorks() {
             So funktioniert es
           </p>
           <h2 style={{ margin: "0 0 10px", fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
-            In 3 Schritten zum Banking-Profi
+            So läuft&apos;s ab.
           </h2>
         </FadeIn>
 
@@ -968,7 +968,7 @@ function Features() {
             Features
           </p>
           <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
-            Was BankAcademy einzigartig macht
+            Warum&apos;s funktioniert.
           </h2>
         </FadeIn>
 
@@ -1276,7 +1276,7 @@ function FinalCTA({ onStart }: { onStart: () => void }) {
             Bereit für BankAcademy?
           </h2>
           <p style={{ margin: "0 0 36px", fontSize: 18, color: WD, lineHeight: 1.6 }}>
-            Starte jetzt und trainiere Banking wie es wirklich ist.
+            Dein erster Arbeitstag in der Bank kommt schneller als du denkst.
           </p>
           <button
             onClick={onStart}
