@@ -391,7 +391,7 @@ const ANLAGEKUNDE: OverviewConfig = {
 const BACKOFFICE: OverviewConfig = {
   moduleId: "banking-operations",
   title: "Back Office",
-  description: "Kontoeröffnungen, Zahlungsverkehr, KYC, Mahnwesen und Kreditgeschäft",
+  description: "Kontoeröffnungen, Zahlungsverkehr, KYC, Mahnwesen und Credit Operations",
   emoji: "🏦",
   totalScenarios: 46,
   groups: [
@@ -409,7 +409,7 @@ const BACKOFFICE: OverviewConfig = {
       ],
     },
     {
-      label: "Bankbetrieb",
+      label: "Banking Operations",
       items: [
         {
           id: "backoffice-kontoeröffnungen",
@@ -446,11 +446,11 @@ const BACKOFFICE: OverviewConfig = {
       ],
     },
     {
-      label: "Kreditgeschäft",
+      label: "Credit Operations",
       items: [
         {
           id: "credit-operations",
-          title: "Kreditgeschäft (Runner)",
+          title: "Credit Operations (Runner)",
           description: "Kreditbearbeitung und Risikoprüfung – alle Level",
           href: "/backoffice/credit-operations",
           emoji: "⚙️",
@@ -483,7 +483,7 @@ const BACKOFFICE: OverviewConfig = {
         {
           id: "credit-operations-schuldbrief",
           title: "Schuldbrief",
-          description: "Papier- und Register-Schuldbrief im Kreditgeschäft",
+          description: "Papier- und Register-Schuldbrief im Credit Operations",
           href: "/backoffice/credit-operations/schuldbrief",
           emoji: "📜",
           totalScenarios: 3,

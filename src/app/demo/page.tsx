@@ -56,7 +56,7 @@ const UNLOCKED_MODULES = [
     description:
       "Know Your Customer – Sorgfaltspflichten, GwG und Beneficial Owner in der Praxis.",
     href: "/demo/backoffice/banking-operations/kyc",
-    tag: "Back Office · Bankbetrieb",
+    tag: "Back Office · Banking Operations",
     xp: "+80 XP",
     color: "#10b981",
   },
@@ -65,7 +65,7 @@ const UNLOCKED_MODULES = [
     description:
       "Zahlungsaufträge prüfen, Fehler erkennen und Buchungen korrekt verarbeiten.",
     href: "/demo/backoffice/banking-operations/zahlungsverkehr",
-    tag: "Back Office · Bankbetrieb",
+    tag: "Back Office · Banking Operations",
     xp: "+55 XP",
     color: "#3b82f6",
   },
@@ -74,7 +74,7 @@ const UNLOCKED_MODULES = [
     description:
       "Mahnläufe, Zahlungsrückstände und Eskalationsstufen sicher bearbeiten.",
     href: "/demo/backoffice/banking-operations/mahnwesen",
-    tag: "Back Office · Bankbetrieb",
+    tag: "Back Office · Banking Operations",
     xp: "+50 XP",
     color: "#ef4444",
   },

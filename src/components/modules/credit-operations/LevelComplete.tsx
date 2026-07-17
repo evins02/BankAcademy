@@ -93,7 +93,7 @@ export function LevelComplete({ level, results, onNext, onRetry }: LevelComplete
             <div className="rounded-DEFAULT border border-primary/20 bg-primary-light p-4 text-center">
               <p className="font-semibold text-primary">Alle Level abgeschlossen!</p>
               <p className="mt-1 text-xs text-text-secondary">
-                Du hast das Kreditgeschäft Modul abgeschlossen.
+                Du hast das Credit Operations Modul abgeschlossen.
               </p>
             </div>
           ) : (

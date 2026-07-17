@@ -75,7 +75,7 @@ Bei Jahresabschlüssen: Schau nicht nur auf den Gewinn. Cashflow und Eigenkapita
     tips: [
       {
         text: "HR-Auszug immer auf Datum prüfen – nicht älter als 3 Monate. Zeichnungsberechtigte können sich ändern und ältere Dokumente sind ungültig.",
-        source: "Kreditgeschäft",
+        source: "Credit Operations",
       },
       {
         text: "Bei Jahresabschluss: Schau nicht nur auf den Gewinn. Cashflow und EK-Quote sagen viel mehr über die echte finanzielle Lage aus.",
@@ -91,7 +91,7 @@ Bei Jahresabschlüssen: Schau nicht nur auf den Gewinn. Cashflow und Eigenkapita
       },
       {
         text: "Zeichnungsberechtigte im HR-Auszug und im Konto-Antrag müssen übereinstimmen. Diskrepanzen vor Kontoeröffnung klären.",
-        source: "Bankbetrieb",
+        source: "Banking Operations",
       },
     ],
   },
@@ -147,15 +147,15 @@ Der beste Back Office Mitarbeiter ist jemand der Probleme sieht bevor sie entste
     tips: [
       {
         text: "Mahnbriefe immer doppelt prüfen bevor sie rausgehen – Betrag, Datum, Empfänger. Ein falscher Brief kostet mehr Zeit als die Prüfung.",
-        source: "Bankbetrieb",
+        source: "Banking Operations",
       },
       {
         text: "Bei Auszahlungen: Checkliste komplett abhaken bevor du klickst. Einmal ausgezahlt ist ausgezahlt – Rückforderungen sind mühsam.",
-        source: "Kreditgeschäft",
+        source: "Credit Operations",
       },
       {
         text: "Fristen im Kalender eintragen sobald ein Fall reinkommt. Verpasste Fristen sind die häufigste Fehlerquelle im Backoffice.",
-        source: "Bankbetrieb",
+        source: "Banking Operations",
       },
       {
         text: "PEP-Frage immer direkt stellen – nicht um den heissen Brei herumreden. Die meisten Kunden verstehen es, wenn du es professionell erklärst.",
@@ -167,11 +167,11 @@ Der beste Back Office Mitarbeiter ist jemand der Probleme sieht bevor sie entste
       },
       {
         text: "Dokumentiere alles sofort – nicht am Ende des Tages. Gedächtnis trügt und Compliance schaut auf Zeitstempel.",
-        source: "Bankbetrieb",
+        source: "Banking Operations",
       },
       {
         text: "IBAN-Fehler sind die häufigste Rückweisungsursache. Beim Kunden nachfragen, nie selbst ergänzen oder raten.",
-        source: "Bankbetrieb",
+        source: "Banking Operations",
       },
     ],
   },

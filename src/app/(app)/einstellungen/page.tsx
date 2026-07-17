@@ -211,7 +211,7 @@ export default function EinstellungenPage() {
                   <option value="firmenkunde">Firmenkunde</option>
                   <option value="anlagekunde">Anlagekunde</option>
                   <option value="backoffice">Backoffice &amp; Zahlungsverkehr</option>
-                  <option value="kreditgeschaeft">Kreditgeschäft</option>
+                  <option value="kreditgeschaeft">Credit Operations</option>
                   <option value="credit-office">Credit Office</option>
                   <option value="keine">Noch nicht zugewiesen</option>
                 </select>

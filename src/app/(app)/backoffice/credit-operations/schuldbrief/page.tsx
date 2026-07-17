@@ -10,7 +10,7 @@ const SCENARIOS = [
   {
     num: 1,
     level: "Level 1 – Einsteiger",
-    situation: "Kreditgeschäft diskutiert den Unterschied zwischen Papier- und Registerschuldbrief.",
+    situation: "Credit Operations diskutiert den Unterschied zwischen Papier- und Registerschuldbrief.",
     question: "Was ist der Vorteil des Registerschuldbriefs?",
     options: [
       { key: "A", text: "Höherer Belehnungswert möglich" },
@@ -29,8 +29,8 @@ const SCENARIOS = [
     num: 2,
     level: "Level 2 – Fortgeschritten",
     situation:
-      "Ein neuer Schuldbrief CHF 350'000 kommt vom Notar bei Kreditgeschäft an.",
-    question: "Was prüft Kreditgeschäft zuerst?",
+      "Ein neuer Schuldbrief CHF 350'000 kommt vom Notar bei Credit Operations an.",
+    question: "Was prüft Credit Operations zuerst?",
     options: [
       { key: "A", text: "Ob der Kunde eine gute Bonität hat" },
       {
@@ -42,7 +42,7 @@ const SCENARIOS = [
     ],
     correct: "B",
     feedback:
-      "Bei Eingang eines Schuldbriefs prüft Kreditgeschäft: 1. Betrag korrekt? 2. Rang korrekt? 3. Eigentümer = Kreditnehmer? 4. Grundbucheintrag stimmt? Erst dann wird der Kredit ausgezahlt.",
+      "Bei Eingang eines Schuldbriefs prüft Credit Operations: 1. Betrag korrekt? 2. Rang korrekt? 3. Eigentümer = Kreditnehmer? 4. Grundbucheintrag stimmt? Erst dann wird der Kredit ausgezahlt.",
   },
   {
     num: 3,
@@ -73,11 +73,11 @@ export default function SchuldbriefPage() {
 
   return (
     <>
-      <Header title="Schuldbriefverwaltung" subtitle="Kreditgeschäft · Back Office" />
+      <Header title="Schuldbriefverwaltung" subtitle="Credit Operations · Back Office" />
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
-          { label: "Kreditgeschäft", href: "/backoffice/credit-operations" },
+          { label: "Credit Operations", href: "/backoffice/credit-operations" },
           { label: "Schuldbriefverwaltung" },
         ]}
       />
@@ -99,7 +99,7 @@ export default function SchuldbriefPage() {
             </button>
             {lernOpen && (
               <div className="border-t border-border px-5 pb-5 pt-4 space-y-4 text-sm text-text-secondary leading-relaxed">
-                <p>Kreditgeschäft verwaltet alle Schuldbriefe der Bank – von Eingang über Aufbewahrung bis zur Freigabe.</p>
+                <p>Credit Operations verwaltet alle Schuldbriefe der Bank – von Eingang über Aufbewahrung bis zur Freigabe.</p>
                 <div>
                   <p className="font-semibold text-text-primary mb-2">Aufgaben:</p>
                   <ul className="space-y-1 ml-2">

@@ -12,7 +12,7 @@ const ABTEILUNG_OPTIONS = [
   { id: "firmenkunde", label: "Firmenkunde", emoji: "🏢", desc: "Firmenkundensegment" },
   { id: "anlagekunde", label: "Anlagekunde", emoji: "📈", desc: "Anlageberatung & Depot" },
   { id: "backoffice", label: "Backoffice & ZV", emoji: "⚙️", desc: "Operativer Betrieb" },
-  { id: "kreditgeschaeft", label: "Kreditgeschäft", emoji: "💳", desc: "Kreditbearbeitung & Sicherheiten" },
+  { id: "kreditgeschaeft", label: "Credit Operations", emoji: "💳", desc: "Kreditbearbeitung & Sicherheiten" },
   { id: "credit-office", label: "Credit Office", emoji: "⚖️", desc: "Kreditprüfung & Bewilligung" },
   { id: "keine", label: "Noch nicht zugewiesen", emoji: "🎯", desc: "Noch kein fixer Einsatz" },
 ];

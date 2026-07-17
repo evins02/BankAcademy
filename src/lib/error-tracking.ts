@@ -70,7 +70,7 @@ export const MODULE_META: Record<string, { label: string; href: string }> = {
   "kontoeröffnung-privat": { label: "Kontoeröffnung", href: "/privatkunde/kontoeröffnung" },
   "banking-operations-kyc": { label: "KYC / GwG", href: "/backoffice/kyc" },
   "banking-operations-blankokredit": { label: "Blankokredit", href: "/backoffice/blankokredit" },
-  "backoffice-credit-operations": { label: "Kreditgeschäft", href: "/backoffice/credit-operations" },
+  "backoffice-credit-operations": { label: "Credit Operations", href: "/backoffice/credit-operations" },
   "banking-operations-anlagekunde": { label: "Anlagekunde", href: "/anlagekunde" },
   "privatkunde-zahlungsverkehr": { label: "Zahlungsverkehr", href: "/privatkunde/zahlungsverkehr" },
   "banking-operations-mahnwesen": { label: "Mahnwesen", href: "/backoffice/mahnwesen" },

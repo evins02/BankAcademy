@@ -48,9 +48,9 @@ export function LernblockCard({ level, onContinue }: LernblockCardProps) {
         <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
           Lernblock
         </p>
-        <h2 className="mb-2 text-lg font-bold text-text-primary">Kreditgeschäft – Grundlagen</h2>
+        <h2 className="mb-2 text-lg font-bold text-text-primary">Credit Operations – Grundlagen</h2>
         <p className="mb-5 text-sm text-text-secondary">
-          Kreditgeschäft prüft bevor ein Kredit ausgezahlt wird:
+          Credit Operations prüft bevor ein Kredit ausgezahlt wird:
         </p>
 
         <div className="mb-6 space-y-3">

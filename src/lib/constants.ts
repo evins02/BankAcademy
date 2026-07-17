@@ -107,7 +107,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Back Office",
     items: [
       {
-        label: "Bankbetrieb",
+        label: "Banking Operations",
         icon: "Landmark",
         sections: [
           {
@@ -121,7 +121,7 @@ export const NAV_GROUPS: NavGroup[] = [
         ],
       },
       {
-        label: "Kreditgeschäft",
+        label: "Credit Operations",
         icon: "Settings2",
         sections: [
           {

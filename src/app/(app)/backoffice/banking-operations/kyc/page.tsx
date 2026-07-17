@@ -13,7 +13,7 @@ export default function BackofficeKycPage() {
         items={[
           { label: "Dashboard", href: "/dashboard" },
           { label: "Back Office" },
-          { label: "Bankbetrieb" },
+          { label: "Banking Operations" },
           { label: "KYC / Compliance" },
         ]}
       />

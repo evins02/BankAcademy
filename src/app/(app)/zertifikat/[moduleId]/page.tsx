@@ -10,8 +10,8 @@ const MODULE_NAMES: Record<string, string> = {
   privatkunde: "Privatkunde",
   firmenkunde: "Firmenkunde",
   anlagekunde: "Anlagekunde",
-  "banking-operations": "Bankbetrieb",
-  "credit-operations": "Kreditgeschäft",
+  "banking-operations": "Banking Operations",
+  "credit-operations": "Credit Operations",
 };
 
 function formatDate(iso: string) {

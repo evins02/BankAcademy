@@ -110,7 +110,7 @@ const SOURCE_LABELS: Record<SourceKey, string> = {
   kyc: "KYC / Compliance",
   mahnwesen: "Mahnwesen",
   blankokredit: "Blankokredit",
-  "credit-ops": "Kreditgeschäft",
+  "credit-ops": "Credit Operations",
   "zv-privat": "ZV Privatkunde",
 };
 
@@ -132,7 +132,7 @@ const MODULE_CHIPS: { label: string; emoji: string; source: SourceKey }[] = [
   { label: "KYC / Compliance", emoji: "🔍", source: "kyc" },
   { label: "Mahnwesen", emoji: "📬", source: "mahnwesen" },
   { label: "Blankokredit", emoji: "🏦", source: "blankokredit" },
-  { label: "Kreditgeschäft", emoji: "⚙️", source: "credit-ops" },
+  { label: "Credit Operations", emoji: "⚙️", source: "credit-ops" },
   { label: "ZV Privatkunde", emoji: "👤", source: "zv-privat" },
 ];
 

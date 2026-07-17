@@ -14,8 +14,8 @@ const MODULE_META: Record<string, { name: string; total: number }> = {
   privatkunde: { name: "Privatkunde", total: 10 },
   firmenkunde: { name: "Firmenkunde", total: 7 },
   anlagekunde: { name: "Anlagekunde", total: 4 },
-  "banking-operations": { name: "Bankbetrieb", total: 4 },
-  "credit-operations": { name: "Kreditgeschäft", total: 5 },
+  "banking-operations": { name: "Banking Operations", total: 4 },
+  "credit-operations": { name: "Credit Operations", total: 5 },
 };
 
 function scoreBg(accuracy: number): string {

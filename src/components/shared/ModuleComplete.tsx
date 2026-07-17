@@ -21,8 +21,8 @@ const NEXT_MODULES = [
   { id: "privatkunde", label: "Privatkunde", emoji: "👤", href: "/privatkunde", reason: "Einstieg ins Retail Banking" },
   { id: "anlagekunde", label: "Anlagekunde", emoji: "📈", href: "/anlagekunde/anlegerprofil", reason: "Vertiefung: Anlageberatung" },
   { id: "firmenkunde", label: "Firmenkunde", emoji: "🏢", href: "/firmenkunde", reason: "Firmenkundenlösungen" },
-  { id: "banking-operations", label: "Bankbetrieb", emoji: "🏦", href: "/backoffice", reason: "Back Office Operationen" },
-  { id: "credit-operations", label: "Kreditgeschäft", emoji: "⚙️", href: "/backoffice/credit-operations", reason: "Kreditbearbeitung" },
+  { id: "banking-operations", label: "Banking Operations", emoji: "🏦", href: "/backoffice", reason: "Back Office Operationen" },
+  { id: "credit-operations", label: "Credit Operations", emoji: "⚙️", href: "/backoffice/credit-operations", reason: "Kreditbearbeitung" },
 ];
 
 function getRecommendations(skipModuleIds: string[]) {

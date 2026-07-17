@@ -18,7 +18,7 @@ export default function ScenarioPage({
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
-          { label: "Bankbetrieb", href: "/banking-operations" },
+          { label: "Banking Operations", href: "/banking-operations" },
           { label: "Kontoeröffnungen", href: "/banking-operations/kontoeröffnungen" },
           { label: scenario.customerType },
         ]}

@@ -64,7 +64,7 @@ const FRONT_OFFICE_MODULES = [
 
 const BACK_OFFICE_MODULES = [
   {
-    title: "Bankbetrieb",
+    title: "Banking Operations",
     description: "Kontoeröffnungen, Zahlungsverkehr, KYC und Mahnwesen.",
     href: "/backoffice",
     icon: Landmark,
@@ -72,7 +72,7 @@ const BACK_OFFICE_MODULES = [
     totalScenarios: 10,
   },
   {
-    title: "Kreditgeschäft",
+    title: "Credit Operations",
     description: "Kreditbearbeitung und Risikoprüfung.",
     href: "/backoffice/credit-operations",
     icon: Settings2,
@@ -151,7 +151,7 @@ function PersonalizedBanner({
     firmenkunde: "Firmenkunde",
     anlagekunde: "Anlagekunde",
     backoffice: "Backoffice & Zahlungsverkehr",
-    kreditgeschaeft: "Kreditgeschäft",
+    kreditgeschaeft: "Credit Operations",
     "credit-office": "Credit Office",
   };
 
@@ -334,8 +334,8 @@ export default function DashboardPage() {
     privatkunde: { title: "Privatkunde", href: "/privatkunde", icon: User },
     firmenkunde: { title: "Firmenkunde", href: "/firmenkunde", icon: Building2 },
     anlagekunde: { title: "Anlagekunde", href: "/anlagekunde", icon: TrendingUp },
-    backoffice: { title: "Bankbetrieb", href: "/backoffice", icon: Landmark },
-    kreditgeschaeft: { title: "Kreditgeschäft", href: "/backoffice/credit-operations", icon: Settings2 },
+    backoffice: { title: "Banking Operations", href: "/backoffice", icon: Landmark },
+    kreditgeschaeft: { title: "Credit Operations", href: "/backoffice/credit-operations", icon: Settings2 },
     "credit-office": { title: "Credit Office", href: "/backoffice/credit-office/hypothek", icon: Settings2 },
   };
   const recommended: { title: string; href: string; icon: LucideIcon } =

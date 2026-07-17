@@ -5,12 +5,12 @@ import { CreditOperationsRunner } from "@/components/modules/credit-operations/C
 export default function CreditOperationsPage() {
   return (
     <>
-      <Header title="Kreditgeschäft" subtitle="Back Office – Kreditauszahlung & Sicherheiten" />
+      <Header title="Credit Operations" subtitle="Back Office – Kreditauszahlung & Sicherheiten" />
       <Breadcrumb
         items={[
           { label: "Dashboard", href: "/dashboard" },
           { label: "Back Office" },
-          { label: "Kreditgeschäft" },
+          { label: "Credit Operations" },
         ]}
       />
       <CreditOperationsRunner />
