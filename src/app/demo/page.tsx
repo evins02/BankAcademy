@@ -70,13 +70,13 @@ const UNLOCKED_MODULES = [
     color: "#3b82f6",
   },
   {
-    title: "Mahnwesen",
+    title: "Schuldbriefverwaltung",
     description:
-      "Mahnläufe, Zahlungsrückstände und Eskalationsstufen sicher bearbeiten.",
-    href: "/demo/backoffice/banking-operations/mahnwesen",
-    tag: "Back Office · Banking Operations",
-    xp: "+50 XP",
-    color: "#ef4444",
+      "Papier- vs. Registerschuldbrief, Eingang prüfen, Freigabe und Übertragung bei Eigentümerwechsel.",
+    href: "/demo/backoffice/credit-operations/schuldbrief",
+    tag: "Back Office · Credit Operations",
+    xp: "+70 XP",
+    color: "#6366f1",
   },
 ];
 
