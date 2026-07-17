@@ -43,15 +43,6 @@ const UNLOCKED_MODULES = [
     color: "#8b5cf6",
   },
   {
-    title: "Anlegerprofil & Beratung",
-    description:
-      "Kundenprofil aufnehmen, Risikobereitschaft einschätzen und passende Anlageempfehlungen abgeben.",
-    href: "/demo/anlagekunde/anlegerprofil",
-    tag: "Anlagekunde · Anlageberatung",
-    xp: "+60 XP",
-    color: "#06b6d4",
-  },
-  {
     title: "KYC / Compliance",
     description:
       "Know Your Customer – Sorgfaltspflichten, GwG und Beneficial Owner in der Praxis.",
@@ -120,7 +111,7 @@ export default function DemoPage() {
                 marginBottom: 20,
               }}
             >
-              👀 Demo Modus · 8 Module freigeschaltet
+              👀 Demo Modus · 7 Module freigeschaltet
             </div>
             <h1
               style={{
@@ -133,7 +124,7 @@ export default function DemoPage() {
               Willkommen bei BankAcademy
             </h1>
             <p style={{ margin: "0 0 28px", fontSize: 15, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>
-              Starte mit den 8 freigeschalteten Modulen. Für alle Module, 150+ Szenarien und den Challenge-Modus kannst du Vollzugang anfragen.
+              Starte mit den 7 freigeschalteten Modulen. Für alle Module, 150+ Szenarien und den Challenge-Modus kannst du Vollzugang anfragen.
             </p>
             <Link
               href="/kontakt"
