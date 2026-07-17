@@ -604,7 +604,7 @@ function Hero({ onStart }: { onStart: () => void }) {
             color: WH,
           }}
         >
-          Banking lernen –{" "}
+          Lern faul.{" "}
           <br />
           <span
             style={{
@@ -614,7 +614,7 @@ function Hero({ onStart }: { onStart: () => void }) {
               backgroundClip: "text",
             }}
           >
-            wie es wirklich ist.
+            Üb smart.
           </span>
         </h1>
 
@@ -628,8 +628,7 @@ function Hero({ onStart }: { onStart: () => void }) {
             color: WD,
           }}
         >
-          Realistische Szenarien, typische Fehler und operative Denkweise –
-          für Lernende im Schweizer Banking.
+          Kein Bock auf trockene Theorie? Wir auch nicht. So lernst du schneller und besser.
         </p>
 
         {/* Buttons */}
@@ -660,7 +659,7 @@ function Hero({ onStart }: { onStart: () => void }) {
               e.currentTarget.style.boxShadow = `0 0 40px ${CY}55`;
             }}
           >
-            Jetzt starten <ChevronRight size={17} />
+            Vollversion <ChevronRight size={17} />
           </button>
           <Link
             href="/demo"
@@ -682,7 +681,7 @@ function Hero({ onStart }: { onStart: () => void }) {
               (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
             }}
           >
-            Demo ansehen →
+            Jetzt gratis loslegen
           </Link>
         </div>
 
