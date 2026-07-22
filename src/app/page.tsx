@@ -685,12 +685,6 @@ function Hero({ onStart }: { onStart: () => void }) {
           </Link>
         </div>
 
-        {/* Trust indicators */}
-        <div style={{ marginTop: 28, paddingTop: 24, borderTop: `1px solid ${BR}`, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
-          <p style={{ margin: 0, fontSize: 12, color: WM, fontStyle: "italic" }}>
-            Entwickelt von einem Banklehrling mit Praxiserfahrung bei einer Schweizer Bank
-          </p>
-        </div>
       </div>
 
       <AppMockup />
@@ -943,6 +937,36 @@ function HowItWorks() {
             </FadeIn>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Section: Founder Story ──────────────────────────────────────────────── */
+
+function FounderStory() {
+  return (
+    <section style={{ background: N, padding: "112px 24px" }}>
+      <div style={{ maxWidth: 680, margin: "0 auto" }}>
+        <FadeIn>
+          <div style={{ borderLeft: `3px solid ${CY}66`, paddingLeft: 28 }}>
+            <p style={{ margin: "0 0 12px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
+              Warum ich BankAcademy gebaut habe
+            </p>
+            <h2 style={{ margin: "0 0 32px", fontSize: "clamp(24px,3.5vw,36px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH, lineHeight: 1.25 }}>
+              Weil ich das Tool vermisst habe,<br />das ich selbst gebraucht hätte.
+            </h2>
+            <p style={{ margin: "0 0 20px", fontSize: 16, lineHeight: 1.75, color: WD }}>
+              Während meiner Lehre hab ich schnell gemerkt: Stures Auswendiglernen aus dem Lehrbuch war nie mein Ding. Ich hab Inhalte viel besser aufgenommen, wenn ich sie spielerisch üben konnte, statt sie nur zu lesen – und am meisten hängen geblieben ist das, was einen echten Praxisbezug hatte.
+            </p>
+            <p style={{ margin: "0 0 20px", fontSize: 16, lineHeight: 1.75, color: WD }}>
+              Nur gab es genau dafür kaum etwas. Also hab ich selbst gebaut, was ich mir gewünscht hätte: echte Bankszenarien zum Üben, statt trockener Theorie zum Auswendiglernen.
+            </p>
+            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.75, color: WH, fontWeight: 700 }}>
+              Heute ist BankAcademy genau das – lern faul, üb smart.
+            </p>
+          </div>
+        </FadeIn>
       </div>
     </section>
   );
@@ -1877,6 +1901,7 @@ export default function LandingPage() {
         <StatsBar />
         <ProblemSolution />
         <HowItWorks />
+        <FounderStory />
         <Features />
         <Modules onStart={() => setAccessOpen(true)} />
         <ForBanks />
