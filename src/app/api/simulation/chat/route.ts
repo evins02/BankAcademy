@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
 import type { Difficulty, ConversationMessage } from "@/components/modules/simulation/sim-types";
 
 export const runtime = "edge";
 export const maxDuration = 30;
-
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const BASE_PROMPT = `You are Thomas Kowalski, 28 years old, living in Zurich. You work as a UX Designer at a startup. You just moved to Zurich 2 months ago and need to open a bank account urgently because your salary gets paid next week.
 
@@ -68,22 +65,37 @@ export async function POST(req: Request) {
     const systemPrompt = BASE_PROMPT + (DIFFICULTY_SUFFIX[difficulty] ?? "");
 
     const anthropicMessages = messages.map((m) => ({
-      role: m.role === "student" ? ("user" as const) : ("assistant" as const),
+      role: m.role === "student" ? "user" : "assistant",
       content: m.content,
     }));
 
-    const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-6",
-      max_tokens: 500,
-      system: systemPrompt,
-      messages: anthropicMessages,
+    const apiRes = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.ANTHROPIC_API_KEY ?? "",
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 500,
+        system: systemPrompt,
+        messages: anthropicMessages,
+      }),
+      signal: AbortSignal.timeout(25000),
     });
 
-    const text =
-      response.content[0].type === "text" ? response.content[0].text : "";
+    if (!apiRes.ok) {
+      const errBody = await apiRes.text();
+      throw new Error(`Anthropic ${apiRes.status}: ${errBody}`);
+    }
+
+    const apiData = await apiRes.json();
+    const text: string =
+      apiData.content?.[0]?.type === "text" ? apiData.content[0].text : "";
 
     const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("No JSON in response");
+    if (!jsonMatch) throw new Error("No JSON in response: " + text.slice(0, 200));
 
     const data = JSON.parse(jsonMatch[0]);
 

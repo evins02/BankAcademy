@@ -99,7 +99,11 @@ export function AiSimulationPage() {
           body: JSON.stringify({ messages: next, difficulty }),
         });
 
-        if (!res.ok) throw new Error("HTTP " + res.status);
+        if (!res.ok) {
+          let detail = "";
+          try { detail = (await res.json()).error ?? ""; } catch { /* ignore */ }
+          throw new Error(`HTTP ${res.status}${detail ? ": " + detail : ""}`);
+        }
         const data: ChatApiResponse = await res.json();
         if ("error" in data) throw new Error((data as { error: string }).error);
 
@@ -124,8 +128,9 @@ export function AiSimulationPage() {
           if (data.finalFeedback) setFinalFeedback(data.finalFeedback);
           setTimeout(() => setView("results"), 1800);
         }
-      } catch {
-        setError("Verbindung unterbrochen – bitte nochmal senden");
+      } catch (err) {
+        const detail = err instanceof Error ? err.message : String(err);
+        setError("Verbindung unterbrochen – " + detail);
         setMessages(messages);
       } finally {
         setIsLoading(false);
