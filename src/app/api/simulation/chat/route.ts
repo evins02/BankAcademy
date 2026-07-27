@@ -1,8 +1,6 @@
-import { NextResponse } from "next/server";
 import type { Difficulty, ConversationMessage } from "@/components/modules/simulation/sim-types";
 
 export const runtime = "edge";
-export const maxDuration = 30;
 
 const BASE_PROMPT = `You are Thomas Kowalski, 28 years old, living in Zurich. You work as a UX Designer at a startup. You just moved to Zurich 2 months ago and need to open a bank account urgently because your salary gets paid next week.
 
@@ -52,65 +50,120 @@ const DIFFICULTY_SUFFIX: Record<Difficulty, string> = {
     "\n\nSCHWIERIGKEITSSTUFE EINSTEIGER: Du bist geduldig und freundlich. Du stellst einfache Fragen, akzeptierst gute erste Antworten sofort und bist verständnisvoll. Sei eher dankbar für Erklärungen.",
   fortgeschritten:
     "\n\nSCHWIERIGKEITSSTUFE FORTGESCHRITTEN: Normales Verhalten wie oben beschrieben.",
-  challenge: "\n\nSCHWIERIGKEITSSTUFE CHALLENGE-NIVEAU: Du bist sehr anspruchsvoll. Du hinterfragst jede Antwort kritisch, verweist auf Konkurrenzangebote ('Bei der Postfinance wäre das günstiger...'), stellst technische Fragen zu GwG Art. 3 und VSB16, und akzeptierst nur vollständige, präzise Antworten. Bei schlechten Antworten sagst du: 'Das ist nicht sehr überzeugend.'",
+  challenge:
+    "\n\nSCHWIERIGKEITSSTUFE CHALLENGE-NIVEAU: Du bist sehr anspruchsvoll. Du hinterfragst jede Antwort kritisch, verweist auf Konkurrenzangebote ('Bei der Postfinance wäre das günstiger...'), stellst technische Fragen zu GwG Art. 3 und VSB16, und akzeptierst nur vollständige, präzise Antworten. Bei schlechten Antworten sagst du: 'Das ist nicht sehr überzeugend.'",
 };
 
 export async function POST(req: Request) {
+  const encoder = new TextEncoder();
+
+  let messages: ConversationMessage[];
+  let difficulty: Difficulty;
+
   try {
-    const { messages, difficulty = "fortgeschritten" } = (await req.json()) as {
-      messages: ConversationMessage[];
-      difficulty?: Difficulty;
-    };
-
-    const systemPrompt = BASE_PROMPT + (DIFFICULTY_SUFFIX[difficulty] ?? "");
-
-    const anthropicMessages = messages.map((m) => ({
-      role: m.role === "student" ? "user" : "assistant",
-      content: m.content,
-    }));
-
-    const apiRes = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": process.env.ANTHROPIC_API_KEY ?? "",
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 500,
-        system: systemPrompt,
-        messages: anthropicMessages,
-      }),
-      signal: AbortSignal.timeout(25000),
-    });
-
-    if (!apiRes.ok) {
-      const errBody = await apiRes.text();
-      throw new Error(`Anthropic ${apiRes.status}: ${errBody}`);
-    }
-
-    const apiData = await apiRes.json();
-    const text: string =
-      apiData.content?.[0]?.type === "text" ? apiData.content[0].text : "";
-
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("No JSON in response: " + text.slice(0, 200));
-
-    const data = JSON.parse(jsonMatch[0]);
-
-    // Suppress greeting-by-name hint if student has already used the customer's name
-    const greetedByName = messages
-      .filter((m) => m.role === "student")
-      .some((m) => /kowalski/i.test(m.content));
-    if (greetedByName && /begrüss|mit namen|namentlich/i.test(data.hint ?? "")) {
-      data.hint = null;
-    }
-
-    return NextResponse.json(data);
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : String(error);
-    console.error("Simulation API error:", msg);
-    return NextResponse.json({ error: msg }, { status: 500 });
+    const body = await req.json() as { messages: ConversationMessage[]; difficulty?: Difficulty };
+    messages = body.messages;
+    difficulty = body.difficulty ?? "fortgeschritten";
+  } catch {
+    return new Response(
+      `data: ${JSON.stringify({ error: "Invalid request body" })}\n\n`,
+      { status: 400, headers: { "Content-Type": "text/event-stream" } }
+    );
   }
+
+  const systemPrompt = BASE_PROMPT + (DIFFICULTY_SUFFIX[difficulty] ?? "");
+  const anthropicMessages = messages.map((m) => ({
+    role: m.role === "student" ? "user" : "assistant",
+    content: m.content,
+  }));
+
+  const stream = new ReadableStream({
+    async start(controller) {
+      const send = (payload: unknown) =>
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(payload)}\n\n`));
+
+      try {
+        const apiRes = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": process.env.ANTHROPIC_API_KEY ?? "",
+            "anthropic-version": "2023-06-01",
+          },
+          body: JSON.stringify({
+            model: "claude-sonnet-4-6",
+            max_tokens: 500,
+            stream: true,
+            system: systemPrompt,
+            messages: anthropicMessages,
+          }),
+        });
+
+        if (!apiRes.ok || !apiRes.body) {
+          const errText = await apiRes.text();
+          send({ error: `Anthropic ${apiRes.status}: ${errText}` });
+          controller.close();
+          return;
+        }
+
+        const reader = apiRes.body.getReader();
+        const decoder = new TextDecoder();
+        let fullText = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          // Keep-alive: each received chunk resets Vercel's idle timer
+          controller.enqueue(encoder.encode(": ping\n\n"));
+
+          const chunk = decoder.decode(value, { stream: true });
+          for (const line of chunk.split("\n")) {
+            if (!line.startsWith("data: ")) continue;
+            const raw = line.slice(6).trim();
+            if (raw === "[DONE]") continue;
+            try {
+              const evt = JSON.parse(raw);
+              if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
+                fullText += evt.delta.text;
+              }
+            } catch { /* partial chunk, skip */ }
+          }
+        }
+
+        const jsonMatch = fullText.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) {
+          send({ error: "No JSON in response: " + fullText.slice(0, 120) });
+          controller.close();
+          return;
+        }
+
+        const data = JSON.parse(jsonMatch[0]);
+
+        // Suppress greeting-by-name hint if student already used the customer's name
+        const greetedByName = messages
+          .filter((m) => m.role === "student")
+          .some((m) => /kowalski/i.test(m.content));
+        if (greetedByName && /begrüss|mit namen|namentlich/i.test(data.hint ?? "")) {
+          data.hint = null;
+        }
+
+        send(data);
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error("Simulation API error:", msg);
+        send({ error: msg });
+      }
+
+      controller.close();
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+    },
+  });
 }

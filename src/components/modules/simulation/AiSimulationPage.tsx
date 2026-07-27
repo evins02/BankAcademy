@@ -99,13 +99,26 @@ export function AiSimulationPage() {
           body: JSON.stringify({ messages: next, difficulty }),
         });
 
-        if (!res.ok) {
-          let detail = "";
-          try { detail = (await res.json()).error ?? ""; } catch { /* ignore */ }
-          throw new Error(`HTTP ${res.status}${detail ? ": " + detail : ""}`);
+        if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
+
+        // Read SSE stream – server pings keep the connection alive while Anthropic responds
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let data: ChatApiResponse | null = null;
+
+        outer: while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          for (const line of decoder.decode(value, { stream: true }).split("\n")) {
+            if (!line.startsWith("data: ")) continue;
+            const parsed = JSON.parse(line.slice(6)) as ChatApiResponse & { error?: string };
+            if ("error" in parsed) throw new Error(parsed.error);
+            data = parsed;
+            break outer;
+          }
         }
-        const data: ChatApiResponse = await res.json();
-        if ("error" in data) throw new Error((data as { error: string }).error);
+
+        if (!data) throw new Error("Keine Antwort vom Server");
 
         const thomasMsg: ConversationMessage = {
           role: "thomas",
