@@ -32,7 +32,7 @@ export function DemoBanner({ onMenuToggle }: { onMenuToggle?: () => void }) {
         </button>
       )}
       <span>
-        👀 Demo Modus – Du siehst eine eingeschränkte Version von BankAcademy.
+        Demo Modus – Du siehst eine eingeschränkte Version von BankAcademy.
       </span>
       <Link
         href="/kontakt"

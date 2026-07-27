@@ -111,7 +111,7 @@ export default function DemoPage() {
                 marginBottom: 20,
               }}
             >
-              👀 Demo Modus · 7 Module freigeschaltet
+              Demo Modus · 7 Module freigeschaltet
             </div>
             <h1
               style={{
