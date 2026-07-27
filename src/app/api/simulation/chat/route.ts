@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import type { Difficulty, ConversationMessage } from "@/components/modules/simulation/sim-types";
 
+export const maxDuration = 25;
+
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const BASE_PROMPT = `You are Thomas Kowalski, 28 years old, living in Zurich. You work as a UX Designer at a startup. You just moved to Zurich 2 months ago and need to open a bank account urgently because your salary gets paid next week.
@@ -83,9 +85,19 @@ export async function POST(req: Request) {
     if (!jsonMatch) throw new Error("No JSON in response");
 
     const data = JSON.parse(jsonMatch[0]);
+
+    // Suppress greeting-by-name hint if student has already used the customer's name
+    const greetedByName = messages
+      .filter((m) => m.role === "student")
+      .some((m) => /kowalski/i.test(m.content));
+    if (greetedByName && /begrüss|mit namen|namentlich/i.test(data.hint ?? "")) {
+      data.hint = null;
+    }
+
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Simulation API error:", error);
-    return NextResponse.json({ error: "API call failed" }, { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("Simulation API error:", msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
