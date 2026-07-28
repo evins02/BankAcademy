@@ -24,6 +24,7 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
   const [phase, setPhase] = useState<Phase>("chat");
   const [messages, setMessages] = useState<ConvMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [chatError, setChatError] = useState<string | null>(null);
   const [evaluation, setEvaluation] = useState<ConvEvaluation | null>(null);
   const [isDemo, setIsDemo] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -36,6 +37,7 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
       const newMessages = [...messages, studentMsg];
       setMessages(newMessages);
       setIsLoading(true);
+      setChatError(null);
 
       try {
         const res = await fetch("/api/kyc-conversation", {
@@ -45,12 +47,13 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
         });
 
         if (!res.ok) {
-          const errText = await res.text().catch(() => "");
-          throw new Error(`API ${res.status}${errText ? `: ${errText}` : ""}`);
+          let detail = "";
+          try { detail = (await res.json()).error ?? ""; } catch { /* ignore */ }
+          throw new Error(`HTTP ${res.status}${detail ? ": " + detail : ""}`);
         }
         const data: CustomerApiResponse = await res.json();
 
-        if (!data.customerMessage) throw new Error("Bad response");
+        if (!data.customerMessage) throw new Error("Leere Antwort vom Server");
 
         setMessages((prev) => [
           ...prev,
@@ -59,14 +62,10 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
         if (data.irrelevant) {
           setIrrelevantCount((n) => n + 1);
         }
-      } catch {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "customer" as const,
-            content: `[Verbindungsproblem – Bitte nochmals senden.]`,
-          },
-        ]);
+      } catch (err) {
+        // Roll back the student message so history stays clean for retry
+        setMessages(messages);
+        setChatError(err instanceof Error ? err.message : String(err));
       } finally {
         setIsLoading(false);
       }
@@ -245,6 +244,7 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
         key={attempt}
         messages={messages}
         isLoading={isLoading}
+        error={chatError}
         onSend={handleSend}
         onFinish={handleFinishChat}
       />

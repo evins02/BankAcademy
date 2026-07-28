@@ -1,18 +1,19 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send } from "lucide-react";
+import { Send, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type ConvMessage } from "./conv-types";
 
 interface ChatPhaseProps {
   messages: ConvMessage[];
   isLoading: boolean;
+  error?: string | null;
   onSend: (text: string) => void;
   onFinish: () => void;
 }
 
-export function ChatPhase({ messages, isLoading, onSend, onFinish }: ChatPhaseProps) {
+export function ChatPhase({ messages, isLoading, error, onSend, onFinish }: ChatPhaseProps) {
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -136,6 +137,14 @@ export function ChatPhase({ messages, isLoading, onSend, onFinish }: ChatPhasePr
 
         <div ref={bottomRef} />
       </div>
+
+      {/* Error banner */}
+      {error && (
+        <div className="shrink-0 mx-5 mb-2 flex items-center gap-2 rounded-xl bg-red-50 border border-red-200 px-4 py-2.5 text-sm text-red-700">
+          <AlertCircle size={14} className="shrink-0" />
+          <span>Verbindungsproblem – {error} · Bitte nochmals senden.</span>
+        </div>
+      )}
 
       {/* Input */}
       <div className="shrink-0 border-t border-border px-5 py-3 space-y-3">
