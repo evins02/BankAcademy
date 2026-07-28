@@ -65,10 +65,12 @@ export async function POST(req: Request) {
       model: "claude-sonnet-4-6",
       max_tokens: 400,
       system: SYSTEM_PROMPT,
-      messages: messages.map((m) => ({
-        role: m.role === "student" ? ("user" as const) : ("assistant" as const),
-        content: m.content,
-      })),
+      messages: messages
+        .filter((m) => m.content && m.content.trim() !== "")
+        .map((m) => ({
+          role: m.role === "student" ? ("user" as const) : ("assistant" as const),
+          content: m.content,
+        })),
     });
 
     const text = response.content[0].type === "text" ? response.content[0].text : "";
