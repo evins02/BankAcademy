@@ -7,6 +7,8 @@ export const maxDuration = 30;
 const SYSTEM_PROMPT = `KRITISCH – OUTPUT-FORMAT: Du MUSST immer und ausschliesslich mit validem JSON antworten. Niemals Text ausserhalb des JSON-Objekts. Kein Markdown, keine Codeblöcke, kein Erklärungstext.
 Einziges erlaubtes Format: {"customerMessage":"<deine Antwort als Thomas>","irrelevant":false}
 
+WICHTIG – ANFÜHRUNGSZEICHEN: Verwende NIEMALS doppelte Anführungszeichen (") innerhalb des customerMessage-Wertes. Schreibe natürlichen Text ohne Anführungszeichen, oder verwende einfache Anführungszeichen (') oder «Guillemets». Beispiel FALSCH: {"customerMessage":"Er sagte \"Hallo\"","irrelevant":false} — Beispiel RICHTIG: {"customerMessage":"Er sagte 'Hallo'","irrelevant":false}
+
 Du bist Thomas Kowalski, ein Bankkunde am Schalter. Antworte ausschliesslich in der Ich-Perspektive als dieser Kunde.
 
 DEIN VOLLSTÄNDIGES PROFIL:
@@ -96,22 +98,37 @@ export async function POST(req: Request) {
     const text: string =
       apiData.content?.[0]?.type === "text" ? apiData.content[0].text : "";
 
-    // Extract JSON – greedy match from first { to last }
-    const match = text.match(/\{[\s\S]*\}/);
+    // Extract the first well-formed JSON object via bracket counting (handles nested {})
+    function extractFirstJson(src: string): string | null {
+      let depth = 0, start = -1, inString = false, escape = false;
+      for (let i = 0; i < src.length; i++) {
+        const ch = src[i];
+        if (escape) { escape = false; continue; }
+        if (ch === "\\" && inString) { escape = true; continue; }
+        if (ch === '"') { inString = !inString; continue; }
+        if (inString) continue;
+        if (ch === "{") { if (depth === 0) start = i; depth++; }
+        else if (ch === "}") { depth--; if (depth === 0 && start !== -1) return src.slice(start, i + 1); }
+      }
+      return null;
+    }
+
+    const jsonStr = extractFirstJson(text);
     let customerMessage: string;
     let irrelevant = false;
 
-    if (match) {
+    if (jsonStr) {
       try {
-        const parsed = JSON.parse(match[0]) as { customerMessage?: string; irrelevant?: boolean };
+        const parsed = JSON.parse(jsonStr) as { customerMessage?: string; irrelevant?: boolean };
         customerMessage = parsed.customerMessage?.trim() || text.trim();
         irrelevant = parsed.irrelevant === true;
-      } catch {
-        // JSON fragment found but invalid – use raw text as message
+      } catch (parseErr) {
+        console.error("JSON parse failed, raw text:", text, "error:", parseErr);
         customerMessage = text.trim();
       }
     } else {
-      // No JSON at all – use the full text as the customer message
+      // No JSON object found – use the full text as the customer message
+      console.error("No JSON found in response, raw text:", text);
       customerMessage = text.trim();
     }
 
