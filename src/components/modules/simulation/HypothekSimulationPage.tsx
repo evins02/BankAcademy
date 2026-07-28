@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { HypothekBriefingScreen } from "./HypothekBriefingScreen";
-import { VideoCallUI, type Mood } from "./VideoCallUI";
+import { VideoCallUI, type Mood, type HistoryEntry } from "./VideoCallUI";
 import { HypothekResultsScreen } from "./HypothekResultsScreen";
 import {
   HYPOTHEK_SIM_STEPS,
@@ -127,6 +127,26 @@ export function HypothekSimulationPage() {
   const feedbackCorrect = selectedKey === currentStep.correctKey;
   const showCalculation = currentStep.hasCalculation && !isReacting;
 
+  // Build conversation history from all completed steps
+  const historyStepCount = isReacting ? stepIndex + 1 : stepIndex;
+  const history: HistoryEntry[] = HYPOTHEK_SIM_STEPS.slice(0, historyStepCount).map((step) => {
+    const sk = answers[step.id] as string | undefined;
+    const opt = sk ? step.options.find((o) => o.key === sk) : undefined;
+    return {
+      customerSpeech: step.customerSpeech,
+      selectedText: opt?.text,
+      correct: sk === step.correctKey,
+    };
+  });
+
+  // Compute running score (correct answers so far as percentage)
+  const answeredCount = Object.keys(answers).length;
+  const correctCount = Object.entries(answers).filter(([id, key]) => {
+    const step = HYPOTHEK_SIM_STEPS.find((s) => String(s.id) === id);
+    return step && key === step.correctKey;
+  }).length;
+  const liveScore = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : undefined;
+
   return (
     <VideoCallUI
       customerSpeech={customerSpeech}
@@ -139,9 +159,8 @@ export function HypothekSimulationPage() {
       onNext={handleNext}
       stepIndex={stepIndex}
       totalSteps={HYPOTHEK_SIM_STEPS.length}
-      customerInitials="SB"
-      customerName="Sarah & Marco Bianchi"
-      customerSubtitle="Hypothekengespräch – Eigenheim"
+      history={history}
+      liveScore={liveScore}
       speechExtra={showCalculation ? <CalculationCard /> : undefined}
     />
   );

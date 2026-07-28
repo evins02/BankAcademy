@@ -131,9 +131,6 @@ export function AnlageSimulationPage() {
           onNext={handleNext}
           stepIndex={stepIndex}
           totalSteps={ANLAGE_SIM_STEPS.length}
-          customerInitials={CUSTOMER.initials}
-          customerName={CUSTOMER.name}
-          customerSubtitle={currentStep.topic}
           speechExtra={
             isReacting ? (
               <div className="space-y-2">
