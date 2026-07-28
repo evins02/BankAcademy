@@ -140,8 +140,15 @@ export function AiVideoCallUI({
         </div>
       </div>
 
-      {/* ── Right: dark video area ── */}
-      <div className="relative flex flex-1 flex-col overflow-hidden bg-[#0A0A0A] text-white">
+      {/* ── Right: video area with background ── */}
+      <div
+        className="relative flex flex-1 flex-col overflow-hidden text-white"
+        style={{
+          backgroundImage: "url('https://raw.githubusercontent.com/evins02/BankAcademy/main/public/bankacademy_kyc_final.svg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center top",
+        }}
+      >
         {/* Mood indicator – top left */}
         <div className="absolute left-4 top-4 z-10 flex max-w-[200px] flex-col gap-0.5 rounded-xl bg-white/10 px-3 py-2 backdrop-blur-sm">
           <div className="flex items-center gap-1.5">
@@ -199,21 +206,6 @@ export function AiVideoCallUI({
             <span className="absolute -bottom-2.5 left-1/2 h-5 w-5 -translate-x-1/2 rotate-45 bg-white shadow-md" />
           </div>
 
-          {/* Avatar */}
-          <div className="flex flex-col items-center gap-2">
-            <div
-              className={cn(
-                "flex h-24 w-24 items-center justify-center rounded-full bg-gray-600 text-2xl font-bold text-white shadow-2xl ring-4 ring-white/10 transition-all duration-300",
-                isLoading && "ring-green-500/50 shadow-green-500/20 shadow-2xl"
-              )}
-            >
-              TK
-            </div>
-            <div className="text-center">
-              <p className="text-base font-semibold text-white">Thomas Kowalski</p>
-              <p className="text-xs text-gray-400">Neukunde – Kontoeröffnung</p>
-            </div>
-          </div>
         </div>
 
         {/* Input area – above control bar */}
