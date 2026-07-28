@@ -73,6 +73,13 @@ export async function POST(req: Request) {
         content: m.content,
       }));
 
+    // Prefill forces Claude to start with the JSON structure — eliminates "No JSON" errors
+    const PREFILL = '{"customerMessage":"';
+    const messagesWithPrefill = [
+      ...filtered,
+      { role: "assistant" as const, content: PREFILL },
+    ];
+
     const apiRes = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -84,7 +91,7 @@ export async function POST(req: Request) {
         model: "claude-sonnet-4-6",
         max_tokens: 400,
         system: SYSTEM_PROMPT,
-        messages: filtered,
+        messages: messagesWithPrefill,
       }),
       signal: AbortSignal.timeout(25000),
     });
@@ -95,10 +102,12 @@ export async function POST(req: Request) {
     }
 
     const apiData = await apiRes.json();
-    const text: string =
+    // Continuation is what Claude generated AFTER the prefill — reconstruct the full JSON
+    const continuation: string =
       apiData.content?.[0]?.type === "text" ? apiData.content[0].text : "";
+    const text = PREFILL + continuation;
 
-    // Extract the first well-formed JSON object via bracket counting (handles nested {})
+    // Extract the first well-formed JSON object via bracket counting
     function extractFirstJson(src: string): string | null {
       let depth = 0, start = -1, inString = false, escape = false;
       for (let i = 0; i < src.length; i++) {
@@ -120,16 +129,16 @@ export async function POST(req: Request) {
     if (jsonStr) {
       try {
         const parsed = JSON.parse(jsonStr) as { customerMessage?: string; irrelevant?: boolean };
-        customerMessage = parsed.customerMessage?.trim() || text.trim();
+        customerMessage = parsed.customerMessage?.trim() || continuation.trim();
         irrelevant = parsed.irrelevant === true;
       } catch (parseErr) {
-        console.error("JSON parse failed, raw text:", text, "error:", parseErr);
-        customerMessage = text.trim();
+        console.error("JSON parse failed, reconstructed:", text, "error:", parseErr);
+        // Fall back to the raw continuation (strip trailing JSON scaffolding if present)
+        customerMessage = continuation.replace(/",?\s*"irrelevant"\s*:\s*(true|false)\s*\}.*$/s, "").trim();
       }
     } else {
-      // No JSON object found – use the full text as the customer message
-      console.error("No JSON found in response, raw text:", text);
-      customerMessage = text.trim();
+      console.error("No JSON object in reconstructed text:", text);
+      customerMessage = continuation.trim();
     }
 
     if (!customerMessage) throw new Error("Leere Antwort von der KI");
