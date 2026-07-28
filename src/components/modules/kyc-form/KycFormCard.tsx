@@ -63,6 +63,184 @@ function SectionHeader({ num, title }: { num: string; title: string }) {
   );
 }
 
+// ── Formular A (read-only official document) ───────────────────────────────
+function FormularADocument() {
+  const today = new Date().toLocaleDateString("de-CH", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+
+  return (
+    <div
+      className="rounded-lg overflow-hidden text-sm"
+      style={{
+        border: "2px solid #9ca3af",
+        background: "#fff",
+        color: "#111",
+      }}
+    >
+      {/* Document header */}
+      <div
+        className="flex items-start justify-between px-5 py-4"
+        style={{ borderBottom: "2px solid #9ca3af", background: "#f9fafb" }}
+      >
+        <div>
+          <p className="font-bold tracking-wide" style={{ fontSize: 15 }}>
+            FORMULAR A
+          </p>
+          <p className="text-xs mt-0.5" style={{ color: "#4b5563" }}>
+            Feststellung des wirtschaftlich Berechtigten – VSB 20 Art. 4
+          </p>
+        </div>
+        <div className="text-right shrink-0 ml-4">
+          <p className="text-xs font-bold" style={{ color: "#374151" }}>MUSTERBANK AG</p>
+          <p className="mt-0.5" style={{ fontSize: 10, color: "#6b7280" }}>
+            Formular-Nr. VSB20-A / 2024
+          </p>
+        </div>
+      </div>
+
+      {/* 1. Kontoinhaber */}
+      <div className="px-5 py-4" style={{ borderBottom: "1px solid #e5e7eb" }}>
+        <p
+          className="font-bold uppercase mb-3"
+          style={{ fontSize: 10, letterSpacing: "0.08em", color: "#6b7280" }}
+        >
+          1. Angaben zum Kontoinhaber
+        </p>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+          <div>
+            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              Name / Vorname
+            </p>
+            <p
+              className="font-medium mt-0.5 pb-1"
+              style={{ fontSize: 13, color: "#111", borderBottom: "1px solid #d1d5db" }}
+            >
+              Kowalski, Thomas
+            </p>
+          </div>
+          <div>
+            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              Geburtsdatum
+            </p>
+            <p
+              className="font-medium mt-0.5 pb-1"
+              style={{ fontSize: 13, color: "#111", borderBottom: "1px solid #d1d5db" }}
+            >
+              14.05.1989
+            </p>
+          </div>
+          <div className="col-span-2">
+            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              Wohnadresse
+            </p>
+            <p
+              className="font-medium mt-0.5 pb-1"
+              style={{ fontSize: 13, color: "#111", borderBottom: "1px solid #d1d5db" }}
+            >
+              Langstrasse 84, 8004 Zürich
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Wirtschaftlich Berechtigte Person */}
+      <div className="px-5 py-4" style={{ borderBottom: "1px solid #e5e7eb" }}>
+        <p
+          className="font-bold uppercase mb-3"
+          style={{ fontSize: 10, letterSpacing: "0.08em", color: "#6b7280" }}
+        >
+          2. Wirtschaftlich Berechtigte Person
+        </p>
+        <div className="space-y-2.5">
+          <div className="flex items-start gap-3">
+            <div
+              className="shrink-0 mt-0.5 flex items-center justify-center rounded"
+              style={{ width: 16, height: 16, border: "2px solid #111", background: "#111" }}
+            >
+              <span style={{ color: "#fff", fontSize: 10, fontWeight: 700, lineHeight: 1 }}>✓</span>
+            </div>
+            <span style={{ fontSize: 13, color: "#111" }}>
+              Der Kontoinhaber ist gleichzeitig die wirtschaftlich berechtigte Person.
+            </span>
+          </div>
+          <div className="flex items-start gap-3">
+            <div
+              className="shrink-0 mt-0.5 rounded"
+              style={{ width: 16, height: 16, border: "1px solid #d1d5db" }}
+            />
+            <span style={{ fontSize: 13, color: "#9ca3af" }}>
+              Die wirtschaftlich berechtigte Person ist eine Drittperson:{" "}
+              <span
+                className="inline-block"
+                style={{ width: 120, borderBottom: "1px solid #d1d5db", verticalAlign: "bottom" }}
+              />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Erklärung */}
+      <div className="px-5 py-4" style={{ borderBottom: "1px solid #e5e7eb", background: "#f9fafb" }}>
+        <p
+          className="font-bold uppercase mb-2"
+          style={{ fontSize: 10, letterSpacing: "0.08em", color: "#6b7280" }}
+        >
+          3. Erklärung des Kontoinhabers
+        </p>
+        <p style={{ fontSize: 11, color: "#4b5563", lineHeight: 1.6 }}>
+          Ich bestätige hiermit die Richtigkeit der obenstehenden Angaben. Ich bin mir bewusst,
+          dass die Bank gestützt auf das Geldwäschereigesetz (GwG) und die Vereinbarung über die
+          Standesregeln zur Sorgfaltspflicht (VSB 20) zur Feststellung des wirtschaftlich
+          Berechtigten verpflichtet ist. Ich verpflichte mich, der Bank Änderungen unverzüglich
+          mitzuteilen (VSB 20 Art. 7).
+        </p>
+      </div>
+
+      {/* Signature row */}
+      <div className="px-5 py-5">
+        <div className="grid grid-cols-2 gap-8">
+          <div>
+            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              Ort und Datum
+            </p>
+            <div
+              className="mt-1 pb-1"
+              style={{ borderBottom: "1px solid #6b7280" }}
+            >
+              <span style={{ fontSize: 13, color: "#111" }}>Bern, {today}</span>
+            </div>
+          </div>
+          <div>
+            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              Unterschrift Kontoinhaber
+            </p>
+            <div
+              className="mt-1 relative"
+              style={{ height: 36, borderBottom: "1px solid #6b7280" }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  bottom: 4,
+                  left: 0,
+                  fontSize: 9,
+                  color: "#d1d5db",
+                  fontStyle: "italic",
+                }}
+              >
+                Originalunterschrift
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const inputCls =
   "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary/25 transition-colors";
 
@@ -132,8 +310,12 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
     });
   }, []);
 
+  const allChecked =
+    form.ausweisVorhanden && form.formularAAusgefuellt && form.unterschriftVorhanden;
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!allChecked) return;
     onSubmit(form);
   }
 
@@ -273,10 +455,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
               onChange={(e) => set("ausweisNummer", e.target.value)}
             />
           </FieldRow>
-          <FieldRow
-            label="Ausweis gültig bis"
-            required
-          >
+          <FieldRow label="Ausweis gültig bis" required>
             <input
               type="date"
               className={inputCls}
@@ -492,43 +671,22 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
           </FieldRow>
         </div>
 
-        {/* Section 6 */}
-        <SectionHeader num="6" title="Dokumente & Steuerstatus" />
-        <div className="px-6">
-          {/* Checkboxes */}
-          <div className="py-3 border-b border-border space-y-3">
-            {[
-              { key: "ausweisVorhanden" as const, label: "Ausweis vorhanden und geprüft" },
-              {
-                key: "formularAAusgefuellt" as const,
-                label: "Formular A ausgefüllt",
-                note: "Pflicht gemäss VSB 20 – auch wenn WiBe = Kontoinhaber",
-                isTrap: true,
-              },
-              { key: "unterschriftVorhanden" as const, label: "Unterschrift des Kunden vorhanden" },
-            ].map((item) => (
-              <label
-                key={item.key}
-                className="flex items-start gap-3 cursor-pointer group"
-              >
-                <input
-                  type="checkbox"
-                  checked={form[item.key]}
-                  onChange={(e) => set(item.key, e.target.checked)}
-                  className="mt-1 accent-primary w-4 h-4"
-                />
-                <div>
-                  <span className="text-sm font-medium text-text-primary">
-                    {item.label}
-                  </span>
-                  {item.note && (
-                    <p className="text-xs text-text-secondary mt-0.5">{item.note}</p>
-                  )}
-                </div>
-              </label>
-            ))}
-          </div>
+        {/* Section 6 – Formular A */}
+        <SectionHeader num="6" title="Formular A – Wirtschaftlich Berechtigter (VSB 20)" />
+        <div className="px-6 py-5">
+          <FormularADocument />
+          <p className="text-xs text-text-secondary mt-3 flex items-start gap-1.5">
+            <span className="shrink-0">ℹ️</span>
+            <span>
+              Dieses Dokument wurde vom Kunden ausgefüllt und vorgelegt. Prüfen Sie alle Angaben
+              sorgfältig auf Übereinstimmung mit dem Gespräch und dem vorgelegten Ausweis.
+            </span>
+          </p>
+        </div>
 
+        {/* Section 7 */}
+        <SectionHeader num="7" title="Dokumente & Steuerstatus" />
+        <div className="px-6">
           <FieldRow label="US-Person (FATCA)" required>
             <select
               className={selectCls}
@@ -577,14 +735,89 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
           </FieldRow>
         </div>
 
+        {/* Checklist */}
+        <div className="px-6 pt-2 pb-5">
+          <div
+            className="rounded-xl overflow-hidden"
+            style={{
+              border: `2px solid ${allChecked ? "var(--primary, #0D1B4B)" : "#f59e0b"}`,
+            }}
+          >
+            <div
+              className="px-5 py-3 border-b"
+              style={{
+                borderColor: allChecked ? "var(--primary, #0D1B4B)" : "#f59e0b",
+                background: allChecked ? "rgba(13,27,75,0.05)" : "#fffbeb",
+              }}
+            >
+              <p className="text-sm font-bold text-text-primary">
+                Abschlusskontrolle – Pflichtbestätigungen
+              </p>
+              <p className="text-xs text-text-secondary mt-0.5">
+                Alle drei Punkte müssen vor dem Einreichen bestätigt werden.
+              </p>
+            </div>
+            <div className="px-5 py-4 space-y-4 bg-surface">
+              {[
+                {
+                  key: "ausweisVorhanden" as const,
+                  label: "Ausweis vorhanden und geprüft",
+                  note: "Typ + Nummer sichtbar, Gültigkeit geprüft",
+                },
+                {
+                  key: "formularAAusgefuellt" as const,
+                  label: "Formular A geprüft – wirtschaftlich Berechtigter korrekt erfasst",
+                  note: "Pflicht gemäss VSB 20 – auch wenn WiBe identisch mit Kontoinhaber",
+                },
+                {
+                  key: "unterschriftVorhanden" as const,
+                  label: "Unterschrift des Kunden vorhanden",
+                  note: "Originalunterschrift auf Formular A",
+                },
+              ].map((item) => (
+                <label
+                  key={item.key}
+                  className="flex items-start gap-3 cursor-pointer group"
+                >
+                  <input
+                    type="checkbox"
+                    checked={form[item.key]}
+                    onChange={(e) => set(item.key, e.target.checked)}
+                    className="mt-0.5 accent-primary w-4 h-4 shrink-0"
+                  />
+                  <div>
+                    <span className="text-sm font-medium text-text-primary">
+                      {item.label}
+                    </span>
+                    <p className="text-xs text-text-secondary mt-0.5">{item.note}</p>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Footer */}
         <div className="px-6 py-5 border-t border-border flex items-center justify-between gap-4">
           <p className="text-xs text-text-secondary">
             * Pflichtfelder · Rechtsgrundlage: VSB 20 · GwG Art. 3-5
           </p>
-          <Button type="submit" variant="primary" className="shrink-0 min-w-36">
-            KYC einreichen →
-          </Button>
+          <div className="shrink-0 flex flex-col items-end gap-1.5">
+            <Button
+              type="submit"
+              variant="primary"
+              className="min-w-40"
+              disabled={!allChecked}
+              title={!allChecked ? "Bitte alle Pflichtbestätigungen anhaken" : undefined}
+            >
+              KYC abschliessen →
+            </Button>
+            {!allChecked && (
+              <p className="text-xs text-amber-600">
+                Bitte alle Pflichtbestätigungen anhaken
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </form>
