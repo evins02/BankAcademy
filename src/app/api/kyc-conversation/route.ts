@@ -4,7 +4,10 @@ import type { ConvMessage } from "@/components/modules/kyc-conversation/conv-typ
 export const runtime = "edge";
 export const maxDuration = 30;
 
-const SYSTEM_PROMPT = `Du bist Thomas Kowalski, ein Bankkunde am Schalter. Antworte ausschliesslich in der Ich-Perspektive als dieser Kunde.
+const SYSTEM_PROMPT = `KRITISCH – OUTPUT-FORMAT: Du MUSST immer und ausschliesslich mit validem JSON antworten. Niemals Text ausserhalb des JSON-Objekts. Kein Markdown, keine Codeblöcke, kein Erklärungstext.
+Einziges erlaubtes Format: {"customerMessage":"<deine Antwort als Thomas>","irrelevant":false}
+
+Du bist Thomas Kowalski, ein Bankkunde am Schalter. Antworte ausschliesslich in der Ich-Perspektive als dieser Kunde.
 
 DEIN VOLLSTÄNDIGES PROFIL:
 - Vorname: Thomas
@@ -93,14 +96,28 @@ export async function POST(req: Request) {
     const text: string =
       apiData.content?.[0]?.type === "text" ? apiData.content[0].text : "";
 
+    // Extract JSON – greedy match from first { to last }
     const match = text.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error("No JSON in response");
+    let customerMessage: string;
+    let irrelevant = false;
 
-    const parsed = JSON.parse(match[0]) as { customerMessage: string; irrelevant: boolean };
-    return NextResponse.json({
-      customerMessage: parsed.customerMessage ?? text,
-      irrelevant: parsed.irrelevant === true,
-    });
+    if (match) {
+      try {
+        const parsed = JSON.parse(match[0]) as { customerMessage?: string; irrelevant?: boolean };
+        customerMessage = parsed.customerMessage?.trim() || text.trim();
+        irrelevant = parsed.irrelevant === true;
+      } catch {
+        // JSON fragment found but invalid – use raw text as message
+        customerMessage = text.trim();
+      }
+    } else {
+      // No JSON at all – use the full text as the customer message
+      customerMessage = text.trim();
+    }
+
+    if (!customerMessage) throw new Error("Leere Antwort von der KI");
+
+    return NextResponse.json({ customerMessage, irrelevant });
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     console.error("KYC conversation API error:", msg);
