@@ -134,7 +134,7 @@ export async function POST(req: Request) {
       } catch (parseErr) {
         console.error("JSON parse failed, reconstructed:", text, "error:", parseErr);
         // Fall back to the raw continuation (strip trailing JSON scaffolding if present)
-        customerMessage = continuation.replace(/",?\s*"irrelevant"\s*:\s*(true|false)\s*\}.*$/s, "").trim();
+        customerMessage = continuation.replace(/",?\s*"irrelevant"\s*:\s*(true|false)\s*\}[\s\S]*$/, "").trim();
       }
     } else {
       console.error("No JSON object in reconstructed text:", text);
