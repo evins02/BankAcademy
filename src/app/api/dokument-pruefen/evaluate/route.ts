@@ -2,6 +2,8 @@ import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { DOKUMENT_REGISTRY } from "@/lib/dokument-pruefen/registry";
 
+export const maxDuration = 30;
+
 interface FeedbackResult {
   correct: boolean;
   partial: boolean;

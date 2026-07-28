@@ -3,6 +3,8 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { ConvMessage } from "@/components/modules/kyc-conversation/conv-types";
 import type { KycFormData } from "@/components/modules/kyc-form/kyc-form-types";
 
+export const maxDuration = 30;
+
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 function buildSystemPrompt(): string {

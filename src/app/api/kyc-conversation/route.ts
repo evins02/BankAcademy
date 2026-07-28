@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
 import type { ConvMessage } from "@/components/modules/kyc-conversation/conv-types";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+export const runtime = "edge";
+export const maxDuration = 30;
 
 const SYSTEM_PROMPT = `Du bist Thomas Kowalski, ein Bankkunde am Schalter. Antworte ausschliesslich in der Ich-Perspektive als dieser Kunde.
 
@@ -61,21 +61,40 @@ export async function POST(req: Request) {
   try {
     const { messages } = (await req.json()) as { messages: ConvMessage[] };
 
-    const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-6",
-      max_tokens: 400,
-      system: SYSTEM_PROMPT,
-      messages: messages
-        .filter((m) => m.content && m.content.trim() !== "")
-        .map((m) => ({
-          role: m.role === "student" ? ("user" as const) : ("assistant" as const),
-          content: m.content,
-        })),
+    const filtered = messages
+      .filter((m) => m.content && m.content.trim() !== "")
+      .map((m) => ({
+        role: m.role === "student" ? "user" : "assistant",
+        content: m.content,
+      }));
+
+    const apiRes = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.ANTHROPIC_API_KEY ?? "",
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 400,
+        system: SYSTEM_PROMPT,
+        messages: filtered,
+      }),
+      signal: AbortSignal.timeout(25000),
     });
 
-    const text = response.content[0].type === "text" ? response.content[0].text : "";
+    if (!apiRes.ok) {
+      const errText = await apiRes.text();
+      throw new Error(`Anthropic ${apiRes.status}: ${errText}`);
+    }
+
+    const apiData = await apiRes.json();
+    const text: string =
+      apiData.content?.[0]?.type === "text" ? apiData.content[0].text : "";
+
     const match = text.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error("No JSON");
+    if (!match) throw new Error("No JSON in response");
 
     const parsed = JSON.parse(match[0]) as { customerMessage: string; irrelevant: boolean };
     return NextResponse.json({
