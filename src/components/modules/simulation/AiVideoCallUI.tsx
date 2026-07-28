@@ -180,12 +180,14 @@ export function AiVideoCallUI({
           </div>
         )}
 
-        {/* Main: speech bubble + avatar */}
-        <div className="flex flex-1 flex-col items-center justify-center gap-6 pb-52 pt-16">
-          {/* Speech bubble */}
+        {/* Speech bubble – absolutely positioned above customer's head */}
+        <div
+          className="absolute left-1/2 z-10 w-full max-w-sm -translate-x-1/2 px-4"
+          style={{ top: "17%" }}
+        >
           <div
             className={cn(
-              "relative z-10 max-w-sm rounded-2xl bg-white px-5 py-4 text-gray-900 shadow-lg",
+              "relative rounded-2xl bg-white px-5 py-4 text-gray-900 shadow-lg",
               isLoading && "animate-pulse"
             )}
           >
@@ -203,9 +205,19 @@ export function AiVideoCallUI({
             ) : (
               <p className="text-sm leading-relaxed">{thomasSpeech}</p>
             )}
-            <span className="absolute -bottom-2.5 left-1/2 h-5 w-5 -translate-x-1/2 rotate-45 bg-white shadow-md" />
+            {/* Arrow pointing DOWN toward the customer */}
+            <span
+              className="absolute -bottom-3 left-1/2 -translate-x-1/2"
+              style={{
+                width: 0,
+                height: 0,
+                borderLeft: "10px solid transparent",
+                borderRight: "10px solid transparent",
+                borderTop: "12px solid white",
+                filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.15))",
+              }}
+            />
           </div>
-
         </div>
 
         {/* Input area – above control bar */}
