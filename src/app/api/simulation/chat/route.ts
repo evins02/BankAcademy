@@ -94,7 +94,7 @@ export async function POST(req: Request) {
           },
           body: JSON.stringify({
             model: "claude-haiku-4-5-20251001",
-            max_tokens: 1200,
+            max_tokens: 2000,
             stream: true,
             system: systemPrompt,
             messages: anthropicMessages,
@@ -133,8 +133,8 @@ export async function POST(req: Request) {
           }
         }
 
-        // Strip markdown code fences if the model wrapped its response
-        const stripped = fullText.replace(/^```[a-z]*\n?/i, "").replace(/\n?```$/i, "").trim();
+        // Remove all code fence markers regardless of position
+        const stripped = fullText.replace(/```(?:json|javascript|js)?\n?/gi, "").trim();
         const jsonMatch = stripped.match(/\{[\s\S]*\}/);
         if (!jsonMatch) {
           send({ error: "No JSON in response: " + fullText.slice(0, 120) });
