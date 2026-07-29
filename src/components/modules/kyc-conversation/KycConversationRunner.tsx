@@ -49,7 +49,8 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
           const detail = await res.text().catch(() => "");
           throw new Error(`HTTP ${res.status}${detail ? ": " + detail : ""}`);
         }
-        const text = await res.text();
+        const data = await res.json();
+        const text: string = data.message ?? "";
 
         if (!text.trim()) throw new Error("Leere Antwort vom Server");
 
