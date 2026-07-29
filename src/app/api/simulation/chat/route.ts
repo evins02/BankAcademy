@@ -97,7 +97,8 @@ export async function POST(req: Request) {
             max_tokens: 2000,
             stream: true,
             system: systemPrompt,
-            messages: anthropicMessages,
+            // Prefill forces the model to start with { — prevents code fences
+            messages: [...anthropicMessages, { role: "assistant", content: "{" }],
           }),
         });
 
@@ -133,9 +134,9 @@ export async function POST(req: Request) {
           }
         }
 
-        // Remove all code fence markers regardless of position
-        const stripped = fullText.replace(/```(?:json|javascript|js)?\n?/gi, "").trim();
-        const jsonMatch = stripped.match(/\{[\s\S]*\}/);
+        // Reconstruct: prepend the prefilled "{" the model continued from
+        const fullJson = "{" + fullText;
+        const jsonMatch = fullJson.match(/\{[\s\S]*\}/);
         if (!jsonMatch) {
           send({ error: "No JSON in response: " + fullText.slice(0, 120) });
           controller.close();
