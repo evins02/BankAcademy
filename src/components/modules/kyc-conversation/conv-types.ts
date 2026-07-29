@@ -3,11 +3,6 @@ export interface ConvMessage {
   content: string;
 }
 
-export interface CustomerApiResponse {
-  customerMessage: string;
-  irrelevant: boolean;
-}
-
 export interface ConvEvaluation {
   result: "BESTANDEN" | "NICHT BESTANDEN";
   conversationAsked: string[];

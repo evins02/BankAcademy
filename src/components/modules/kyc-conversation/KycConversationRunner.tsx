@@ -5,7 +5,6 @@ import { ChatPhase } from "./ChatPhase";
 import { EvalFeedbackCard } from "./EvalFeedbackCard";
 import {
   type ConvMessage,
-  type CustomerApiResponse,
   type ConvEvaluation,
   DEMO_EVALUATION,
 } from "./conv-types";
@@ -47,21 +46,17 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
         });
 
         if (!res.ok) {
-          let detail = "";
-          try { detail = (await res.json()).error ?? ""; } catch { /* ignore */ }
+          const detail = await res.text().catch(() => "");
           throw new Error(`HTTP ${res.status}${detail ? ": " + detail : ""}`);
         }
-        const data: CustomerApiResponse = await res.json();
+        const text = await res.text();
 
-        if (!data.customerMessage) throw new Error("Leere Antwort vom Server");
+        if (!text.trim()) throw new Error("Leere Antwort vom Server");
 
         setMessages((prev) => [
           ...prev,
-          { role: "customer", content: data.customerMessage },
+          { role: "customer", content: text.trim() },
         ]);
-        if (data.irrelevant) {
-          setIrrelevantCount((n) => n + 1);
-        }
       } catch (err) {
         // Roll back the student message so history stays clean for retry
         setMessages(messages);
