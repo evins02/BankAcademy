@@ -10,6 +10,9 @@ const CUSTOMER_DOSSIER = [
   { label: "Geburtsdatum", value: "14.06.1985" },
   { label: "Nationalität", value: "Schweizer" },
   { label: "Wohnsitz", value: "Bergstrasse 22, 3007 Bern" },
+  { label: "Ausweistyp", value: "Ausländischer Reisepass" },
+  { label: "Ausweisnummer", value: "X1234567" },
+  { label: "Gültig bis", value: "14.05.2027" },
   { label: "Beruf", value: "Projektleiter IT, Swisscom AG (100%)" },
   { label: "Zivilstand", value: "Verheiratet, 2 Kinder" },
   { label: "Einkommen", value: "CHF 95'000/Jahr netto" },
@@ -201,21 +204,10 @@ function FormularADocument() {
 
       {/* Signature row */}
       <div className="px-5 py-5">
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-3 gap-6">
           <div>
             <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Ort und Datum
-            </p>
-            <div
-              className="mt-1 pb-1"
-              style={{ borderBottom: "1px solid #6b7280" }}
-            >
-              <span style={{ fontSize: 13, color: "#111" }}>Bern, {today}</span>
-            </div>
-          </div>
-          <div>
-            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Unterschrift Kontoinhaber
+              Unterschrift Kunde
             </p>
             <div
               className="mt-1 relative"
@@ -233,6 +225,39 @@ function FormularADocument() {
               >
                 Originalunterschrift
               </span>
+            </div>
+          </div>
+          <div>
+            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              Unterschrift Berater
+            </p>
+            <div
+              className="mt-1 relative"
+              style={{ height: 36, borderBottom: "1px solid #6b7280" }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  bottom: 4,
+                  left: 0,
+                  fontSize: 9,
+                  color: "#d1d5db",
+                  fontStyle: "italic",
+                }}
+              >
+                Originalunterschrift
+              </span>
+            </div>
+          </div>
+          <div>
+            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              Ort und Datum
+            </p>
+            <div
+              className="mt-1 pb-1"
+              style={{ borderBottom: "1px solid #6b7280" }}
+            >
+              <span style={{ fontSize: 13, color: "#111" }}>Zürich, {today}</span>
             </div>
           </div>
         </div>
@@ -442,9 +467,10 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
               onChange={(e) => set("ausweisTyp", e.target.value)}
             >
               <option value="">— bitte wählen —</option>
-              <option>Pass</option>
-              <option>ID</option>
-              <option>Aufenthaltsbewilligung</option>
+              <option>Schweizer Pass</option>
+              <option>Identitätskarte</option>
+              <option>Ausländischer Reisepass</option>
+              <option>Ausländische ID</option>
             </select>
           </FieldRow>
           <FieldRow label="Ausweis Nummer" required>
@@ -761,7 +787,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
               {[
                 {
                   key: "ausweisVorhanden" as const,
-                  label: "Ausweis vorhanden und geprüft",
+                  label: "Ausweis vorhanden und geprüft – Ausländischer Reisepass, Nr. X1234567, gültig bis 14.05.2027",
                   note: "Typ + Nummer sichtbar, Gültigkeit geprüft",
                 },
                 {
