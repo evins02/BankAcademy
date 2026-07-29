@@ -5,9 +5,12 @@ export async function POST(req: Request) {
 
   const systemPrompt = `Du bist Thomas Kowalski, ein polnischer Staatsbürger der in Zürich wohnt und ein Bankkonto eröffnen möchte. Antworte ausschliesslich als dieser Kunde auf Deutsch. Kurze natürliche Antworten wie in einem echten Gespräch am Bankschalter. Kein JSON, keine Formatierung, nur normaler Text.`
 
-  const filteredMessages = messages.filter((msg: any) =>
-    msg.content && msg.content.toString().trim() !== ''
-  )
+  const filteredMessages = messages
+    .filter((msg: any) => msg.content && msg.content.toString().trim() !== '')
+    .map((msg: any) => ({
+      role: msg.role === 'student' ? 'user' : 'assistant',
+      content: msg.content
+    }))
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
