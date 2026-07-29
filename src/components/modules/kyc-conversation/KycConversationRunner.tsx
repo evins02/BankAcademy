@@ -46,7 +46,8 @@ export function KycConversationRunner({ onBack }: KycConversationRunnerProps) {
         });
 
         if (!res.ok) {
-          const detail = await res.text().catch(() => "");
+          let detail = "";
+          try { detail = (await res.json()).error ?? ""; } catch { detail = await res.text().catch(() => ""); }
           throw new Error(`HTTP ${res.status}${detail ? ": " + detail : ""}`);
         }
         const data = await res.json();
