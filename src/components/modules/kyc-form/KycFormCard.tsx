@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { ChevronDown, ChevronUp, User, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type KycFormData, EMPTY_FORM } from "./kyc-form-types";
@@ -68,8 +68,80 @@ function SectionHeader({ num, title }: { num: string; title: string }) {
   );
 }
 
-// ── Formular A (read-only official document) ───────────────────────────────
-function FormularADocument() {
+// ── Signature Pad ──────────────────────────────────────────────────────────
+function SignaturePad({ onChange }: { onChange: (hasSignature: boolean) => void }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const padRef = useRef<any>(null);
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let pad: any;
+    import("signature_pad").then(({ default: SP }) => {
+      pad = new SP(canvas, {
+        backgroundColor: "rgb(249, 250, 251)",
+        penColor: "rgb(17, 24, 39)",
+      });
+      pad.addEventListener("endStroke", () => onChangeRef.current(!pad.isEmpty()));
+      padRef.current = pad;
+    });
+    return () => {
+      pad?.off();
+    };
+  }, []);
+
+  return (
+    <div className="relative inline-block">
+      <canvas
+        ref={canvasRef}
+        width={280}
+        height={100}
+        style={{
+          display: "block",
+          background: "#f9fafb",
+          border: "1px solid #d1d5db",
+          borderRadius: 4,
+          cursor: "crosshair",
+        }}
+      />
+      <button
+        type="button"
+        onClick={() => {
+          padRef.current?.clear();
+          onChangeRef.current(false);
+        }}
+        style={{
+          position: "absolute",
+          bottom: 4,
+          right: 4,
+          fontSize: 10,
+          lineHeight: 1,
+          color: "#9ca3af",
+          background: "white",
+          border: "1px solid #e5e7eb",
+          borderRadius: 3,
+          padding: "2px 6px",
+          cursor: "pointer",
+        }}
+      >
+        ✕
+      </button>
+    </div>
+  );
+}
+
+// ── Formular A (official document with live signature + visum) ─────────────
+interface FormularADocumentProps {
+  onSignatureChange: (hasSignature: boolean) => void;
+  onVisumChange: (checked: boolean) => void;
+  visumBerater: boolean;
+}
+
+function FormularADocument({ onSignatureChange, onVisumChange, visumBerater }: FormularADocumentProps) {
   const today = new Date().toLocaleDateString("de-CH", {
     day: "2-digit",
     month: "2-digit",
@@ -206,61 +278,36 @@ function FormularADocument() {
 
       {/* Signature row */}
       <div className="px-5 py-5">
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 gap-8">
+          {/* LEFT – Unterschrift Kunde (drawable canvas) */}
           <div>
-            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }} className="mb-1.5">
               Unterschrift Kunde
             </p>
-            <div
-              className="mt-1 relative"
-              style={{ height: 36, borderBottom: "1px solid #6b7280" }}
-            >
-              <span
-                style={{
-                  position: "absolute",
-                  bottom: 4,
-                  left: 0,
-                  fontSize: 9,
-                  color: "#d1d5db",
-                  fontStyle: "italic",
-                }}
-              >
-                Originalunterschrift
-              </span>
-            </div>
-          </div>
-          <div>
-            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Unterschrift Berater
+            <SignaturePad onChange={onSignatureChange} />
+            <p className="mt-2" style={{ fontSize: 11, color: "#4b5563" }}>
+              Ort, Datum: Zürich, {today}
             </p>
-            <div
-              className="mt-1 relative"
-              style={{ height: 36, borderBottom: "1px solid #6b7280" }}
-            >
-              <span
-                style={{
-                  position: "absolute",
-                  bottom: 4,
-                  left: 0,
-                  fontSize: 9,
-                  color: "#d1d5db",
-                  fontStyle: "italic",
-                }}
-              >
-                Originalunterschrift
-              </span>
-            </div>
           </div>
+          {/* RIGHT – Visum Berater (checkbox) */}
           <div>
-            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Ort und Datum
+            <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }} className="mb-2">
+              Visum Berater
             </p>
-            <div
-              className="mt-1 pb-1"
-              style={{ borderBottom: "1px solid #6b7280" }}
-            >
-              <span style={{ fontSize: 13, color: "#111" }}>Zürich, {today}</span>
-            </div>
+            <label className="flex items-start gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={visumBerater}
+                onChange={(e) => onVisumChange(e.target.checked)}
+                className="mt-0.5 accent-primary w-4 h-4 shrink-0"
+              />
+              <span style={{ fontSize: 13, color: "#111", lineHeight: 1.4 }}>
+                Ich bestätige die Identifikation des Kunden
+              </span>
+            </label>
+            <p className="mt-3" style={{ fontSize: 11, color: "#4b5563" }}>
+              Datum: {today}
+            </p>
           </div>
         </div>
       </div>
@@ -330,8 +377,9 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
       artGeschaeftsbeziehung: "Einfache Bankbeziehung",
       ausweisVorhanden: true,
       formularAAusgefuellt: false, // TRAP: missing
+      unterschriftVorhanden: false, // auto-managed by canvas
+      visumBerater: false,
       wohnsitzbestaetigung: false, // TRAP: missing for Ausweis B
-      unterschriftVorhanden: true,
       usPerson: "Nein",
       usTin: "",
       geburtsorUSA: "Nein",
@@ -344,6 +392,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
     form.ausweisVorhanden &&
     form.formularAAusgefuellt &&
     form.unterschriftVorhanden &&
+    form.visumBerater &&
     (!requiresWohnsitz || form.wohnsitzbestaetigung);
 
   function handleSubmit(e: React.FormEvent) {
@@ -721,7 +770,11 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
         {/* Section 6 – Formular A */}
         <SectionHeader num="6" title="Formular A – Wirtschaftlich Berechtigter (VSB 20)" />
         <div className="px-6 py-5">
-          <FormularADocument />
+          <FormularADocument
+            onSignatureChange={(v) => set("unterschriftVorhanden", v)}
+            onVisumChange={(v) => set("visumBerater", v)}
+            visumBerater={form.visumBerater}
+          />
           <p className="text-xs text-text-secondary mt-3 flex items-start gap-1.5">
             <span className="shrink-0">ℹ️</span>
             <span>
@@ -812,43 +865,60 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
                     label: "Ausweis vorhanden und geprüft – Ausländischer Reisepass, Nr. X1234567, gültig bis 14.05.2027",
                     note: "Typ + Nummer sichtbar, Gültigkeit geprüft",
                     show: true,
+                    auto: false,
                   },
                   {
                     key: "formularAAusgefuellt" as const,
                     label: "Formular A geprüft – wirtschaftlich Berechtigter korrekt erfasst",
                     note: "Pflicht gemäss VSB 20 – auch wenn WiBe identisch mit Kontoinhaber",
                     show: true,
+                    auto: false,
                   },
                   {
                     key: "unterschriftVorhanden" as const,
-                    label: "Unterschrift des Kunden vorhanden",
-                    note: "Originalunterschrift auf Formular A",
+                    label: "Unterschrift Kunde vorhanden",
+                    note: "Wird automatisch gesetzt sobald das Unterschriftsfeld ausgefüllt ist",
                     show: true,
+                    auto: true,
+                  },
+                  {
+                    key: "visumBerater" as const,
+                    label: "Visum Berater gesetzt",
+                    note: "Wird automatisch gesetzt sobald die Berater-Bestätigung im Formular A angehakt ist",
+                    show: true,
+                    auto: true,
                   },
                   {
                     key: "wohnsitzbestaetigung" as const,
                     label: "Wohnsitzbestätigung vorhanden (Pflicht bei Ausweis B)",
                     note: "Bei Aufenthaltsbewilligung B ist eine aktuelle Wohnsitzbestätigung/Meldebestätigung zwingend – der Wohnsitz auf dem Ausländerausweis ist nicht immer aktuell.",
                     show: requiresWohnsitz,
+                    auto: false,
                   },
-                ] as { key: keyof typeof form; label: string; note: string; show: boolean }[]
+                ] as { key: keyof typeof form; label: string; note: string; show: boolean; auto: boolean }[]
               )
                 .filter((item) => item.show)
                 .map((item) => (
                   <label
                     key={item.key}
-                    className="flex items-start gap-3 cursor-pointer group"
+                    className="flex items-start gap-3"
+                    style={item.auto ? { pointerEvents: "none" } : { cursor: "pointer" }}
                   >
                     <input
                       type="checkbox"
                       checked={form[item.key] as boolean}
-                      onChange={(e) => set(item.key, e.target.checked as KycFormData[typeof item.key])}
-                      className="mt-0.5 accent-primary w-4 h-4 shrink-0"
+                      onChange={item.auto ? () => {} : (e) => set(item.key, e.target.checked as KycFormData[typeof item.key])}
+                      className="mt-0.5 w-4 h-4 shrink-0 accent-primary"
                     />
                     <div>
-                      <span className="text-sm font-medium text-text-primary">
-                        {item.label}
-                      </span>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-sm font-medium text-text-primary">{item.label}</span>
+                        {item.auto && (
+                          <span className="text-[10px] text-text-secondary border border-border rounded px-1.5 py-0.5 leading-none">
+                            auto
+                          </span>
+                        )}
+                      </div>
                       <p className="text-xs text-text-secondary mt-0.5">{item.note}</p>
                     </div>
                   </label>
