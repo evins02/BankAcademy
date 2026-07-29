@@ -78,7 +78,7 @@ export const EMPTY_FORM: KycFormData = {
   artGeschaeftsbeziehung: "",
   ausweisVorhanden: false,
   formularAAusgefuellt: false,
-  unterschriftVorhanden: true,
+  unterschriftVorhanden: false,
   wohnsitzbestaetigung: false,
   usPerson: "",
   usTin: "",

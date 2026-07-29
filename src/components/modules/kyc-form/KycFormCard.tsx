@@ -70,11 +70,9 @@ function SectionHeader({ num, title }: { num: string; title: string }) {
 }
 
 // ── Visum-Berater signature canvas (signature_pad) ─────────────────────────
-function VisumBeraterCanvas({ onChange }: { onChange: (hasData: boolean) => void }) {
+function VisumBeraterCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const padRef = useRef<SignaturePad | null>(null);
-  const onChangeRef = useRef(onChange);
-  onChangeRef.current = onChange;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -85,8 +83,6 @@ function VisumBeraterCanvas({ onChange }: { onChange: (hasData: boolean) => void
       penColor: "#1a1a2e",
     });
     padRef.current = pad;
-    const onEnd = () => onChangeRef.current(!pad.isEmpty());
-    pad.addEventListener("endStroke", onEnd);
     return () => {
       pad.off();
       padRef.current = null;
@@ -95,7 +91,6 @@ function VisumBeraterCanvas({ onChange }: { onChange: (hasData: boolean) => void
 
   const clear = () => {
     padRef.current?.clear();
-    onChangeRef.current(false);
   };
 
   return (
@@ -138,11 +133,7 @@ function VisumBeraterCanvas({ onChange }: { onChange: (hasData: boolean) => void
 }
 
 // ── Formular A (official document with drawable Visum Berater) ──────────────
-interface FormularADocumentProps {
-  onVisumChange: (hasData: boolean) => void;
-}
-
-function FormularADocument({ onVisumChange }: FormularADocumentProps) {
+function FormularADocument() {
   const today = new Date().toLocaleDateString("de-CH", {
     day: "2-digit",
     month: "2-digit",
@@ -308,7 +299,7 @@ function FormularADocument({ onVisumChange }: FormularADocumentProps) {
             <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }} className="mb-1.5">
               Visum Berater
             </p>
-            <VisumBeraterCanvas onChange={onVisumChange} />
+            <VisumBeraterCanvas />
             <p className="mt-2" style={{ fontSize: 11, color: "#4b5563" }}>
               Datum: {today}
             </p>
@@ -335,7 +326,6 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
   const [dossierOpen, setDossierOpen] = useState(true);
   const [form, setForm] = useState<KycFormData>(EMPTY_FORM);
   const [visumGesetzt, setVisumGesetzt] = useState(false);
-  const handleVisumChange = useCallback((hasData: boolean) => setVisumGesetzt(hasData), []);
 
   const set = useCallback(
     <K extends keyof KycFormData>(field: K, value: KycFormData[K]) => {
@@ -383,7 +373,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
       artGeschaeftsbeziehung: "Einfache Bankbeziehung",
       ausweisVorhanden: true,
       formularAAusgefuellt: false, // TRAP: missing
-      unterschriftVorhanden: true,
+      unterschriftVorhanden: false,
       wohnsitzbestaetigung: false, // TRAP: missing for Ausweis B
       usPerson: "Nein",
       usTin: "",
@@ -396,6 +386,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
   const allChecked =
     form.ausweisVorhanden &&
     form.formularAAusgefuellt &&
+    form.unterschriftVorhanden &&
     visumGesetzt &&
     (!requiresWohnsitz || form.wohnsitzbestaetigung);
 
@@ -774,7 +765,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
         {/* Section 6 – Formular A */}
         <SectionHeader num="6" title="Formular A – Wirtschaftlich Berechtigter (VSB 20)" />
         <div className="px-6 py-5">
-          <FormularADocument onVisumChange={handleVisumChange} />
+          <FormularADocument />
           <p className="text-xs text-text-secondary mt-3 flex items-start gap-1.5">
             <span className="shrink-0">ℹ️</span>
             <span>
@@ -897,44 +888,39 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
                   </label>
                 ))}
 
-              {/* Auto-managed display items */}
-              {[
-                {
-                  key: "unterschriftKunde",
-                  label: "Unterschrift Kunde vorhanden und geprüft",
-                  note: "Vorgefertigte Originalunterschrift auf Formular A",
-                  checked: form.unterschriftVorhanden,
-                },
-                {
-                  key: "visumBerater",
-                  label: "Visum Berater gesetzt",
-                  note: "Ihre Unterschrift als Berater im Formular A (Feld rechts oben)",
-                  checked: visumGesetzt,
-                },
-              ].map((item) => (
-                <div key={item.key} className="flex items-start gap-3">
-                  <div
-                    className="mt-0.5 shrink-0 rounded border flex items-center justify-center"
-                    style={{
-                      width: 16,
-                      height: 16,
-                      background: item.checked ? "var(--primary, #0D1B4B)" : "#f3f4f6",
-                      borderColor: item.checked ? "var(--primary, #0D1B4B)" : "#d1d5db",
-                    }}
-                  >
-                    {item.checked && (
-                      <span style={{ color: "#fff", fontSize: 9, lineHeight: 1, fontWeight: 700 }}>✓</span>
-                    )}
-                  </div>
-                  <div>
-                    <span className="text-sm font-medium text-text-primary">{item.label}</span>
-                    <p className="text-xs text-text-secondary mt-0.5">{item.note}</p>
-                    <span className="text-xs" style={{ color: "#9ca3af", fontStyle: "italic" }}>
-                      automatisch
-                    </span>
-                  </div>
+              {/* Manual checkboxes – lower two */}
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={form.unterschriftVorhanden}
+                  onChange={(e) => set("unterschriftVorhanden", e.target.checked)}
+                  className="mt-0.5 accent-primary w-4 h-4 shrink-0"
+                />
+                <div>
+                  <span className="text-sm font-medium text-text-primary">
+                    Unterschrift Kunde vorhanden und geprüft
+                  </span>
+                  <p className="text-xs text-text-secondary mt-0.5">
+                    Originalunterschrift auf Formular A sichtbar und geprüft
+                  </p>
                 </div>
-              ))}
+              </label>
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={visumGesetzt}
+                  onChange={(e) => setVisumGesetzt(e.target.checked)}
+                  className="mt-0.5 accent-primary w-4 h-4 shrink-0"
+                />
+                <div>
+                  <span className="text-sm font-medium text-text-primary">
+                    Visum Berater gesetzt
+                  </span>
+                  <p className="text-xs text-text-secondary mt-0.5">
+                    Ihre Unterschrift als Berater im Formular A (Feld rechts oben)
+                  </p>
+                </div>
+              </label>
             </div>
           </div>
         </div>
