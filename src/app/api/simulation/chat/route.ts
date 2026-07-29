@@ -72,10 +72,12 @@ export async function POST(req: Request) {
   }
 
   const systemPrompt = BASE_PROMPT + (DIFFICULTY_SUFFIX[difficulty] ?? "");
-  const anthropicMessages = messages.map((m) => ({
-    role: m.role === "student" ? "user" : "assistant",
-    content: m.content,
-  }));
+  const anthropicMessages = messages
+    .filter((m) => m.content && m.content.toString().trim() !== "")
+    .map((m) => ({
+      role: m.role === "student" ? "user" : "assistant",
+      content: m.content,
+    }));
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -91,7 +93,7 @@ export async function POST(req: Request) {
             "anthropic-version": "2023-06-01",
           },
           body: JSON.stringify({
-            model: "claude-sonnet-4-6",
+            model: "claude-haiku-4-5-20251001",
             max_tokens: 500,
             stream: true,
             system: systemPrompt,

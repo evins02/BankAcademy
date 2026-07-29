@@ -4,12 +4,7 @@ import type { ConvMessage } from "@/components/modules/kyc-conversation/conv-typ
 export const runtime = "edge";
 export const maxDuration = 30;
 
-const SYSTEM_PROMPT = `KRITISCH – OUTPUT-FORMAT: Du MUSST immer und ausschliesslich mit validem JSON antworten. Niemals Text ausserhalb des JSON-Objekts. Kein Markdown, keine Codeblöcke, kein Erklärungstext.
-Einziges erlaubtes Format: {"customerMessage":"<deine Antwort als Thomas>","irrelevant":false}
-
-WICHTIG – ANFÜHRUNGSZEICHEN: Verwende NIEMALS doppelte Anführungszeichen (") innerhalb des customerMessage-Wertes. Schreibe natürlichen Text ohne Anführungszeichen, oder verwende einfache Anführungszeichen (') oder «Guillemets». Beispiel FALSCH: {"customerMessage":"Er sagte \"Hallo\"","irrelevant":false} — Beispiel RICHTIG: {"customerMessage":"Er sagte 'Hallo'","irrelevant":false}
-
-Du bist Thomas Kowalski, ein Bankkunde am Schalter. Antworte ausschliesslich in der Ich-Perspektive als dieser Kunde.
+const SYSTEM_PROMPT = `Du bist Thomas Kowalski, ein Bankkunde am Schalter. Antworte ausschliesslich in der Ich-Perspektive als dieser Kunde. Antworte in natürlichem Deutsch, 1–2 Sätze, ohne Erklärungen oder Formatierungen.
 
 DEIN VOLLSTÄNDIGES PROFIL:
 - Vorname: Thomas
@@ -55,12 +50,7 @@ Berater: «Wann wurden Sie geboren?» → «Am 14. Juni 1985.»
 Berater: «Sind Sie US-Bürger?» → «Nein, bin ich nicht.»
 Berater: «Haben Sie eine Greencard?» → «Nein.»
 
-IRRELEVANZ-BEWERTUNG:
-Beurteile nach jeder Frage des Beraters ob sie sachlich mit der Kontoeröffnung zu tun hat.
-irrelevant = true: Smalltalk, persönliche Meinungen, Themen ohne Bezug zur Kontoeröffnung (z.B. «Wie war Ihr Wochenende?», «Was essen Sie gerne?»)
-irrelevant = false: alle Fragen zu deinen Personalien, Beruf, Finanzen, Compliance-Status oder Ausweis
-
-Antworte NUR als JSON ohne Markdown: {"customerMessage":"<Antwort als Thomas>","irrelevant":false}`;
+IRRELEVANTE FRAGEN: Bei Smalltalk oder themenfremden Fragen antworte kurz und natürlich ausweichend (z.B. «Das spielt hier keine Rolle.» oder «Ich würde lieber beim Thema bleiben.»).`;
 
 export async function POST(req: Request) {
   try {
@@ -73,13 +63,6 @@ export async function POST(req: Request) {
         content: m.content,
       }));
 
-    // Prefill forces Claude to start with the JSON structure — eliminates "No JSON" errors
-    const PREFILL = '{"customerMessage":"';
-    const messagesWithPrefill = [
-      ...filtered,
-      { role: "assistant" as const, content: PREFILL },
-    ];
-
     const apiRes = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -88,10 +71,10 @@ export async function POST(req: Request) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 400,
+        model: "claude-haiku-4-5-20251001",
+        max_tokens: 200,
         system: SYSTEM_PROMPT,
-        messages: messagesWithPrefill,
+        messages: filtered,
       }),
       signal: AbortSignal.timeout(25000),
     });
@@ -102,48 +85,12 @@ export async function POST(req: Request) {
     }
 
     const apiData = await apiRes.json();
-    // Continuation is what Claude generated AFTER the prefill — reconstruct the full JSON
-    const continuation: string =
-      apiData.content?.[0]?.type === "text" ? apiData.content[0].text : "";
-    const text = PREFILL + continuation;
-
-    // Extract the first well-formed JSON object via bracket counting
-    function extractFirstJson(src: string): string | null {
-      let depth = 0, start = -1, inString = false, escape = false;
-      for (let i = 0; i < src.length; i++) {
-        const ch = src[i];
-        if (escape) { escape = false; continue; }
-        if (ch === "\\" && inString) { escape = true; continue; }
-        if (ch === '"') { inString = !inString; continue; }
-        if (inString) continue;
-        if (ch === "{") { if (depth === 0) start = i; depth++; }
-        else if (ch === "}") { depth--; if (depth === 0 && start !== -1) return src.slice(start, i + 1); }
-      }
-      return null;
-    }
-
-    const jsonStr = extractFirstJson(text);
-    let customerMessage: string;
-    let irrelevant = false;
-
-    if (jsonStr) {
-      try {
-        const parsed = JSON.parse(jsonStr) as { customerMessage?: string; irrelevant?: boolean };
-        customerMessage = parsed.customerMessage?.trim() || continuation.trim();
-        irrelevant = parsed.irrelevant === true;
-      } catch (parseErr) {
-        console.error("JSON parse failed, reconstructed:", text, "error:", parseErr);
-        // Fall back to the raw continuation (strip trailing JSON scaffolding if present)
-        customerMessage = continuation.replace(/",?\s*"irrelevant"\s*:\s*(true|false)\s*\}[\s\S]*$/, "").trim();
-      }
-    } else {
-      console.error("No JSON object in reconstructed text:", text);
-      customerMessage = continuation.trim();
-    }
+    const customerMessage: string =
+      (apiData.content?.[0]?.type === "text" ? apiData.content[0].text : "").trim();
 
     if (!customerMessage) throw new Error("Leere Antwort von der KI");
 
-    return NextResponse.json({ customerMessage, irrelevant });
+    return NextResponse.json({ customerMessage, irrelevant: false });
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     console.error("KYC conversation API error:", msg);

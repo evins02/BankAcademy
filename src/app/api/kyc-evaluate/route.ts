@@ -3,6 +3,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { ConvMessage } from "@/components/modules/kyc-conversation/conv-types";
 import type { KycFormData } from "@/components/modules/kyc-form/kyc-form-types";
 
+export const runtime = "edge";
 export const maxDuration = 30;
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -78,7 +79,7 @@ export async function POST(req: Request) {
       .join("\n");
 
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-6",
+      model: "claude-haiku-4-5-20251001",
       max_tokens: 1600,
       system: buildSystemPrompt(),
       messages: [

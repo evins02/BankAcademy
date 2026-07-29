@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import type { HypothekFormData } from "@/components/modules/hypothek-antrag/hypothek-antrag-types";
 
+export const runtime = "edge";
 export const maxDuration = 30;
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -70,7 +71,7 @@ export async function POST(req: Request) {
     const { formData } = (await req.json()) as { formData: HypothekFormData };
 
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-6",
+      model: "claude-haiku-4-5-20251001",
       max_tokens: 1400,
       system: SYSTEM_PROMPT,
       messages: [
