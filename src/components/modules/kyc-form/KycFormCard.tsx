@@ -8,7 +8,7 @@ import { type KycFormData, EMPTY_FORM } from "./kyc-form-types";
 const CUSTOMER_DOSSIER = [
   { label: "Name", value: "Thomas Kowalski" },
   { label: "Geburtsdatum", value: "14.06.1985" },
-  { label: "Nationalität", value: "Schweizer" },
+  { label: "Nationalität", value: "Polnisch" },
   { label: "Wohnsitz", value: "Bergstrasse 22, 3007 Bern" },
   { label: "Ausweistyp", value: "Ausländischer Reisepass" },
   { label: "Ausweisnummer", value: "X1234567" },
@@ -307,7 +307,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
       geburtsdatum: "1985-06-14",
       nationalitaet: "Schweizer",
       wohnsitz: "Bergstrasse 22, 3007 Bern",
-      ausweisTyp: "Pass",
+      ausweisTyp: "Ausländischer Reisepass",
       ausweisNummer: "X1234567",
       ausweisGueltigBis: "2024-03-12", // TRAP: expired
       beruf: "Projektleiter IT",
