@@ -13,6 +13,8 @@ const CUSTOMER_DOSSIER = [
   { label: "Ausweistyp", value: "Ausländischer Reisepass" },
   { label: "Ausweisnummer", value: "X1234567" },
   { label: "Gültig bis", value: "14.05.2027" },
+  { label: "Aufenthaltsbewilligung", value: "Ausweis B" },
+  { label: "Wohnsitzbestätigung", value: "vorhanden" },
   { label: "Beruf", value: "Projektleiter IT, Swisscom AG (100%)" },
   { label: "Zivilstand", value: "Verheiratet, 2 Kinder" },
   { label: "Einkommen", value: "CHF 95'000/Jahr netto" },
@@ -310,6 +312,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
       ausweisTyp: "Ausländischer Reisepass",
       ausweisNummer: "X1234567",
       ausweisGueltigBis: "2024-03-12", // TRAP: expired
+      aufenthaltsbewilligung: "Ausweis B",
       beruf: "Projektleiter IT",
       arbeitgeber: "Swisscom AG",
       beschaeftigungsgrad: "100%",
@@ -327,6 +330,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
       artGeschaeftsbeziehung: "Einfache Bankbeziehung",
       ausweisVorhanden: true,
       formularAAusgefuellt: false, // TRAP: missing
+      wohnsitzbestaetigung: false, // TRAP: missing for Ausweis B
       unterschriftVorhanden: true,
       usPerson: "Nein",
       usTin: "",
@@ -335,8 +339,12 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
     });
   }, []);
 
+  const requiresWohnsitz = form.aufenthaltsbewilligung === "Ausweis B";
   const allChecked =
-    form.ausweisVorhanden && form.formularAAusgefuellt && form.unterschriftVorhanden;
+    form.ausweisVorhanden &&
+    form.formularAAusgefuellt &&
+    form.unterschriftVorhanden &&
+    (!requiresWohnsitz || form.wohnsitzbestaetigung);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -488,6 +496,19 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
               value={form.ausweisGueltigBis}
               onChange={(e) => set("ausweisGueltigBis", e.target.value)}
             />
+          </FieldRow>
+          <FieldRow label="Aufenthaltsbewilligung">
+            <select
+              className={selectCls}
+              value={form.aufenthaltsbewilligung}
+              onChange={(e) => set("aufenthaltsbewilligung", e.target.value)}
+            >
+              <option value="">— keine / nicht zutreffend —</option>
+              <option>Ausweis B</option>
+              <option>Ausweis C</option>
+              <option>Ausweis L</option>
+              <option>Ausweis G</option>
+            </select>
           </FieldRow>
         </div>
 
@@ -784,41 +805,54 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
               </p>
             </div>
             <div className="px-5 py-4 space-y-4 bg-surface">
-              {[
-                {
-                  key: "ausweisVorhanden" as const,
-                  label: "Ausweis vorhanden und geprüft – Ausländischer Reisepass, Nr. X1234567, gültig bis 14.05.2027",
-                  note: "Typ + Nummer sichtbar, Gültigkeit geprüft",
-                },
-                {
-                  key: "formularAAusgefuellt" as const,
-                  label: "Formular A geprüft – wirtschaftlich Berechtigter korrekt erfasst",
-                  note: "Pflicht gemäss VSB 20 – auch wenn WiBe identisch mit Kontoinhaber",
-                },
-                {
-                  key: "unterschriftVorhanden" as const,
-                  label: "Unterschrift des Kunden vorhanden",
-                  note: "Originalunterschrift auf Formular A",
-                },
-              ].map((item) => (
-                <label
-                  key={item.key}
-                  className="flex items-start gap-3 cursor-pointer group"
-                >
-                  <input
-                    type="checkbox"
-                    checked={form[item.key]}
-                    onChange={(e) => set(item.key, e.target.checked)}
-                    className="mt-0.5 accent-primary w-4 h-4 shrink-0"
-                  />
-                  <div>
-                    <span className="text-sm font-medium text-text-primary">
-                      {item.label}
-                    </span>
-                    <p className="text-xs text-text-secondary mt-0.5">{item.note}</p>
-                  </div>
-                </label>
-              ))}
+              {(
+                [
+                  {
+                    key: "ausweisVorhanden" as const,
+                    label: "Ausweis vorhanden und geprüft – Ausländischer Reisepass, Nr. X1234567, gültig bis 14.05.2027",
+                    note: "Typ + Nummer sichtbar, Gültigkeit geprüft",
+                    show: true,
+                  },
+                  {
+                    key: "formularAAusgefuellt" as const,
+                    label: "Formular A geprüft – wirtschaftlich Berechtigter korrekt erfasst",
+                    note: "Pflicht gemäss VSB 20 – auch wenn WiBe identisch mit Kontoinhaber",
+                    show: true,
+                  },
+                  {
+                    key: "unterschriftVorhanden" as const,
+                    label: "Unterschrift des Kunden vorhanden",
+                    note: "Originalunterschrift auf Formular A",
+                    show: true,
+                  },
+                  {
+                    key: "wohnsitzbestaetigung" as const,
+                    label: "Wohnsitzbestätigung vorhanden (Pflicht bei Ausweis B)",
+                    note: "Bei Aufenthaltsbewilligung B ist eine aktuelle Wohnsitzbestätigung/Meldebestätigung zwingend – der Wohnsitz auf dem Ausländerausweis ist nicht immer aktuell.",
+                    show: requiresWohnsitz,
+                  },
+                ] as { key: keyof typeof form; label: string; note: string; show: boolean }[]
+              )
+                .filter((item) => item.show)
+                .map((item) => (
+                  <label
+                    key={item.key}
+                    className="flex items-start gap-3 cursor-pointer group"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={form[item.key] as boolean}
+                      onChange={(e) => set(item.key, e.target.checked as KycFormData[typeof item.key])}
+                      className="mt-0.5 accent-primary w-4 h-4 shrink-0"
+                    />
+                    <div>
+                      <span className="text-sm font-medium text-text-primary">
+                        {item.label}
+                      </span>
+                      <p className="text-xs text-text-secondary mt-0.5">{item.note}</p>
+                    </div>
+                  </label>
+                ))}
             </div>
           </div>
         </div>

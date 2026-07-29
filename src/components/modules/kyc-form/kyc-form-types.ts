@@ -7,6 +7,7 @@ export interface KycFormData {
   ausweisTyp: string;
   ausweisNummer: string;
   ausweisGueltigBis: string;
+  aufenthaltsbewilligung: string;
 
   // Section 2 – Beruflich
   beruf: string;
@@ -35,6 +36,7 @@ export interface KycFormData {
   ausweisVorhanden: boolean;
   formularAAusgefuellt: boolean;
   unterschriftVorhanden: boolean;
+  wohnsitzbestaetigung: boolean;
   usPerson: string;
   usTin: string;
   geburtsorUSA: string;
@@ -58,6 +60,7 @@ export const EMPTY_FORM: KycFormData = {
   ausweisTyp: "",
   ausweisNummer: "",
   ausweisGueltigBis: "",
+  aufenthaltsbewilligung: "",
   beruf: "",
   arbeitgeber: "",
   beschaeftigungsgrad: "",
@@ -76,6 +79,7 @@ export const EMPTY_FORM: KycFormData = {
   ausweisVorhanden: false,
   formularAAusgefuellt: false,
   unterschriftVorhanden: false,
+  wohnsitzbestaetigung: false,
   usPerson: "",
   usTin: "",
   geburtsorUSA: "",
