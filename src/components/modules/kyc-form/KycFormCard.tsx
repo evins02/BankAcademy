@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
+import SignaturePad from "signature_pad";
 import { ChevronDown, ChevronUp, User, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type KycFormData, EMPTY_FORM } from "./kyc-form-types";
@@ -68,8 +69,80 @@ function SectionHeader({ num, title }: { num: string; title: string }) {
   );
 }
 
-// ── Formular A (read-only official document) ───────────────────────────────
-function FormularADocument() {
+// ── Visum-Berater signature canvas (signature_pad) ─────────────────────────
+function VisumBeraterCanvas({ onChange }: { onChange: (hasData: boolean) => void }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const padRef = useRef<SignaturePad | null>(null);
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const pad = new SignaturePad(canvas, {
+      minWidth: 0.5,
+      maxWidth: 2.5,
+      penColor: "#1a1a2e",
+    });
+    padRef.current = pad;
+    const onEnd = () => onChangeRef.current(!pad.isEmpty());
+    pad.addEventListener("endStroke", onEnd);
+    return () => {
+      pad.off();
+      padRef.current = null;
+    };
+  }, []);
+
+  const clear = () => {
+    padRef.current?.clear();
+    onChangeRef.current(false);
+  };
+
+  return (
+    <div style={{ position: "relative", display: "inline-block" }}>
+      <canvas
+        ref={canvasRef}
+        width={280}
+        height={100}
+        style={{
+          display: "block",
+          border: "1px solid #d1d5db",
+          borderRadius: 4,
+          background: "#f9fafb",
+          touchAction: "none",
+          cursor: "crosshair",
+        }}
+      />
+      <button
+        type="button"
+        onClick={clear}
+        title="Unterschrift löschen"
+        style={{
+          position: "absolute",
+          bottom: 4,
+          right: 4,
+          lineHeight: 1,
+          fontSize: 11,
+          padding: "2px 7px",
+          borderRadius: 3,
+          border: "1px solid #d1d5db",
+          background: "#e5e7eb",
+          color: "#374151",
+          cursor: "pointer",
+        }}
+      >
+        ✕
+      </button>
+    </div>
+  );
+}
+
+// ── Formular A (official document with drawable Visum Berater) ──────────────
+interface FormularADocumentProps {
+  onVisumChange: (hasData: boolean) => void;
+}
+
+function FormularADocument({ onVisumChange }: FormularADocumentProps) {
   const today = new Date().toLocaleDateString("de-CH", {
     day: "2-digit",
     month: "2-digit",
@@ -230,12 +303,12 @@ function FormularADocument() {
               Ort, Datum: Zürich, {today}
             </p>
           </div>
-          {/* RIGHT – Visum Berater (empty line) */}
+          {/* RIGHT – Visum Berater (drawable canvas) */}
           <div>
             <p style={{ fontSize: 10, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em" }} className="mb-1.5">
               Visum Berater
             </p>
-            <div style={{ height: 52, borderBottom: "1px solid #6b7280" }} />
+            <VisumBeraterCanvas onChange={onVisumChange} />
             <p className="mt-2" style={{ fontSize: 11, color: "#4b5563" }}>
               Datum: {today}
             </p>
@@ -261,6 +334,8 @@ interface KycFormCardProps {
 export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps) {
   const [dossierOpen, setDossierOpen] = useState(true);
   const [form, setForm] = useState<KycFormData>(EMPTY_FORM);
+  const [visumGesetzt, setVisumGesetzt] = useState(false);
+  const handleVisumChange = useCallback((hasData: boolean) => setVisumGesetzt(hasData), []);
 
   const set = useCallback(
     <K extends keyof KycFormData>(field: K, value: KycFormData[K]) => {
@@ -308,7 +383,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
       artGeschaeftsbeziehung: "Einfache Bankbeziehung",
       ausweisVorhanden: true,
       formularAAusgefuellt: false, // TRAP: missing
-      unterschriftVorhanden: false,
+      unterschriftVorhanden: true,
       wohnsitzbestaetigung: false, // TRAP: missing for Ausweis B
       usPerson: "Nein",
       usTin: "",
@@ -321,7 +396,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
   const allChecked =
     form.ausweisVorhanden &&
     form.formularAAusgefuellt &&
-    form.unterschriftVorhanden &&
+    visumGesetzt &&
     (!requiresWohnsitz || form.wohnsitzbestaetigung);
 
   function handleSubmit(e: React.FormEvent) {
@@ -699,7 +774,7 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
         {/* Section 6 – Formular A */}
         <SectionHeader num="6" title="Formular A – Wirtschaftlich Berechtigter (VSB 20)" />
         <div className="px-6 py-5">
-          <FormularADocument />
+          <FormularADocument onVisumChange={handleVisumChange} />
           <p className="text-xs text-text-secondary mt-3 flex items-start gap-1.5">
             <span className="shrink-0">ℹ️</span>
             <span>
@@ -779,10 +854,11 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
                 Abschlusskontrolle – Pflichtbestätigungen
               </p>
               <p className="text-xs text-text-secondary mt-0.5">
-                Alle drei Punkte müssen vor dem Einreichen bestätigt werden.
+                Alle Punkte müssen vor dem Einreichen bestätigt sein.
               </p>
             </div>
             <div className="px-5 py-4 space-y-4 bg-surface">
+              {/* Manual checkboxes */}
               {(
                 [
                   {
@@ -795,12 +871,6 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
                     key: "formularAAusgefuellt" as const,
                     label: "Formular A geprüft – wirtschaftlich Berechtigter korrekt erfasst",
                     note: "Pflicht gemäss VSB 20 – auch wenn WiBe identisch mit Kontoinhaber",
-                    show: true,
-                  },
-                  {
-                    key: "unterschriftVorhanden" as const,
-                    label: "Unterschrift des Kunden vorhanden und geprüft",
-                    note: "Originalunterschrift auf Formular A sichtbar und geprüft",
                     show: true,
                   },
                   {
@@ -826,6 +896,45 @@ export function KycFormCard({ onSubmit, isDemo, hideDossier }: KycFormCardProps)
                     </div>
                   </label>
                 ))}
+
+              {/* Auto-managed display items */}
+              {[
+                {
+                  key: "unterschriftKunde",
+                  label: "Unterschrift Kunde vorhanden und geprüft",
+                  note: "Vorgefertigte Originalunterschrift auf Formular A",
+                  checked: form.unterschriftVorhanden,
+                },
+                {
+                  key: "visumBerater",
+                  label: "Visum Berater gesetzt",
+                  note: "Ihre Unterschrift als Berater im Formular A (Feld rechts oben)",
+                  checked: visumGesetzt,
+                },
+              ].map((item) => (
+                <div key={item.key} className="flex items-start gap-3">
+                  <div
+                    className="mt-0.5 shrink-0 rounded border flex items-center justify-center"
+                    style={{
+                      width: 16,
+                      height: 16,
+                      background: item.checked ? "var(--primary, #0D1B4B)" : "#f3f4f6",
+                      borderColor: item.checked ? "var(--primary, #0D1B4B)" : "#d1d5db",
+                    }}
+                  >
+                    {item.checked && (
+                      <span style={{ color: "#fff", fontSize: 9, lineHeight: 1, fontWeight: 700 }}>✓</span>
+                    )}
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-text-primary">{item.label}</span>
+                    <p className="text-xs text-text-secondary mt-0.5">{item.note}</p>
+                    <span className="text-xs" style={{ color: "#9ca3af", fontStyle: "italic" }}>
+                      automatisch
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
