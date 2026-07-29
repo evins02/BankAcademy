@@ -36,7 +36,6 @@ export interface KycFormData {
   ausweisVorhanden: boolean;
   formularAAusgefuellt: boolean;
   unterschriftVorhanden: boolean;
-  visumBerater: boolean;
   wohnsitzbestaetigung: boolean;
   usPerson: string;
   usTin: string;
@@ -80,7 +79,6 @@ export const EMPTY_FORM: KycFormData = {
   ausweisVorhanden: false,
   formularAAusgefuellt: false,
   unterschriftVorhanden: false,
-  visumBerater: false,
   wohnsitzbestaetigung: false,
   usPerson: "",
   usTin: "",
