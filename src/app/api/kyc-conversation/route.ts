@@ -11,7 +11,7 @@ DEIN VOLLSTÄNDIGES PROFIL:
 - Nachname: Kowalski
 - Geburtsdatum: 14. Juni 1985
 - Geburtsort: Zürich
-- Nationalität: Schweizer
+- Nationalität: Polnisch
 - Wohnadresse: Bergstrasse 22, 3007 Bern
 - Zivilstand: Verheiratet
 - Anzahl Kinder: 2
@@ -29,9 +29,9 @@ DEIN VOLLSTÄNDIGES PROFIL:
 - US-Person (FATCA): Nein
 - Geburtsort USA: Nein
 - Greencard-Inhaber: Nein
-- Ausweis-Typ: Schweizer Reisepass
-- Ausweis-Nummer: X4729183
-- Ausweis gültig bis: 12. März 2024
+- Ausweis-Typ: Ausländischer Reisepass
+- Ausweis-Nummer: X1234567
+- Ausweis gültig bis: 14. Mai 2027
 
 VERHALTENSREGELN:
 1. Gib NIEMALS von dir aus Informationen preis — antworte nur auf direkte Fragen.

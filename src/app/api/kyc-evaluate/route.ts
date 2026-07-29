@@ -18,14 +18,14 @@ function buildSystemPrompt(): string {
 Prüfe das KYC-Gespräch und das ausgefüllte Formular für Neukunde Thomas Kowalski.
 
 ECHTE KUNDENDATEN:
-- Name: Thomas Kowalski, geb. 14.06.1985, Schweizer
+- Name: Thomas Kowalski, geb. 14.06.1985, Polnisch
 - Wohnsitz: Bergstrasse 22, 3007 Bern
 - Beruf: Projektleiter IT, Swisscom AG, 100%
 - Zivilstand: Verheiratet, 2 Kinder
 - Einkommen: CHF 95'000/Jahr netto, Vermögen ca. CHF 45'000
 - Herkunft: Lohn, andere Banken: PostFinance
 - Zweck: Lohnkonto + Zahlungsverkehr, WiBe: selbst, PEP: Nein, keine US-Verbindung
-- Ausweis: Schweizer Pass X4729183, gültig bis 12.03.2024 (ABGELAUFEN! Heute: ${today})
+- Ausweis: Ausländischer Reisepass X1234567, gültig bis 14.05.2027 (Demo-Falle: Formular oft mit 12.03.2024 vorausgefüllt → abgelaufen)
 
 TEIL 1 – GESPRÄCH (9 Pflichtfragen):
 Prüfe ob der Kundenberater folgende Fragen gestellt hat:
@@ -42,7 +42,7 @@ Prüfe ob der Kundenberater folgende Fragen gestellt hat:
 TEIL 2 – FORMULAR (8 Prüfpunkte):
 P1. Personalien vollständig
 P2. Ausweis dokumentiert (Typ + Nummer + vorhanden)
-P3. Ausweis GÜLTIG (ausweisGueltigBis muss nach ${today} liegen; 12.03.2024 = abgelaufen → FEHLER)
+P3. Ausweis GÜLTIG (ausweisGueltigBis muss nach ${today} liegen; 12.03.2024 = abgelaufen → FEHLER; korrekt: 14.05.2027)
 P4. Berufliche Angaben vollständig
 P5. Finanzielle Angaben vollständig
 P6. Compliance vollständig (WiBe, PEP, Zweck, Art)

@@ -17,7 +17,7 @@ function buildSystemPrompt(): string {
 ECHTE KUNDENDATEN für dieses Formular (Thomas Kowalski):
 - Name: Thomas Kowalski
 - Geburtsdatum: 14.06.1985
-- Nationalität: Schweizer
+- Nationalität: Polnisch
 - Wohnsitz: Bergstrasse 22, 3007 Bern
 - Beruf: Projektleiter IT, Arbeitgeber: Swisscom AG, 100%
 - Zivilstand: Verheiratet, 2 Kinder
@@ -28,8 +28,11 @@ ECHTE KUNDENDATEN für dieses Formular (Thomas Kowalski):
 - WiBe: Identisch mit Kontoinhaber
 - PEP: Nein, keine US-Verbindung
 
+KUNDENDATEN AUSWEIS:
+- Ausweistyp: Ausländischer Reisepass, Ausweisnummer: X1234567, gültig bis: 14.05.2027
+
 FALLEN die ZWINGEND geprüft werden müssen:
-1. AUSWEIS ABGELAUFEN: Der echte Ausweis läuft am 12.03.2024 ab. Heute ist ${today}. Jedes Datum das vor heute liegt ODER dem 12.03.2024 entspricht → Fehler "Ausweis abgelaufen". Ein gültiger Ausweis ist VSB 20 Art. 3 Pflicht.
+1. AUSWEIS ABGELAUFEN: Das Demo-Formular enthält als Falle das Datum 12.03.2024 (abgelaufen). Heute ist ${today}. Jedes ausweisGueltigBis das vor heute liegt → Fehler "Ausweis abgelaufen". Korrekt wäre 14.05.2027. Ein gültiger Ausweis ist VSB 20 Art. 3 Pflicht.
 2. FORMULAR A: Auch wenn WiBe = "Identisch mit Kontoinhaber", MUSS Formular A ausgefüllt sein (VSB 20 Art. 4). formularAAusgefuellt = false → zwingend Fehler melden.
 
 ACHT PRÜFPUNKTE (scoreCorrect und scoreTotal beziehen sich darauf):
