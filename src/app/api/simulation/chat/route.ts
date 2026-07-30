@@ -1,6 +1,10 @@
+import Anthropic from "@anthropic-ai/sdk";
 import type { Difficulty, ConversationMessage } from "@/components/modules/simulation/sim-types";
 
 export const runtime = "edge";
+export const maxDuration = 30;
+
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const BASE_PROMPT = `You are Thomas Kowalski, 28 years old, living in Zurich. You work as a UX Designer at a startup. You just moved to Zurich 2 months ago and need to open a bank account urgently because your salary gets paid next week.
 
@@ -54,6 +58,25 @@ const DIFFICULTY_SUFFIX: Record<Difficulty, string> = {
     "\n\nSCHWIERIGKEITSSTUFE CHALLENGE-NIVEAU: Du bist sehr anspruchsvoll. Du hinterfragst jede Antwort kritisch, verweist auf Konkurrenzangebote ('Bei der Postfinance wäre das günstiger...'), stellst technische Fragen zu GwG Art. 3 und VSB16, und akzeptierst nur vollständige, präzise Antworten. Bei schlechten Antworten sagst du: 'Das ist nicht sehr überzeugend.'",
 };
 
+// Escape literal control characters inside JSON string values.
+// The model occasionally emits unescaped newlines/tabs in string values,
+// which makes JSON.parse fail. This function fixes only characters inside
+// strings, leaving structural whitespace untouched.
+function sanitizeJson(s: string): string {
+  let inStr = false, esc = false, out = "";
+  for (const ch of s) {
+    if (esc) { out += ch; esc = false; continue; }
+    if (ch === "\\") { out += ch; if (inStr) esc = true; continue; }
+    if (ch === '"') { out += ch; inStr = !inStr; continue; }
+    if (inStr && ch < " ") {
+      out += ch === "\n" ? "\\n" : ch === "\r" ? "\\r" : ch === "\t" ? "\\t" : "";
+      continue;
+    }
+    out += ch;
+  }
+  return out;
+}
+
 export async function POST(req: Request) {
   const encoder = new TextEncoder();
 
@@ -75,12 +98,12 @@ export async function POST(req: Request) {
   const mapped = messages
     .filter((m) => m.content && m.content.toString().trim() !== "")
     .map((m) => ({
-      role: m.role === "student" ? "user" : "assistant",
+      role: (m.role === "student" ? "user" : "assistant") as "user" | "assistant",
       content: m.content,
     }));
 
   // Anthropic requires messages to start with role "user".
-  // The initial Thomas opening maps to "assistant", so we drop any leading assistant turns.
+  // The initial Thomas opening maps to "assistant", so drop any leading assistant turns.
   const firstUser = mapped.findIndex((m) => m.role === "user");
   const anthropicMessages = firstUser >= 0 ? mapped.slice(firstUser) : mapped;
 
@@ -90,70 +113,26 @@ export async function POST(req: Request) {
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(payload)}\n\n`));
 
       try {
-        const apiRes = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": process.env.ANTHROPIC_API_KEY ?? "",
-            "anthropic-version": "2023-06-01",
-          },
-          body: JSON.stringify({
-            model: "claude-haiku-4-5-20251001",
-            max_tokens: 2000,
-            stream: true,
-            system: systemPrompt,
-            // Prefill forces the model to start with { — prevents code fences
-            messages: [...anthropicMessages, { role: "assistant", content: "{" }],
-          }),
+        // Use the Anthropic SDK for streaming — it handles SSE parsing internally,
+        // so chunk boundary splits can never corrupt the assembled text.
+        const sdkStream = anthropic.messages.stream({
+          model: "claude-haiku-4-5-20251001",
+          max_tokens: 2000,
+          system: systemPrompt,
+          // Prefill forces the model to start with { — prevents code fences
+          messages: [...anthropicMessages, { role: "assistant", content: "{" }],
         });
 
-        if (!apiRes.ok || !apiRes.body) {
-          const errText = await apiRes.text();
-          send({ error: `Anthropic ${apiRes.status}: ${errText}` });
-          controller.close();
-          return;
-        }
-
-        const reader = apiRes.body.getReader();
-        const decoder = new TextDecoder();
         let fullText = "";
-        let lineBuffer = ""; // accumulates bytes until a complete SSE line arrives
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          // Keep-alive: each received chunk resets Vercel's idle timer
+        for await (const event of sdkStream) {
+          // Send keepalive ping on every SDK event so Vercel's idle timer resets
           controller.enqueue(encoder.encode(": ping\n\n"));
-
-          // Append decoded bytes to the buffer, then split on complete lines.
-          // SSE lines can span multiple network reads; processing partial lines
-          // causes JSON.parse to fail silently, losing most of the text deltas.
-          lineBuffer += decoder.decode(value, { stream: true });
-          const lines = lineBuffer.split("\n");
-          lineBuffer = lines.pop() ?? ""; // last element may be incomplete
-
-          for (const line of lines) {
-            if (!line.startsWith("data: ")) continue;
-            const raw = line.slice(6).trim();
-            if (raw === "[DONE]") continue;
-            try {
-              const evt = JSON.parse(raw);
-              if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
-                fullText += evt.delta.text;
-              }
-            } catch { /* malformed event, skip */ }
+          if (
+            event.type === "content_block_delta" &&
+            event.delta.type === "text_delta"
+          ) {
+            fullText += event.delta.text;
           }
-        }
-
-        // Process any remaining content in the buffer after stream ends
-        if (lineBuffer.startsWith("data: ")) {
-          try {
-            const evt = JSON.parse(lineBuffer.slice(6).trim());
-            if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
-              fullText += evt.delta.text;
-            }
-          } catch { /* ignore */ }
         }
 
         // Reconstruct: prepend the prefilled "{" the model continued from
@@ -163,24 +142,6 @@ export async function POST(req: Request) {
           send({ error: "No JSON in response: " + fullText.slice(0, 120) });
           controller.close();
           return;
-        }
-
-        // Escape any literal control characters (newlines, tabs, etc.) that
-        // appear inside JSON string values — the model sometimes emits them
-        // unescaped, which breaks JSON.parse.
-        function sanitizeJson(s: string): string {
-          let inStr = false, esc = false, out = "";
-          for (const ch of s) {
-            if (esc) { out += ch; esc = false; continue; }
-            if (ch === "\\") { out += ch; if (inStr) esc = true; continue; }
-            if (ch === '"') { out += ch; inStr = !inStr; continue; }
-            if (inStr && ch < " ") {
-              out += ch === "\n" ? "\\n" : ch === "\r" ? "\\r" : ch === "\t" ? "\\t" : "";
-              continue;
-            }
-            out += ch;
-          }
-          return out;
         }
 
         let data: ReturnType<typeof JSON.parse>;
