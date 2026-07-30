@@ -72,12 +72,17 @@ export async function POST(req: Request) {
   }
 
   const systemPrompt = BASE_PROMPT + (DIFFICULTY_SUFFIX[difficulty] ?? "");
-  const anthropicMessages = messages
+  const mapped = messages
     .filter((m) => m.content && m.content.toString().trim() !== "")
     .map((m) => ({
       role: m.role === "student" ? "user" : "assistant",
       content: m.content,
     }));
+
+  // Anthropic requires messages to start with role "user".
+  // The initial Thomas opening maps to "assistant", so we drop any leading assistant turns.
+  const firstUser = mapped.findIndex((m) => m.role === "user");
+  const anthropicMessages = firstUser >= 0 ? mapped.slice(firstUser) : mapped;
 
   const stream = new ReadableStream({
     async start(controller) {
