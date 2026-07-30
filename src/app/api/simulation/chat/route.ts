@@ -117,6 +117,7 @@ export async function POST(req: Request) {
         const reader = apiRes.body.getReader();
         const decoder = new TextDecoder();
         let fullText = "";
+        let lineBuffer = ""; // accumulates bytes until a complete SSE line arrives
 
         while (true) {
           const { done, value } = await reader.read();
@@ -125,8 +126,14 @@ export async function POST(req: Request) {
           // Keep-alive: each received chunk resets Vercel's idle timer
           controller.enqueue(encoder.encode(": ping\n\n"));
 
-          const chunk = decoder.decode(value, { stream: true });
-          for (const line of chunk.split("\n")) {
+          // Append decoded bytes to the buffer, then split on complete lines.
+          // SSE lines can span multiple network reads; processing partial lines
+          // causes JSON.parse to fail silently, losing most of the text deltas.
+          lineBuffer += decoder.decode(value, { stream: true });
+          const lines = lineBuffer.split("\n");
+          lineBuffer = lines.pop() ?? ""; // last element may be incomplete
+
+          for (const line of lines) {
             if (!line.startsWith("data: ")) continue;
             const raw = line.slice(6).trim();
             if (raw === "[DONE]") continue;
@@ -135,8 +142,18 @@ export async function POST(req: Request) {
               if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
                 fullText += evt.delta.text;
               }
-            } catch { /* partial chunk, skip */ }
+            } catch { /* malformed event, skip */ }
           }
+        }
+
+        // Process any remaining content in the buffer after stream ends
+        if (lineBuffer.startsWith("data: ")) {
+          try {
+            const evt = JSON.parse(lineBuffer.slice(6).trim());
+            if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
+              fullText += evt.delta.text;
+            }
+          } catch { /* ignore */ }
         }
 
         // Reconstruct: prepend the prefilled "{" the model continued from
