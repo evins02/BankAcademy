@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { KontoPrivatRunner } from "./KontoPrivatRunner";
 import { KycFormRunner } from "@/components/modules/kyc-form/KycFormRunner";
-import { KycConversationRunner } from "@/components/modules/kyc-conversation/KycConversationRunner";
-
 type HubView = "hub" | "levels" | "kyc" | "conversation";
 
 function BackBar({
@@ -58,7 +56,9 @@ export function KontoeröffnungHub() {
     return (
       <div className="flex flex-1 flex-col overflow-hidden">
         <BackBar onClick={() => setView("hub")} />
-        <KycConversationRunner onBack={() => setView("hub")} />
+        <div className="flex-1 flex items-center justify-center p-6">
+          <p className="text-sm text-text-secondary">Wird geladen…</p>
+        </div>
       </div>
     );
   }
