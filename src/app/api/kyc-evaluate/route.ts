@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import type { ConvMessage } from "@/components/modules/kyc-conversation/conv-types";
 import type { KycFormData } from "@/components/modules/kyc-form/kyc-form-types";
+
+type Message = { role: string; content: string };
 
 export const runtime = "edge";
 export const maxDuration = 30;
@@ -70,12 +71,12 @@ BESTANDEN nur wenn conversationScore = 9 UND formScore = 8.`;
 export async function POST(req: Request) {
   try {
     const { messages, formData } = (await req.json()) as {
-      messages: ConvMessage[];
+      messages: Message[];
       formData: KycFormData;
     };
 
     const transcript = messages
-      .map((m) => `${m.role === "student" ? "Berater" : "Kunde"}: ${m.content}`)
+      .map((m) => `${(m.role === "student" || m.role === "user") ? "Berater" : "Kunde"}: ${m.content}`)
       .join("\n");
 
     const response = await anthropic.messages.create({
