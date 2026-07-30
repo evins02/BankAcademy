@@ -148,7 +148,36 @@ export async function POST(req: Request) {
           return;
         }
 
-        const data = JSON.parse(jsonMatch[0]);
+        // Escape any literal control characters (newlines, tabs, etc.) that
+        // appear inside JSON string values — the model sometimes emits them
+        // unescaped, which breaks JSON.parse.
+        function sanitizeJson(s: string): string {
+          let inStr = false, esc = false, out = "";
+          for (const ch of s) {
+            if (esc) { out += ch; esc = false; continue; }
+            if (ch === "\\") { out += ch; if (inStr) esc = true; continue; }
+            if (ch === '"') { out += ch; inStr = !inStr; continue; }
+            if (inStr && ch < " ") {
+              out += ch === "\n" ? "\\n" : ch === "\r" ? "\\r" : ch === "\t" ? "\\t" : "";
+              continue;
+            }
+            out += ch;
+          }
+          return out;
+        }
+
+        let data: ReturnType<typeof JSON.parse>;
+        try {
+          data = JSON.parse(jsonMatch[0]);
+        } catch {
+          try {
+            data = JSON.parse(sanitizeJson(jsonMatch[0]));
+          } catch {
+            send({ error: "JSON parse failed. Raw: " + jsonMatch[0].slice(0, 300) });
+            controller.close();
+            return;
+          }
+        }
 
         // Suppress greeting-by-name hint if student already used the customer's name
         const greetedByName = messages
