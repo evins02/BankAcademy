@@ -41,6 +41,7 @@ export function KycConversationRunner({ onBack }: Props) {
   const [isListening, setIsListening] = useState(false);
   const [ttsEnabled, setTtsEnabled] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
+  const [speechError, setSpeechError] = useState<string | null>(null);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const historyRef = useRef<HTMLDivElement>(null);
@@ -156,12 +157,15 @@ export function KycConversationRunner({ onBack }: Props) {
     if (!SpeechRec) return;
 
     const recognition = new SpeechRec();
-    recognition.lang = "de-CH";
+    recognition.lang = "de-DE";
     recognition.interimResults = false;
     recognition.continuous = false;
     recognition.maxAlternatives = 1;
 
-    recognition.onstart = () => setIsListening(true);
+    recognition.onstart = () => {
+      setIsListening(true);
+      setSpeechError(null);
+    };
 
     recognition.onresult = (event: any) => {
       const text = event.results[0][0].transcript;
@@ -179,6 +183,13 @@ export function KycConversationRunner({ onBack }: Props) {
 
     recognition.onerror = (event: any) => {
       console.error("Sprachfehler:", event.error);
+      const msgs: Record<string, string> = {
+        "not-allowed": "Mikrofon-Zugriff verweigert – bitte in den Browser-Einstellungen erlauben.",
+        "no-speech": "Kein Ton erkannt – bitte nochmals versuchen.",
+        "network": "Netzwerkfehler bei der Spracherkennung.",
+        "audio-capture": "Kein Mikrofon gefunden.",
+      };
+      setSpeechError(msgs[event.error] ?? `Fehler: ${event.error}`);
       setIsListening(false);
       pendingTranscriptRef.current = "";
     };
@@ -505,6 +516,13 @@ export function KycConversationRunner({ onBack }: Props) {
 
           {/* Input area */}
           <div className="absolute bottom-16 left-0 right-0 z-10 space-y-2 px-4">
+            {speechError && (
+              <div className="flex items-center gap-2 rounded-xl bg-orange-600/90 px-4 py-2 text-xs text-white shadow-lg">
+                <AlertCircle size={12} className="shrink-0" />
+                {speechError}
+                <button className="ml-auto underline" onClick={() => setSpeechError(null)}>✕</button>
+              </div>
+            )}
             {error && (
               <div className="flex items-center gap-2 rounded-xl bg-red-600/90 px-4 py-2 text-xs text-white shadow-lg">
                 <AlertCircle size={12} className="shrink-0" />
