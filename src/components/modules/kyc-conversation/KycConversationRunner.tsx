@@ -51,7 +51,7 @@ export function KycConversationRunner({ onBack }: Props) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       setSpeechSupported(
-        !!(window.SpeechRecognition || (window as any).webkitSpeechRecognition)
+        !!((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)
       );
     }
   }, []);
