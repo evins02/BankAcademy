@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Phone, Mic, Video, ArrowUp, AlertCircle, Lightbulb } from "lucide-react";
+import { Phone, Mic, MicOff, Video, ArrowUp, AlertCircle, Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Mood, ConversationMessage } from "./sim-types";
 
@@ -54,9 +54,31 @@ export function AiVideoCallUI({
 }: AiVideoCallUIProps) {
   const [input, setInput] = useState("");
   const [inputError, setInputError] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [speechSupported, setSpeechSupported] = useState(false);
+  const [speechError, setSpeechError] = useState<string | null>(null);
+  const [micPermission, setMicPermission] = useState<PermissionState | null>(null);
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const historyRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
+  const pendingTranscriptRef = useRef<string>("");
   const moodConfig = MOOD_CONFIG[mood];
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setSpeechSupported(
+      !!((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)
+    );
+    navigator.permissions?.query({ name: "microphone" as PermissionName }).then((status) => {
+      setMicPermission(status.state);
+      status.onchange = () => setMicPermission(status.state);
+    }).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    return () => { recognitionRef.current?.abort(); };
+  }, []);
 
   useEffect(() => {
     if (historyRef.current) {
@@ -67,6 +89,75 @@ export function AiVideoCallUI({
   useEffect(() => {
     if (!isLoading) textareaRef.current?.focus();
   }, [isLoading]);
+
+  async function toggleListening() {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      return;
+    }
+
+    setSpeechError(null);
+
+    const SpeechRec =
+      (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition;
+    if (!SpeechRec) {
+      setSpeechError("Spracherkennung wird von diesem Browser nicht unterstützt (Chrome empfohlen).");
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((t) => t.stop());
+    } catch {
+      setSpeechError("Mikrofon-Zugriff verweigert – bitte in den Browser-Einstellungen erlauben.");
+      return;
+    }
+
+    const recognition = new SpeechRec();
+    recognition.lang = "de-DE";
+    recognition.interimResults = false;
+    recognition.continuous = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setIsListening(true);
+
+    recognition.onresult = (event: any) => {
+      const text = event.results[0][0].transcript;
+      const capped = text.slice(0, 500);
+      setInput(capped);
+      pendingTranscriptRef.current = capped;
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      const text = pendingTranscriptRef.current;
+      pendingTranscriptRef.current = "";
+      if (text.trim()) {
+        onSend(text.trim());
+        setInput("");
+      }
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Sprachfehler:", event.error);
+      const msgs: Record<string, string> = {
+        "not-allowed": "Mikrofon-Zugriff verweigert – bitte in den Browser-Einstellungen erlauben.",
+        "no-speech": "Kein Ton erkannt – bitte nochmals versuchen.",
+        "network": "Netzwerkfehler bei der Spracherkennung.",
+        "audio-capture": "Kein Mikrofon gefunden.",
+      };
+      setSpeechError(msgs[event.error] ?? `Fehler: ${event.error}`);
+      setIsListening(false);
+      pendingTranscriptRef.current = "";
+    };
+
+    try {
+      recognition.start();
+      recognitionRef.current = recognition;
+    } catch (e) {
+      setSpeechError(`Spracherkennung konnte nicht gestartet werden: ${e instanceof Error ? e.message : String(e)}`);
+    }
+  }
 
   function handleSend() {
     const text = input.trim();
@@ -241,6 +332,15 @@ export function AiVideoCallUI({
             </button>
           </div>
 
+          {/* Speech error */}
+          {speechError && (
+            <div className="flex items-center gap-2 rounded-xl bg-orange-600/90 px-4 py-2 text-xs text-white shadow-lg">
+              <AlertCircle size={12} className="shrink-0" />
+              {speechError}
+              <button className="ml-auto underline" onClick={() => setSpeechError(null)}>✕</button>
+            </div>
+          )}
+
           {/* Error */}
           {error && (
             <div className="flex items-center gap-2 rounded-xl bg-red-600/90 px-4 py-2 text-xs text-white shadow-lg">
@@ -296,12 +396,37 @@ export function AiVideoCallUI({
 
         {/* Control bar */}
         <div className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-center gap-5 border-t border-white/10 bg-[#111111]/95 px-6 py-3 backdrop-blur-sm">
-          <button
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
-            aria-label="Mikrofon"
-          >
-            <Mic size={18} />
-          </button>
+          {/* Mic button */}
+          <div className="flex flex-col items-center gap-0.5">
+            <button
+              onClick={toggleListening}
+              disabled={isLoading || !speechSupported}
+              aria-label={isListening ? "Aufnahme stoppen" : "Spracheingabe starten"}
+              className={cn(
+                "relative flex h-11 w-11 items-center justify-center rounded-full text-white transition-colors",
+                isListening
+                  ? "bg-red-600 hover:bg-red-700"
+                  : micPermission === "denied"
+                  ? "bg-gray-700 cursor-not-allowed"
+                  : "bg-white/10 hover:bg-white/20"
+              )}
+            >
+              {isListening && (
+                <span className="absolute inset-0 rounded-full animate-ping bg-red-500/50" />
+              )}
+              {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+            </button>
+            {micPermission === "denied" && (
+              <span className="text-[8px] text-red-400">Blockiert</span>
+            )}
+            {micPermission === "granted" && !isListening && (
+              <span className="text-[8px] text-green-400">Bereit</span>
+            )}
+            {isListening && (
+              <span className="text-[8px] text-red-300 animate-pulse">Aufnahme…</span>
+            )}
+          </div>
+
           <button
             className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
             aria-label="Kamera"
