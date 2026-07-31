@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ArrowUp, AlertCircle, CheckCircle, XCircle } from "lucide-react";
+import { ArrowUp, AlertCircle, CheckCircle, XCircle, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import { KycFormCard } from "@/components/modules/kyc-form/KycFormCard";
 import type { KycFormData } from "@/components/modules/kyc-form/kyc-form-types";
 import { addXP } from "@/lib/xpData";
@@ -37,8 +37,32 @@ export function KycConversationRunner({ onBack }: Props) {
   const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
+  // Speech state
+  const [isListening, setIsListening] = useState(false);
+  const [ttsEnabled, setTtsEnabled] = useState(false);
+  const [speechSupported, setSpeechSupported] = useState(false);
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const historyRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
+  const pendingTranscriptRef = useRef<string>("");
+
+  // Detect browser speech support
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setSpeechSupported(
+        !!(window.SpeechRecognition || (window as any).webkitSpeechRecognition)
+      );
+    }
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      recognitionRef.current?.abort();
+      if (typeof window !== "undefined") window.speechSynthesis?.cancel();
+    };
+  }, []);
 
   useEffect(() => {
     if (historyRef.current) {
@@ -68,10 +92,28 @@ export function KycConversationRunner({ onBack }: Props) {
     }
   }, [phase, evaluation]);
 
-  async function sendMessage() {
-    if (!input.trim() || loading) return;
+  // TTS: read Thomas's response aloud
+  const lastThomas = [...messages].reverse().find((m) => m.role === "assistant");
+  useEffect(() => {
+    if (!ttsEnabled || !lastThomas || typeof window === "undefined") return;
+    window.speechSynthesis?.cancel();
+    const u = new SpeechSynthesisUtterance(lastThomas.content);
+    u.lang = "de-DE";
+    u.rate = 0.95;
+    window.speechSynthesis?.speak(u);
+  }, [lastThomas, ttsEnabled]);
 
-    const newMessages: Message[] = [...messages, { role: "user", content: input }];
+  // Stop TTS while waiting for response
+  useEffect(() => {
+    if (loading && typeof window !== "undefined") window.speechSynthesis?.cancel();
+  }, [loading]);
+
+  async function sendMessage(textOverride?: string) {
+    const text = (textOverride !== undefined ? textOverride : input).trim();
+    if (!text || loading) return;
+
+    const snapshot = messages;
+    const newMessages: Message[] = [...messages, { role: "user", content: text }];
     setMessages(newMessages);
     setInput("");
     setLoading(true);
@@ -89,7 +131,7 @@ export function KycConversationRunner({ onBack }: Props) {
 
       setMessages([...newMessages, { role: "assistant", content: data.message }]);
     } catch (e) {
-      setMessages(messages);
+      setMessages(snapshot);
       setError(e instanceof Error ? e.message : String(e));
     } finally {
       setLoading(false);
@@ -101,6 +143,49 @@ export function KycConversationRunner({ onBack }: Props) {
       e.preventDefault();
       sendMessage();
     }
+  }
+
+  function toggleListening() {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      return;
+    }
+
+    const SpeechRec =
+      (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition;
+    if (!SpeechRec) return;
+
+    const recognition = new SpeechRec();
+    recognition.lang = "de-CH";
+    recognition.interimResults = true;
+    recognition.continuous = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setIsListening(true);
+
+    recognition.onresult = (event: any) => {
+      const transcript = Array.from(event.results as any[])
+        .map((r: any) => r[0].transcript)
+        .join("");
+      const capped = transcript.slice(0, 500);
+      setInput(capped);
+      pendingTranscriptRef.current = capped;
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      const text = pendingTranscriptRef.current;
+      pendingTranscriptRef.current = "";
+      if (text.trim()) sendMessage(text);
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+      pendingTranscriptRef.current = "";
+    };
+
+    recognition.start();
+    recognitionRef.current = recognition;
   }
 
   async function handleFormSubmit(formData: KycFormData) {
@@ -145,7 +230,6 @@ export function KycConversationRunner({ onBack }: Props) {
     setAttempt((a) => a + 1);
   }
 
-  const lastThomas = [...messages].reverse().find((m) => m.role === "assistant");
   const questionCount = messages.filter((m) => m.role === "user").length;
 
   // ── Transition ─────────────────────────────────────────────────────────────
@@ -226,12 +310,9 @@ export function KycConversationRunner({ onBack }: Props) {
         <Confetti active={showConfetti} />
         <div className="flex-1 overflow-y-auto p-6">
           <div className="mx-auto max-w-2xl space-y-4">
-            {/* Result header */}
             <div
               className={`rounded-DEFAULT p-5 flex items-start gap-4 ${
-                passed
-                  ? "bg-green-50 border border-green-200"
-                  : "bg-red-50 border border-red-200"
+                passed ? "bg-green-50 border border-green-200" : "bg-red-50 border border-red-200"
               }`}
             >
               {passed ? (
@@ -247,7 +328,6 @@ export function KycConversationRunner({ onBack }: Props) {
               </div>
             </div>
 
-            {/* Scores */}
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-DEFAULT bg-surface p-4 shadow-card">
                 <p className="text-xs text-text-secondary mb-1">Gespräch</p>
@@ -265,7 +345,6 @@ export function KycConversationRunner({ onBack }: Props) {
               </div>
             </div>
 
-            {/* Missing questions */}
             {evaluation.conversationMissing.length > 0 && (
               <div className="rounded-DEFAULT bg-surface p-4 shadow-card">
                 <p className="text-sm font-bold text-text-primary mb-2">Fehlende Pflichtfragen</p>
@@ -279,7 +358,6 @@ export function KycConversationRunner({ onBack }: Props) {
               </div>
             )}
 
-            {/* Form errors */}
             {evaluation.formErrors.length > 0 && (
               <div className="rounded-DEFAULT bg-surface p-4 shadow-card">
                 <p className="text-sm font-bold text-text-primary mb-2">Formularfehler</p>
@@ -294,7 +372,6 @@ export function KycConversationRunner({ onBack }: Props) {
               </div>
             )}
 
-            {/* Actions */}
             <div className="flex gap-3">
               <button
                 onClick={handleRetry}
@@ -341,9 +418,7 @@ export function KycConversationRunner({ onBack }: Props) {
               >
                 <div
                   className={`max-w-[88%] rounded-xl px-3 py-2 text-xs ${
-                    msg.role === "user"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-700 text-gray-100"
+                    msg.role === "user" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-100"
                   }`}
                 >
                   {msg.role === "assistant" && (
@@ -438,7 +513,34 @@ export function KycConversationRunner({ onBack }: Props) {
               </div>
             )}
             <div className="flex items-end gap-2">
+              {/* Mic button */}
+              {speechSupported && (
+                <button
+                  onClick={toggleListening}
+                  disabled={loading}
+                  aria-label={isListening ? "Aufnahme stoppen" : "Spracheingabe starten"}
+                  className={`relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white shadow-lg transition-all disabled:cursor-not-allowed disabled:opacity-40 ${
+                    isListening
+                      ? "bg-red-500"
+                      : "bg-white/20 hover:bg-white/30"
+                  }`}
+                >
+                  {/* Pulse ring when active */}
+                  {isListening && (
+                    <span className="absolute inset-0 rounded-xl animate-ping bg-red-500/50" />
+                  )}
+                  {isListening ? <MicOff size={20} /> : <Mic size={20} />}
+                </button>
+              )}
+
+              {/* Textarea */}
               <div className="relative flex-1">
+                {isListening && (
+                  <div className="absolute -top-6 left-0 flex items-center gap-1.5 text-[11px] text-red-300">
+                    <span className="h-1.5 w-1.5 rounded-full bg-red-400 animate-pulse" />
+                    Spreche jetzt…
+                  </div>
+                )}
                 <textarea
                   ref={textareaRef}
                   value={input}
@@ -446,15 +548,21 @@ export function KycConversationRunner({ onBack }: Props) {
                   onKeyDown={handleKeyDown}
                   disabled={loading}
                   rows={3}
-                  placeholder="Was sagst du als Berater? Stelle deine KYC-Fragen..."
+                  placeholder={
+                    isListening
+                      ? "Höre zu…"
+                      : "Was sagst du als Berater? Stelle deine KYC-Fragen..."
+                  }
                   className="w-full resize-none rounded-xl bg-white/95 px-4 py-3 pb-6 text-sm text-gray-900 placeholder-gray-400 shadow-lg outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60"
                 />
                 <p className="absolute bottom-2 right-3 text-[10px] text-gray-400">
                   {input.length}/500
                 </p>
               </div>
+
+              {/* Send button */}
               <button
-                onClick={sendMessage}
+                onClick={() => sendMessage()}
                 disabled={loading || !input.trim()}
                 aria-label="Senden"
                 className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg transition-all hover:bg-blue-700 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
@@ -466,9 +574,23 @@ export function KycConversationRunner({ onBack }: Props) {
 
           {/* Control bar */}
           <div className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between border-t border-white/10 bg-[#111111]/95 px-6 py-3 backdrop-blur-sm">
-            <p className="text-xs text-gray-500">
-              {questionCount} {questionCount === 1 ? "Frage" : "Fragen"} gestellt
-            </p>
+            <div className="flex items-center gap-4">
+              {/* TTS toggle */}
+              <button
+                onClick={() => {
+                  if (ttsEnabled && typeof window !== "undefined") window.speechSynthesis?.cancel();
+                  setTtsEnabled((v) => !v);
+                }}
+                aria-label={ttsEnabled ? "Stimme ausschalten" : "Stimme einschalten"}
+                className="flex items-center gap-1.5 rounded-lg bg-white/10 px-2.5 py-1.5 text-xs text-gray-300 transition-colors hover:bg-white/20"
+              >
+                {ttsEnabled ? <Volume2 size={13} /> : <VolumeX size={13} />}
+                <span>Stimme {ttsEnabled ? "an" : "aus"}</span>
+              </button>
+              <p className="text-xs text-gray-500">
+                {questionCount} {questionCount === 1 ? "Frage" : "Fragen"} gestellt
+              </p>
+            </div>
             <button
               onClick={() => setPhase("transition")}
               className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
