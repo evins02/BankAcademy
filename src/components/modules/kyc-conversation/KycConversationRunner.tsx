@@ -146,15 +146,29 @@ export function KycConversationRunner({ onBack }: Props) {
     }
   }
 
-  function toggleListening() {
+  async function toggleListening() {
     if (isListening) {
       recognitionRef.current?.stop();
       return;
     }
 
+    setSpeechError(null);
+
     const SpeechRec =
       (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition;
-    if (!SpeechRec) return;
+    if (!SpeechRec) {
+      setSpeechError("Spracherkennung wird von diesem Browser nicht unterstützt (Chrome empfohlen).");
+      return;
+    }
+
+    // Explicitly request mic permission — ensures Chrome shows the permission dialog
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((t) => t.stop()); // release immediately; SpeechRecognition manages its own stream
+    } catch {
+      setSpeechError("Mikrofon-Zugriff verweigert – bitte in den Browser-Einstellungen erlauben.");
+      return;
+    }
 
     const recognition = new SpeechRec();
     recognition.lang = "de-DE";
@@ -162,10 +176,7 @@ export function KycConversationRunner({ onBack }: Props) {
     recognition.continuous = false;
     recognition.maxAlternatives = 1;
 
-    recognition.onstart = () => {
-      setIsListening(true);
-      setSpeechError(null);
-    };
+    recognition.onstart = () => setIsListening(true);
 
     recognition.onresult = (event: any) => {
       const text = event.results[0][0].transcript;
@@ -194,8 +205,12 @@ export function KycConversationRunner({ onBack }: Props) {
       pendingTranscriptRef.current = "";
     };
 
-    recognition.start();
-    recognitionRef.current = recognition;
+    try {
+      recognition.start();
+      recognitionRef.current = recognition;
+    } catch (e) {
+      setSpeechError(`Spracherkennung konnte nicht gestartet werden: ${e instanceof Error ? e.message : String(e)}`);
+    }
   }
 
   async function handleFormSubmit(formData: KycFormData) {
