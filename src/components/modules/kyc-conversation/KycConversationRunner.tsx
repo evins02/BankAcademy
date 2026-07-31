@@ -42,19 +42,23 @@ export function KycConversationRunner({ onBack }: Props) {
   const [ttsEnabled, setTtsEnabled] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
   const [speechError, setSpeechError] = useState<string | null>(null);
+  const [micPermission, setMicPermission] = useState<PermissionState | null>(null);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const historyRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const pendingTranscriptRef = useRef<string>("");
 
-  // Detect browser speech support
+  // Detect browser speech support and mic permission state
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setSpeechSupported(
-        !!((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)
-      );
-    }
+    if (typeof window === "undefined") return;
+    setSpeechSupported(
+      !!((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)
+    );
+    navigator.permissions?.query({ name: "microphone" as PermissionName }).then((status) => {
+      setMicPermission(status.state);
+      status.onchange = () => setMicPermission(status.state);
+    }).catch(() => {});
   }, []);
 
   // Cleanup on unmount
@@ -547,22 +551,31 @@ export function KycConversationRunner({ onBack }: Props) {
             <div className="flex items-end gap-2">
               {/* Mic button */}
               {speechSupported && (
-                <button
-                  onClick={toggleListening}
-                  disabled={loading}
-                  aria-label={isListening ? "Aufnahme stoppen" : "Spracheingabe starten"}
-                  className={`relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white shadow-lg transition-all disabled:cursor-not-allowed disabled:opacity-40 ${
-                    isListening
-                      ? "bg-red-500"
-                      : "bg-white/20 hover:bg-white/30"
-                  }`}
-                >
-                  {/* Pulse ring when active */}
-                  {isListening && (
-                    <span className="absolute inset-0 rounded-xl animate-ping bg-red-500/50" />
+                <div className="flex flex-col items-center gap-1">
+                  <button
+                    onClick={toggleListening}
+                    disabled={loading}
+                    aria-label={isListening ? "Aufnahme stoppen" : "Spracheingabe starten"}
+                    className={`relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white shadow-lg transition-all disabled:cursor-not-allowed disabled:opacity-40 ${
+                      isListening
+                        ? "bg-red-500"
+                        : micPermission === "denied"
+                        ? "bg-gray-600 cursor-not-allowed"
+                        : "bg-white/20 hover:bg-white/30"
+                    }`}
+                  >
+                    {isListening && (
+                      <span className="absolute inset-0 rounded-xl animate-ping bg-red-500/50" />
+                    )}
+                    {isListening ? <MicOff size={20} /> : <Mic size={20} />}
+                  </button>
+                  {micPermission === "denied" && (
+                    <span className="text-[9px] text-red-400 text-center leading-tight w-14">Blockiert</span>
                   )}
-                  {isListening ? <MicOff size={20} /> : <Mic size={20} />}
-                </button>
+                  {micPermission === "granted" && !isListening && (
+                    <span className="text-[9px] text-green-400 text-center leading-tight w-14">Bereit</span>
+                  )}
+                </div>
               )}
 
               {/* Textarea */}
