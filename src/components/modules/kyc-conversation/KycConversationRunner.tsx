@@ -157,17 +157,15 @@ export function KycConversationRunner({ onBack }: Props) {
 
     const recognition = new SpeechRec();
     recognition.lang = "de-CH";
-    recognition.interimResults = true;
+    recognition.interimResults = false;
     recognition.continuous = false;
     recognition.maxAlternatives = 1;
 
     recognition.onstart = () => setIsListening(true);
 
     recognition.onresult = (event: any) => {
-      const transcript = Array.from(event.results as any[])
-        .map((r: any) => r[0].transcript)
-        .join("");
-      const capped = transcript.slice(0, 500);
+      const text = event.results[0][0].transcript;
+      const capped = text.slice(0, 500);
       setInput(capped);
       pendingTranscriptRef.current = capped;
     };
@@ -179,7 +177,8 @@ export function KycConversationRunner({ onBack }: Props) {
       if (text.trim()) sendMessage(text);
     };
 
-    recognition.onerror = () => {
+    recognition.onerror = (event: any) => {
+      console.error("Sprachfehler:", event.error);
       setIsListening(false);
       pendingTranscriptRef.current = "";
     };
