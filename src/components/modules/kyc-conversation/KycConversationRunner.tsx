@@ -48,6 +48,7 @@ export function KycConversationRunner({ onBack }: Props) {
   const historyRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const pendingTranscriptRef = useRef<string>("");
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Detect browser speech support and mic permission state
   useEffect(() => {
@@ -65,7 +66,7 @@ export function KycConversationRunner({ onBack }: Props) {
   useEffect(() => {
     return () => {
       recognitionRef.current?.abort();
-      if (typeof window !== "undefined") window.speechSynthesis?.cancel();
+      audioRef.current?.pause();
     };
   }, []);
 
@@ -97,20 +98,30 @@ export function KycConversationRunner({ onBack }: Props) {
     }
   }, [phase, evaluation]);
 
-  // TTS: read Thomas's response aloud
+  // TTS: read Thomas's response aloud via OpenAI TTS
   const lastThomas = [...messages].reverse().find((m) => m.role === "assistant");
   useEffect(() => {
-    if (!ttsEnabled || !lastThomas || typeof window === "undefined") return;
-    window.speechSynthesis?.cancel();
-    const u = new SpeechSynthesisUtterance(lastThomas.content);
-    u.lang = "de-DE";
-    u.rate = 0.95;
-    window.speechSynthesis?.speak(u);
+    if (!ttsEnabled || !lastThomas) return;
+    audioRef.current?.pause();
+    fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: lastThomas.content }),
+    })
+      .then((r) => r.blob())
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        audioRef.current = audio;
+        audio.play().catch(() => {});
+        audio.onended = () => URL.revokeObjectURL(url);
+      })
+      .catch(() => {});
   }, [lastThomas, ttsEnabled]);
 
   // Stop TTS while waiting for response
   useEffect(() => {
-    if (loading && typeof window !== "undefined") window.speechSynthesis?.cancel();
+    if (loading) audioRef.current?.pause();
   }, [loading]);
 
   async function sendMessage(textOverride?: string) {

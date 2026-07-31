@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Phone, Mic, MicOff, Video, ArrowUp, AlertCircle, Lightbulb } from "lucide-react";
+import { Phone, Mic, MicOff, Video, ArrowUp, AlertCircle, Lightbulb, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Mood, ConversationMessage } from "./sim-types";
 
@@ -58,11 +58,13 @@ export function AiVideoCallUI({
   const [speechSupported, setSpeechSupported] = useState(false);
   const [speechError, setSpeechError] = useState<string | null>(null);
   const [micPermission, setMicPermission] = useState<PermissionState | null>(null);
+  const [ttsEnabled, setTtsEnabled] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const historyRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const pendingTranscriptRef = useRef<string>("");
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const moodConfig = MOOD_CONFIG[mood];
 
   useEffect(() => {
@@ -77,8 +79,36 @@ export function AiVideoCallUI({
   }, []);
 
   useEffect(() => {
-    return () => { recognitionRef.current?.abort(); };
+    return () => {
+      recognitionRef.current?.abort();
+      audioRef.current?.pause();
+    };
   }, []);
+
+  // TTS: play Thomas's latest message via OpenAI TTS
+  useEffect(() => {
+    if (!ttsEnabled || !thomasSpeech || isLoading) return;
+    audioRef.current?.pause();
+    fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: thomasSpeech }),
+    })
+      .then((r) => r.blob())
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        audioRef.current = audio;
+        audio.play().catch(() => {});
+        audio.onended = () => URL.revokeObjectURL(url);
+      })
+      .catch(() => {});
+  }, [thomasSpeech, ttsEnabled, isLoading]);
+
+  // Stop audio while loading
+  useEffect(() => {
+    if (isLoading) audioRef.current?.pause();
+  }, [isLoading]);
 
   useEffect(() => {
     if (historyRef.current) {
@@ -422,6 +452,21 @@ export function AiVideoCallUI({
               <span className="text-[8px] text-red-300 animate-pulse">Aufnahme…</span>
             )}
           </div>
+
+          {/* TTS toggle */}
+          <button
+            onClick={() => {
+              if (ttsEnabled) audioRef.current?.pause();
+              setTtsEnabled((v) => !v);
+            }}
+            aria-label={ttsEnabled ? "Stimme ausschalten" : "Stimme einschalten"}
+            className={cn(
+              "flex h-11 w-11 items-center justify-center rounded-full text-white transition-colors",
+              ttsEnabled ? "bg-blue-600 hover:bg-blue-700" : "bg-white/10 hover:bg-white/20"
+            )}
+          >
+            {ttsEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+          </button>
 
           <button
             className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
