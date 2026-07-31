@@ -130,12 +130,8 @@ export function AiVideoCallUI({
 
     recognition.onend = () => {
       setIsListening(false);
-      const text = pendingTranscriptRef.current;
       pendingTranscriptRef.current = "";
-      if (text.trim()) {
-        onSend(text.trim());
-        setInput("");
-      }
+      // Text bleibt im Eingabefeld – User sendet manuell per Enter oder Button
     };
 
     recognition.onerror = (event: any) => {

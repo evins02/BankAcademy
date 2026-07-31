@@ -191,9 +191,8 @@ export function KycConversationRunner({ onBack }: Props) {
 
     recognition.onend = () => {
       setIsListening(false);
-      const text = pendingTranscriptRef.current;
       pendingTranscriptRef.current = "";
-      if (text.trim()) sendMessage(text);
+      // Text bleibt im Eingabefeld – User sendet manuell per Enter oder Button
     };
 
     recognition.onerror = (event: any) => {
