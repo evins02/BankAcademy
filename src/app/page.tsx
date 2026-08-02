@@ -1041,7 +1041,7 @@ function WarumBankAcademy() {
 
         <FadeIn style={{ textAlign: "center", marginTop: 52 }} delay={0.35}>
           <button
-            onClick={() => document.getElementById("module")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => { window.location.href = "/demo"; }}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -1059,7 +1059,7 @@ function WarumBankAcademy() {
             onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
           >
-            Mehr entdecken <ChevronRight size={15} />
+            Demo ausprobieren <ChevronRight size={15} />
           </button>
         </FadeIn>
       </div>
