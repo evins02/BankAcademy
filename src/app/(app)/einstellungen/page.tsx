@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { getSettings, saveSettings, applyTheme, type AppSettings } from "@/lib/settingsData";
+import { lsRemove } from "@/lib/storage";
 import { getProgress, getStreak, computeBadges } from "@/lib/progressData";
 import { getXP, getXPLevel } from "@/lib/xpData";
 import { getAverageRating } from "@/lib/ratingsData";
@@ -123,7 +124,7 @@ export default function EinstellungenPage() {
       return;
     }
     ["progress", "streak", "notifications", "badge-dates", "mock-seeded", "total-xp", "scenario-notes"].forEach((k) =>
-      localStorage.removeItem(k)
+      lsRemove(k)
     );
     window.location.reload();
   }

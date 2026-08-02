@@ -1,5 +1,7 @@
 "use client";
 
+import { ls, lsSet } from "./storage";
+
 export interface ScenarioRating {
   scenarioId: string;
   rating: number; // 1-5
@@ -9,7 +11,7 @@ export interface ScenarioRating {
 function read(): Record<string, ScenarioRating> {
   if (typeof window === "undefined") return {};
   try {
-    const raw = localStorage.getItem("scenario-ratings");
+    const raw = ls("scenario-ratings");
     return raw ? JSON.parse(raw) : {};
   } catch {
     return {};
@@ -18,7 +20,7 @@ function read(): Record<string, ScenarioRating> {
 
 function write(data: Record<string, ScenarioRating>) {
   if (typeof window === "undefined") return;
-  localStorage.setItem("scenario-ratings", JSON.stringify(data));
+  lsSet("scenario-ratings", JSON.stringify(data));
 }
 
 export function getRatings(): Record<string, ScenarioRating> {

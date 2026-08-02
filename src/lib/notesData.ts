@@ -1,5 +1,7 @@
 "use client";
 
+import { ls, lsSet } from "./storage";
+
 export interface ScenarioNote {
   scenarioId: string;
   moduleId: string;
@@ -11,7 +13,7 @@ export interface ScenarioNote {
 export function getNotes(): Record<string, ScenarioNote> {
   if (typeof window === "undefined") return {};
   try {
-    const raw = localStorage.getItem("scenario-notes");
+    const raw = ls("scenario-notes");
     return raw ? JSON.parse(raw) : {};
   } catch {
     return {};
@@ -26,7 +28,7 @@ export function saveNote(note: ScenarioNote) {
     delete notes[note.scenarioId];
   }
   if (typeof window !== "undefined") {
-    localStorage.setItem("scenario-notes", JSON.stringify(notes));
+    lsSet("scenario-notes", JSON.stringify(notes));
   }
 }
 
@@ -34,6 +36,6 @@ export function deleteNote(scenarioId: string) {
   const notes = getNotes();
   delete notes[scenarioId];
   if (typeof window !== "undefined") {
-    localStorage.setItem("scenario-notes", JSON.stringify(notes));
+    lsSet("scenario-notes", JSON.stringify(notes));
   }
 }

@@ -1,12 +1,14 @@
 "use client";
 
+import { ls, lsSet, lsRemove } from "./storage";
+
 const STORAGE_KEY = "bankinglab:concept-errors";
 
 type ConceptErrorStore = Record<string, Record<string, { count: number; lastError: number }>>;
 
 function load(): ConceptErrorStore {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = ls(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as ConceptErrorStore) : {};
   } catch {
     return {};
@@ -15,7 +17,7 @@ function load(): ConceptErrorStore {
 
 function save(store: ConceptErrorStore): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+    lsSet(STORAGE_KEY, JSON.stringify(store));
   } catch {
     // ignore storage errors
   }
@@ -68,6 +70,6 @@ export function clearConceptErrors(moduleId?: string): void {
     delete store[moduleId];
     save(store);
   } else {
-    try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
+    try { lsRemove(STORAGE_KEY); } catch { /* ignore */ }
   }
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import { ls, lsSet } from "./storage";
+
 export const XP_LEVELS = [
   { min: 0, max: 500, title: "Einsteiger", color: "#6B7280" },
   { min: 500, max: 1500, title: "Lernender", color: "#16A34A" },
@@ -11,7 +13,7 @@ export const XP_LEVELS = [
 export function getXP(): number {
   if (typeof window === "undefined") return 0;
   try {
-    return parseInt(localStorage.getItem("total-xp") ?? "0", 10) || 0;
+    return parseInt(ls("total-xp") ?? "0", 10) || 0;
   } catch {
     return 0;
   }
@@ -21,7 +23,7 @@ export function addXP(amount: number): number {
   const current = getXP();
   const next = current + amount;
   if (typeof window !== "undefined") {
-    localStorage.setItem("total-xp", String(next));
+    lsSet("total-xp", String(next));
   }
   return next;
 }

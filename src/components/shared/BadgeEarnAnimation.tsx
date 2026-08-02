@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Confetti } from "@/components/shared/Confetti";
 import type { Badge } from "@/lib/progressData";
+import { ls, lsSet } from "@/lib/storage";
 
 interface BadgeEarnAnimationProps {
   badge: Badge;
@@ -129,12 +130,12 @@ export function useNewlyEarnedBadge() {
 
   function checkForNewBadges(badges: Badge[]) {
     const shownKey = "badges-shown";
-    const shown = new Set<string>(JSON.parse(localStorage.getItem(shownKey) ?? "[]"));
+    const shown = new Set<string>(JSON.parse(ls(shownKey) ?? "[]"));
     const newBadge = badges.find((b) => b.earnedAt && !shown.has(b.id));
     if (newBadge) {
       setPendingBadge(newBadge);
       shown.add(newBadge.id);
-      localStorage.setItem(shownKey, JSON.stringify([...shown]));
+      lsSet(shownKey, JSON.stringify([...shown]));
     }
   }
 

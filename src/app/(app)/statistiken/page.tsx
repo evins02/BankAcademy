@@ -9,6 +9,7 @@ import { ProgressBar } from "@/components/ui/progress-bar";
 import { SkeletonStatCard } from "@/components/ui/skeleton";
 import { getProgress, getStreak, computeBadges, type ModuleProgress } from "@/lib/progressData";
 import { getXP } from "@/lib/xpData";
+import { ls } from "@/lib/storage";
 
 const MODULE_META: Record<string, { name: string; total: number }> = {
   privatkunde: { name: "Privatkunde", total: 10 },
@@ -90,7 +91,7 @@ export default function StatistikenPage() {
     // Build activity date set from streak + lastAttempt dates
     const dates = new Set<string>();
     try {
-      const stored = JSON.parse(localStorage.getItem("activity-dates") ?? "[]") as string[];
+      const stored = JSON.parse(ls("activity-dates") ?? "[]") as string[];
       stored.forEach((d) => dates.add(d));
     } catch {}
     // Also add lastAttempt dates from modules

@@ -1,5 +1,7 @@
 "use client";
 
+import { ls, lsSet } from "./storage";
+
 export interface ModuleProgress {
   moduleId: string;
   completed: number;
@@ -47,7 +49,7 @@ export interface Badge {
 function read<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
-    const raw = localStorage.getItem(key);
+    const raw = ls(key);
     return raw ? (JSON.parse(raw) as T) : fallback;
   } catch {
     return fallback;
@@ -56,7 +58,7 @@ function read<T>(key: string, fallback: T): T {
 
 function write<T>(key: string, value: T) {
   if (typeof window === "undefined") return;
-  localStorage.setItem(key, JSON.stringify(value));
+  lsSet(key, JSON.stringify(value));
 }
 
 // ─── Progress ─────────────────────────────────────────────────────────────────
@@ -130,9 +132,9 @@ const MODULE_TOTALS: Record<string, { name: string; total: number }> = {
 export function generateSmartNotifications() {
   if (typeof window === "undefined") return;
   const today = new Date().toISOString().slice(0, 10);
-  const lastGen = localStorage.getItem("notif-generated-date");
+  const lastGen = ls("notif-generated-date");
   if (lastGen === today) return;
-  localStorage.setItem("notif-generated-date", today);
+  lsSet("notif-generated-date", today);
 
   const streak = getStreak();
   const progress = getProgress();
@@ -183,9 +185,9 @@ export function generateSmartNotifications() {
     const totalCompleted = Object.values(progress).reduce((s, m) => s + m.completed, 0);
     if (totalCompleted > 0) {
       const lastWeekKey = "notif-weekly-shown";
-      const lastWeekDate = localStorage.getItem(lastWeekKey);
+      const lastWeekDate = ls(lastWeekKey);
       if (lastWeekDate !== today) {
-        localStorage.setItem(lastWeekKey, today);
+        lsSet(lastWeekKey, today);
         const completedMods = Object.values(MODULE_TOTALS).filter((m, i) => {
           const id = Object.keys(MODULE_TOTALS)[i];
           const p = progress[id];
@@ -339,17 +341,17 @@ const ALL_BADGES: Badge[] = [
 
 export function recordCorrectAnswer() {
   if (typeof window === "undefined") return;
-  const streak = parseInt(localStorage.getItem("correct-streak") ?? "0") + 1;
-  localStorage.setItem("correct-streak", String(streak));
-  const best = parseInt(localStorage.getItem("correct-streak-best") ?? "0");
-  if (streak > best) localStorage.setItem("correct-streak-best", String(streak));
+  const streak = parseInt(ls("correct-streak") ?? "0") + 1;
+  lsSet("correct-streak", String(streak));
+  const best = parseInt(ls("correct-streak-best") ?? "0");
+  if (streak > best) lsSet("correct-streak-best", String(streak));
 }
 
 export function recordWrongAnswer() {
   if (typeof window === "undefined") return;
-  const prevStreak = parseInt(localStorage.getItem("correct-streak") ?? "0");
-  if (prevStreak === 0) localStorage.setItem("comeback-earned", "true");
-  localStorage.setItem("correct-streak", "0");
+  const prevStreak = parseInt(ls("correct-streak") ?? "0");
+  if (prevStreak === 0) lsSet("comeback-earned", "true");
+  lsSet("correct-streak", "0");
 }
 
 export function computeBadges(): Badge[] {
@@ -375,15 +377,15 @@ export function computeBadges(): Badge[] {
 
   // New badges
   if (typeof window !== "undefined") {
-    if (!localStorage.getItem("first-visit")) localStorage.setItem("first-visit", new Date().toISOString());
+    if (!ls("first-visit")) lsSet("first-visit", new Date().toISOString());
     earned.add("erster-tag");
 
     const totalCompleted = modules.reduce((s, m) => s + m.completed, 0);
     if (totalCompleted >= 5) earned.add("wissensdurst");
 
-    if (parseInt(localStorage.getItem("correct-streak-best") ?? "0") >= 5) earned.add("scharfschuetze");
-    if (localStorage.getItem("comeback-earned") === "true") earned.add("comeback-kid");
-    if (parseInt(localStorage.getItem("lap-best-score") ?? "0") >= 80) earned.add("lap-bereit");
+    if (parseInt(ls("correct-streak-best") ?? "0") >= 5) earned.add("scharfschuetze");
+    if (ls("comeback-earned") === "true") earned.add("comeback-kid");
+    if (parseInt(ls("lap-best-score") ?? "0") >= 80) earned.add("lap-bereit");
   }
 
   if (completedModules.find((m) => m.moduleId === "banking-operations")) earned.add("banking-insider");
@@ -409,7 +411,7 @@ export function computeBadges(): Badge[] {
 
 export function seedMockDataIfEmpty() {
   if (typeof window === "undefined") return;
-  if (localStorage.getItem("mock-seeded")) return;
+  if (ls("mock-seeded")) return;
 
   const progress: Record<string, ModuleProgress> = {
     privatkunde: {
@@ -492,6 +494,6 @@ export function seedMockDataIfEmpty() {
   write("progress", progress);
   write("streak", streak);
   write("notifications", notifications);
-  localStorage.setItem("mock-seeded", "true");
+  lsSet("mock-seeded", "true");
 }
 

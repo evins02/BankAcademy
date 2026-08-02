@@ -1,3 +1,5 @@
+import { ls, lsSet } from "./storage";
+
 export interface TrackingError {
   type: "missed" | "wrong";
   /** doc ID (document-select) or option key (MCQ) */
@@ -27,7 +29,7 @@ const STORAGE_KEY = "bankinglab:error-tracking";
 
 function loadStore(): ErrorTrackingStore {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = ls(STORAGE_KEY);
     if (!raw) return { schemaVersion: 1, records: [] };
     return JSON.parse(raw) as ErrorTrackingStore;
   } catch {
@@ -37,7 +39,7 @@ function loadStore(): ErrorTrackingStore {
 
 function saveStore(store: ErrorTrackingStore): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+    lsSet(STORAGE_KEY, JSON.stringify(store));
   } catch {
     // localStorage unavailable (SSR / private browsing with storage blocked)
   }

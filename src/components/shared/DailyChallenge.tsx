@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { addXP } from "@/lib/xpData";
+import { ls, lsSet } from "@/lib/storage";
 
 const CHALLENGES = [
   { label: "Zahlungsverkehr", module: "Back Office", href: "/privatkunde/basis/zahlungsverkehr", emoji: "💸" },
@@ -41,14 +42,14 @@ export function DailyChallenge() {
   const challenge = getChallenge();
 
   useEffect(() => {
-    setCompleted(localStorage.getItem(todayKey()) === "true");
+    setCompleted(ls(todayKey()) === "true");
     const interval = setInterval(() => setCountdown(formatCountdown()), 1000);
     return () => clearInterval(interval);
   }, []);
 
   function accept() {
     if (!completed) {
-      localStorage.setItem(todayKey(), "true");
+      lsSet(todayKey(), "true");
       addXP(150);
       setCompleted(true);
     }

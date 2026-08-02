@@ -5,6 +5,7 @@ import { X, TrendingUp, CheckCircle2, Target, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProgress, getStreak } from "@/lib/progressData";
 import { getXP, getXPLevel } from "@/lib/xpData";
+import { ls, lsSet } from "@/lib/storage";
 
 interface WeeklyReportModalProps {
   onClose: () => void;
@@ -70,7 +71,7 @@ export function WeeklyReportModal({ onClose }: WeeklyReportModalProps) {
   useEffect(() => {
     setStats(computeWeekStats());
     const today = new Date().toISOString().slice(0, 10);
-    localStorage.setItem("last-weekly-report", today);
+    lsSet("last-weekly-report", today);
   }, []);
 
   if (!stats) return null;
@@ -152,7 +153,7 @@ export function shouldShowWeeklyReport(): boolean {
   if (typeof window === "undefined") return false;
   const today = new Date();
   if (today.getDay() !== 1) return false; // Monday only
-  const lastShown = localStorage.getItem("last-weekly-report");
+  const lastShown = ls("last-weekly-report");
   const todayStr = today.toISOString().slice(0, 10);
   return lastShown !== todayStr;
 }

@@ -10,6 +10,7 @@ import { NotificationBell } from "@/components/layout/NotificationBell";
 import { NAV_GROUPS } from "@/lib/constants";
 import { getStreak } from "@/lib/progressData";
 import { getXP, getXPLevel, getXPProgress } from "@/lib/xpData";
+import { lsClearSession, lsRemove } from "@/lib/storage";
 import { useFocusMode } from "@/context/FocusModeContext";
 import { useMobileMenu } from "@/context/MobileMenuContext";
 
@@ -118,7 +119,7 @@ export function Header({ title, subtitle }: HeaderProps) {
   function resetProgress() {
     if (!confirm("Möchtest du deinen Fortschritt wirklich zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.")) return;
     ["progress", "streak", "notifications", "badge-dates", "total-xp", "mock-seeded", "activity-dates"].forEach((k) =>
-      localStorage.removeItem(k)
+      lsRemove(k)
     );
     setProfileOpen(false);
     router.push("/dashboard");
@@ -126,7 +127,7 @@ export function Header({ title, subtitle }: HeaderProps) {
   }
 
   function abmelden() {
-    localStorage.clear();
+    lsClearSession();
     setProfileOpen(false);
     router.push("/");
   }

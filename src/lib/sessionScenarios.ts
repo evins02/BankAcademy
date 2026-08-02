@@ -1,5 +1,6 @@
 "use client";
 
+import { ls, lsSet, lsRemove } from "./storage";
 import { getWeakConcepts } from "./conceptTracker";
 
 interface HasIdAndConcepts {
@@ -73,7 +74,7 @@ export function resolveSessionCases<T extends HasIdAndConcepts>(
 
   // Restore existing session
   try {
-    const raw = localStorage.getItem(key);
+    const raw = ls(key);
     if (raw) {
       const stored: StoredSession = JSON.parse(raw);
       if (Date.now() - stored.createdAt < SESSION_TTL_MS) {
@@ -95,7 +96,7 @@ export function resolveSessionCases<T extends HasIdAndConcepts>(
 
   try {
     const session: StoredSession = { orderedIds: ordered.map((c) => c.id), createdAt: Date.now() };
-    localStorage.setItem(key, JSON.stringify(session));
+    lsSet(key, JSON.stringify(session));
   } catch {
     // ignore
   }
@@ -106,7 +107,7 @@ export function resolveSessionCases<T extends HasIdAndConcepts>(
 /** Force a new shuffle next time the module+level is started. */
 export function resetSession(moduleId: string, level: number): void {
   if (typeof window === "undefined") return;
-  try { localStorage.removeItem(storageKey(moduleId, level)); } catch { /* ignore */ }
+  try { lsRemove(storageKey(moduleId, level)); } catch { /* ignore */ }
 }
 
 /** Reset all sessions for a module (call when user clicks "Restart"). */

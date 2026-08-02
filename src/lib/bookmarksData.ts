@@ -1,5 +1,7 @@
 "use client";
 
+import { ls, lsSet } from "./storage";
+
 export interface Bookmark {
   scenarioId: string;
   moduleId: string;
@@ -11,7 +13,7 @@ export interface Bookmark {
 function read(): Record<string, Bookmark> {
   if (typeof window === "undefined") return {};
   try {
-    const raw = localStorage.getItem("scenario-bookmarks");
+    const raw = ls("scenario-bookmarks");
     return raw ? JSON.parse(raw) : {};
   } catch {
     return {};
@@ -20,7 +22,7 @@ function read(): Record<string, Bookmark> {
 
 function write(data: Record<string, Bookmark>) {
   if (typeof window === "undefined") return;
-  localStorage.setItem("scenario-bookmarks", JSON.stringify(data));
+  lsSet("scenario-bookmarks", JSON.stringify(data));
 }
 
 export function getBookmarks(): Record<string, Bookmark> {
