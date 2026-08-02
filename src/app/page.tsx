@@ -946,67 +946,25 @@ function HowItWorks() {
 
 function FounderStory() {
   return (
-    <section style={{ background: "#FFFFFF", padding: "96px 24px" }}>
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+    <section style={{ background: N, padding: "112px 24px" }}>
+      <div style={{ maxWidth: 680, margin: "0 auto" }}>
         <FadeIn>
-          <div style={{ display: "grid", gap: 56, alignItems: "center" }} className="lg:grid-cols-[1fr_260px]">
-            {/* Text */}
-            <div>
-              <p style={{ margin: "0 0 12px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
-                Wer dahinter steckt
-              </p>
-              <h2 style={{ margin: "0 0 28px", fontSize: "clamp(24px,3.5vw,36px)", fontWeight: 800, letterSpacing: "-0.5px", color: N, lineHeight: 1.25 }}>
-                Aus der Praxis.<br />Für die Praxis.
-              </h2>
-              <p style={{ margin: "0 0 18px", fontSize: 17, lineHeight: 1.8, color: "#374151" }}>
-                Ich hab selbst die Banklehre gemacht – bei Raiffeisen, dann Bank WIR. Und ich hab gespürt was fehlt: echte Praxis, echte Situationen, echtes Feedback.
-              </p>
-              <p style={{ margin: "0 0 36px", fontSize: 17, lineHeight: 1.8, color: "#374151" }}>
-                BankAcademy ist meine Antwort darauf.
-              </p>
-              <a
-                href="mailto:evins@bankacademy.ch"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                  padding: "13px 26px",
-                  borderRadius: 100,
-                  fontSize: 14,
-                  fontWeight: 700,
-                  background: N,
-                  color: "#FFFFFF",
-                  textDecoration: "none",
-                  transition: "opacity 0.15s, transform 0.15s",
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.82"; e.currentTarget.style.transform = "scale(1.03)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "scale(1)"; }}
-              >
-                Kontakt aufnehmen
-              </a>
-            </div>
-
-            {/* Photo / Placeholder */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-              <div style={{
-                width: 200,
-                height: 200,
-                borderRadius: "50%",
-                background: `linear-gradient(135deg, ${CY}22 0%, ${PU}22 100%)`,
-                border: `3px solid ${CY}55`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 80,
-                overflow: "hidden",
-              }}>
-                👤
-              </div>
-              <div style={{ textAlign: "center" }}>
-                <p style={{ margin: "0 0 3px", fontWeight: 700, color: N, fontSize: 16 }}>Evins Ariaratnam</p>
-                <p style={{ margin: 0, fontSize: 13, color: "#6B7280" }}>Gründer BankAcademy</p>
-              </div>
-            </div>
+          <div style={{ borderLeft: `3px solid ${CY}66`, paddingLeft: 28 }}>
+            <p style={{ margin: "0 0 12px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
+              Warum ich BankAcademy gebaut habe
+            </p>
+            <h2 style={{ margin: "0 0 32px", fontSize: "clamp(24px,3.5vw,36px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH, lineHeight: 1.25 }}>
+              Weil ich das Tool vermisst habe,<br />das ich selbst gebraucht hätte.
+            </h2>
+            <p style={{ margin: "0 0 20px", fontSize: 16, lineHeight: 1.75, color: WD }}>
+              Während meiner Lehre hab ich schnell gemerkt: Stures Auswendiglernen aus dem Lehrbuch war nie mein Ding. Ich hab Inhalte viel besser aufgenommen, wenn ich sie spielerisch üben konnte, statt sie nur zu lesen – und am meisten hängen geblieben ist das, was einen echten Praxisbezug hatte.
+            </p>
+            <p style={{ margin: "0 0 20px", fontSize: 16, lineHeight: 1.75, color: WD }}>
+              Nur gab es genau dafür kaum etwas. Also hab ich selbst gebaut, was ich mir gewünscht hätte: echte Bankszenarien zum Üben, statt trockener Theorie zum Auswendiglernen.
+            </p>
+            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.75, color: WH, fontWeight: 700 }}>
+              Heute ist BankAcademy genau das – lern faul, üb smart.
+            </p>
           </div>
         </FadeIn>
       </div>
@@ -1025,13 +983,13 @@ const WARUM_ITEMS = [
 
 function WarumBankAcademy() {
   return (
-    <section style={{ background: "#F0F4F8", padding: "96px 24px" }}>
+    <section style={{ background: NM, padding: "96px 24px" }}>
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
         <FadeIn style={{ textAlign: "center", marginBottom: 56 }}>
           <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
             Warum BankAcademy
           </p>
-          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: N }}>
+          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
             Einzigartig. Weil es sein muss.
           </h2>
         </FadeIn>
@@ -1041,36 +999,40 @@ function WarumBankAcademy() {
             <FadeIn key={item.title} delay={i * 0.08}>
               <div
                 style={{
-                  background: "#FFFFFF",
-                  border: "1px solid #E5E7EB",
+                  background: CB,
+                  border: `1px solid ${BR}`,
                   borderRadius: 18,
                   padding: "28px 24px",
                   display: "flex",
                   gap: 18,
                   alignItems: "flex-start",
-                  transition: "box-shadow 0.2s, transform 0.2s",
+                  transition: "transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s",
                   height: "100%",
                 }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 30px rgba(0,0,0,0.09)";
-                  (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px)";
+                  (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 40px rgba(0,0,0,0.3)";
+                  (e.currentTarget as HTMLDivElement).style.borderColor = `${CY}33`;
+                  (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.07)";
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
                   (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+                  (e.currentTarget as HTMLDivElement).style.borderColor = BR;
+                  (e.currentTarget as HTMLDivElement).style.background = CB;
                 }}
               >
                 <div style={{
                   width: 48, height: 48, borderRadius: 14,
-                  background: `${CY}18`,
+                  background: `${CY}15`,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 26, flexShrink: 0,
                 }}>
                   {item.emoji}
                 </div>
                 <div>
-                  <h3 style={{ margin: "0 0 8px", fontSize: 15, fontWeight: 700, color: N }}>{item.title}</h3>
-                  <p style={{ margin: 0, fontSize: 14, lineHeight: 1.65, color: "#4B5563" }}>{item.desc}</p>
+                  <h3 style={{ margin: "0 0 8px", fontSize: 15, fontWeight: 700, color: WH }}>{item.title}</h3>
+                  <p style={{ margin: 0, fontSize: 14, lineHeight: 1.65, color: WD }}>{item.desc}</p>
                 </div>
               </div>
             </FadeIn>
@@ -1088,14 +1050,14 @@ function WarumBankAcademy() {
               borderRadius: 100,
               fontSize: 14,
               fontWeight: 700,
-              background: N,
-              color: "#FFFFFF",
+              background: CY,
+              color: N,
               border: "none",
               cursor: "pointer",
-              transition: "transform 0.15s, opacity 0.15s",
+              transition: "transform 0.15s",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.82"; e.currentTarget.style.transform = "scale(1.03)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "scale(1)"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
           >
             Mehr entdecken <ChevronRight size={15} />
           </button>
