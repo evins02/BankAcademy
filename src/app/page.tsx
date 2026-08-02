@@ -962,9 +962,29 @@ function FounderStory() {
             <p style={{ margin: "0 0 20px", fontSize: 16, lineHeight: 1.75, color: WD }}>
               Nur gab es genau dafür kaum etwas. Also hab ich selbst gebaut, was ich mir gewünscht hätte: echte Bankszenarien zum Üben, statt trockener Theorie zum Auswendiglernen.
             </p>
-            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.75, color: WH, fontWeight: 700 }}>
+            <p style={{ margin: "0 0 32px", fontSize: 16, lineHeight: 1.75, color: WH, fontWeight: 700 }}>
               Heute ist BankAcademy genau das – lern faul, üb smart.
             </p>
+            <Link
+              href="/kontakt"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "13px 26px",
+                borderRadius: 100,
+                fontSize: 14,
+                fontWeight: 700,
+                background: CY,
+                color: N,
+                textDecoration: "none",
+                transition: "transform 0.15s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+            >
+              Kontakt aufnehmen <ChevronRight size={15} />
+            </Link>
           </div>
         </FadeIn>
       </div>
