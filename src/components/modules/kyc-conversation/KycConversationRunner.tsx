@@ -39,7 +39,7 @@ export function KycConversationRunner({ onBack }: Props) {
 
   // Speech state
   const [isListening, setIsListening] = useState(false);
-  const [ttsEnabled, setTtsEnabled] = useState(false);
+  const [ttsEnabled, setTtsEnabled] = useState(true);
   const [speechSupported, setSpeechSupported] = useState(false);
   const [speechError, setSpeechError] = useState<string | null>(null);
   const [micPermission, setMicPermission] = useState<PermissionState | null>(null);
@@ -48,7 +48,6 @@ export function KycConversationRunner({ onBack }: Props) {
   const historyRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const pendingTranscriptRef = useRef<string>("");
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Detect browser speech support and mic permission state
   useEffect(() => {
@@ -66,7 +65,7 @@ export function KycConversationRunner({ onBack }: Props) {
   useEffect(() => {
     return () => {
       recognitionRef.current?.abort();
-      audioRef.current?.pause();
+      if (typeof window !== "undefined") window.speechSynthesis?.cancel();
     };
   }, []);
 
@@ -98,31 +97,19 @@ export function KycConversationRunner({ onBack }: Props) {
     }
   }, [phase, evaluation]);
 
-  // TTS: read Thomas's response aloud via OpenAI TTS
+  // TTS: read Thomas's response aloud via Web Speech API
   const lastThomas = [...messages].reverse().find((m) => m.role === "assistant");
   useEffect(() => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    if (loading) { window.speechSynthesis.cancel(); return; }
     if (!ttsEnabled || !lastThomas) return;
-    audioRef.current?.pause();
-    fetch("/api/tts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: lastThomas.content }),
-    })
-      .then((r) => r.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
-        audioRef.current = audio;
-        audio.play().catch(() => {});
-        audio.onended = () => URL.revokeObjectURL(url);
-      })
-      .catch(() => {});
-  }, [lastThomas, ttsEnabled]);
-
-  // Stop TTS while waiting for response
-  useEffect(() => {
-    if (loading) audioRef.current?.pause();
-  }, [loading]);
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(lastThomas.content);
+    utterance.lang = "de-CH";
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
+  }, [lastThomas, ttsEnabled, loading]);
 
   async function sendMessage(textOverride?: string) {
     const text = (textOverride !== undefined ? textOverride : input).trim();

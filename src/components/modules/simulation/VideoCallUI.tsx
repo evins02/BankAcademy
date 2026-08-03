@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { CheckCircle2, XCircle, ChevronRight } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
+import { CheckCircle2, XCircle, ChevronRight, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type Mood = "positive" | "neutral" | "negative";
@@ -56,12 +56,29 @@ export function VideoCallUI({
 }: VideoCallUIProps) {
   const moodConfig = MOOD_CONFIG[mood];
   const historyRef = useRef<HTMLDivElement>(null);
+  const [ttsEnabled, setTtsEnabled] = useState(true);
 
   useEffect(() => {
     if (historyRef.current) {
       historyRef.current.scrollTop = historyRef.current.scrollHeight;
     }
   }, [history, customerSpeech]);
+
+  // TTS: speak customer's line via Web Speech API
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    if (!ttsEnabled || !customerSpeech) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(customerSpeech);
+    utterance.lang = "de-CH";
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
+  }, [customerSpeech, ttsEnabled]);
+
+  useEffect(() => {
+    return () => { if (typeof window !== "undefined") window.speechSynthesis?.cancel(); };
+  }, []);
 
   return (
     <div className="flex flex-1 overflow-hidden">
@@ -136,6 +153,21 @@ export function VideoCallUI({
             {moodConfig.label}
           </span>
         </div>
+
+        {/* TTS toggle – top right (next to score) */}
+        <button
+          onClick={() => {
+            if (ttsEnabled && typeof window !== "undefined") window.speechSynthesis?.cancel();
+            setTtsEnabled((v) => !v);
+          }}
+          aria-label={ttsEnabled ? "Stimme ausschalten" : "Stimme einschalten"}
+          className={cn(
+            "absolute right-4 top-16 z-10 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-sm transition-colors",
+            ttsEnabled ? "bg-blue-600/80 text-white" : "bg-black/40 text-gray-400 hover:bg-black/60"
+          )}
+        >
+          {ttsEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
+        </button>
 
         {/* Score / progress – top right */}
         <div className="absolute right-4 top-4 z-10 flex flex-col items-center rounded-xl border border-white/20 bg-black/40 px-3 py-2 backdrop-blur-sm">

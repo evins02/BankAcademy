@@ -58,13 +58,12 @@ export function AiVideoCallUI({
   const [speechSupported, setSpeechSupported] = useState(false);
   const [speechError, setSpeechError] = useState<string | null>(null);
   const [micPermission, setMicPermission] = useState<PermissionState | null>(null);
-  const [ttsEnabled, setTtsEnabled] = useState(false);
+  const [ttsEnabled, setTtsEnabled] = useState(true);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const historyRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const pendingTranscriptRef = useRef<string>("");
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const moodConfig = MOOD_CONFIG[mood];
 
   useEffect(() => {
@@ -81,34 +80,22 @@ export function AiVideoCallUI({
   useEffect(() => {
     return () => {
       recognitionRef.current?.abort();
-      audioRef.current?.pause();
+      if (typeof window !== "undefined") window.speechSynthesis?.cancel();
     };
   }, []);
 
-  // TTS: play Thomas's latest message via OpenAI TTS
+  // TTS: speak Thomas's latest message via Web Speech API
   useEffect(() => {
-    if (!ttsEnabled || !thomasSpeech || isLoading) return;
-    audioRef.current?.pause();
-    fetch("/api/tts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: thomasSpeech }),
-    })
-      .then((r) => r.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
-        audioRef.current = audio;
-        audio.play().catch(() => {});
-        audio.onended = () => URL.revokeObjectURL(url);
-      })
-      .catch(() => {});
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    if (isLoading) { window.speechSynthesis.cancel(); return; }
+    if (!ttsEnabled || !thomasSpeech) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(thomasSpeech);
+    utterance.lang = "de-CH";
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
   }, [thomasSpeech, ttsEnabled, isLoading]);
-
-  // Stop audio while loading
-  useEffect(() => {
-    if (isLoading) audioRef.current?.pause();
-  }, [isLoading]);
 
   useEffect(() => {
     if (historyRef.current) {
@@ -456,7 +443,7 @@ export function AiVideoCallUI({
           {/* TTS toggle */}
           <button
             onClick={() => {
-              if (ttsEnabled) audioRef.current?.pause();
+              if (ttsEnabled && typeof window !== "undefined") window.speechSynthesis?.cancel();
               setTtsEnabled((v) => !v);
             }}
             aria-label={ttsEnabled ? "Stimme ausschalten" : "Stimme einschalten"}
