@@ -353,7 +353,7 @@ export const BK_LEVELS: BlankokreditLevelConfig[] = [
         briefing:
           "Freibetrag: CHF 800. Keine bestehenden Kredite. Kunde fragt: «Wie viel Kredit kann ich maximal bekommen?»",
         question:
-          "Maximaler Kredit = CHF 800 × 36 Monate = CHF ___",
+          "Wie hoch ist der maximale Blankokredit für diesen Kunden? CHF ___",
         answer: "28800",
         unit: "CHF",
         tolerance: 1,

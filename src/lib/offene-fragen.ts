@@ -208,7 +208,7 @@ export const OF_CASES_ZAHLUNGSVERKEHR: OffeneFrageCase[] = [
     id: "zv-of-1",
     level: 1,
     briefing:
-      "Kunde Herr Baumann ruft an und besteht darauf, dass seine IBAN korrekt ist — er habe sie direkt von seinem Kontoauszug abgetippt. Du gibst die IBAN ins System ein: Das System wirft sofort einen Fehler aus und lehnt sie ab. Du überprüfst: Die IBAN hat 22 Stellen statt der korrekten 21 für eine Schweizer IBAN.",
+      "Kunde Herr Baumann ruft an und besteht darauf, dass seine IBAN korrekt ist — er habe sie direkt von seinem Kontoauszug abgetippt. Du gibst die IBAN ins System ein: Das System wirft sofort einen Fehler aus und lehnt sie ab.",
     question: "Wie gehst du vor?",
     role: "Backoffice-Mitarbeiter/in",
     expectedApproach:

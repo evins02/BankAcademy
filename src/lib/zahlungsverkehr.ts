@@ -72,7 +72,7 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         id: "1.1",
         level: 1,
         briefing:
-          "Du bearbeitest einen Zahlungsauftrag. Der Kunde möchte CHF 2'500 überweisen. Die IBAN hat 22 Stellen statt 21.",
+          "Du bearbeitest einen Zahlungsauftrag. Der Kunde möchte CHF 2'500 überweisen. Das System lehnt die eingegebene IBAN sofort ab.",
         question:
           "Eine Schweizer IBAN hat immer genau ___ Stellen.",
         answer: "21",
