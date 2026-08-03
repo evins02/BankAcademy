@@ -75,8 +75,8 @@ export function SubModuleMCQ({
           if (!submitted) {
             cls =
               selected === opt.key
-                ? "border-text-primary bg-gray-50"
-                : "border-border hover:border-gray-300 hover:bg-gray-50 cursor-pointer";
+                ? "border-primary bg-primary-light text-text-primary"
+                : "border-border bg-surface text-text-secondary hover:border-primary/40 hover:bg-primary-light/30 hover:text-text-primary cursor-pointer";
           } else {
             if (opt.key === correct) {
               cls = "border-green-500 bg-green-50";
@@ -96,8 +96,11 @@ export function SubModuleMCQ({
                 cls
               )}
             >
-              <span className="shrink-0 font-bold text-text-secondary w-4">{opt.key}</span>
-              <span className="text-text-primary">{opt.text}</span>
+              <span className={cn(
+                "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold transition-colors",
+                !submitted && selected === opt.key ? "bg-primary text-white" : "bg-gray-100 text-text-secondary"
+              )}>{opt.key}</span>
+              <span className="flex-1">{opt.text}</span>
             </button>
           );
         })}

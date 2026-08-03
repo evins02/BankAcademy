@@ -58,21 +58,21 @@ export function McqCaseCard({
             className={cn(
               "flex w-full items-start gap-3 rounded-DEFAULT border p-4 text-left text-sm transition-colors",
               selected === opt.key
-                ? "border-primary bg-primary-light"
-                : "border-border bg-surface hover:bg-background"
+                ? "border-primary bg-primary-light text-text-primary"
+                : "border-border bg-surface text-text-secondary hover:border-primary/40 hover:bg-primary-light/30 hover:text-text-primary"
             )}
           >
             <span
               className={cn(
-                "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold transition-colors",
+                "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold transition-colors",
                 selected === opt.key
-                  ? "border-primary bg-primary text-white"
-                  : "border-gray-300 text-text-secondary"
+                  ? "bg-primary text-white"
+                  : "bg-gray-100 text-text-secondary"
               )}
             >
               {opt.key}
             </span>
-            <span className="flex-1 leading-relaxed text-text-primary">{opt.text}</span>
+            <span className="flex-1 leading-relaxed">{opt.text}</span>
           </button>
         ))}
       </div>
