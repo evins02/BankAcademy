@@ -21,6 +21,7 @@ interface FeedbackPanelProps {
   total: number;
   isLastCase: boolean;
   onNext: () => void;
+  onSkip?: () => void;
 }
 
 export function FeedbackPanel({
@@ -30,6 +31,7 @@ export function FeedbackPanel({
   total,
   isLastCase,
   onNext,
+  onSkip,
 }: FeedbackPanelProps) {
   const isCorrect = selectedOption === zvCase.correct;
   const levelConfig = ZV_LEVELS.find((l) => l.level === zvCase.level)!;
@@ -55,9 +57,16 @@ export function FeedbackPanel({
             <Badge variant={levelConfig.badgeVariant}>
               Level {zvCase.level} – {levelConfig.label}
             </Badge>
-            <span className="text-xs text-text-secondary">
-              Fall {caseIndex + 1} von {total}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-text-secondary">
+                Fall {caseIndex + 1} von {total}
+              </span>
+              {onSkip && !isLastCase && (
+                <button onClick={onSkip} className="text-xs text-text-secondary underline underline-offset-2 hover:text-text-primary">
+                  Überspringen →
+                </button>
+              )}
+            </div>
           </div>
 
           <div

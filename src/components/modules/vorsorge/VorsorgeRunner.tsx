@@ -146,6 +146,7 @@ export function VorsorgeRunner() {
             isLastCase={isLastCase}
             nextLabel={isLastCase ? "Level abschliessen" : undefined}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         ) : (
           <FeedbackCard
@@ -155,6 +156,7 @@ export function VorsorgeRunner() {
             total={total}
             isLastCase={isLastCase}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         )
       )}

@@ -13,9 +13,10 @@ interface McqResultCardProps {
   selected: string;
   isLastCase: boolean;
   onNext: () => void;
+  onSkip?: () => void;
 }
 
-export function McqResultCard({ c, selected, isLastCase, onNext }: McqResultCardProps) {
+export function McqResultCard({ c, selected, isLastCase, onNext, onSkip }: McqResultCardProps) {
   const isCorrect = selected === c.correct;
   const [recallDone, setRecallDone] = useState(false);
 
@@ -33,9 +34,14 @@ export function McqResultCard({ c, selected, isLastCase, onNext }: McqResultCard
         ) : (
           <XCircle size={24} className="shrink-0 text-red-600" />
         )}
-        <p className={cn("font-semibold", isCorrect ? "text-green-800" : "text-red-800")}>
+        <p className={cn("flex-1 font-semibold", isCorrect ? "text-green-800" : "text-red-800")}>
           {isCorrect ? "Richtig!" : "Leider falsch"}
         </p>
+        {onSkip && !isLastCase && (
+          <button onClick={onSkip} className="text-xs text-text-secondary underline underline-offset-2 hover:text-text-primary">
+            Überspringen →
+          </button>
+        )}
       </div>
 
       {/* Active recall before the answer is revealed */}

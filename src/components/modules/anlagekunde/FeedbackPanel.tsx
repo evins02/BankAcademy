@@ -18,6 +18,7 @@ interface FeedbackPanelProps {
   total: number;
   isLastScenario: boolean;
   onNext: () => void;
+  onSkip?: () => void;
 }
 
 export function FeedbackPanel({
@@ -27,6 +28,7 @@ export function FeedbackPanel({
   total,
   isLastScenario,
   onNext,
+  onSkip,
 }: FeedbackPanelProps) {
   const isCorrect = selectedOption === scenario.correct;
   const levelConfig = AL_LEVELS.find((l) => l.level === scenario.level)!;
@@ -51,9 +53,16 @@ export function FeedbackPanel({
             <Badge variant={levelConfig.badgeVariant}>
               Level {scenario.level} – {levelConfig.label}
             </Badge>
-            <span className="text-xs text-text-secondary">
-              Szenario {scenarioIndex + 1} von {total}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-text-secondary">
+                Szenario {scenarioIndex + 1} von {total}
+              </span>
+              {onSkip && !isLastScenario && (
+                <button onClick={onSkip} className="text-xs text-text-secondary underline underline-offset-2 hover:text-text-primary">
+                  Überspringen →
+                </button>
+              )}
+            </div>
           </div>
 
           <div

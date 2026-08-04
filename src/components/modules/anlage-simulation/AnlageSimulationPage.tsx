@@ -129,6 +129,7 @@ export function AnlageSimulationPage() {
           isReacting={isReacting}
           feedbackCorrect={feedbackCorrect}
           onNext={handleNext}
+          onSkip={handleNext}
           stepIndex={stepIndex}
           totalSteps={ANLAGE_SIM_STEPS.length}
           speechExtra={

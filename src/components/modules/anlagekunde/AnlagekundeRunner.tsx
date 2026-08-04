@@ -127,6 +127,7 @@ export function AnlagekundeRunner() {
           total={total}
           isLastScenario={isLastScenario}
           onNext={handleNext}
+          onSkip={handleNext}
         />
       )}
       {view === "level-complete" && (

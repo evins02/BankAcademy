@@ -136,6 +136,7 @@ export function SparenKontoRunner() {
             isLastCase={isLastScenario}
             nextLabel={isLastScenario ? "Level abschliessen" : undefined}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         ) : (
           <FeedbackPanel
@@ -145,6 +146,7 @@ export function SparenKontoRunner() {
             total={total}
             isLastScenario={isLastScenario}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         )
       )}

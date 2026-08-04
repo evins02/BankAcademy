@@ -12,6 +12,7 @@ interface DocumentResultCardProps {
   selected: Set<string>;
   isLastCase: boolean;
   onNext: () => void;
+  onSkip?: () => void;
 }
 
 function scoreColor(s: number) {
@@ -31,6 +32,7 @@ export function DocumentResultCard({
   selected,
   isLastCase,
   onNext,
+  onSkip,
 }: DocumentResultCardProps) {
   const { score, correct } = scoreDocumentCase(c, selected);
   const [recallDone, setRecallDone] = useState(false);
@@ -63,11 +65,18 @@ export function DocumentResultCard({
             </p>
             <p className={cn("mt-0.5 text-2xl font-bold", scoreColor(score))}>{score}%</p>
           </div>
-          {correct ? (
-            <CheckCircle2 size={32} className="text-green-600" />
-          ) : (
-            <XCircle size={32} className="text-red-600" />
-          )}
+          <div className="flex flex-col items-end gap-2">
+            {correct ? (
+              <CheckCircle2 size={32} className="text-green-600" />
+            ) : (
+              <XCircle size={32} className="text-red-600" />
+            )}
+            {onSkip && !isLastCase && (
+              <button onClick={onSkip} className="text-xs text-text-secondary underline underline-offset-2 hover:text-text-primary">
+                Überspringen →
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

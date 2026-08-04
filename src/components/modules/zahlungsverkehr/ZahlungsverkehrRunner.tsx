@@ -262,6 +262,7 @@ export function ZahlungsverkehrRunner() {
             isLastCase={isLastCase}
             nextLabel={isLastCase ? "Level abschliessen" : undefined}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         ) : isOf(currentCase) ? (
           <OffeneFrageResultCard
@@ -274,6 +275,7 @@ export function ZahlungsverkehrRunner() {
             isLastCase={isLastCase}
             nextLabel={isLastCase ? "Level abschliessen" : undefined}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         ) : (
           <FeedbackPanel
@@ -283,6 +285,7 @@ export function ZahlungsverkehrRunner() {
             total={total}
             isLastCase={isLastCase}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         )
       )}

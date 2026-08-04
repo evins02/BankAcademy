@@ -26,6 +26,7 @@ interface VideoCallUIProps {
   isReacting?: boolean;
   feedbackCorrect?: boolean;
   onNext?: () => void;
+  onSkip?: () => void;
   stepIndex?: number;
   totalSteps?: number;
   liveScore?: number;
@@ -48,6 +49,7 @@ export function VideoCallUI({
   isReacting = false,
   feedbackCorrect,
   onNext,
+  onSkip,
   stepIndex,
   totalSteps,
   liveScore,
@@ -246,6 +248,14 @@ export function VideoCallUI({
                 Weiter
                 <ChevronRight size={16} />
               </button>
+              {onSkip && stepIndex !== undefined && totalSteps !== undefined && stepIndex < totalSteps - 1 && (
+                <button
+                  onClick={onSkip}
+                  className="text-center text-xs text-white/60 underline underline-offset-2 hover:text-white/90"
+                >
+                  Überspringen →
+                </button>
+              )}
             </div>
           ) : (
             <div className="space-y-2">

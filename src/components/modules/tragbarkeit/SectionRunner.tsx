@@ -87,6 +87,7 @@ export function SectionRunner({ sectionId }: SectionRunnerProps) {
           total={section.cases.length}
           isLast={isLast}
           onNext={handleNext}
+          onSkip={handleNext}
         />
       )}
 

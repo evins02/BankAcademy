@@ -181,6 +181,7 @@ export function KycRunner() {
             isLastCase={isLastScenario}
             nextLabel={isLastScenario ? "Level abschliessen" : undefined}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         ) : isOf(currentScenario) ? (
           <OffeneFrageResultCard
@@ -193,6 +194,7 @@ export function KycRunner() {
             isLastCase={isLastScenario}
             nextLabel={isLastScenario ? "Level abschliessen" : undefined}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         ) : (
           <FeedbackPanel
@@ -202,6 +204,7 @@ export function KycRunner() {
             total={total}
             isLastScenario={isLastScenario}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         )
       )}

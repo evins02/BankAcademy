@@ -21,6 +21,7 @@ interface FeedbackCardProps {
   total: number;
   isLastCase: boolean;
   onNext: () => void;
+  onSkip?: () => void;
 }
 
 export function FeedbackCard({
@@ -30,6 +31,7 @@ export function FeedbackCard({
   total,
   isLastCase,
   onNext,
+  onSkip,
 }: FeedbackCardProps) {
   const isCorrect = selectedOption === fondsCase.correct;
   const levelConfig = FONDS_LEVELS.find((l) => l.level === fondsCase.level)!;
@@ -55,9 +57,16 @@ export function FeedbackCard({
             <Badge variant={levelConfig.badgeVariant}>
               Level {fondsCase.level} – {levelConfig.label}
             </Badge>
-            <span className="text-xs text-text-secondary">
-              Fall {caseIndex + 1} von {total}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-text-secondary">
+                Fall {caseIndex + 1} von {total}
+              </span>
+              {onSkip && !isLastCase && (
+                <button onClick={onSkip} className="text-xs text-text-secondary underline underline-offset-2 hover:text-text-primary">
+                  Überspringen →
+                </button>
+              )}
+            </div>
           </div>
 
           <div

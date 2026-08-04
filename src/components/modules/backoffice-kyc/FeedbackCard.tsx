@@ -17,6 +17,7 @@ interface FeedbackCardProps {
   total: number;
   isLastScenario: boolean;
   onNext: () => void;
+  onSkip?: () => void;
 }
 
 export function FeedbackCard({
@@ -26,6 +27,7 @@ export function FeedbackCard({
   total,
   isLastScenario,
   onNext,
+  onSkip,
 }: FeedbackCardProps) {
   const levelConfig = BKO_KYC_LEVELS.find((l) => l.level === scenario.level)!;
   const isCorrect = submission.isCorrect;
@@ -38,9 +40,16 @@ export function FeedbackCard({
           <Badge variant={levelConfig.badgeVariant}>
             Level {scenario.level} – {levelConfig.label}
           </Badge>
-          <span className="text-xs text-text-secondary">
-            Fall {scenarioIndex + 1} von {total}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-text-secondary">
+              Fall {scenarioIndex + 1} von {total}
+            </span>
+            {onSkip && !isLastScenario && (
+              <button onClick={onSkip} className="text-xs text-text-secondary underline underline-offset-2 hover:text-text-primary">
+                Überspringen →
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Result banner */}

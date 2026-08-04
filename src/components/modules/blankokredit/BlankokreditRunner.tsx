@@ -193,6 +193,7 @@ export function BlankokreditRunner() {
             isLastCase={isLastCase}
             nextLabel={isLastCase ? "Level abschliessen" : undefined}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         ) : isOf(currentCase) ? (
           <OffeneFrageResultCard
@@ -205,6 +206,7 @@ export function BlankokreditRunner() {
             isLastCase={isLastCase}
             nextLabel={isLastCase ? "Level abschliessen" : undefined}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         ) : (
           <FeedbackPanel
@@ -214,6 +216,7 @@ export function BlankokreditRunner() {
             total={total}
             isLastCase={isLastCase}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         )
       )}

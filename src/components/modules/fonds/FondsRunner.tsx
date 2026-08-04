@@ -210,6 +210,7 @@ export function FondsRunner() {
           total={total}
           isLastCase={isLastCase}
           onNext={handleNext}
+          onSkip={handleNext}
         />
       )}
 

@@ -12,6 +12,7 @@ interface CaseFeedbackProps {
   total: number;
   isLast: boolean;
   onNext: () => void;
+  onSkip?: () => void;
 }
 
 export function CaseFeedback({
@@ -21,6 +22,7 @@ export function CaseFeedback({
   total,
   isLast,
   onNext,
+  onSkip,
 }: CaseFeedbackProps) {
   const isCorrect = selectedOption === sectionCase.correct;
 
@@ -31,9 +33,16 @@ export function CaseFeedback({
           <span className="text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
             Fall {sectionCase.id}
           </span>
-          <span className="text-xs text-text-secondary">
-            {caseIndex + 1} / {total}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-text-secondary">
+              {caseIndex + 1} / {total}
+            </span>
+            {onSkip && !isLast && (
+              <button onClick={onSkip} className="text-xs text-text-secondary underline underline-offset-2 hover:text-text-primary">
+                Überspringen →
+              </button>
+            )}
+          </div>
         </div>
 
         <div

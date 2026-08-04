@@ -18,6 +18,7 @@ interface OffeneFrageResultCardProps {
   nextLabel?: string;
   onNext: () => void;
   onResult?: (isCorrect: boolean) => void;
+  onSkip?: () => void;
 }
 
 const ERGEBNIS_CONFIG = {
@@ -55,6 +56,7 @@ export function OffeneFrageResultCard({
   nextLabel,
   onNext,
   onResult,
+  onSkip,
 }: OffeneFrageResultCardProps) {
   const [status, setStatus] = useState<"loading" | "done" | "error">("loading");
   const [result, setResult] = useState<OffeneFrageEvalResult | null>(null);
@@ -97,9 +99,16 @@ export function OffeneFrageResultCard({
           <Badge variant={badgeVariant}>
             Level {c.level} – {levelLabel}
           </Badge>
-          <span className="text-xs text-text-secondary">
-            {caseIndex + 1} von {total}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-text-secondary">
+              {caseIndex + 1} von {total}
+            </span>
+            {onSkip && !isLastCase && (
+              <button onClick={onSkip} className="text-xs text-text-secondary underline underline-offset-2 hover:text-text-primary">
+                Überspringen →
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Student's answer recap */}

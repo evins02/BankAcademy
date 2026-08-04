@@ -20,6 +20,7 @@ interface LückentextResultCardProps {
   isLastCase: boolean;
   nextLabel?: string;
   onNext: () => void;
+  onSkip?: () => void;
 }
 
 export function LückentextResultCard({
@@ -33,6 +34,7 @@ export function LückentextResultCard({
   isLastCase,
   nextLabel,
   onNext,
+  onSkip,
 }: LückentextResultCardProps) {
   const [recallDone, setRecallDone] = useState(false);
   const [before, after] = c.question.split("___");
@@ -44,9 +46,16 @@ export function LückentextResultCard({
           <Badge variant={badgeVariant}>
             Level {c.level} – {levelLabel}
           </Badge>
-          <span className="text-xs text-text-secondary">
-            {caseIndex + 1} von {total}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-text-secondary">
+              {caseIndex + 1} von {total}
+            </span>
+            {onSkip && !isLastCase && (
+              <button onClick={onSkip} className="text-xs text-text-secondary underline underline-offset-2 hover:text-text-primary">
+                Überspringen →
+              </button>
+            )}
+          </div>
         </div>
 
         <div

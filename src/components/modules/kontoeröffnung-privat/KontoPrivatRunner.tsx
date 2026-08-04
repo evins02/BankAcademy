@@ -285,6 +285,7 @@ export function KontoPrivatRunner() {
             selected={selectedDocs}
             isLastCase={effectiveIsLastCase}
             onNext={handleNext}
+            onSkip={handleNext}
           />
         </div>
       );
@@ -296,6 +297,7 @@ export function KontoPrivatRunner() {
           selected={selectedOption!}
           isLastCase={effectiveIsLastCase}
           onNext={handleNext}
+          onSkip={handleNext}
         />
       </div>
     );

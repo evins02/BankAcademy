@@ -101,6 +101,7 @@ export function SimulationPage() {
       isReacting={isReacting}
       feedbackCorrect={feedbackCorrect}
       onNext={handleNext}
+      onSkip={handleNext}
       stepIndex={stepIndex}
       totalSteps={SIM_STEPS.length}
     />

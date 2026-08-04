@@ -109,6 +109,7 @@ export function BkoKycRunner() {
           total={total}
           isLastScenario={isLastScenario}
           onNext={handleNext}
+          onSkip={handleNext}
         />
       )}
 

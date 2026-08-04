@@ -134,6 +134,7 @@ export function ZvPrivatRunner() {
           total={total}
           isLastCase={isLastCase}
           onNext={handleNext}
+          onSkip={handleNext}
         />
       )}
 

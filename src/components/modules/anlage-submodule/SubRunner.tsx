@@ -161,6 +161,7 @@ export function SubRunner({
           total={total}
           isLastCase={isLastCase}
           onNext={handleNext}
+          onSkip={handleNext}
         />
       )}
 
