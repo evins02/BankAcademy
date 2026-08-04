@@ -17,8 +17,9 @@ import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { addAttemptRecord } from "@/lib/error-tracking";
 import { NoteModal } from "@/components/shared/NoteModal";
+import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 
-type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
+type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete";
 
 export function BlankokreditRunner() {
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
@@ -32,6 +33,8 @@ export function BlankokreditRunner() {
   const [lückentextAnswer, setLückentextAnswer] = useState("");
   const [offeneFrageAnswer, setOffeneFrageAnswer] = useState("");
   const [noteOpen, setNoteOpen] = useState(false);
+  const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
+  const [isMcqSecondAttempt, setIsMcqSecondAttempt] = useState(false);
 
   const levelConfig = BK_LEVELS.find((l) => l.level === activeLevel)!;
   const activeCases = useMemo(
@@ -63,8 +66,23 @@ export function BlankokreditRunner() {
   }, []);
 
   const handleSubmit = useCallback(() => {
-    setView("feedback");
-  }, []);
+    if (isLt(currentCase) || isOf(currentCase)) {
+      setView("feedback");
+      return;
+    }
+    if (view === "soft-feedback") {
+      setIsMcqSecondAttempt(true);
+      setView("feedback");
+      return;
+    }
+    const isCorrect = selectedOption === (currentCase as { correct: OptionKey }).correct;
+    if (!isCorrect) {
+      setSoftFeedbackMessage("Du hast eine falsche Antwort gewählt. Du hast noch einen Versuch.");
+      setView("soft-feedback");
+    } else {
+      setView("feedback");
+    }
+  }, [view, currentCase, selectedOption]);
 
   const handleNext = useCallback(() => {
     const isLückentext = isLt(currentCase);
@@ -90,7 +108,7 @@ export function BlankokreditRunner() {
         levelNum: activeLevel,
         caseId: currentCase.id,
         caseTitle: String(_c.title ?? _c.label ?? _c.question ?? currentCase.id),
-        attempt: 1,
+        attempt: (!isLückentext && isMcqSecondAttempt) ? 2 : 1,
         timestamp: Date.now(),
         score: isCorrect ? 100 : 0,
         correct: isCorrect,
@@ -113,9 +131,10 @@ export function BlankokreditRunner() {
       setSelectedOption(null);
       setLückentextAnswer("");
       setOffeneFrageAnswer("");
+      setIsMcqSecondAttempt(false);
       setView("playing");
     }
-  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, lückentextAnswer, offeneFrageAnswer]);
+  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, lückentextAnswer, offeneFrageAnswer, isMcqSecondAttempt]);
 
   const handleRetry = useCallback(() => {
     setCaseIndex(0);
@@ -123,6 +142,7 @@ export function BlankokreditRunner() {
     setSessionResults([]);
     setLückentextAnswer("");
     setOffeneFrageAnswer("");
+    setIsMcqSecondAttempt(false);
     setView("lernblock");
   }, []);
 
@@ -144,7 +164,7 @@ export function BlankokreditRunner() {
         <LernblockCard level={activeLevel} onContinue={handleLernblockDone} />
       )}
 
-      {view === "playing" && currentCase && (
+      {(view === "playing" || view === "soft-feedback") && currentCase && (
         isLt(currentCase) ? (
           <LückentextCard
             c={currentCase}
@@ -168,15 +188,18 @@ export function BlankokreditRunner() {
             onSubmit={handleSubmit}
           />
         ) : (
-          <CaseCard
-            bkCase={currentCase}
-            caseIndex={caseIndex}
-            total={total}
-            selectedOption={selectedOption}
-            onSelect={setSelectedOption}
-            onSubmit={handleSubmit}
-            onOpenNote={() => setNoteOpen(true)}
-          />
+          <>
+            {view === "soft-feedback" && <SoftFeedbackBanner message={softFeedbackMessage} />}
+            <CaseCard
+              bkCase={currentCase}
+              caseIndex={caseIndex}
+              total={total}
+              selectedOption={selectedOption}
+              onSelect={setSelectedOption}
+              onSubmit={handleSubmit}
+              onOpenNote={() => setNoteOpen(true)}
+            />
+          </>
         )
       )}
 

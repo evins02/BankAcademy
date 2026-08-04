@@ -10,8 +10,9 @@ import { SK_LEVELS, type LevelNum, type OptionKey } from "@/lib/sparen-konto";
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
+import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 
-type View = "selector" | "playing" | "feedback" | "level-complete";
+type View = "selector" | "playing" | "soft-feedback" | "feedback" | "level-complete";
 
 export function SparenKontoRunner() {
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
@@ -24,6 +25,7 @@ export function SparenKontoRunner() {
   const [sessionResults, setSessionResults] = useState<ScenarioResult[]>([]);
   const [lückentextAnswer, setLückentextAnswer] = useState("");
   const [noteOpen, setNoteOpen] = useState(false);
+  const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
 
   const levelConfig = SK_LEVELS.find((l) => l.level === activeLevel)!;
   const currentScenario = levelConfig.scenarios[scenarioIndex];
@@ -43,8 +45,22 @@ export function SparenKontoRunner() {
   }, []);
 
   const handleSubmit = useCallback(() => {
-    setView("feedback");
-  }, []);
+    if (isLt(currentScenario)) {
+      setView("feedback");
+      return;
+    }
+    if (view === "soft-feedback") {
+      setView("feedback");
+      return;
+    }
+    const isCorrect = selectedOption === (currentScenario as { correct: OptionKey }).correct;
+    if (!isCorrect) {
+      setSoftFeedbackMessage("Du hast eine falsche Antwort gewählt. Du hast noch einen Versuch.");
+      setView("soft-feedback");
+    } else {
+      setView("feedback");
+    }
+  }, [view, currentScenario, selectedOption]);
 
   const handleNext = useCallback(() => {
     const isLückentext = isLt(currentScenario);
@@ -72,6 +88,7 @@ export function SparenKontoRunner() {
       setScenarioIndex((i) => i + 1);
       setSelectedOption(null);
       setLückentextAnswer("");
+      setSoftFeedbackMessage("");
       setView("playing");
     }
   }, [selectedOption, currentScenario, sessionResults, isLastScenario, activeLevel, lückentextAnswer]);
@@ -98,7 +115,7 @@ export function SparenKontoRunner() {
         />
       )}
 
-      {view === "playing" && currentScenario && (
+      {(view === "playing" || view === "soft-feedback") && currentScenario && (
         isLt(currentScenario) ? (
           <LückentextCard
             c={currentScenario}
@@ -111,15 +128,18 @@ export function SparenKontoRunner() {
             onSubmit={handleSubmit}
           />
         ) : (
-          <ScenarioCard
-            scenario={currentScenario}
-            scenarioIndex={scenarioIndex}
-            total={total}
-            selectedOption={selectedOption}
-            onSelect={setSelectedOption}
-            onSubmit={handleSubmit}
-            onOpenNote={() => setNoteOpen(true)}
-          />
+          <>
+            {view === "soft-feedback" && <SoftFeedbackBanner message={softFeedbackMessage} />}
+            <ScenarioCard
+              scenario={currentScenario}
+              scenarioIndex={scenarioIndex}
+              total={total}
+              selectedOption={selectedOption}
+              onSelect={setSelectedOption}
+              onSubmit={handleSubmit}
+              onOpenNote={() => setNoteOpen(true)}
+            />
+          </>
         )
       )}
 

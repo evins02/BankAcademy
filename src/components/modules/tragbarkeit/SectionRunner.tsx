@@ -7,8 +7,9 @@ import { CaseCard } from "./CaseCard";
 import { CaseFeedback } from "./CaseFeedback";
 import { SectionComplete, type CaseResult } from "./SectionComplete";
 import { getSectionConfig, type SectionId, type OptionKey } from "@/lib/tragbarkeit";
+import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 
-type View = "theory" | "question" | "feedback" | "complete";
+type View = "theory" | "question" | "soft-feedback" | "feedback" | "complete";
 
 interface SectionRunnerProps {
   sectionId: SectionId;
@@ -22,13 +23,24 @@ export function SectionRunner({ sectionId }: SectionRunnerProps) {
   const [caseIndex, setCaseIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<OptionKey | null>(null);
   const [results, setResults] = useState<CaseResult[]>([]);
+  const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
 
   const currentCase = section.cases[caseIndex];
   const isLast = caseIndex === section.cases.length - 1;
 
   const handleSubmit = useCallback(() => {
-    setView("feedback");
-  }, []);
+    if (view === "soft-feedback") {
+      setView("feedback");
+      return;
+    }
+    const isCorrect = selectedOption === currentCase.correct;
+    if (!isCorrect) {
+      setSoftFeedbackMessage("Du hast eine falsche Antwort gewählt. Du hast noch einen Versuch.");
+      setView("soft-feedback");
+    } else {
+      setView("feedback");
+    }
+  }, [view, selectedOption, currentCase]);
 
   const handleNext = useCallback(() => {
     if (!selectedOption) return;
@@ -44,6 +56,7 @@ export function SectionRunner({ sectionId }: SectionRunnerProps) {
     } else {
       setCaseIndex((i) => i + 1);
       setSelectedOption(null);
+      setSoftFeedbackMessage("");
       setView("question");
     }
   }, [selectedOption, currentCase, results, isLast]);
@@ -52,6 +65,7 @@ export function SectionRunner({ sectionId }: SectionRunnerProps) {
     setCaseIndex(0);
     setSelectedOption(null);
     setResults([]);
+    setSoftFeedbackMessage("");
     setView("theory");
   }, []);
 
@@ -68,15 +82,18 @@ export function SectionRunner({ sectionId }: SectionRunnerProps) {
         />
       )}
 
-      {view === "question" && currentCase && (
-        <CaseCard
-          sectionCase={currentCase}
-          caseIndex={caseIndex}
-          total={section.cases.length}
-          selectedOption={selectedOption}
-          onSelect={setSelectedOption}
-          onSubmit={handleSubmit}
-        />
+      {(view === "question" || view === "soft-feedback") && currentCase && (
+        <>
+          {view === "soft-feedback" && <SoftFeedbackBanner message={softFeedbackMessage} />}
+          <CaseCard
+            sectionCase={currentCase}
+            caseIndex={caseIndex}
+            total={section.cases.length}
+            selectedOption={selectedOption}
+            onSelect={setSelectedOption}
+            onSubmit={handleSubmit}
+          />
+        </>
       )}
 
       {view === "feedback" && currentCase && selectedOption && (

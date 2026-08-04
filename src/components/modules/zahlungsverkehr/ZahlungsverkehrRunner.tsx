@@ -23,8 +23,9 @@ import { useGlossar } from "@/context/GlossarContext";
 import { getSettings } from "@/lib/settingsData";
 import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
+import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 
-type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
+type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete" | "module-complete";
 
 const MAX_LEVEL = 3 as LevelNum;
 
@@ -46,6 +47,7 @@ export function ZahlungsverkehrRunner() {
   const [levelElapsed, setLevelElapsed] = useState<number | undefined>(undefined);
   const [noteOpen, setNoteOpen] = useState(false);
   const [moduleAccuracy, setModuleAccuracy] = useState<number | undefined>(undefined);
+  const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
 
   const { open: openGlossar } = useGlossar();
 
@@ -83,8 +85,22 @@ export function ZahlungsverkehrRunner() {
   }, []);
 
   const handleSubmit = useCallback(() => {
-    setView("feedback");
-  }, []);
+    if (isLt(currentCase) || isOf(currentCase)) {
+      setView("feedback");
+      return;
+    }
+    if (view === "soft-feedback") {
+      setView("feedback");
+      return;
+    }
+    const isCorrect = selectedOption === (currentCase as { correct: OptionKey }).correct;
+    if (!isCorrect) {
+      setSoftFeedbackMessage("Du hast eine falsche Antwort gewählt. Du hast noch einen Versuch.");
+      setView("soft-feedback");
+    } else {
+      setView("feedback");
+    }
+  }, [view, currentCase, selectedOption]);
 
   const handleNext = useCallback(() => {
     const isLückentext = isLt(currentCase);
@@ -150,6 +166,7 @@ export function ZahlungsverkehrRunner() {
       setSelectedOption(null);
       setLückentextAnswer("");
       setOffeneFrageAnswer("");
+      setSoftFeedbackMessage("");
       setView("playing");
     }
   }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, wrongStreak, levelStartTime, lückentextAnswer, offeneFrageAnswer]);
@@ -212,7 +229,7 @@ export function ZahlungsverkehrRunner() {
         />
       )}
 
-      {view === "playing" && currentCase && (
+      {(view === "playing" || view === "soft-feedback") && currentCase && (
         isLt(currentCase) ? (
           <LückentextCard
             c={currentCase}
@@ -236,16 +253,19 @@ export function ZahlungsverkehrRunner() {
             onSubmit={handleSubmit}
           />
         ) : (
-          <CaseCard
-            zvCase={currentCase}
-            caseIndex={caseIndex}
-            total={total}
-            selectedOption={selectedOption}
-            onSelect={setSelectedOption}
-            onSubmit={handleSubmit}
-            onOpenNote={() => setNoteOpen(true)}
-            levelStartTime={timerEnabled ? levelStartTime : undefined}
-          />
+          <>
+            {view === "soft-feedback" && <SoftFeedbackBanner message={softFeedbackMessage} />}
+            <CaseCard
+              zvCase={currentCase}
+              caseIndex={caseIndex}
+              total={total}
+              selectedOption={selectedOption}
+              onSelect={setSelectedOption}
+              onSubmit={handleSubmit}
+              onOpenNote={() => setNoteOpen(true)}
+              levelStartTime={timerEnabled ? levelStartTime : undefined}
+            />
+          </>
         )
       )}
 

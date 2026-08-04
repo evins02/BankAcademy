@@ -11,8 +11,9 @@ import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { addAttemptRecord } from "@/lib/error-tracking";
 import { NoteModal } from "@/components/shared/NoteModal";
+import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 
-type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
+type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete";
 
 export function AnlagekundeRunner() {
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
@@ -24,6 +25,8 @@ export function AnlagekundeRunner() {
   const [scenarioIndex, setScenarioIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<OptionKey | null>(null);
   const [sessionResults, setSessionResults] = useState<ScenarioResult[]>([]);
+  const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
+  const [isMcqSecondAttempt, setIsMcqSecondAttempt] = useState(false);
 
   const levelConfig = AL_LEVELS.find((l) => l.level === activeLevel)!;
   const activeScenarios = useMemo(
@@ -44,8 +47,19 @@ export function AnlagekundeRunner() {
   }, []);
 
   const handleSubmit = useCallback(() => {
-    setView("feedback");
-  }, []);
+    if (view === "soft-feedback") {
+      setIsMcqSecondAttempt(true);
+      setView("feedback");
+      return;
+    }
+    const isCorrect = selectedOption === currentScenario.correct;
+    if (!isCorrect) {
+      setSoftFeedbackMessage("Du hast eine falsche Antwort gewählt. Du hast noch einen Versuch.");
+      setView("soft-feedback");
+    } else {
+      setView("feedback");
+    }
+  }, [view, selectedOption, currentScenario]);
 
   const handleNext = useCallback(() => {
     if (!selectedOption) return;
@@ -63,7 +77,7 @@ export function AnlagekundeRunner() {
       levelNum: activeLevel,
       caseId: currentScenario.id,
       caseTitle: String((currentScenario as unknown as Record<string, unknown>).title ?? (currentScenario as unknown as Record<string, unknown>).label ?? currentScenario.id),
-      attempt: 1,
+      attempt: isMcqSecondAttempt ? 2 : 1,
       timestamp: Date.now(),
       score: isCorrect ? 100 : 0,
       correct: isCorrect,
@@ -81,14 +95,16 @@ export function AnlagekundeRunner() {
     } else {
       setScenarioIndex((i) => i + 1);
       setSelectedOption(null);
+      setIsMcqSecondAttempt(false);
       setView("playing");
     }
-  }, [selectedOption, currentScenario, sessionResults, isLastScenario, activeLevel]);
+  }, [selectedOption, currentScenario, sessionResults, isLastScenario, activeLevel, isMcqSecondAttempt]);
 
   const handleRetry = useCallback(() => {
     setScenarioIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
+    setIsMcqSecondAttempt(false);
     setView("lernblock");
   }, []);
 
@@ -108,16 +124,19 @@ export function AnlagekundeRunner() {
       {view === "lernblock" && (
         <LernblockCard level={activeLevel} onContinue={() => setView("playing")} />
       )}
-      {view === "playing" && currentScenario && (
-        <CaseCard
-          scenario={currentScenario}
-          scenarioIndex={scenarioIndex}
-          total={total}
-          selectedOption={selectedOption}
-          onSelect={setSelectedOption}
-          onSubmit={handleSubmit}
-          onOpenNote={() => setNoteOpen(true)}
-        />
+      {(view === "playing" || view === "soft-feedback") && currentScenario && (
+        <>
+          {view === "soft-feedback" && <SoftFeedbackBanner message={softFeedbackMessage} />}
+          <CaseCard
+            scenario={currentScenario}
+            scenarioIndex={scenarioIndex}
+            total={total}
+            selectedOption={selectedOption}
+            onSelect={setSelectedOption}
+            onSubmit={handleSubmit}
+            onOpenNote={() => setNoteOpen(true)}
+          />
+        </>
       )}
       {view === "feedback" && currentScenario && selectedOption && (
         <FeedbackPanel

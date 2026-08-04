@@ -10,8 +10,9 @@ import { VORSORGE_LEVELS, type LevelNum } from "@/lib/vorsorge";
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
+import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 
-type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
+type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete";
 
 export function VorsorgeRunner() {
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
@@ -23,6 +24,7 @@ export function VorsorgeRunner() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [sessionResults, setSessionResults] = useState<CaseResult[]>([]);
   const [lückentextAnswer, setLückentextAnswer] = useState("");
+  const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
 
   const levelConfig = VORSORGE_LEVELS.find((l) => l.level === activeLevel)!;
   const currentCase = levelConfig.cases[caseIndex];
@@ -46,8 +48,22 @@ export function VorsorgeRunner() {
   }, []);
 
   const handleSubmit = useCallback(() => {
-    setView("feedback");
-  }, []);
+    if (isLt(currentCase)) {
+      setView("feedback");
+      return;
+    }
+    if (view === "soft-feedback") {
+      setView("feedback");
+      return;
+    }
+    const isCorrect = selectedOption === (currentCase as { correct: string }).correct;
+    if (!isCorrect) {
+      setSoftFeedbackMessage("Du hast eine falsche Antwort gewählt. Du hast noch einen Versuch.");
+      setView("soft-feedback");
+    } else {
+      setView("feedback");
+    }
+  }, [view, currentCase, selectedOption]);
 
   const handleNext = useCallback(() => {
     const isLückentext = isLt(currentCase);
@@ -75,6 +91,7 @@ export function VorsorgeRunner() {
       setCaseIndex((i) => i + 1);
       setSelectedOption(null);
       setLückentextAnswer("");
+      setSoftFeedbackMessage("");
       setView("playing");
     }
   }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, lückentextAnswer]);
@@ -109,7 +126,7 @@ export function VorsorgeRunner() {
 
       {view === "lernblock" && <LernblockCards onContinue={handleLernblockDone} />}
 
-      {view === "playing" && currentCase && (
+      {(view === "playing" || view === "soft-feedback") && currentCase && (
         isLt(currentCase) ? (
           <LückentextCard
             c={currentCase}
@@ -122,14 +139,17 @@ export function VorsorgeRunner() {
             onSubmit={handleSubmit}
           />
         ) : (
-          <CaseCard
-            vorsorgeCase={currentCase}
-            caseIndex={caseIndex}
-            total={total}
-            selectedOption={selectedOption}
-            onSelect={setSelectedOption}
-            onSubmit={handleSubmit}
-          />
+          <>
+            {view === "soft-feedback" && <SoftFeedbackBanner message={softFeedbackMessage} />}
+            <CaseCard
+              vorsorgeCase={currentCase}
+              caseIndex={caseIndex}
+              total={total}
+              selectedOption={selectedOption}
+              onSelect={setSelectedOption}
+              onSubmit={handleSubmit}
+            />
+          </>
         )
       )}
 

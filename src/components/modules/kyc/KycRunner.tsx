@@ -16,8 +16,9 @@ import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { NoteModal } from "@/components/shared/NoteModal";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { addAttemptRecord } from "@/lib/error-tracking";
+import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 
-type View = "selector" | "playing" | "feedback" | "level-complete";
+type View = "selector" | "playing" | "soft-feedback" | "feedback" | "level-complete";
 
 export function KycRunner() {
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
@@ -31,6 +32,8 @@ export function KycRunner() {
   const [lückentextAnswer, setLückentextAnswer] = useState("");
   const [offeneFrageAnswer, setOffeneFrageAnswer] = useState("");
   const [noteOpen, setNoteOpen] = useState(false);
+  const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
+  const [isMcqSecondAttempt, setIsMcqSecondAttempt] = useState(false);
 
   const levelConfig = KYC_LEVELS.find((l) => l.level === activeLevel)!;
   const activeScenarios = useMemo(
@@ -59,8 +62,23 @@ export function KycRunner() {
   }, []);
 
   const handleSubmit = useCallback(() => {
-    setView("feedback");
-  }, []);
+    if (isLt(currentScenario) || isOf(currentScenario)) {
+      setView("feedback");
+      return;
+    }
+    if (view === "soft-feedback") {
+      setIsMcqSecondAttempt(true);
+      setView("feedback");
+      return;
+    }
+    const isCorrect = selectedOption === (currentScenario as { correct: OptionKey }).correct;
+    if (!isCorrect) {
+      setSoftFeedbackMessage("Du hast eine falsche Antwort gewählt. Du hast noch einen Versuch.");
+      setView("soft-feedback");
+    } else {
+      setView("feedback");
+    }
+  }, [view, currentScenario, selectedOption]);
 
   const handleNext = useCallback(() => {
     const isLückentext = isLt(currentScenario);
@@ -86,7 +104,7 @@ export function KycRunner() {
         levelNum: activeLevel,
         caseId: currentScenario.id,
         caseTitle: String(_c.title ?? _c.label ?? _c.question ?? currentScenario.id),
-        attempt: 1,
+        attempt: (!isLückentext && isMcqSecondAttempt) ? 2 : 1,
         timestamp: Date.now(),
         score: isCorrect ? 100 : 0,
         correct: isCorrect,
@@ -105,9 +123,10 @@ export function KycRunner() {
       setSelectedOption(null);
       setLückentextAnswer("");
       setOffeneFrageAnswer("");
+      setIsMcqSecondAttempt(false);
       setView("playing");
     }
-  }, [selectedOption, currentScenario, sessionResults, isLastScenario, activeLevel, lückentextAnswer, offeneFrageAnswer]);
+  }, [selectedOption, currentScenario, sessionResults, isLastScenario, activeLevel, lückentextAnswer, offeneFrageAnswer, isMcqSecondAttempt]);
 
   const handleRetry = useCallback(() => {
     setScenarioIndex(0);
@@ -115,6 +134,7 @@ export function KycRunner() {
     setSessionResults([]);
     setLückentextAnswer("");
     setOffeneFrageAnswer("");
+    setIsMcqSecondAttempt(false);
     setView("playing");
   }, []);
 
@@ -132,7 +152,7 @@ export function KycRunner() {
         />
       )}
 
-      {view === "playing" && currentScenario && (
+      {(view === "playing" || view === "soft-feedback") && currentScenario && (
         isLt(currentScenario) ? (
           <LückentextCard
             c={currentScenario}
@@ -156,15 +176,18 @@ export function KycRunner() {
             onSubmit={handleSubmit}
           />
         ) : (
-          <ScenarioCard
-            scenario={currentScenario}
-            scenarioIndex={scenarioIndex}
-            total={total}
-            selectedOption={selectedOption}
-            onSelect={setSelectedOption}
-            onSubmit={handleSubmit}
-            onOpenNote={() => setNoteOpen(true)}
-          />
+          <>
+            {view === "soft-feedback" && <SoftFeedbackBanner message={softFeedbackMessage} />}
+            <ScenarioCard
+              scenario={currentScenario}
+              scenarioIndex={scenarioIndex}
+              total={total}
+              selectedOption={selectedOption}
+              onSelect={setSelectedOption}
+              onSubmit={handleSubmit}
+              onOpenNote={() => setNoteOpen(true)}
+            />
+          </>
         )
       )}
 
