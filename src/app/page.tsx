@@ -49,6 +49,25 @@ function useInView(threshold = 0.1) {
   return { ref, visible };
 }
 
+function useScrollZoom(from = 0.86) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(from);
+  useEffect(() => {
+    const update = () => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const winH = window.innerHeight;
+      const progress = Math.min(1, Math.max(0, (winH - rect.top) / (winH * 0.85)));
+      setScale(from + (1 - from) * progress);
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+    return () => window.removeEventListener("scroll", update);
+  }, [from]);
+  return { ref, scale };
+}
+
 function useCountUp(target: number, active: boolean) {
   const [v, setV] = useState(0);
   useEffect(() => {
@@ -374,150 +393,6 @@ function Navbar({
   );
 }
 
-/* ─── App mockup ──────────────────────────────────────────────────────────── */
-
-function AppMockup() {
-  return (
-    <div
-      id="mockup"
-      className="hidden sm:block"
-      style={{ position: "relative", maxWidth: 860, margin: "60px auto 0", padding: "0 24px" }}
-    >
-      {/* Glow */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: -40,
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "60%",
-          height: 160,
-          borderRadius: "50%",
-          background: CY,
-          opacity: 0.12,
-          filter: "blur(56px)",
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* Browser */}
-      <div
-        style={{
-          borderRadius: 18,
-          overflow: "hidden",
-          boxShadow: `0 0 0 1px ${BR}, 0 40px 100px rgba(0,0,0,0.7)`,
-          animation: "mockupFloat 6s ease-in-out infinite",
-          transform: "perspective(1400px) rotateX(4deg)",
-        }}
-      >
-        {/* Chrome bar */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            background: "#0d1117",
-            padding: "10px 16px",
-          }}
-        >
-          <div style={{ display: "flex", gap: 6 }}>
-            <span style={{ width: 11, height: 11, borderRadius: "50%", background: "#ef4444", display: "inline-block" }} />
-            <span style={{ width: 11, height: 11, borderRadius: "50%", background: "#fbbf24", display: "inline-block" }} />
-            <span style={{ width: 11, height: 11, borderRadius: "50%", background: "#22c55e", display: "inline-block" }} />
-          </div>
-          <div
-            style={{
-              flex: 1,
-              maxWidth: 300,
-              margin: "0 auto",
-              background: "#161b22",
-              borderRadius: 6,
-              padding: "5px 12px",
-              display: "flex",
-              alignItems: "center",
-              gap: 7,
-            }}
-          >
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e", display: "inline-block" }} />
-            <span style={{ fontSize: 11, color: "#6b7280" }}>app.bankacademy.ch/dashboard</span>
-          </div>
-        </div>
-
-        {/* App UI */}
-        <div style={{ display: "flex", height: 280, background: "#F8F9FD", overflow: "hidden" }}>
-          {/* Sidebar */}
-          <div style={{ width: 168, flexShrink: 0, background: "#0D1B4B", padding: "12px 10px", display: "flex", flexDirection: "column", gap: 2 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "6px 10px", marginBottom: 10 }}>
-              <span style={{ width: 20, height: 20, borderRadius: 6, background: CY, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 900, color: N }}>BA</span>
-              <span style={{ fontSize: 11, fontWeight: 800, color: "#fff", letterSpacing: "-0.3px" }}>BankAcademy</span>
-            </div>
-            {[
-              { label: "Dashboard", active: true },
-              { label: "Privatkunde", active: false },
-              { label: "Firmenkunde", active: false },
-              { label: "Back Office", active: false },
-              { label: "Statistiken", active: false },
-            ].map((item) => (
-              <div
-                key={item.label}
-                style={{
-                  borderRadius: 8,
-                  padding: "7px 10px",
-                  fontSize: 10,
-                  fontWeight: item.active ? 600 : 400,
-                  color: item.active ? CY : "rgba(255,255,255,0.38)",
-                  background: item.active ? `${CY}22` : "transparent",
-                }}
-              >
-                {item.label}
-              </div>
-            ))}
-          </div>
-
-          {/* Main content */}
-          <div style={{ flex: 1, padding: 16, overflow: "hidden" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-              <div>
-                <p style={{ fontSize: 12, fontWeight: 700, color: "#111827", margin: 0 }}>Guten Abend, Max 👋</p>
-                <p style={{ fontSize: 10, color: "#9ca3af", margin: "2px 0 0" }}>Bereit für die nächste Einheit?</p>
-              </div>
-              <span style={{ background: "#fef3c7", color: "#92400e", fontSize: 9, fontWeight: 700, padding: "3px 8px", borderRadius: 100 }}>🔥 12 Tage</span>
-            </div>
-
-            {/* Stats */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 12 }}>
-              {[["105+", "Szenarien"], ["12", "Abgeschlossen"], ["84%", "Genauigkeit"]].map(([n, l]) => (
-                <div key={l} style={{ background: "#fff", border: "1px solid #f3f4f6", borderRadius: 12, padding: 8, textAlign: "center", boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}>
-                  <p style={{ margin: 0, fontSize: 13, fontWeight: 800, color: "#0D1B4B" }}>{n}</p>
-                  <p style={{ margin: "1px 0 0", fontSize: 8, color: "#9ca3af" }}>{l}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Modules */}
-            <p style={{ margin: "0 0 6px", fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#9ca3af" }}>Module</p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
-              {[
-                { name: "Privatkunde", pct: 65, clr: CY },
-                { name: "Firmenkunde", pct: 40, clr: PU },
-                { name: "Back Office", pct: 80, clr: "#10b981" },
-                { name: "Anlagekunde", pct: 20, clr: "#f59e0b" },
-              ].map((m) => (
-                <div key={m.name} style={{ background: "#fff", border: "1px solid #f3f4f6", borderRadius: 10, padding: "8px 9px" }}>
-                  <p style={{ margin: "0 0 5px", fontSize: 9, fontWeight: 600, color: "#374151" }}>{m.name}</p>
-                  <div style={{ height: 4, background: "#f3f4f6", borderRadius: 100, overflow: "hidden" }}>
-                    <div style={{ height: "100%", width: `${m.pct}%`, background: m.clr, borderRadius: 100 }} />
-                  </div>
-                  <p style={{ margin: "3px 0 0", fontSize: 8, color: "#9ca3af" }}>{m.pct}%</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 /* ─── Section: Hero ───────────────────────────────────────────────────────── */
 
@@ -687,8 +562,6 @@ function Hero({ onStart }: { onStart: () => void }) {
 
       </div>
 
-      <AppMockup />
-
       {/* Bottom fade */}
       <div
         style={{
@@ -708,8 +581,11 @@ function Hero({ onStart }: { onStart: () => void }) {
 /* ─── Section: Demo Video ─────────────────────────────────────────────────── */
 
 function DemoVideo() {
+  const { ref: zoomRef, scale } = useScrollZoom(0.86);
+
   return (
     <section
+      id="demo-video"
       style={{
         background: N,
         padding: "96px 24px 104px",
@@ -746,57 +622,64 @@ function DemoVideo() {
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.15}>
-          <div style={{ maxWidth: 900, margin: "0 auto 40px" }}>
-            <div
-              style={{
-                borderRadius: 18,
-                overflow: "hidden",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.35), 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.07)",
-              }}
+        <div
+          ref={zoomRef}
+          style={{
+            maxWidth: 900,
+            margin: "0 auto 40px",
+            transform: `scale(${scale})`,
+            transformOrigin: "center center",
+            willChange: "transform",
+          }}
+        >
+          <div
+            style={{
+              borderRadius: 18,
+              overflow: "hidden",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.35), 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.07)",
+            }}
+          >
+            <video
+              controls
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{ width: "100%", display: "block", borderRadius: 0 }}
             >
-              <video
-                controls
-                autoPlay
-                muted
-                loop
-                playsInline
-                style={{ width: "100%", display: "block", borderRadius: 0 }}
-              >
-                <source src="/demo-video.mp4" type="video/mp4" />
-              </video>
-            </div>
+              <source src="/demo-video.mp4" type="video/mp4" />
+            </video>
           </div>
+        </div>
 
-          <div style={{ textAlign: "center" }}>
-            <Link
-              href="/demo"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "14px 30px",
-                borderRadius: 100,
-                fontSize: 15,
-                fontWeight: 700,
-                background: CY,
-                color: N,
-                textDecoration: "none",
-                boxShadow: `0 4px 20px ${CY}44`,
-                transition: "transform 0.15s, box-shadow 0.15s",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.04)";
-                e.currentTarget.style.boxShadow = `0 6px 28px ${CY}66`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = `0 4px 20px ${CY}44`;
-              }}
-            >
-              Jetzt selbst ausprobieren <ChevronRight size={15} />
-            </Link>
-          </div>
+        <FadeIn delay={0.1} style={{ textAlign: "center" }}>
+          <Link
+            href="/demo"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "14px 30px",
+              borderRadius: 100,
+              fontSize: 15,
+              fontWeight: 700,
+              background: CY,
+              color: N,
+              textDecoration: "none",
+              boxShadow: `0 4px 20px ${CY}44`,
+              transition: "transform 0.15s, box-shadow 0.15s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.04)";
+              e.currentTarget.style.boxShadow = `0 6px 28px ${CY}66`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.boxShadow = `0 4px 20px ${CY}44`;
+            }}
+          >
+            Jetzt selbst ausprobieren <ChevronRight size={15} />
+          </Link>
         </FadeIn>
       </div>
     </section>
@@ -1974,7 +1857,7 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
       { label: "Features", action: () => onNav("features") },
       { label: "Module", action: () => onNav("module") },
       { label: "Für Banken", action: () => onNav("fuer-banken") },
-      { label: "Demo", action: () => document.getElementById("mockup")?.scrollIntoView({ behavior: "smooth" }) },
+      { label: "Demo", action: () => document.getElementById("demo-video")?.scrollIntoView({ behavior: "smooth" }) },
     ],
     Ressourcen: [
       { label: "Glossar", action: () => { window.location.href = "/glossar"; } },
@@ -2081,10 +1964,6 @@ export default function LandingPage() {
   return (
     <>
       <style>{`
-        @keyframes mockupFloat {
-          0%, 100% { transform: perspective(1400px) rotateX(4deg) translateY(0px); }
-          50% { transform: perspective(1400px) rotateX(4deg) translateY(-10px); }
-        }
         @keyframes pulseDot {
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.45; transform: scale(0.8); }
