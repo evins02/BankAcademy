@@ -705,6 +705,104 @@ function Hero({ onStart }: { onStart: () => void }) {
   );
 }
 
+/* ─── Section: Demo Video ─────────────────────────────────────────────────── */
+
+function DemoVideo() {
+  return (
+    <section
+      style={{
+        background: N,
+        padding: "96px 24px 104px",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Subtle radial glow behind video */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `radial-gradient(ellipse 70% 60% at 50% 50%, ${CY}0d 0%, transparent 65%)`,
+          pointerEvents: "none",
+        }}
+      />
+
+      <div style={{ position: "relative", maxWidth: 960, margin: "0 auto" }}>
+        <FadeIn style={{ textAlign: "center", marginBottom: 48 }}>
+          <h2
+            style={{
+              margin: "0 0 12px",
+              fontSize: "clamp(26px,4vw,42px)",
+              fontWeight: 800,
+              letterSpacing: "-0.5px",
+              color: WH,
+              lineHeight: 1.15,
+            }}
+          >
+            Sieh wie BankAcademy funktioniert
+          </h2>
+          <p style={{ margin: 0, fontSize: 17, color: WD, lineHeight: 1.6 }}>
+            In 60 Sekunden verstehst du was BankAcademy macht
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.15}>
+          <div style={{ maxWidth: 900, margin: "0 auto 40px" }}>
+            <div
+              style={{
+                borderRadius: 18,
+                overflow: "hidden",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.35), 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.07)",
+              }}
+            >
+              <video
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+                style={{ width: "100%", display: "block", borderRadius: 0 }}
+              >
+                <source src="/demo-video.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+
+          <div style={{ textAlign: "center" }}>
+            <Link
+              href="/demo"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "14px 30px",
+                borderRadius: 100,
+                fontSize: 15,
+                fontWeight: 700,
+                background: CY,
+                color: N,
+                textDecoration: "none",
+                boxShadow: `0 4px 20px ${CY}44`,
+                transition: "transform 0.15s, box-shadow 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.04)";
+                e.currentTarget.style.boxShadow = `0 6px 28px ${CY}66`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = `0 4px 20px ${CY}44`;
+              }}
+            >
+              Jetzt selbst ausprobieren <ChevronRight size={15} />
+            </Link>
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
 /* ─── Section: Stats bar ──────────────────────────────────────────────────── */
 
 function StatsBar() {
@@ -2013,6 +2111,7 @@ export default function LandingPage() {
           onStart={() => { setMobileOpen(false); setAccessOpen(true); }}
         />
         <Hero onStart={() => setAccessOpen(true)} />
+        <DemoVideo />
         <FounderStory />
         <WarumBankAcademy />
         <Modules onStart={() => setAccessOpen(true)} />
