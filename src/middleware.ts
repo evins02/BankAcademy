@@ -14,6 +14,8 @@ export function middleware(req: NextRequest) {
     pathname.startsWith("/favicon") ||
     pathname.startsWith("/demo") ||
     pathname.startsWith("/code-eingabe") ||
+    pathname === "/sitemap.xml" ||
+    pathname === "/robots.txt" ||
     PUBLIC_API.has(pathname) ||
     PUBLIC.has(pathname)
   ) {
