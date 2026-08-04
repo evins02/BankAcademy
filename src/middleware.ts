@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // Routes accessible without access code
-const PUBLIC = new Set(["/", "/start", "/datenschutz", "/kontakt", "/impressum"]);
+const PUBLIC = new Set(["/", "/start", "/code-eingabe", "/datenschutz", "/kontakt", "/impressum"]);
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -13,21 +13,22 @@ export function middleware(req: NextRequest) {
     pathname.startsWith("/admin") ||
     pathname.startsWith("/favicon") ||
     pathname.startsWith("/demo") ||
+    pathname.startsWith("/code-eingabe") ||
     PUBLIC_API.has(pathname) ||
     PUBLIC.has(pathname)
   ) {
     return NextResponse.next();
   }
 
-  // Check access cookie
+  // Check access cookie — set exclusively by /api/validate-access after code verification
   const access = req.cookies.get("bankacademy_access");
   if (access?.value === "1") {
     return NextResponse.next();
   }
 
-  // No valid cookie → back to landing page
+  // No valid cookie → dedicated code-entry gate
   const url = req.nextUrl.clone();
-  url.pathname = "/";
+  url.pathname = "/code-eingabe";
   return NextResponse.redirect(url);
 }
 

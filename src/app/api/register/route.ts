@@ -1,14 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
 
-const COOKIE_OPTIONS = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax" as const,
-  maxAge: 60 * 60 * 24 * 30, // 30 days
-  path: "/",
-};
-
 async function ensureTable() {
   await sql`
     CREATE TABLE IF NOT EXISTS registrations (
@@ -40,7 +32,6 @@ export async function POST(req: NextRequest) {
     VALUES (${vorname.trim()}, ${nachname.trim()}, ${email.trim().toLowerCase()}, ${optIn ?? false})
   `;
 
-  const res = NextResponse.json({ success: true });
-  res.cookies.set("bankacademy_access", "1", COOKIE_OPTIONS);
-  return res;
+  // Registration saves user data only — access requires a separate code via /api/validate-access
+  return NextResponse.json({ success: true });
 }

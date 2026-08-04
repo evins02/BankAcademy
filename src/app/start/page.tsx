@@ -18,8 +18,7 @@ export default function StartPage() {
     if (typeof window === "undefined") return;
     const done = localStorage.getItem("registration-complete");
     if (done === "true") {
-      const onboarded = localStorage.getItem("onboarding-complete");
-      router.replace(onboarded === "true" ? "/dashboard" : "/onboarding");
+      router.replace("/code-eingabe");
     } else {
       setChecking(false);
     }
@@ -46,10 +45,8 @@ export default function StartPage() {
 
     localStorage.setItem("registration-complete", "true");
     localStorage.setItem("registered-email", email.trim().toLowerCase());
-    localStorage.setItem("fullAccess", "true");
 
-    const onboarded = localStorage.getItem("onboarding-complete");
-    router.push(onboarded === "true" ? "/dashboard" : "/onboarding");
+    router.push("/code-eingabe?registered=true");
   }
 
   if (checking) return null;
