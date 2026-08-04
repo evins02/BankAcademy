@@ -401,11 +401,10 @@ function Hero({ onStart }: { onStart: () => void }) {
     <section
       style={{
         background: N,
-        minHeight: "100vh",
         position: "relative",
         overflow: "hidden",
         paddingTop: 96,
-        paddingBottom: 64,
+        paddingBottom: 80,
       }}
     >
       {/* Grid pattern */}
