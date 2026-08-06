@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckCircle2 } from "lucide-react";
 
 const N = "#0A1628";
@@ -39,8 +39,12 @@ function Field({ label, error, children }: { label: string; error?: string; chil
   );
 }
 
-export function ContactForms() {
-  const [tab, setTab] = useState<Tab>("lernender");
+export function ContactForms({ initialTab }: { initialTab?: Tab } = {}) {
+  const [tab, setTab] = useState<Tab>(initialTab ?? "lernender");
+
+  useEffect(() => {
+    if (initialTab) setTab(initialTab);
+  }, [initialTab]);
   const [lf, setLf] = useState<LF>(EMPTY_LF);
   const [bf, setBf] = useState<BF>(EMPTY_BF);
   const [errors, setErrors] = useState<Record<string, string>>({});

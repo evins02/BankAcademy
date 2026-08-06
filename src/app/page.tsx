@@ -1271,7 +1271,7 @@ const B2B_CARDS = [
   { emoji: "📋", title: "Compliance-konform", text: "Alle Inhalte nach GwG, VSB 20, FIDLEG und weiteren Regelwerken" },
 ];
 
-function ForBanks() {
+function ForBanks({ onBankContact }: { onBankContact: () => void }) {
   return (
     <section id="fuer-banken" style={{ background: N, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
@@ -1289,8 +1289,8 @@ function ForBanks() {
             <p style={{ margin: "0 0 28px", fontSize: 16, color: WD, lineHeight: 1.65 }}>
               BankAcademy ergänzt bestehende Ausbildungsangebote mit praxisnahem digitalem Training – abgestimmt auf Schweizer Bankstandards.
             </p>
-            <Link
-              href="/kontakt"
+            <button
+              onClick={onBankContact}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -1301,7 +1301,8 @@ function ForBanks() {
                 fontWeight: 700,
                 background: PU,
                 color: WH,
-                textDecoration: "none",
+                border: "none",
+                cursor: "pointer",
                 boxShadow: `0 4px 20px ${PU}44`,
                 transition: "transform 0.15s",
               }}
@@ -1309,7 +1310,7 @@ function ForBanks() {
               onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
             >
               Kontakt aufnehmen <ChevronRight size={15} />
-            </Link>
+            </button>
           </FadeIn>
 
           {/* Cards grid */}
@@ -1349,7 +1350,7 @@ function ForBanks() {
 
 /* ─── Section: Contact ────────────────────────────────────────────────────── */
 
-function ContactSection() {
+function ContactSection({ initialTab }: { initialTab?: "lernender" | "bank" }) {
   return (
     <section id="kontakt" style={{ background: NM, padding: "96px 24px" }}>
       <div style={{ maxWidth: 640, margin: "0 auto" }}>
@@ -1372,7 +1373,7 @@ function ContactSection() {
             padding: "44px 40px",
             boxShadow: "0 8px 40px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.06)",
           }}>
-            <ContactForms />
+            <ContactForms initialTab={initialTab} />
           </div>
         </FadeIn>
       </div>
@@ -1985,6 +1986,7 @@ export default function LandingPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [accessOpen, setAccessOpen] = useState(false);
+  const [contactTab, setContactTab] = useState<"lernender" | "bank">("lernender");
 
   function scrollTo(id: string) {
     setMobileOpen(false);
@@ -2027,8 +2029,8 @@ export default function LandingPage() {
         <FounderStory />
         <WarumBankAcademy />
         <Modules onStart={() => setAccessOpen(true)} />
-        <ForBanks />
-        <ContactSection />
+        <ForBanks onBankContact={() => { setContactTab("bank"); scrollTo("kontakt"); }} />
+        <ContactSection initialTab={contactTab} />
         <FinalCTA onStart={() => setAccessOpen(true)} />
         <Footer onNav={scrollTo} />
       </div>
