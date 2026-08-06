@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ChevronRight, Eye, EyeOff, Menu, X } from "lucide-react";
+import { ContactForms } from "@/components/shared/ContactForms";
 
 /* ─── Design tokens ───────────────────────────────────────────────────────── */
 
@@ -123,7 +124,7 @@ const NAV_ITEMS: { label: string; id?: string; href?: string }[] = [
   { label: "Features", id: "features" },
   { label: "Module", id: "module" },
   { label: "Für Banken", id: "fuer-banken" },
-  { label: "Kontakt", href: "/kontakt" },
+  { label: "Kontakt", id: "kontakt" },
 ];
 
 function Navbar({
@@ -1346,6 +1347,39 @@ function ForBanks() {
   );
 }
 
+/* ─── Section: Contact ────────────────────────────────────────────────────── */
+
+function ContactSection() {
+  return (
+    <section id="kontakt" style={{ background: NM, padding: "96px 24px" }}>
+      <div style={{ maxWidth: 640, margin: "0 auto" }}>
+        <FadeIn style={{ textAlign: "center", marginBottom: 40 }}>
+          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
+            Kontakt
+          </p>
+          <h2 style={{ margin: "0 0 10px", fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
+            Schreib uns.
+          </h2>
+          <p style={{ margin: 0, fontSize: 16, color: WD, lineHeight: 1.6 }}>
+            Egal ob Lernende/r oder Bank – wir freuen uns von dir zu hören.
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.1}>
+          <div style={{
+            background: "#fff",
+            borderRadius: 24,
+            padding: "44px 40px",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.06)",
+          }}>
+            <ContactForms />
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
 /* ─── Section: Final CTA ──────────────────────────────────────────────────── */
 
 function FinalCTA({ onStart }: { onStart: () => void }) {
@@ -1994,6 +2028,7 @@ export default function LandingPage() {
         <WarumBankAcademy />
         <Modules onStart={() => setAccessOpen(true)} />
         <ForBanks />
+        <ContactSection />
         <FinalCTA onStart={() => setAccessOpen(true)} />
         <Footer onNav={scrollTo} />
       </div>
