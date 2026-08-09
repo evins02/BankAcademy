@@ -3,16 +3,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  async redirects() {
-    return [
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.bankacademy.ch" }],
-        destination: "https://bankacademy.ch/:path*",
-        permanent: true,
-      },
-    ];
-  },
   async headers() {
     return [
       {
