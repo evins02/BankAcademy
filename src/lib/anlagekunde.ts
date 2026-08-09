@@ -186,13 +186,13 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
           "Neukunde (45) kommt zum Erstgespräch Anlageberatung. Er sagt: «Ich habe CHF 200'000 – was soll ich kaufen?» Du weisst noch nichts über seine persönliche Situation.",
         question: "Was machst du zuerst?",
         options: [
-          { key: "A", text: "Aktien empfehlen – bei 200k passt das" },
+          { key: "A", text: "Aktien empfehlen – bei CHF 200'000 und einem typischen Anlagehorizont von über 10 Jahren ist ein Wachstumsportfolio mit 70% Aktienanteil die renditestärkste Option. Das Anlegerprofil kann gleichzeitig mit dem Kaufauftrag ausgefüllt werden." },
           {
             key: "B",
             text: "Ist-Analyse: Einnahmen, Ausgaben, Verpflichtungen, Anlagehorizont, Risikobereitschaft und bestehende Vorsorge erfassen – erst dann Anlegerprofil erstellen.",
           },
-          { key: "C", text: "3a Einzahlung empfehlen – sicher" },
-          { key: "D", text: "Depot sofort eröffnen und Startpaket zusammenstellen" },
+          { key: "C", text: "3a-Konto empfehlen – steuerlich optimal und für diese Summe ideal. Mit CHF 200'000 kann der Maximalbetrag von CHF 7'258 über mehrere Konten verteilt werden und bietet die beste Kombination aus Sicherheit und Steuerersparnis." },
+          { key: "D", text: "Depot sofort eröffnen und ein ausgewogenes Startportfolio zusammenstellen – bei CHF 200'000 und erkennbar langfristigem Horizont ist das Profil 'Mittel' plausibel. Das formelle Anlegerprofil kann beim nächsten Termin nachgeholt werden." },
         ],
         correct: "B",
         feedback:

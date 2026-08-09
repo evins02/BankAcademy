@@ -99,13 +99,13 @@ const L1_CASES: FondsCase[] = [
       "Kunde, 40 Jahre, hat CHF 20'000 seit 5 Jahren auf dem Sparkonto liegen. Er fragt, ob das klug ist.",
     question: "Was sagst du ihm?",
     options: [
-      { key: "A", text: "\"Ja, Sparkonto ist immer am besten – Sicherheit geht vor\"" },
+      { key: "A", text: "\"Das Sparkonto ist die richtige Wahl – mit 40 Jahren sind es noch 25 Jahre bis zur Pension, aber das Kapital sollte vorher nicht gebunden sein. Vor Renteneintritt keine Strategie mit Verlustrisiko eingehen.\"" },
       {
         key: "B",
         text: "\"Sparkonto ist sicher, aber der Zins ist tief. Bei einem Horizont von 10+ Jahren könnte ein Fonds deutlich mehr Rendite bringen. Wichtig: Nur Geld anlegen, das Sie nicht kurzfristig brauchen.\"",
       },
-      { key: "C", text: "\"Sofort alles in Aktien investieren – Sparkonto ist zu langweilig\"" },
-      { key: "D", text: "\"Sparkonto auflösen und in die Säule 3a einzahlen\"" },
+      { key: "C", text: "\"Das Geld sofort in einen globalen Aktien-ETF investieren – historisch hat der MSCI World nach 10 Jahren noch nie einen Verlust ausgewiesen, das Risiko ist bei diesem Horizont statistisch null.\"" },
+      { key: "D", text: "\"Das Sparkonto auflösen und in die Säule 3a investieren – der Steuervorteil der 3a übertrifft langfristig jeden Fondsertrag. Mit CHF 20'000 kann man die Einzahlungen über mehrere Jahre optimal verteilen.\"" },
     ],
     correct: "B",
     feedback:

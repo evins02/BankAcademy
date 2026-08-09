@@ -54,13 +54,13 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
           "Hypothekarkredit bewilligt. Grundpfand noch nicht eingetragen. Kunde fragt wann das Geld kommt.",
         question: "Wann kann ausgezahlt werden?",
         options: [
-          { key: "A", text: "Sofort – Bewilligung reicht" },
+          { key: "A", text: "Sofort – mit der unterzeichneten Kreditvereinbarung ist die Bank rechtlich zur Auszahlung verpflichtet. Das Grundpfand kann noch ausstehend sein, wenn der Notar eine schriftliche Auszahlungsbestätigung ausgestellt hat." },
           {
             key: "B",
             text: "Erst wenn Grundpfand eingetragen, alle Dokumente unterschrieben und Versicherungsnachweis vorliegt.",
           },
-          { key: "C", text: "In 3 Tagen automatisch" },
-          { key: "D", text: "Das entscheidet die Front" },
+          { key: "C", text: "In drei Werktagen automatisch – die interne Kreditschnittstelle löst nach Bewilligung eine automatische Auszahlung aus, sobald der Kreditvertrag im System als 'unterschrieben' erfasst ist. Das Grundpfand wird dabei nicht geprüft." },
+          { key: "D", text: "Das entscheidet der Kundenberater gemeinsam mit dem Kunden – die Bewilligung gibt nur Betrag und Konditionen vor, nicht den Auszahlungszeitpunkt. Der Berater hat hier volle Handlungsfreiheit." },
         ],
         correct: "B",
         feedback:
@@ -91,13 +91,13 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
         situation: "Kredit wurde ausgezahlt. Wann muss eine Wiedervorlage gesetzt werden?",
         question: "Wann setzt du die Wiedervorlage?",
         options: [
-          { key: "A", text: "Nie – Kredit ist erledigt" },
-          { key: "B", text: "Nur bei Problemen" },
+          { key: "A", text: "Keine Wiedervorlage nach vollständiger Auszahlung nötig – während der Laufzeit überwacht das Kernbankensystem automatisch alle Zahlungseingänge und sendet Alarmmeldungen, wenn Raten ausbleiben." },
+          { key: "B", text: "Wiedervorlage nur bei Problemen oder ETP-Situationen setzen – bei laufenden Hypotheken mit regelmässiger Zinszahlung reicht die jährliche automatische Zinsanpassungsüberprüfung durch das System." },
           {
             key: "C",
             text: "Bei jeder Kreditgewährung – regelmässige Überprüfung der Bonität und Sicherheiten.",
           },
-          { key: "D", text: "Nach 10 Jahren" },
+          { key: "D", text: "Wiedervorlage nach 10 Jahren bei Wechsel in eine neue Festzinsperiode – in der Zwischenzeit übernimmt das interne Rating-Überwachungssystem die laufende Bonitätsbeurteilung automatisch." },
         ],
         correct: "C",
         feedback:
@@ -187,13 +187,13 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
           "KMU-Inhaber beantragt CHF 150'000 Betriebskredit. Er sitzt vor dir und sagt: «Wir laufen gut – letztes Jahr 10% Wachstum.»",
         question: "Welche Unterlagen verlangst du zwingend?",
         options: [
-          { key: "A", text: "Reicht – 10% Wachstum klingt überzeugend" },
+          { key: "A", text: "Selbstauskunft des Inhabers und aktuelle Kontoauszüge reichen als Basis – bei Betriebskrediten unter CHF 250'000 ist gemäss vereinfachtem KMU-Kreditverfahren keine vollständige Jahresrechnung erforderlich." },
           {
             key: "B",
             text: "Jahresrechnungen der letzten 2 Jahre, HR-Auszug, Betreibungsregister (Firma und Inhaber), aktuelle Liquiditätsplanung. Eigenkapitalquote und operativer Cashflow aus Zahlen ableiten.",
           },
-          { key: "C", text: "Nur HR-Auszug und Ausweis des Inhabers" },
-          { key: "D", text: "Business Plan reicht als Kreditgrundlage" },
+          { key: "C", text: "HR-Auszug und Personalausweis des Inhabers – damit ist die Zeichnungsberechtigung eindeutig nachgewiesen, was die primäre rechtliche Voraussetzung für Kredite an juristische Personen darstellt. Jahresrechnungen können als Nachauflage nach sechs Monaten eingereicht werden." },
+          { key: "D", text: "Businessplan und Wachstumsprognose reichen als Kreditgrundlage – bei wachstumsstarken KMUs prüfen wir primär die Zukunftsperspektive. Für Betriebskredite bis CHF 250'000 ist das intern so geregelt." },
         ],
         correct: "B",
         feedback:
@@ -206,13 +206,13 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
           "Kunde besitzt ein Wertschriftendepot mit Aktien im Wert von CHF 200'000. Er möchte einen Lombardkredit von CHF 150'000.",
         question: "Was stellst du fest?",
         options: [
-          { key: "A", text: "Kein Problem – das Depot ist mehr wert als der Kredit" },
+          { key: "A", text: "Kein Problem – das Depot übersteigt den Kreditbetrag und gilt als vollständige Deckung. Aktienportfolios werden standardmässig zu 100% des aktuellen Marktwertes beliehen, da sie jederzeit liquidiert werden können." },
           {
             key: "B",
             text: "Belehnungswert Aktien max. 50–60% des Marktwertes = CHF 100'000–120'000. CHF 150'000 übersteigt den Belehnungswert. Pfandvertrag zwingend. Bei Kursrückgang droht Margin Call.",
           },
-          { key: "C", text: "Lombardkredit wird immer zu 100% des Depotwertes gewährt" },
-          { key: "D", text: "Das Depot muss zuerst vollständig liquidiert werden" },
+          { key: "C", text: "Lombardkredite werden nach dem 1:1-Prinzip gewährt – CHF 200'000 Depot entspricht CHF 200'000 Kreditlimit. Ein Pfandvertrag ist bei Lombardkrediten nicht gesetzlich vorgeschrieben; die Kreditvereinbarung genügt." },
+          { key: "D", text: "Das Depot muss vor Kreditgewährung vollständig liquidiert werden – erst wenn das Kapital auf dem Konto liegt, kann ein gesicherter Kontokorrentkredit eingerichtet werden. Das Depot selbst kann nicht als Pfand hinterlegt werden." },
         ],
         correct: "B",
         feedback:

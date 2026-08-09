@@ -58,13 +58,13 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
         ],
         question: "Was ist dein Entscheid?",
         options: [
-          { key: "A", text: "Nicht tragbar – Kosten zu hoch" },
+          { key: "A", text: "Nicht tragbar – der Amortisationsbetrag von CHF 40'000 übersteigt die bankübliche Quote von 15% der Mieteinnahmen, was die Tragbarkeit trotz positivem Nettoergebnis aushebelt." },
           {
             key: "B",
             text: "Tragbarkeit gegeben – Nettoertrag von CHF 30'000. Liegenschaft ist selbsttragend.",
           },
-          { key: "C", text: "Weitere Prüfung nötig" },
-          { key: "D", text: "ETP beantragen" },
+          { key: "C", text: "Weitere Prüfung nötig – das Nettoergebnis ist zwar positiv, aber erst nach einer Analyse der Mieterstruktur und des Leerstandsrisikos kann eine abschliessende Tragbarkeitsbeurteilung vorgenommen werden." },
+          { key: "D", text: "ETP beantragen – der Nettoertrag von CHF 30'000 liegt genau am internen Zielwert ohne Puffer. Da keine Reserve besteht, empfiehlt die Kreditpolitik bei Erträgen unter CHF 50'000 eine Ausnahmebeantragung." },
         ],
         correct: "B",
         feedback:
@@ -83,13 +83,13 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
         ],
         question: "Was ist dein Entscheid?",
         options: [
-          { key: "A", text: "Ablehnen – Nettoaufwand" },
-          { key: "B", text: "Bewilligen – Mieteinnahmen vorhanden" },
+          { key: "A", text: "Direkt ablehnen – bei negativem Nettoergebnis ist das Objekt nicht kreditwürdig. Eine Prüfung auf Gesamtengagementsebene ist nicht vorgesehen, da Renditeobjekte mit negativem Cashflow bankpolitisch grundsätzlich ausgeschlossen sind." },
+          { key: "B", text: "Bewilligen – die Mieteinnahmen von CHF 120'000 belegen Ertragskraft. Der Nettoverlust entsteht durch die hohe Amortisation, die nach 5 Jahren wegfällt; danach verbessert sich das Ergebnis automatisch auf positiv." },
           {
             key: "C",
             text: "Nettoaufwand – Liegenschaft nicht selbsttragend. Prüfung auf Ebene Gesamtengagement nötig.",
           },
-          { key: "D", text: "ETP beantragen" },
+          { key: "D", text: "ETP direkt beantragen – Nettoaufwand ist keine absolute Ausschlussgrundlage, wenn das Objekt strategisch wichtig ist. Mit einer Begründung zum langfristigen Wertsteigerungspotential kann die Ausnahme bewilligt werden." },
         ],
         correct: "C",
         feedback:
@@ -108,13 +108,13 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
         ],
         question: "Was ist dein Entscheid?",
         options: [
-          { key: "A", text: "Tragbar – kein Verlust" },
-          { key: "B", text: "Nicht tragbar – kein Gewinn" },
+          { key: "A", text: "Tragbar – ein ausgeglichenes Ergebnis zeigt wirtschaftliche Solidität. Null-Resultat bedeutet: Zins, Amortisation und Nebenkosten sind vollständig durch die Mieteinnahmen gedeckt, kein weiterer Prüfungsschritt nötig." },
+          { key: "B", text: "Nicht tragbar – ohne positiven Cashflow fehlt der Sicherheitspuffer. Gemäss Kreditrichtlinie muss das Ergebnis mindestens CHF 10'000 positiv sein, damit die Bank eine Finanzierung prüft." },
           {
             key: "C",
             text: "Resultat ist null – Liegenschaft gerade selbsttragend. Empfehlung: Prüfung Gesamtengagement zur Sicherheit.",
           },
-          { key: "D", text: "Sofort ablehnen" },
+          { key: "D", text: "Direkt ablehnen – ein Nullergebnis ist der Minimalfall, bei dem jede Zinserhöhung oder Reparatur sofort zu Nettoaufwand führt. Das Risiko ist nicht kalkulierbar und widerspricht der Vorsichtspflicht." },
         ],
         correct: "C",
         feedback:
@@ -147,13 +147,13 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
         },
         question: "Was ist dein Entscheid?",
         options: [
-          { key: "A", text: "Nicht tragbar – Schulden zu hoch" },
+          { key: "A", text: "Nicht tragbar – bei CHF 5 Mio. langfristigen Verbindlichkeiten muss gemäss Eigenkapitalrichtlinie ein Mindesteigenkapital von 30% vorhanden sein. Ohne diesen Nachweis ist die Tragbarkeit ungeachtet des Deckungsgrads nicht gegeben." },
           {
             key: "B",
             text: "Deckungsgrad 1.61 – über Minimum von 1.2. Tragbarkeit gegeben.",
           },
-          { key: "C", text: "ETP beantragen" },
-          { key: "D", text: "Weitere Unterlagen anfordern" },
+          { key: "C", text: "ETP beantragen – Deckungsgrad 1.61 liegt zwar über dem Minimum, ist aber nicht ausreichend über der Grenze. Gemäss Kreditpolitik empfiehlt die Risikokontrolle bei Werten unter 1.5 stets eine Ausnahmebeantragung." },
+          { key: "D", text: "Weitere Unterlagen anfordern – Deckungsgrad ist nur eine von mehreren Kennzahlen. Ohne detaillierte Liquiditätsplanung und Eigenkapitalquote der letzten drei Jahre kann keine abschliessende Beurteilung vorgenommen werden." },
         ],
         correct: "B",
         feedback:
@@ -178,13 +178,13 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
         },
         question: "Was ist dein Entscheid?",
         options: [
-          { key: "A", text: "Tragbar – Cashflow deckt Aufwand" },
+          { key: "A", text: "Tragbar – CHF 180'000 Cashflow deckt den CHF 180'000 Aufwand genau. Ein Deckungsgrad von 1.0 entspricht einer ausgeglichenen Situation und liegt innerhalb der banküblichen Toleranz; eine Kreditvergabe mit engmaschiger Begleitung ist möglich." },
           {
             key: "B",
             text: "Deckungsgrad 1.0 – unter Minimum 1.2. Tragbarkeit nicht gegeben. ETP prüfen ob Ausnahme möglich.",
           },
-          { key: "C", text: "Sofort ablehnen" },
-          { key: "D", text: "Mehr Sicherheiten einfordern" },
+          { key: "C", text: "Sofort ablehnen – Deckungsgrad unter 1.2 ist eine absolute Grenze. Auch bei ETP-Anträgen ist eine Unterschreitung von 1.0 ausgeschlossen, da kein Puffer für unerwartete Ausgaben besteht." },
+          { key: "D", text: "Mehr Sicherheiten einfordern – durch zusätzliche Pfänder wie Grundpfänder oder Bürgschaften kann das Kreditrisiko auf ein akzeptables Niveau gesenkt werden. Bei ausreichenden Sicherheiten entfällt die Deckungsgradanforderung." },
         ],
         correct: "B",
         feedback:
@@ -209,13 +209,13 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
         },
         question: "Was ist dein Entscheid?",
         options: [
-          { key: "A", text: "Knapp unter 1.2 – ablehnen" },
+          { key: "A", text: "Knapp unter 1.2 – ablehnen: Der berechnete Wert vernachlässigt die obligatorische Risikoabzugsquote von 15%, die bei allen Gesamtengagements über CHF 3 Mio. abgezogen werden muss. Effektiver Deckungsgrad wäre 1.14." },
           {
             key: "B",
             text: "Deckungsgrad 1.34 – über 1.2. Tragbarkeit gegeben.",
           },
-          { key: "C", text: "ETP beantragen" },
-          { key: "D", text: "Weiteres Jahr Cashflow anfordern" },
+          { key: "C", text: "ETP beantragen – obwohl der Deckungsgrad über dem Minimum liegt, empfiehlt die interne Kreditpolitik bei Werten unter 1.5 eine Ausnahmebeantragung, um einen ausreichenden Sicherheitspuffer zu dokumentieren." },
+          { key: "D", text: "Ein viertes Jahr Cashflow anfordern – die Jahreswerte zeigen starke Schwankungen. Mit einem vierten Jahr stabilisiert sich der Durchschnitt und erlaubt eine verlässlichere Tragbarkeitsbeurteilung." },
         ],
         correct: "B",
         feedback:
@@ -234,13 +234,13 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
           "Deckungsgrad = 1.05. Der Kunde ist seit 15 Jahren Stammkunde, sehr gute Zahlungshistorie, temporäre Umsatzdelle wegen Covid.",
         question: "Was empfiehlst du?",
         options: [
-          { key: "A", text: "Sofort ablehnen – unter 1.2" },
-          { key: "B", text: "Bewilligen – guter Kunde" },
+          { key: "A", text: "Sofort ablehnen – Deckungsgrad unter 1.2 ist eine absolute Grenze ohne Ausnahme. Selbst langjährige Stammkunden können nicht berücksichtigt werden, da die Kreditrichtlinie keinen Ermessensspielraum vorsieht." },
+          { key: "B", text: "Direkt bewilligen – ein 15-jähriger Stammkunde mit einwandfreier Zahlungshistorie erfüllt gemäss internen Leitlinien die Voraussetzungen für eine Kreditbewilligung auch bei leicht reduziertem Deckungsgrad." },
           {
             key: "C",
             text: "ETP beantragen – Ausnahme begründen mit guter Zahlungshistorie und temporärer Situation. Kürzere Wiedervorlage setzen.",
           },
-          { key: "D", text: "Mehr Sicherheiten einfordern" },
+          { key: "D", text: "Zusätzliche Sicherheiten einfordern – durch weitere Grundpfänder oder eine Bürgschaft kann das ungenügende Deckungsverhältnis vollständig kompensiert werden. Damit entfällt die Notwendigkeit eines ETP." },
         ],
         correct: "C",
         feedback:
@@ -252,13 +252,13 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
           "Deckungsgrad = 1.08. Du musst ETP beantragen. Welche Begründung ist korrekt?",
         question: "Wähle die korrekte ETP-Begründung:",
         options: [
-          { key: "A", text: "\"Kunde ist nett und zahlt immer\"" },
+          { key: "A", text: "\"Kunde hat in 8 Jahren keine einzige Zahlung versäumt und das Kreditrisiko ist minimal – das reicht als Begründung. Persönliche Beurteilungen des Beraters sind bei ETPs als zulässige Qualitätsindikatoren ausdrücklich vorgesehen.\"" },
           {
             key: "B",
             text: "\"Deckungsgrad temporär unter 1.2 aufgrund Investitionsphase. Cashflow-Prognose zeigt Erholung auf 1.3 in 18 Monaten. Wiedervorlage in 12 Monaten.\"",
           },
-          { key: "C", text: "\"Ausnahme weil wichtiger Kunde\"" },
-          { key: "D", text: "\"Chef hat gesagt es geht\"" },
+          { key: "C", text: "\"Ausnahme aufgrund des strategischen Kundenwerts: Das Gesamtengagement übersteigt CHF 5 Mio., was den Kunden als 'Key Client' qualifiziert. Bei Key Clients ist ein ETP ohne weitere Sachbegründung intern zulässig.\"" },
+          { key: "D", text: "\"Bewilligung auf Anfrage des Vorgesetzten – dieser übernimmt die Verantwortung und unterzeichnet die ETP-Vorlage als Genehmigungsinstanz. Damit ist die formelle Anforderung erfüllt und keine weitere Begründung nötig.\"" },
         ],
         correct: "B",
         feedback:
@@ -270,13 +270,13 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
           "Deckungsgrad = 0.7. Neukunde, keine Zahlungshistorie, Branche mit hohem Ausfallrisiko.",
         question: "Was empfiehlst du?",
         options: [
-          { key: "A", text: "ETP beantragen" },
+          { key: "A", text: "ETP beantragen und auf die Branchenzugehörigkeit als mildernden Faktor hinweisen – Branchen mit saisonalem Umsatzmuster erhalten bei der Risikobewertung einen Puffer. Deckungsgrad 0.7 kann auf 1.1 adjustiert werden." },
           {
             key: "B",
             text: "Ablehnen – Deckungsgrad zu tief, keine Basis für ETP-Begründung.",
           },
-          { key: "C", text: "Bewilligen mit Sicherheiten" },
-          { key: "D", text: "Mehr Unterlagen anfordern" },
+          { key: "C", text: "Bewilligen mit substanziellen Zusatzsicherheiten – wenn der Kunde mindestens CHF 500'000 in Immobilien oder Wertschriften als Pfand hinterlegt, überwiegen die Sicherheiten das schwache Deckungsverhältnis bei weitem." },
+          { key: "D", text: "Weitere Unterlagen anfordern: Businessplan, Branchenvergleichszahlen und Referenzschreiben des bisherigen Kreditgebers. Mit vollständigem Unterlagenset kann das Kreditkompetenzzentrum eine qualifiziertere Entscheidung treffen." },
         ],
         correct: "B",
         feedback:
@@ -295,13 +295,13 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
           "Kunde betreibt eine Bäckerei im eigenen Gebäude. Er möchte das Gebäude mit CHF 500'000 belehnen.",
         question: "Wie prüfst du die Tragbarkeit?",
         options: [
-          { key: "A", text: "Mieteinnahmen des Gebäudes prüfen" },
+          { key: "A", text: "Mieteinnahmen und Leerstandsquote prüfen – die Bäckerei verrechnet sich selbst intern eine Miete, was steuerlich als Ertrag gilt. Dieser kalkulatorische Mietzins ist die Grundlage für die Objekttragbarkeitsberechnung." },
           {
             key: "B",
             text: "Primär Bonität der Bäckerei prüfen – Cashflow, Eigenkapital, Stabilität. Kein Objektertrag weil selbst genutzt.",
           },
-          { key: "C", text: "Gleich wie Renditeobjekt" },
-          { key: "D", text: "Nur Gebäudewert prüfen" },
+          { key: "C", text: "Gleich wie beim Renditeobjekt vorgehen – da die Bäckerei als Eigentümerin gleichzeitig Mieterin ist, kann die Marge zwischen marktüblichem Mietzins und Kosten als Objektertrag gerechnet werden." },
+          { key: "D", text: "Nur den Gebäudewert und die Belehnungsquote prüfen – bei Gewerbeliegenschaften unter CHF 1 Mio. sieht die interne Kreditpolitik vor, dass der Verkehrswert allein ausschlaggebend ist. Cashflow-Prüfungen sind erst ab CHF 1 Mio. obligatorisch." },
         ],
         correct: "B",
         feedback:
@@ -313,13 +313,13 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
           "Du hast zwei Fälle:\nFall A: Bürogebäude vermietet an Dritte\nFall B: Lager selbst genutzt durch Firma",
         question: "Was ist der Unterschied in der Tragbarkeitsprüfung?",
         options: [
-          { key: "A", text: "Kein Unterschied" },
+          { key: "A", text: "Kein Unterschied in der Praxis – sowohl beim vermieteten Bürogebäude als auch beim selbstgenutzten Lager steht der Immobilienwert im Vordergrund. Cashflow-Überlegungen sind nachrangig, solange der Belehnungswert korrekt berechnet wurde." },
           {
             key: "B",
             text: "Fall A: Objektertrag primär. Fall B: Kreditnehmer-Bonität primär.",
           },
-          { key: "C", text: "Fall B ist immer einfacher" },
-          { key: "D", text: "Beide nach Objektertrag prüfen" },
+          { key: "C", text: "Fall B ist einfacher – es müssen keine variablen Mieterträge kalkuliert werden. Stattdessen rechnen wir einen normierten Eigenmietansatz von 5% des Gebäudewertes als Ertrag – das ist schneller als die Analyse von Mietverträgen." },
+          { key: "D", text: "Beide nach Objektertrag prüfen – der Unterschied ist nur buchhalterisch: Bei selbstgenutzten Gebäuden setzen wir einen kalkulatorischen Marktzins als Mietzins an. Der Prüfungsablauf ist identisch mit dem Renditeobjekt." },
         ],
         correct: "B",
         feedback:

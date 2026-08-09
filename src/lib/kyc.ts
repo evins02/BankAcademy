@@ -96,10 +96,10 @@ export const KYC_LEVELS: KycLevelConfig[] = [
           "Eine neue Kundin möchte ein Konto eröffnen. Sie sagt, das Geld auf dem Konto gehöre eigentlich ihrem Bruder im Ausland, sie verwalte es nur für ihn.",
         question: "Was ist in dieser Situation zwingend?",
         options: [
-          { key: "A", text: "Nur die Kundin identifizieren – sie ist die Vertragspartnerin" },
+          { key: "A", text: "Nur die Kundin identifizieren – sie ist die Vertragspartnerin und trägt die rechtliche Verantwortung für das Konto. Die Herkunft der Mittel und allfällige wirtschaftliche Berechtigungen müssen nicht separat dokumentiert werden." },
           { key: "B", text: "Formular A ausfüllen – wirtschaftlich Berechtigter ist der Bruder" },
-          { key: "C", text: "Konto ablehnen – Drittgelder sind verboten" },
-          { key: "D", text: "Formular K ausfüllen" },
+          { key: "C", text: "Konto grundsätzlich ablehnen – Konten für Dritte sind nur mit schriftlicher Treuhandvereinbarung und Compliance-Genehmigung zulässig. Ohne genehmigtes Mandat darf die Bank keine Vermögenswerte für Dritte entgegennehmen." },
+          { key: "D", text: "Formular K ausfüllen – das ist das Standardformular für Treuhandverhältnisse. Es ersetzt bei klarer Drittberechtigung das Formular A und wird direkt an die FINMA weitergeleitet." },
         ],
         correct: "B",
         feedback:
@@ -152,13 +152,13 @@ export const KYC_LEVELS: KycLevelConfig[] = [
           "Du betreust seit 5 Jahren einen Kunden mit einem kleinen Handwerksbetrieb. Plötzlich gehen monatlich CHF 50'000 auf seinem Konto ein – bisher waren es maximal CHF 8'000. Auf Nachfrage sagt er, er habe einen neuen Grossauftrag erhalten.",
         question: "Welche Pflichten hast du gemäss GwG?",
         options: [
-          { key: "A", text: "Erklärung des Kunden akzeptieren und nichts weiter unternehmen" },
+          { key: "A", text: "Erklärung des Kunden im CRM-System als 'Grossauftrag bestätigt' erfassen und das Transaktionsverhalten 3 Monate beobachten. Wenn keine weiteren Auffälligkeiten auftreten, sind keine GwG-Massnahmen notwendig." },
           {
             key: "B",
             text: "Erneute Identifikation, Abklärung der Herkunft, Dokumentation – bei Verdacht Meldung an MROS",
           },
-          { key: "C", text: "Konto sofort sperren und Kunden informieren" },
-          { key: "D", text: "Nur intern dem Compliance-Team melden und abwarten" },
+          { key: "C", text: "Konto präventiv sperren und den Kunden schriftlich über die laufende Überprüfung informieren. Erst nach der Rückmeldung des Kunden mit Belegen entscheidet die Compliance über Weiterführung oder MROS-Meldung." },
+          { key: "D", text: "Compliance-Ticket eröffnen und abwarten – der interne Sachbearbeiter prüft den Sachverhalt und entscheidet gemäss GwG-Schwellenwert selbst, ob eine Meldung an die MROS nötig ist. Als Betreuer sind keine weiteren Schritte erforderlich." },
         ],
         correct: "B",
         feedback:
@@ -171,13 +171,13 @@ export const KYC_LEVELS: KycLevelConfig[] = [
           "Eine politisch exponierte Person (PEP) aus dem Ausland möchte ein Konto eröffnen und CHF 500'000 einlegen. Die Herkunft der Mittel ist unklar.",
         question: "Was gilt bei PEPs und was musst du tun?",
         options: [
-          { key: "A", text: "Normal behandeln wie jeden anderen Kunden" },
-          { key: "B", text: "Ablehnen – PEPs sind grundsätzlich verboten" },
+          { key: "A", text: "Normale KYC-Abklärung durchführen – PEP-Status allein ist kein Grund für erhöhte Sorgfalt, solange der Kunde keine nachweislichen Korruptionsvorwürfe hat. CHF 500'000 ist bei einer Führungsposition plausibel." },
+          { key: "B", text: "Geschäftsbeziehung grundsätzlich ablehnen – gemäss GwG Art. 6 sind ausländische PEPs ohne EU-Staatsbürgerschaft für Schweizer Banken automatisch als nicht zulässige Hochrisikokunden eingestuft." },
           {
             key: "C",
             text: "Erhöhte Sorgfaltspflichten anwenden: Genehmigung der Geschäftsleitung, Herkunft der Mittel abklären, engmaschige Überwachung",
           },
-          { key: "D", text: "Nur Compliance informieren und deren Entscheidung abwarten" },
+          { key: "D", text: "Compliance per E-Mail informieren und das Konto provisorisch eröffnen – die Compliance entscheidet innert 5 Arbeitstagen ob besondere Auflagen gelten. Erst danach werden die Sorgfaltspflichten angepasst." },
         ],
         correct: "C",
         feedback:
@@ -190,12 +190,12 @@ export const KYC_LEVELS: KycLevelConfig[] = [
           "Dein langjähriger Kollege bittet dich, ihm kurz Zugang zu einem Kundenkonto zu geben, weil er selbst gerade keinen Zugriff hat. Der Kunde sei einverstanden.",
         question: "Was machst du?",
         options: [
-          { key: "A", text: "Zugang geben – der Kollege ist ja vertrauenswürdig" },
+          { key: "A", text: "Zugang geben – der Kollege untersteht demselben Berufsgeheimnis wie du. Ein kurzfristiger Zugangstausch unter Bankmitarbeitenden ist im Rahmen des internen Organisationsrechts zulässig, solange keine Kundendaten kopiert werden." },
           {
             key: "B",
             text: "Zugang verweigern – jeder Mitarbeiter darf nur auf Konten zugreifen für die er berechtigt ist",
           },
-          { key: "C", text: "Zugang geben aber dokumentieren" },
+          { key: "C", text: "Zugang gewähren und im Ticketsystem als 'temporärer Zugangstausch aus betrieblichen Gründen' erfassen – die Dokumentation schützt beide Parteien und gilt datenschutzrechtlich als hinreichende Rechtfertigung bei kurzem Zugang." },
           { key: "D", text: "Zugang temporär gewähren und den Vorgesetzten kurz informieren – wenn der Kollege die Verantwortung übernimmt, ist das datenschutzrechtlich abgedeckt." },
         ],
         correct: "B",

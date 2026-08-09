@@ -123,13 +123,13 @@ const L1_CASES: ZvFoCase[] = [
       "Kundin fragt: 'Ich bekomme so viele Papierrechnungen. Gibt es eine digitale Lösung?'",
     question: "Was erklärst du ihr?",
     options: [
-      { key: "A", text: "\"Einfach alles per E-Banking manuell zahlen\"" },
+      { key: "A", text: "\"Per QR-Code im E-Banking zahlen – die App liest alle Daten automatisch aus dem Einzahlungsschein. Das ist genauso papierlos wie E-Bill, und Sie behalten volle Kontrolle über jeden Betrag und Zeitpunkt.\"" },
       {
         key: "B",
         text: "\"Mit E-Bill erhalten Sie Rechnungen direkt im E-Banking – bereits vorerfasst. Sie müssen nur noch prüfen und mit wenigen Klicks bestätigen. Kein Papier mehr.\"",
       },
-      { key: "C", text: "\"Dauerauftrag für alle Rechnungen einrichten\"" },
-      { key: "D", text: "\"Das geht leider nicht digital\"" },
+      { key: "C", text: "\"Für jeden Rechnungssteller einen Dauerauftrag einrichten – der Betrag wird am gleichen Datum abgebucht. Falls die Rechnung variiert, überweist der Dauerauftrag trotzdem denselben Betrag wie vereinbart.\"" },
+      { key: "D", text: "\"Digitale Rechnungslösungen sind bei uns erst für Grosskunden verfügbar. Für Privatkunden ist die Papierrechnung weiterhin die einzige rechtlich gültige Zahlungsaufforderung in der Schweiz.\"" },
     ],
     correct: "B",
     feedback:
@@ -142,13 +142,13 @@ const L1_CASES: ZvFoCase[] = [
     situation: "Kunde ruft aufgeregt an: 'Ich habe meine Maestrokarte verloren – was soll ich tun?'",
     question: "Was sagst du ihm?",
     options: [
-      { key: "A", text: "\"Kommen Sie morgen in die Filiale\"" },
+      { key: "A", text: "\"Notieren Sie Kartennummer und die letzten Transaktionen, kommen Sie morgen früh in die Filiale und stellen Sie einen schriftlichen Verlustbericht – ohne diesen kann keine Ersatzkarte ausgestellt werden.\"" },
       {
         key: "B",
         text: "\"Keine Panik – rufen Sie sofort die Sperrhotline an: 0800 80 40 40. Die Karte wird sofort gesperrt. Danach eröffnen wir eine neue Karte.\"",
       },
-      { key: "C", text: "\"Warten Sie, ob sie wieder auftaucht\"" },
-      { key: "D", text: "\"Ändern Sie Ihr E-Banking-Passwort\"" },
+      { key: "C", text: "\"Das Missbrauchsrisiko ist gering, solange die PIN nicht auf der Karte notiert war. Warten Sie 48 Stunden – nur wenn bis dahin fremde Transaktionen erscheinen, müssen Sie die Karte sperren lassen.\"" },
+      { key: "D", text: "\"Das wichtigste ist, sofort die Karten-PIN und das E-Banking-Passwort zu ändern. Damit sind keine Kartentransaktionen mehr möglich – eine Sperrung durch die Bank ist erst nötig, wenn fremde Buchungen erscheinen.\"" },
     ],
     correct: "B",
     feedback:
@@ -169,13 +169,13 @@ const L2_CASES: ZvFoCase[] = [
       "Kunde hat Krankenkassenrechnung mit unterschiedlichen Beträgen jeden Monat. Er fragt, was besser ist – Dauerauftrag oder LSV?",
     question: "Was empfiehlst du?",
     options: [
-      { key: "A", text: "Dauerauftrag – einfacher einzurichten" },
+      { key: "A", text: "Dauerauftrag mit dem höchsten erwarteten Monatsbetrag einrichten – falls die Prämie tiefer ausfällt, landet die Differenz auf dem Konto der Krankenkasse als Guthaben und wird mit der nächsten Rechnung verrechnet." },
       {
         key: "B",
         text: "LSV – die Krankenkasse zieht automatisch den richtigen Betrag ein, auch wenn er variiert. Mit Widerspruchsrecht geschützt.",
       },
-      { key: "C", text: "Beide einrichten für Sicherheit" },
-      { key: "D", text: "Manuell jeden Monat zahlen" },
+      { key: "C", text: "Beide parallel einrichten – der Dauerauftrag deckt den Fixanteil der Prämie, der LSV-Auftrag gleicht variable Differenzen aus. So ist jede Rechnung ohne Unterzahlung gedeckt." },
+      { key: "D", text: "Manuell zahlen – so behält der Kunde volle Kontrolle und prüft jeden Monat die aktuelle Prämie bevor er zahlt. Das ist aufwändiger, aber bei variierenden Beträgen die sicherste Methode." },
     ],
     correct: "B",
     feedback:
@@ -191,16 +191,16 @@ const L2_CASES: ZvFoCase[] = [
     options: [
       {
         key: "A",
-        text: "\"E-Banking ist gefährlich – besser den Schalter nutzen\"",
+        text: "\"E-Banking hat dasselbe Betrugsrisiko wie Online-Shopping. Für Überweisungen über CHF 5'000 empfehle ich den Schalter – dort validieren wir jede Zahlung manuell und können bei Phishing-Verdacht sofort eingreifen.\"",
       },
       {
         key: "B",
         text: "\"E-Banking ist sicher, wenn Sie diese Regeln befolgen: Niemals Passwort weitergeben, immer offizielle Bank-App nutzen, bei Phishing-Mails sofort melden, Gerät regelmässig aktualisieren.\"",
       },
-      { key: "C", text: "\"Passwort regelmässig ändern reicht aus\"" },
+      { key: "C", text: "\"Das regelmässige Ändern des Passworts ist die wichtigste Schutzmassnahme. Die Bank sendet automatisch eine SMS-Bestätigung bei ungewöhnlichen Logins – das schützt zusätzlich gegen fremden Zugriff.\"" },
       {
         key: "D",
-        text: "\"Die Bank haftet immer – kein Risiko für Sie\"",
+        text: "\"Unsere Bank garantiert Rückerstattung bei Schäden durch Hackerangriffe, solange Sie das E-Banking über unser offizielles Portal nutzen. Verluste durch Phishing sind versichert und werden innerhalb von 5 Werktagen erstattet.\"",
       },
     ],
     correct: "B",
@@ -215,13 +215,13 @@ const L2_CASES: ZvFoCase[] = [
       "Kunde möchte CHF 2'000 an einen Freund in Deutschland überweisen. Was braucht er?",
     question: "Was erklärst du?",
     options: [
-      { key: "A", text: "\"Nur die Kontonummer des Empfängers\"" },
+      { key: "A", text: "\"In der EU gilt SEPA-Instant: Es reicht eine einfache Kontonummer, IBAN und BIC werden automatisch durch das Clearingsystem ergänzt. Der Betrag wird in Echtzeit übermittelt.\"" },
       {
         key: "B",
         text: "\"Deutschland liegt in der SEPA-Zone. Es reicht die IBAN des Empfängers – kein BIC nötig. Günstigere Gebühren als SWIFT. Zahlung meist innerhalb 1–2 Tagen.\"",
       },
-      { key: "C", text: "\"Auslandzahlungen nach Deutschland sind nicht möglich\"" },
-      { key: "D", text: "\"IBAN und BIC sind zwingend erforderlich\"" },
+      { key: "C", text: "\"Für Zahlungen nach Deutschland brauchen wir zwingend IBAN und BIC, weil Deutschland kein SEPA-Abkommen mit der Schweiz unterzeichnet hat. Der Empfänger muss den 8- oder 11-stelligen BIC mitteilen.\"" },
+      { key: "D", text: "\"IBAN alleine reicht für Deutschland nicht – zusätzlich zwingend den BIC angeben, weil Zahlungen zwischen Schweiz und EU ausschliesslich über SWIFT laufen. SEPA gilt nur innerhalb der Eurozone.\"" },
     ],
     correct: "B",
     feedback:
@@ -242,18 +242,18 @@ const L3_CASES: ZvFoCase[] = [
       "Kunde möchte Geld überweisen – Fall A: CHF 5'000 nach Frankreich. Fall B: CHF 5'000 nach Japan. Er fragt nach dem Unterschied.",
     question: "Was erklärst du?",
     options: [
-      { key: "A", text: "\"Kein Unterschied – beides gleich teuer und gleiche Anforderungen\"" },
+      { key: "A", text: "\"Kein wesentlicher Unterschied – beide Länder werden über das internationale SWIFT-Netz abgewickelt. Frankreich ist EU-Mitglied, aber SEPA gilt für Schweizer Banken nicht, da die Schweiz kein EU-Mitglied ist.\"" },
       {
         key: "B",
         text: "\"Frankreich = SEPA-Zone = nur IBAN nötig, kein BIC, günstigere Gebühren. Japan = SWIFT = ausserhalb EU/EWR, IBAN und BIC zwingend, höhere Gebühren – besonders bei Fremdwährungen.\"",
       },
       {
         key: "C",
-        text: "\"Zahlungen nach Japan sind nicht möglich\"",
+        text: "\"Zahlungen nach Japan laufen über das ISO 20022-System, das SEPA und SWIFT vereinheitlicht. Japan und die EU haben ein bilaterales Zahlungsabkommen – es reicht die IBAN, kein BIC nötig.\"",
       },
       {
         key: "D",
-        text: "\"Beide Länder brauchen IBAN und BIC\"",
+        text: "\"Beide Länder brauchen zwingend IBAN und BIC – Frankreich unterzeichnete den SEPA-Vertrag erst 2019, weswegen für ältere Konten noch immer der BIC-Code erforderlich ist.\"",
       },
     ],
     correct: "B",
