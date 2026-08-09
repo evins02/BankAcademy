@@ -106,15 +106,15 @@ export const MW_LEVELS: MwLevelConfig[] = [
           "Konsumkredit Rate CHF 450 war am 01. April fällig. Zahlungserinnerung wurde am 11. April geschickt. Keine Reaktion. Heute ist der 25. April.",
         question: "Was ist jetzt zu tun?",
         options: [
-          { key: "A", text: "Nochmals Zahlungserinnerung" },
+          { key: "A", text: "1. Mahnung mit Frist und Mahngebühr senden." },
           {
             key: "B",
-            text: "1. Mahnung mit Frist und Mahngebühr senden.",
+            text: "Nochmals Zahlungserinnerung",
           },
           { key: "C", text: "Sofort kündigen" },
           { key: "D", text: "Betreibung einleiten" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Zahlungserinnerung wurde ignoriert. Nächste Stufe: 1. Mahnung mit konkreter Zahlungsfrist und Mahngebühr. Kunde muss verstehen dass Eskalation folgt.",
       },
@@ -154,12 +154,12 @@ export const MW_LEVELS: MwLevelConfig[] = [
           { key: "A", text: "Einverstanden – Teilzahlung akzeptieren und Mahnprozess stoppen" },
           {
             key: "B",
-            text: "Teilzahlung verbuchen, aber Mahnprozess für ausstehende CHF 900 weiterführen. Schriftliche Bestätigung der Ratenzahlung einholen.",
+            text: "Mahnprozess vollständig stoppen",
           },
           { key: "C", text: "Gesamten Betrag zurückbuchen" },
-          { key: "D", text: "Mahnprozess vollständig stoppen" },
+          { key: "D", text: "Teilzahlung verbuchen, aber Mahnprozess für ausstehende CHF 900 weiterführen. Schriftliche Bestätigung der Ratenzahlung einholen." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Teilzahlung wird verbucht aber Mahnprozess läuft für Restbetrag weiter. Ohne schriftliche Vereinbarung hat mündliche Zusage keinen Bestand. Ratenzahlungsvereinbarung schriftlich festhalten.",
       },
@@ -170,15 +170,15 @@ export const MW_LEVELS: MwLevelConfig[] = [
           "Kredit wurde gekündigt. Kunde zahlt trotzdem nicht. Was braucht es für die Betreibung?",
         question: "Wie leitest du die Betreibung ein?",
         options: [
-          { key: "A", text: "Mündliche Anweisung an Betreibungsamt reicht" },
+          { key: "A", text: "Betreibungsbegehren beim zuständigen Betreibungsamt einreichen mit: Schuldnerdaten, Forderungsbetrag, Forderungsgrund." },
           {
             key: "B",
-            text: "Betreibungsbegehren beim zuständigen Betreibungsamt einreichen mit: Schuldnerdaten, Forderungsbetrag, Forderungsgrund.",
+            text: "Mündliche Anweisung an Betreibungsamt reicht",
           },
           { key: "C", text: "Direkt Konkurs anmelden" },
           { key: "D", text: "Anwalt beauftragen und abwarten" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Betreibung läuft über das zuständige Betreibungsamt (Wohnort des Schuldners). Betreibungsbegehren mit genauen Schuldnerdaten und Forderungsdetails. Betreibungsamt schickt dann Zahlungsbefehl an Schuldner.",
       },
@@ -196,15 +196,15 @@ export const MW_LEVELS: MwLevelConfig[] = [
           "Bank hat Betreibung eingeleitet. Schuldner erhebt Rechtsvorschlag. Was bedeutet das und was muss die Bank tun?",
         question: "Wie reagierst du?",
         options: [
-          { key: "A", text: "Betreibung ist erledigt – Rechtsvorschlag beendet alles" },
+          { key: "A", text: "Rechtsvorschlag stoppt Betreibung vorläufig. Bank muss Rechtsöffnung beantragen beim Gericht um Betreibung fortzusetzen." },
           {
             key: "B",
-            text: "Rechtsvorschlag stoppt Betreibung vorläufig. Bank muss Rechtsöffnung beantragen beim Gericht um Betreibung fortzusetzen.",
+            text: "Betreibung ist erledigt – Rechtsvorschlag beendet alles",
           },
           { key: "C", text: "Sofort Konkurs einleiten" },
           { key: "D", text: "Nichts – einfach abwarten" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Rechtsvorschlag = Schuldner bestreitet Forderung. Betreibung wird unterbrochen. Bank braucht Rechtsöffnung (provisorisch oder definitiv) um weiterzumachen. Provisorische Rechtsöffnung möglich wenn schriftliche Schuldanerkennung vorliegt (z.B. Kreditvertrag).",
       },
@@ -218,12 +218,12 @@ export const MW_LEVELS: MwLevelConfig[] = [
           { key: "A", text: "Sofort Betreibung auf Pfandverwertung einleiten" },
           {
             key: "B",
-            text: "Trotz Kündigung zuerst Gespräch mit Kunde suchen – Verkauf des Objekts oder Refinanzierung prüfen. Zwangsverwertung ist letztes Mittel.",
+            text: "Nichts unternehmen – Objekt ist genug Sicherheit",
           },
           { key: "C", text: "Kredit sofort abschreiben" },
-          { key: "D", text: "Nichts unternehmen – Objekt ist genug Sicherheit" },
+          { key: "D", text: "Trotz Kündigung zuerst Gespräch mit Kunde suchen – Verkauf des Objekts oder Refinanzierung prüfen. Zwangsverwertung ist letztes Mittel." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Bei Hypotheken mit genügend Deckung immer zuerst Lösung suchen. Zwangsverwertung ist für alle teuer und langwierig. Verkauf durch Kunden selbst ist oft bessere Lösung. Erst wenn keine Einigung = Betreibung auf Pfandverwertung.",
       },

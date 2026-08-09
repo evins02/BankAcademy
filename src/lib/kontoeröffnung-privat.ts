@@ -283,11 +283,11 @@ const L1_VOLLMACHT_MCQ: McqCase = {
   options: [
     {
       key: "A",
-      text: "Der Bruder kann mit Vollmacht kommen. Die Bank identifiziert den Bruder und eröffnet das Konto auf den Namen von Herrn Huber.",
+      text: "Die Erstidentifikation muss persönlich durch Herrn Huber erfolgen. Eine Vollmacht ersetzt die persönliche Identifikation bei Kontoeröffnung nicht.",
     },
     {
       key: "B",
-      text: "Die Erstidentifikation muss persönlich durch Herrn Huber erfolgen. Eine Vollmacht ersetzt die persönliche Identifikation bei Kontoeröffnung nicht.",
+      text: "Der Bruder kann mit Vollmacht kommen. Die Bank identifiziert den Bruder und eröffnet das Konto auf den Namen von Herrn Huber.",
     },
     {
       key: "C",
@@ -298,12 +298,12 @@ const L1_VOLLMACHT_MCQ: McqCase = {
       text: "Das Konto kann auch per Online-Antrag oder per Post eröffnet werden, ohne persönliches Erscheinen.",
     },
   ],
-  correct: "B",
+  correct: "A",
   feedback:
     "Gemäss GwG muss der wirtschaftlich Berechtigte (Herr Huber) bei der Kontoeröffnung persönlich identifiziert werden. Eine Vollmacht berechtigt den Bevollmächtigten, das Konto später zu bedienen – sie ersetzt aber niemals die Erstidentifikation des Kontoinhabers.",
   feedbackPerOption: {
-    A: "Falsch – durch Identifikation des Bruders wird nur der Bruder erfasst, nicht Herr Huber. Die GwG-Pflicht zur Identifikation des wirtschaftlich Berechtigten bleibt unerfüllt.",
-    B: "Korrekt – GwG Art. 3 verlangt die persönliche Identifikation des Kontoinhabers. Herr Huber muss selbst erscheinen.",
+    A: "Korrekt – GwG Art. 3 verlangt die persönliche Identifikation des Kontoinhabers. Herr Huber muss selbst erscheinen.",
+    B: "Falsch – durch Identifikation des Bruders wird nur der Bruder erfasst, nicht Herr Huber. Die GwG-Pflicht zur Identifikation des wirtschaftlich Berechtigten bleibt unerfüllt.",
     C: "Falsch – eine notarielle Beglaubigung der Vollmacht ändert nichts an der Pflicht zur persönlichen Identifikation des wirtschaftlich Berechtigten.",
     D: "Falsch – für Neukunden ist in der Schweiz grundsätzlich die persönliche Identifikation in der Filiale oder per Video-Ident erforderlich.",
   },

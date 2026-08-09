@@ -13,12 +13,12 @@ const L1_CASES: SubmoduleCase[] = [
       { key: "A", text: "Obligation B ist klar die bessere Wahl – 6.5% Coupon ergibt CHF 3'250 Zins pro Jahr statt CHF 750. Bei einer so grossen Renditedifferenz überwiegt der Ertrag das theoretische Risiko." },
       {
         key: "B",
-        text: "AAA bedeutet höchste Bonität und minimales Ausfallrisiko. CCC ist nahe am Ausfall. Der höhere Coupon ist die Risikoprämie – für Thomas als konservativen Anleger ist Obligation A die richtige Wahl.",
+        text: "Rating-Agenturen lagen in der Finanzkrise 2008 komplett daneben. Für erfahrene Anleger wie Thomas gilt: Coupon und Laufzeit entscheiden, nicht das Rating einer Agentur.",
       },
       { key: "C", text: "Beide Obligationen sind vertraglich abgesichert und zahlen Coupon und Kapital zurück. Das Rating ist eine externe Einschätzung ohne Rechtsverbindlichkeit und beeinflusst nicht die Vertragspflichten." },
-      { key: "D", text: "Rating-Agenturen lagen in der Finanzkrise 2008 komplett daneben. Für erfahrene Anleger wie Thomas gilt: Coupon und Laufzeit entscheiden, nicht das Rating einer Agentur." },
+      { key: "D", text: "AAA bedeutet höchste Bonität und minimales Ausfallrisiko. CCC ist nahe am Ausfall. Der höhere Coupon ist die Risikoprämie – für Thomas als konservativen Anleger ist Obligation A die richtige Wahl." },
     ],
-    correct: "B",
+    correct: "D",
     feedback:
       "Ratings zeigen die Kreditwürdigkeit des Emittenten. AAA = höchste Qualität, minimales Ausfallrisiko. CCC = erhebliches Ausfallrisiko – bei wirtschaftlicher Verschlechterung ist Ausfall wahrscheinlich. Der höhere Coupon bei CCC ist die Risikoprämie. Für Thomas (Kapitalerhalt) ist Obligation A die einzig vertretbare Wahl.",
     warum:

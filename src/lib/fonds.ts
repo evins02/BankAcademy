@@ -99,15 +99,15 @@ const L1_CASES: FondsCase[] = [
       "Kunde, 40 Jahre, hat CHF 20'000 seit 5 Jahren auf dem Sparkonto liegen. Er fragt, ob das klug ist.",
     question: "Was sagst du ihm?",
     options: [
-      { key: "A", text: "\"Das Sparkonto ist die richtige Wahl – mit 40 Jahren sind es noch 25 Jahre bis zur Pension, aber das Kapital sollte vorher nicht gebunden sein. Vor Renteneintritt keine Strategie mit Verlustrisiko eingehen.\"" },
+      { key: "A", text: "\"Sparkonto ist sicher, aber der Zins ist tief. Bei einem Horizont von 10+ Jahren könnte ein Fonds deutlich mehr Rendite bringen. Wichtig: Nur Geld anlegen, das Sie nicht kurzfristig brauchen.\"" },
       {
         key: "B",
-        text: "\"Sparkonto ist sicher, aber der Zins ist tief. Bei einem Horizont von 10+ Jahren könnte ein Fonds deutlich mehr Rendite bringen. Wichtig: Nur Geld anlegen, das Sie nicht kurzfristig brauchen.\"",
+        text: "\"Das Sparkonto ist die richtige Wahl – mit 40 Jahren sind es noch 25 Jahre bis zur Pension, aber das Kapital sollte vorher nicht gebunden sein. Vor Renteneintritt keine Strategie mit Verlustrisiko eingehen.\"",
       },
       { key: "C", text: "\"Das Geld sofort in einen globalen Aktien-ETF investieren – historisch hat der MSCI World nach 10 Jahren noch nie einen Verlust ausgewiesen, das Risiko ist bei diesem Horizont statistisch null.\"" },
       { key: "D", text: "\"Das Sparkonto auflösen und in die Säule 3a investieren – der Steuervorteil der 3a übertrifft langfristig jeden Fondsertrag. Mit CHF 20'000 kann man die Einzahlungen über mehrere Jahre optimal verteilen.\"" },
     ],
-    correct: "B",
+    correct: "A",
     feedback:
       "Sparkonto = Sicherheit aber tiefe Rendite. Fonds = höhere Rendite aber mit Schwankungen. Faustregel: Notreserve (3–6 Monatslöhne) immer auf dem Sparkonto. Alles darüber kann angelegt werden, wenn der Horizont lang genug ist.",
     warum:
@@ -165,10 +165,10 @@ const L2_CASES: FondsCase[] = [
       "Kundin, 62 Jahre, geht in 3 Jahren in Pension. Sie hat CHF 80'000 und fragt, ob sie noch in Fonds investieren soll.",
     question: "Was empfiehlst du?",
     options: [
-      { key: "A", text: "Ja – Wachstum für maximale Rendite in den letzten Jahren" },
+      { key: "A", text: "Bei 3 Jahren Horizont und naher Pensionierung empfehle ich maximal Ertrag-Strategie oder Sparkonto. Aktien brauchen mind. 5 Jahre – bei einem Kursrückgang kurz vor der Pension wäre das fatal." },
       {
         key: "B",
-        text: "Bei 3 Jahren Horizont und naher Pensionierung empfehle ich maximal Ertrag-Strategie oder Sparkonto. Aktien brauchen mind. 5 Jahre – bei einem Kursrückgang kurz vor der Pension wäre das fatal.",
+        text: "Ja – Wachstum für maximale Rendite in den letzten Jahren",
       },
       {
         key: "C",
@@ -176,7 +176,7 @@ const L2_CASES: FondsCase[] = [
       },
       { key: "D", text: "Alles in die Säule 3a einzahlen für Steuervorteile" },
     ],
-    correct: "B",
+    correct: "A",
     feedback:
       "Der Anlagehorizont ist entscheidend! 3 Jahre = zu kurz für hohen Aktienanteil. Das Risiko eines Kursrückgangs kurz vor der Pensionierung ist nicht tragbar – das Kapital wird dann gebraucht. Ertrag oder Sparkonto als sichere Wahl für diesen Fall.",
     warum:
@@ -202,15 +202,15 @@ const L2_CASES: FondsCase[] = [
       },
       {
         key: "B",
-        text: "\"TER ist sehr wichtig! Bei CHF 50'000 Anlage: Fonds A kostet CHF 150/Jahr, Fonds B kostet CHF 900/Jahr. Über 10 Jahre: CHF 7'500 Unterschied – nur wegen der Kosten.\"",
+        text: "\"TER bis 1.8% ist für aktive Fonds branchenüblich und von der FINMA so zugelassen. Entscheidend ist, ob Fonds B seinen Vergleichsindex langfristig schlägt – was er nachweislich tut.\"",
       },
       {
         key: "C",
         text: "\"Aktiv verwaltete Fonds haben höhere TER, weil der Fondsmanager täglich analysiert und optimiert. Das zahlt sich aus: Aktive Fonds schlagen langfristig passive ETFs, weil sie auf Krisen reagieren können.\"",
       },
-      { key: "D", text: "\"TER bis 1.8% ist für aktive Fonds branchenüblich und von der FINMA so zugelassen. Entscheidend ist, ob Fonds B seinen Vergleichsindex langfristig schlägt – was er nachweislich tut.\"" },
+      { key: "D", text: "\"TER ist sehr wichtig! Bei CHF 50'000 Anlage: Fonds A kostet CHF 150/Jahr, Fonds B kostet CHF 900/Jahr. Über 10 Jahre: CHF 7'500 Unterschied – nur wegen der Kosten.\"" },
     ],
-    correct: "B",
+    correct: "D",
     feedback:
       "TER (Total Expense Ratio) ist die jährliche Gesamtkostenquote eines Fonds. Tiefere Kosten = mehr Rendite für den Kunden. ETFs haben oft deutlich tiefere TER als aktiv verwaltete Fonds. Kosten immer vergleichen – sie machen über lange Zeiträume einen grossen Unterschied.",
     warum:
@@ -271,12 +271,12 @@ const L3_CASES: FondsCase[] = [
       },
       {
         key: "B",
-        text: "\"Ich verstehe Ihre Sorge. Aber Verkaufen beim Tiefstand realisiert den Verlust. Ihr Horizont ist noch 10 Jahre – Märkte haben sich historisch immer erholt. Ruhe bewahren und Strategie nicht ändern.\"",
+        text: "\"In andere Fonds wechseln – das löst das Problem\"",
       },
       { key: "C", text: "\"Warten Sie bis morgen und entscheiden Sie dann\"" },
-      { key: "D", text: "\"In andere Fonds wechseln – das löst das Problem\"" },
+      { key: "D", text: "\"Ich verstehe Ihre Sorge. Aber Verkaufen beim Tiefstand realisiert den Verlust. Ihr Horizont ist noch 10 Jahre – Märkte haben sich historisch immer erholt. Ruhe bewahren und Strategie nicht ändern.\"" },
     ],
-    correct: "B",
+    correct: "D",
     feedback:
       "Klassischer Fehler: Verkaufen im Tief, kaufen im Hoch – genau das Gegenteil von richtig. Langfristiger Horizont = kurzfristige Schwankungen aushalten. Historisch erholen sich Aktienmärkte nach jedem Rückgang. Strategie nur ändern, wenn sich die Lebenssituation ändert – nicht wegen Marktbewegungen.",
     warum:
@@ -302,12 +302,12 @@ const L3_CASES: FondsCase[] = [
       },
       {
         key: "B",
-        text: "Anlegerprofil muss angepasst werden! Der effektive Horizont ist 3 Jahre, nicht 7. Bei Wachstum riskiert er beim Hauskauf einen Kursrückgang. Empfehlung: Sparkonto oder Ertrag für diesen Betrag.",
+        text: "Portfolio auf Ausgewogen (50/50) umschichten – damit ist das Risiko halbiert und der Hauskauf in 3 Jahren ausreichend abgesichert.",
       },
       { key: "C", text: "Wachstum bei 3-jährigem Horizont ist noch vertretbar – Aktienmärkte erholen sich nach Korrekturen in der Regel innerhalb von 12–18 Monaten." },
-      { key: "D", text: "Portfolio auf Ausgewogen (50/50) umschichten – damit ist das Risiko halbiert und der Hauskauf in 3 Jahren ausreichend abgesichert." },
+      { key: "D", text: "Anlegerprofil muss angepasst werden! Der effektive Horizont ist 3 Jahre, nicht 7. Bei Wachstum riskiert er beim Hauskauf einen Kursrückgang. Empfehlung: Sparkonto oder Ertrag für diesen Betrag." },
     ],
-    correct: "B",
+    correct: "D",
     feedback:
       "Der effektive Anlagehorizont ist der kürzere! Nicht was der Kunde unterschrieben hat, sondern wann er das Geld wirklich braucht. Das Anlegerprofil muss der Realität entsprechen – der Berater hat eine Beratungspflicht. Ein falsches Profil ist ein Haftungsrisiko.",
     warum:

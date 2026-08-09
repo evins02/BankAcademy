@@ -23,15 +23,15 @@ const L1_CASES: SubmoduleCase[] = [
     ],
     question: "Was bedeutet TER und warum ist der Kostenunterschied nach 20 Jahren so gross?",
     options: [
-      { key: "A", text: "TER ist eine einmalige Kaufgebühr – spielt nur beim Kauf eine Rolle" },
+      { key: "A", text: "TER ist die jährliche Gesamtkostenquote. Durch den Zinseszins-Effekt summiert sich 1.6% Unterschied auf ca. CHF 6'800 nach 20 Jahren" },
       {
         key: "B",
-        text: "TER ist die jährliche Gesamtkostenquote. Durch den Zinseszins-Effekt summiert sich 1.6% Unterschied auf ca. CHF 6'800 nach 20 Jahren",
+        text: "TER ist eine einmalige Kaufgebühr – spielt nur beim Kauf eine Rolle",
       },
       { key: "C", text: "TER spielt bei langfristiger Anlage kaum eine Rolle" },
       { key: "D", text: "Höheres TER bedeutet aktives Management und damit immer bessere Rendite" },
     ],
-    correct: "B",
+    correct: "A",
     feedback:
       "TER (Total Expense Ratio) = jährliche Gesamtkosten in Prozent des Fondsvermögens. 1.6% Unterschied klingt klein – aber der Zinseszins-Effekt über 20 Jahre kostet Elena ca. CHF 6'800 mehr. Passiv = günstig, da kein aktives Management-Team bezahlt werden muss.",
     warum:

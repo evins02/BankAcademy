@@ -181,12 +181,12 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
           { key: "A", text: "Tragbar – CHF 180'000 Cashflow deckt den CHF 180'000 Aufwand genau. Ein Deckungsgrad von 1.0 entspricht einer ausgeglichenen Situation und liegt innerhalb der banküblichen Toleranz; eine Kreditvergabe mit engmaschiger Begleitung ist möglich." },
           {
             key: "B",
-            text: "Deckungsgrad 1.0 – unter Minimum 1.2. Tragbarkeit nicht gegeben. ETP prüfen ob Ausnahme möglich.",
+            text: "Mehr Sicherheiten einfordern – durch zusätzliche Pfänder wie Grundpfänder oder Bürgschaften kann das Kreditrisiko auf ein akzeptables Niveau gesenkt werden. Bei ausreichenden Sicherheiten entfällt die Deckungsgradanforderung.",
           },
           { key: "C", text: "Sofort ablehnen – Deckungsgrad unter 1.2 ist eine absolute Grenze. Auch bei ETP-Anträgen ist eine Unterschreitung von 1.0 ausgeschlossen, da kein Puffer für unerwartete Ausgaben besteht." },
-          { key: "D", text: "Mehr Sicherheiten einfordern – durch zusätzliche Pfänder wie Grundpfänder oder Bürgschaften kann das Kreditrisiko auf ein akzeptables Niveau gesenkt werden. Bei ausreichenden Sicherheiten entfällt die Deckungsgradanforderung." },
+          { key: "D", text: "Deckungsgrad 1.0 – unter Minimum 1.2. Tragbarkeit nicht gegeben. ETP prüfen ob Ausnahme möglich." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Deckungsgrad 1.0 < 1.2 = Tragbarkeit nicht gegeben. Ablehnung oder ETP-Beantragung mit Begründung.",
       },
@@ -209,15 +209,15 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
         },
         question: "Was ist dein Entscheid?",
         options: [
-          { key: "A", text: "Knapp unter 1.2 – ablehnen: Der berechnete Wert vernachlässigt die obligatorische Risikoabzugsquote von 15%, die bei allen Gesamtengagements über CHF 3 Mio. abgezogen werden muss. Effektiver Deckungsgrad wäre 1.14." },
+          { key: "A", text: "Deckungsgrad 1.34 – über 1.2. Tragbarkeit gegeben." },
           {
             key: "B",
-            text: "Deckungsgrad 1.34 – über 1.2. Tragbarkeit gegeben.",
+            text: "Knapp unter 1.2 – ablehnen: Der berechnete Wert vernachlässigt die obligatorische Risikoabzugsquote von 15%, die bei allen Gesamtengagements über CHF 3 Mio. abgezogen werden muss. Effektiver Deckungsgrad wäre 1.14.",
           },
           { key: "C", text: "ETP beantragen – obwohl der Deckungsgrad über dem Minimum liegt, empfiehlt die interne Kreditpolitik bei Werten unter 1.5 eine Ausnahmebeantragung, um einen ausreichenden Sicherheitspuffer zu dokumentieren." },
           { key: "D", text: "Ein viertes Jahr Cashflow anfordern – die Jahreswerte zeigen starke Schwankungen. Mit einem vierten Jahr stabilisiert sich der Durchschnitt und erlaubt eine verlässlichere Tragbarkeitsbeurteilung." },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Deckungsgrad 1.34 > 1.2 = Tragbarkeit knapp aber klar gegeben. Immer genau rechnen – Grenzfälle entscheiden sich in den Dezimalstellen.",
       },
@@ -273,12 +273,12 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
           { key: "A", text: "ETP beantragen und auf die Branchenzugehörigkeit als mildernden Faktor hinweisen – Branchen mit saisonalem Umsatzmuster erhalten bei der Risikobewertung einen Puffer. Deckungsgrad 0.7 kann auf 1.1 adjustiert werden." },
           {
             key: "B",
-            text: "Ablehnen – Deckungsgrad zu tief, keine Basis für ETP-Begründung.",
+            text: "Weitere Unterlagen anfordern: Businessplan, Branchenvergleichszahlen und Referenzschreiben des bisherigen Kreditgebers. Mit vollständigem Unterlagenset kann das Kreditkompetenzzentrum eine qualifiziertere Entscheidung treffen.",
           },
           { key: "C", text: "Bewilligen mit substanziellen Zusatzsicherheiten – wenn der Kunde mindestens CHF 500'000 in Immobilien oder Wertschriften als Pfand hinterlegt, überwiegen die Sicherheiten das schwache Deckungsverhältnis bei weitem." },
-          { key: "D", text: "Weitere Unterlagen anfordern: Businessplan, Branchenvergleichszahlen und Referenzschreiben des bisherigen Kreditgebers. Mit vollständigem Unterlagenset kann das Kreditkompetenzzentrum eine qualifiziertere Entscheidung treffen." },
+          { key: "D", text: "Ablehnen – Deckungsgrad zu tief, keine Basis für ETP-Begründung." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "ETP ist kein Freifahrtschein. Bei Deckungsgrad 0.7 und ohne positive Faktoren ist eine ETP-Begründung nicht haltbar. Hier muss abgelehnt werden.",
       },
@@ -298,12 +298,12 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
           { key: "A", text: "Mieteinnahmen und Leerstandsquote prüfen – die Bäckerei verrechnet sich selbst intern eine Miete, was steuerlich als Ertrag gilt. Dieser kalkulatorische Mietzins ist die Grundlage für die Objekttragbarkeitsberechnung." },
           {
             key: "B",
-            text: "Primär Bonität der Bäckerei prüfen – Cashflow, Eigenkapital, Stabilität. Kein Objektertrag weil selbst genutzt.",
+            text: "Nur den Gebäudewert und die Belehnungsquote prüfen – bei Gewerbeliegenschaften unter CHF 1 Mio. sieht die interne Kreditpolitik vor, dass der Verkehrswert allein ausschlaggebend ist. Cashflow-Prüfungen sind erst ab CHF 1 Mio. obligatorisch.",
           },
           { key: "C", text: "Gleich wie beim Renditeobjekt vorgehen – da die Bäckerei als Eigentümerin gleichzeitig Mieterin ist, kann die Marge zwischen marktüblichem Mietzins und Kosten als Objektertrag gerechnet werden." },
-          { key: "D", text: "Nur den Gebäudewert und die Belehnungsquote prüfen – bei Gewerbeliegenschaften unter CHF 1 Mio. sieht die interne Kreditpolitik vor, dass der Verkehrswert allein ausschlaggebend ist. Cashflow-Prüfungen sind erst ab CHF 1 Mio. obligatorisch." },
+          { key: "D", text: "Primär Bonität der Bäckerei prüfen – Cashflow, Eigenkapital, Stabilität. Kein Objektertrag weil selbst genutzt." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Selbstgenutzte Gewerbeliegenschaft = kein externer Mieter = kein Objektertrag. Deshalb steht die Bonität des Kreditnehmers im Zentrum.",
       },
@@ -313,15 +313,15 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
           "Du hast zwei Fälle:\nFall A: Bürogebäude vermietet an Dritte\nFall B: Lager selbst genutzt durch Firma",
         question: "Was ist der Unterschied in der Tragbarkeitsprüfung?",
         options: [
-          { key: "A", text: "Kein Unterschied in der Praxis – sowohl beim vermieteten Bürogebäude als auch beim selbstgenutzten Lager steht der Immobilienwert im Vordergrund. Cashflow-Überlegungen sind nachrangig, solange der Belehnungswert korrekt berechnet wurde." },
+          { key: "A", text: "Fall A: Objektertrag primär. Fall B: Kreditnehmer-Bonität primär." },
           {
             key: "B",
-            text: "Fall A: Objektertrag primär. Fall B: Kreditnehmer-Bonität primär.",
+            text: "Kein Unterschied in der Praxis – sowohl beim vermieteten Bürogebäude als auch beim selbstgenutzten Lager steht der Immobilienwert im Vordergrund. Cashflow-Überlegungen sind nachrangig, solange der Belehnungswert korrekt berechnet wurde.",
           },
           { key: "C", text: "Fall B ist einfacher – es müssen keine variablen Mieterträge kalkuliert werden. Stattdessen rechnen wir einen normierten Eigenmietansatz von 5% des Gebäudewertes als Ertrag – das ist schneller als die Analyse von Mietverträgen." },
           { key: "D", text: "Beide nach Objektertrag prüfen – der Unterschied ist nur buchhalterisch: Bei selbstgenutzten Gebäuden setzen wir einen kalkulatorischen Marktzins als Mietzins an. Der Prüfungsablauf ist identisch mit dem Renditeobjekt." },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Das ist ein klassischer Prüfungspunkt in der Abschlussprüfung. Renditeobjekt = Objektertrag zuerst. Selbstgenutzt = Kreditnehmer zuerst. Nie verwechseln!",
       },

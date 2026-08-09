@@ -144,12 +144,12 @@ export const BK_LEVELS: BlankokreditLevelConfig[] = [
           { key: "A", text: "Bewilligen – Nettolohn CHF 4'200 ist stabil und die ZEK zeigt zum Zeitpunkt der Prüfung keine negativen Einträge." },
           {
             key: "B",
-            text: "Ablehnen – Kreditfähigkeit nicht gegeben. Monatliche Amortisation CHF 1'056 übersteigt Freibetrag CHF 430 massiv.",
+            text: "Zurückweisen mit Hinweis: In 6 Monaten neu einreichen, nach Abbau der Kreditkarte steigt der Freibetrag auf über CHF 800.",
           },
           { key: "C", text: "Teilbewilligung CHF 20'000 auf 36 Monate – Amortisation sinkt auf CHF 556 und passt damit in den Freibetrag." },
-          { key: "D", text: "Zurückweisen mit Hinweis: In 6 Monaten neu einreichen, nach Abbau der Kreditkarte steigt der Freibetrag auf über CHF 800." },
+          { key: "D", text: "Ablehnen – Kreditfähigkeit nicht gegeben. Monatliche Amortisation CHF 1'056 übersteigt Freibetrag CHF 430 massiv." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Kreditfähigkeit klar nicht gegeben. Freibetrag CHF 430 reicht nicht für Amortisation CHF 1'056. Ablehnung zwingend.",
       },
@@ -266,15 +266,15 @@ export const BK_LEVELS: BlankokreditLevelConfig[] = [
         ],
         question: "Was machst du?",
         options: [
-          { key: "A", text: "Ablehnen – zu knapp" },
+          { key: "A", text: "Bewilligen – Kreditfähigkeit ist gegeben. CHF 556 ≤ CHF 580. Knapp aber klar innerhalb der Limite." },
           {
             key: "B",
-            text: "Bewilligen – Kreditfähigkeit ist gegeben. CHF 556 ≤ CHF 580. Knapp aber klar innerhalb der Limite.",
+            text: "Ablehnen – zu knapp",
           },
           { key: "C", text: "Teilbewilligung CHF 18'000" },
           { key: "D", text: "Weitere Unterlagen anfordern" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Kreditfähigkeit ist gegeben – auch wenn knapp. Solange Amortisation unter Freibetrag liegt, ist Bewilligung möglich. Kein Ermessensspielraum bei klarer Regel.",
       },
@@ -389,12 +389,12 @@ export const BK_LEVELS: BlankokreditLevelConfig[] = [
           { key: "A", text: "Nein – bestehender Kredit reicht allein schon" },
           {
             key: "B",
-            text: "Ja – CHF 917 ≤ CHF 1'000. Kreditfähigkeit für Gesamtbetrag CHF 33'000 gegeben.",
+            text: "Bestehenden Kredit zuerst ablösen",
           },
           { key: "C", text: "Nur CHF 10'000 bewilligen" },
-          { key: "D", text: "Bestehenden Kredit zuerst ablösen" },
+          { key: "D", text: "Ja – CHF 917 ≤ CHF 1'000. Kreditfähigkeit für Gesamtbetrag CHF 33'000 gegeben." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Entscheidend ist immer der TOTAL-Betrag aller Kredite geteilt durch 36. Nicht jeder Kredit einzeln. CHF 33'000 ÷ 36 = CHF 917 ≤ Freibetrag CHF 1'000 = Kreditfähigkeit gegeben.",
       },

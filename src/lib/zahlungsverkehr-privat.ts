@@ -126,12 +126,12 @@ const L1_CASES: ZvFoCase[] = [
       { key: "A", text: "\"Per QR-Code im E-Banking zahlen – die App liest alle Daten automatisch aus dem Einzahlungsschein. Das ist genauso papierlos wie E-Bill, und Sie behalten volle Kontrolle über jeden Betrag und Zeitpunkt.\"" },
       {
         key: "B",
-        text: "\"Mit E-Bill erhalten Sie Rechnungen direkt im E-Banking – bereits vorerfasst. Sie müssen nur noch prüfen und mit wenigen Klicks bestätigen. Kein Papier mehr.\"",
+        text: "\"Digitale Rechnungslösungen sind bei uns erst für Grosskunden verfügbar. Für Privatkunden ist die Papierrechnung weiterhin die einzige rechtlich gültige Zahlungsaufforderung in der Schweiz.\"",
       },
       { key: "C", text: "\"Für jeden Rechnungssteller einen Dauerauftrag einrichten – der Betrag wird am gleichen Datum abgebucht. Falls die Rechnung variiert, überweist der Dauerauftrag trotzdem denselben Betrag wie vereinbart.\"" },
-      { key: "D", text: "\"Digitale Rechnungslösungen sind bei uns erst für Grosskunden verfügbar. Für Privatkunden ist die Papierrechnung weiterhin die einzige rechtlich gültige Zahlungsaufforderung in der Schweiz.\"" },
+      { key: "D", text: "\"Mit E-Bill erhalten Sie Rechnungen direkt im E-Banking – bereits vorerfasst. Sie müssen nur noch prüfen und mit wenigen Klicks bestätigen. Kein Papier mehr.\"" },
     ],
-    correct: "B",
+    correct: "D",
     feedback:
       "E-Bill = Rechnungen digital direkt im E-Banking. Der Rechnungssteller schickt die Rechnung elektronisch – die Kundin prüft und bezahlt mit einem Klick. Kein Einzahlungsschein, kein Papier. Dauerauftrag wäre falsch, da Rechnungen unterschiedliche Beträge haben können.",
   },
@@ -142,15 +142,15 @@ const L1_CASES: ZvFoCase[] = [
     situation: "Kunde ruft aufgeregt an: 'Ich habe meine Maestrokarte verloren – was soll ich tun?'",
     question: "Was sagst du ihm?",
     options: [
-      { key: "A", text: "\"Notieren Sie Kartennummer und die letzten Transaktionen, kommen Sie morgen früh in die Filiale und stellen Sie einen schriftlichen Verlustbericht – ohne diesen kann keine Ersatzkarte ausgestellt werden.\"" },
+      { key: "A", text: "\"Keine Panik – rufen Sie sofort die Sperrhotline an: 0800 80 40 40. Die Karte wird sofort gesperrt. Danach eröffnen wir eine neue Karte.\"" },
       {
         key: "B",
-        text: "\"Keine Panik – rufen Sie sofort die Sperrhotline an: 0800 80 40 40. Die Karte wird sofort gesperrt. Danach eröffnen wir eine neue Karte.\"",
+        text: "\"Notieren Sie Kartennummer und die letzten Transaktionen, kommen Sie morgen früh in die Filiale und stellen Sie einen schriftlichen Verlustbericht – ohne diesen kann keine Ersatzkarte ausgestellt werden.\"",
       },
       { key: "C", text: "\"Das Missbrauchsrisiko ist gering, solange die PIN nicht auf der Karte notiert war. Warten Sie 48 Stunden – nur wenn bis dahin fremde Transaktionen erscheinen, müssen Sie die Karte sperren lassen.\"" },
       { key: "D", text: "\"Das wichtigste ist, sofort die Karten-PIN und das E-Banking-Passwort zu ändern. Damit sind keine Kartentransaktionen mehr möglich – eine Sperrung durch die Bank ist erst nötig, wenn fremde Buchungen erscheinen.\"" },
     ],
-    correct: "B",
+    correct: "A",
     feedback:
       "Bei Kartenverlust sofort sperren lassen! Die Sperrhotline 0800 80 40 40 ist 24/7 erreichbar. Eine gesperrte Karte kann nicht mehr missbraucht werden. Morgen in die Filiale zu kommen ist zu spät – die Karte muss sofort gesperrt werden. Danach wird eine Ersatzkarte beantragt.",
   },
@@ -169,15 +169,15 @@ const L2_CASES: ZvFoCase[] = [
       "Kunde hat Krankenkassenrechnung mit unterschiedlichen Beträgen jeden Monat. Er fragt, was besser ist – Dauerauftrag oder LSV?",
     question: "Was empfiehlst du?",
     options: [
-      { key: "A", text: "Dauerauftrag mit dem höchsten erwarteten Monatsbetrag einrichten – falls die Prämie tiefer ausfällt, landet die Differenz auf dem Konto der Krankenkasse als Guthaben und wird mit der nächsten Rechnung verrechnet." },
+      { key: "A", text: "LSV – die Krankenkasse zieht automatisch den richtigen Betrag ein, auch wenn er variiert. Mit Widerspruchsrecht geschützt." },
       {
         key: "B",
-        text: "LSV – die Krankenkasse zieht automatisch den richtigen Betrag ein, auch wenn er variiert. Mit Widerspruchsrecht geschützt.",
+        text: "Dauerauftrag mit dem höchsten erwarteten Monatsbetrag einrichten – falls die Prämie tiefer ausfällt, landet die Differenz auf dem Konto der Krankenkasse als Guthaben und wird mit der nächsten Rechnung verrechnet.",
       },
       { key: "C", text: "Beide parallel einrichten – der Dauerauftrag deckt den Fixanteil der Prämie, der LSV-Auftrag gleicht variable Differenzen aus. So ist jede Rechnung ohne Unterzahlung gedeckt." },
       { key: "D", text: "Manuell zahlen – so behält der Kunde volle Kontrolle und prüft jeden Monat die aktuelle Prämie bevor er zahlt. Das ist aufwändiger, aber bei variierenden Beträgen die sicherste Methode." },
     ],
-    correct: "B",
+    correct: "A",
     feedback:
       "LSV ist ideal, wenn der Betrag variiert. Der Dauerauftrag ist nur bei gleichbleibendem Betrag sinnvoll – da Krankenkassenprämien variieren können, ist LSV die richtige Wahl. Das Widerspruchsrecht schützt den Kunden vor falschen Abbuchungen.",
   },
@@ -218,12 +218,12 @@ const L2_CASES: ZvFoCase[] = [
       { key: "A", text: "\"In der EU gilt SEPA-Instant: Es reicht eine einfache Kontonummer, IBAN und BIC werden automatisch durch das Clearingsystem ergänzt. Der Betrag wird in Echtzeit übermittelt.\"" },
       {
         key: "B",
-        text: "\"Deutschland liegt in der SEPA-Zone. Es reicht die IBAN des Empfängers – kein BIC nötig. Günstigere Gebühren als SWIFT. Zahlung meist innerhalb 1–2 Tagen.\"",
+        text: "\"IBAN alleine reicht für Deutschland nicht – zusätzlich zwingend den BIC angeben, weil Zahlungen zwischen Schweiz und EU ausschliesslich über SWIFT laufen. SEPA gilt nur innerhalb der Eurozone.\"",
       },
       { key: "C", text: "\"Für Zahlungen nach Deutschland brauchen wir zwingend IBAN und BIC, weil Deutschland kein SEPA-Abkommen mit der Schweiz unterzeichnet hat. Der Empfänger muss den 8- oder 11-stelligen BIC mitteilen.\"" },
-      { key: "D", text: "\"IBAN alleine reicht für Deutschland nicht – zusätzlich zwingend den BIC angeben, weil Zahlungen zwischen Schweiz und EU ausschliesslich über SWIFT laufen. SEPA gilt nur innerhalb der Eurozone.\"" },
+      { key: "D", text: "\"Deutschland liegt in der SEPA-Zone. Es reicht die IBAN des Empfängers – kein BIC nötig. Günstigere Gebühren als SWIFT. Zahlung meist innerhalb 1–2 Tagen.\"" },
     ],
-    correct: "B",
+    correct: "D",
     feedback:
       "Deutschland liegt in der SEPA-Zone – innerhalb SEPA reicht die IBAN alleine, kein BIC erforderlich. Günstigere Gebühren als SWIFT. Wichtig: Die Schweiz ist kein EU-Land, aber SEPA-Mitglied – also können Schweizer Kunden SEPA-Zahlungen in die EU senden.",
   },
@@ -242,10 +242,10 @@ const L3_CASES: ZvFoCase[] = [
       "Kunde möchte Geld überweisen – Fall A: CHF 5'000 nach Frankreich. Fall B: CHF 5'000 nach Japan. Er fragt nach dem Unterschied.",
     question: "Was erklärst du?",
     options: [
-      { key: "A", text: "\"Kein wesentlicher Unterschied – beide Länder werden über das internationale SWIFT-Netz abgewickelt. Frankreich ist EU-Mitglied, aber SEPA gilt für Schweizer Banken nicht, da die Schweiz kein EU-Mitglied ist.\"" },
+      { key: "A", text: "\"Frankreich = SEPA-Zone = nur IBAN nötig, kein BIC, günstigere Gebühren. Japan = SWIFT = ausserhalb EU/EWR, IBAN und BIC zwingend, höhere Gebühren – besonders bei Fremdwährungen.\"" },
       {
         key: "B",
-        text: "\"Frankreich = SEPA-Zone = nur IBAN nötig, kein BIC, günstigere Gebühren. Japan = SWIFT = ausserhalb EU/EWR, IBAN und BIC zwingend, höhere Gebühren – besonders bei Fremdwährungen.\"",
+        text: "\"Kein wesentlicher Unterschied – beide Länder werden über das internationale SWIFT-Netz abgewickelt. Frankreich ist EU-Mitglied, aber SEPA gilt für Schweizer Banken nicht, da die Schweiz kein EU-Mitglied ist.\"",
       },
       {
         key: "C",
@@ -256,7 +256,7 @@ const L3_CASES: ZvFoCase[] = [
         text: "\"Beide Länder brauchen zwingend IBAN und BIC – Frankreich unterzeichnete den SEPA-Vertrag erst 2019, weswegen für ältere Konten noch immer der BIC-Code erforderlich ist.\"",
       },
     ],
-    correct: "B",
+    correct: "A",
     feedback:
       "SEPA gilt für EU/EWR-Länder – innerhalb SEPA reicht die IBAN, kein BIC nötig. SWIFT gilt weltweit ausserhalb EU/EWR – IBAN und BIC zwingend, höhere Gebühren. Wichtig: Die Schweiz ist kein EU-Land aber SEPA-Mitglied! Frankreich ist EU/SEPA, Japan ist SWIFT.",
   },
@@ -291,12 +291,12 @@ const L3_CASES: ZvFoCase[] = [
       { key: "A", text: "1. Dauerauftrag  2. Dauerauftrag mit variablem Betrag  3. E-Bill  4. SEPA – Japan ist dem SEPA-Abkommen beigetreten, daher reicht die IBAN ohne BIC." },
       {
         key: "B",
-        text: "1. Dauerauftrag  2. LSV  3. E-Bill aktivieren  4. SWIFT – ausserhalb EU/EWR, IBAN und BIC zwingend, höhere Gebühren bei JPY",
+        text: "1. LSV  2. LSV  3. Dauerauftrag  4. SWIFT mit nur IBAN – Japan akzeptiert als G7-Land europäische Zahlungsstandards ohne BIC.",
       },
       { key: "C", text: "1. E-Bill  2. Dauerauftrag  3. LSV  4. SEPA mit IBAN – BIC ist in Europa seit 2016 nicht mehr nötig, auch für Japan gilt SEPA-Standard." },
-      { key: "D", text: "1. LSV  2. LSV  3. Dauerauftrag  4. SWIFT mit nur IBAN – Japan akzeptiert als G7-Land europäische Zahlungsstandards ohne BIC." },
+      { key: "D", text: "1. Dauerauftrag  2. LSV  3. E-Bill aktivieren  4. SWIFT – ausserhalb EU/EWR, IBAN und BIC zwingend, höhere Gebühren bei JPY" },
     ],
-    correct: "B",
+    correct: "D",
     feedback:
       "Jedes Produkt hat seinen Zweck: 1. Dauerauftrag = gleicher Betrag, gleicher Empfänger. 2. LSV = variabler Betrag – Krankenkasse zieht selbst ein. 3. E-Bill = Rechnungen papierlos direkt im E-Banking. 4. Japan liegt ausserhalb EU/EWR → SWIFT zwingend, IBAN + BIC nötig, höhere Gebühren als SEPA. Merke: Schweiz = SEPA-Mitglied, aber kein EU-Land!",
   },

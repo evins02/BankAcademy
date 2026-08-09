@@ -32,18 +32,18 @@ export const ANLAGE_SIM_STEPS: AnlageSimStep[] = [
     options: [
       {
         key: "A",
-        text: "«Super Idee! Aktien sind langfristig unschlagbar. Sollen wir gleich ein Depot eröffnen?»",
+        text: "«Gerne helfe ich Ihnen. Bevor wir über Produkte sprechen: Was sind Ihre persönlichen Ziele mit dem Geld?»",
       },
       {
         key: "B",
-        text: "«Gerne helfe ich Ihnen. Bevor wir über Produkte sprechen: Was sind Ihre persönlichen Ziele mit dem Geld?»",
+        text: "«Super Idee! Aktien sind langfristig unschlagbar. Sollen wir gleich ein Depot eröffnen?»",
       },
       {
         key: "C",
         text: "«Das ist kompliziert. Ich müsste Ihnen erst verschiedene Produkte vorstellen.»",
       },
     ],
-    correct: "B",
+    correct: "A",
     feedback:
       "Richtig! Vor jeder Produktempfehlung: Ziele, Situation und Bedürfnisse des Kunden klären. FIDLEG Art. 12 verpflichtet zur Eignungsprüfung. Direkt zu Produkten springen ohne Profilierung wäre eine Pflichtverletzung.",
     tip: "Im Beratungsgespräch beginnt man mit Fragen – nie mit Antworten.",
@@ -161,14 +161,14 @@ export const ANLAGE_SIM_STEPS: AnlageSimStep[] = [
       },
       {
         key: "B",
-        text: "«Zuerst: Anlegerprofil unterschreiben, KID für jeden Fonds abgeben, Risikobroschüre quittieren, Anlagerichtlinien bestätigen – dann erteilen wir den Auftrag.»",
+        text: "«Ihr mündliches Einverständnis reicht – wir erledigen die Formulare später per E-Mail.»",
       },
       {
         key: "C",
-        text: "«Ihr mündliches Einverständnis reicht – wir erledigen die Formulare später per E-Mail.»",
+        text: "«Zuerst: Anlegerprofil unterschreiben, KID für jeden Fonds abgeben, Risikobroschüre quittieren, Anlagerichtlinien bestätigen – dann erteilen wir den Auftrag.»",
       },
     ],
-    correct: "B",
+    correct: "C",
     feedback:
       "Korrekte Prozessführung! Vor jedem Kauf zwingend: (1) Anlegerprofil unterschrieben, (2) KID für jeden Fonds abgegeben, (3) Risikobroschüre quittiert, (4) Anlagerichtlinien unterschrieben. Erst dann den Auftrag erteilen. Mündliches Einverständnis allein reicht rechtlich nicht – Haftungsrisiko für die Bank!",
     tip: "Keine Abkürzungen bei der Dokumentation. Sie schützt den Kunden und die Bank gleichermassen.",

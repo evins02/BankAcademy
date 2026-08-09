@@ -81,15 +81,15 @@ const L1_CASES: VorsorgeCase[] = [
       { key: "A", text: "Sparkonto – mit CHF 7'258 Jahresmaximum bietet die 3a keine echte Wirkung. Das Sparkonto ist vollständig verfügbar, bietet dieselbe Sicherheit und ist bei gleichzeitigem Sparziel die bessere Basis." },
       {
         key: "B",
-        text: "Säule 3a – steuerlich abzugsfähig, bis CHF 7'258 pro Jahr einzahlbar, Geld ist bis zur Pensionierung gebunden",
+        text: "Säule 3b über eine Lebensversicherung – sie ist ebenfalls steuerlich begünstigt, bietet mehr Flexibilität als das 3a-Konto und ist deshalb für Angestellte mit PK-Anschluss die bessere Wahl.",
       },
       { key: "C", text: "Aktien über ein Depot – Kursgewinne sind in der Schweiz steuerfrei, und langfristig übertrifft die historische Aktienrendite von ca. 7% p.a. den Steuervorteil der 3a deutlich." },
       {
         key: "D",
-        text: "Säule 3b über eine Lebensversicherung – sie ist ebenfalls steuerlich begünstigt, bietet mehr Flexibilität als das 3a-Konto und ist deshalb für Angestellte mit PK-Anschluss die bessere Wahl.",
+        text: "Säule 3a – steuerlich abzugsfähig, bis CHF 7'258 pro Jahr einzahlbar, Geld ist bis zur Pensionierung gebunden",
       },
     ],
-    correct: "B",
+    correct: "D",
     feedback:
       "Säule 3a ist ideal für Steueroptimierung und Altersvorsorge. Einzahlungen sind vollständig vom steuerbaren Einkommen abziehbar. Maximum 2026: CHF 7'258 pro Jahr. Das Geld ist bis 5 Jahre vor Pensionierung gebunden – Ausnahmen (z.B. Eigenheim, Auswanderung) sind möglich.",
   },
@@ -100,15 +100,15 @@ const L1_CASES: VorsorgeCase[] = [
     situation: "Kunde fragt: 'Was ist der Unterschied zwischen 3a und 3b?'",
     question: "Was erklärst du?",
     options: [
-      { key: "A", text: "\"3a und 3b sind steuerlich identisch – beide Formen sind vollständig vom steuerbaren Einkommen abzugsfähig. Der Unterschied liegt nur im Anbieter: 3a über Bank, 3b über Versicherung.\"" },
+      { key: "A", text: "\"3a ist gebunden und steuerlich abzugsfähig – maximaler Einzahlungsbetrag pro Jahr. 3b ist frei – keine Limite, keine Steuervergünstigung, jederzeit verfügbar.\"" },
       {
         key: "B",
-        text: "\"3a ist gebunden und steuerlich abzugsfähig – maximaler Einzahlungsbetrag pro Jahr. 3b ist frei – keine Limite, keine Steuervergünstigung, jederzeit verfügbar.\"",
+        text: "\"3a und 3b sind steuerlich identisch – beide Formen sind vollständig vom steuerbaren Einkommen abzugsfähig. Der Unterschied liegt nur im Anbieter: 3a über Bank, 3b über Versicherung.\"",
       },
       { key: "C", text: "\"3b ist in der Regel die bessere Wahl: Seit der Steuerreform 2019 sind Einzahlungen in 3b-Policen kantonal teilweise abzugsfähig, und man ist nicht durch eine Sperrfrist bis zur Pensionierung eingeschränkt.\"" },
       { key: "D", text: "\"3a eignet sich primär für Selbständige ohne PK-Anschluss, die bis zu 20% ihres Einkommens einzahlen dürfen. Für Angestellte mit Pensionskasse ist das 3b-Konto steuerlich attraktiver, weil keine Bezugssperrfrist gilt.\"" },
     ],
-    correct: "B",
+    correct: "A",
     feedback:
       "3a = gebunden, Steuervorteil, Maximum CHF 7'258 (Angestellte). 3b = frei, kein Steuervorteil, kein Maximum, jederzeit verfügbar. Empfehlung: Zuerst 3a maximal ausschöpfen um den Steuervorteil zu nutzen, dann 3b für flexible Zusatzersparnisse.",
   },
@@ -130,12 +130,12 @@ const L2_CASES: VorsorgeCase[] = [
       { key: "A", text: "\"Bei 25% Grenzsteuersatz liegt der Bundessteuervorteil bei ca. CHF 500 – der grosse Teil der Steuerersparnis entsteht erst beim Bezug zur Pensionierung, weil der Auszahlungssteuersatz dann erheblich tiefer ist.\"" },
       {
         key: "B",
-        text: "\"Bei Grenzsteuersatz 25% sparen Sie CHF 1'814.50 Steuern – einfach durch die 3a Einzahlung von CHF 7'258.\"",
+        text: "\"Das lässt sich pauschal nicht sagen – der tatsächliche Steuervorteil hängt von Ihrem Kanton, Ihrer Gemeinde und dem genauen steuerbaren Einkommen ab. Das Steueramt muss das individuell ausrechnen, bevor eine Empfehlung sinnvoll ist.\"",
       },
       { key: "C", text: "\"Der Vorteil gilt ausschliesslich für die direkte Bundessteuer – kantonale und kommunale Einkommenssteuern können durch 3a-Einzahlungen nicht reduziert werden, daher lohnt sich das nur bei sehr hohem Einkommen.\"" },
-      { key: "D", text: "\"Das lässt sich pauschal nicht sagen – der tatsächliche Steuervorteil hängt von Ihrem Kanton, Ihrer Gemeinde und dem genauen steuerbaren Einkommen ab. Das Steueramt muss das individuell ausrechnen, bevor eine Empfehlung sinnvoll ist.\"" },
+      { key: "D", text: "\"Bei Grenzsteuersatz 25% sparen Sie CHF 1'814.50 Steuern – einfach durch die 3a Einzahlung von CHF 7'258.\"" },
     ],
-    correct: "B",
+    correct: "D",
     feedback:
       "Steuerersparnis = Einzahlung × Grenzsteuersatz. CHF 7'258 × 25% = CHF 1'814.50. Das ist fast ein Monatslohn gespart – jedes Jahr! Je höher das Einkommen und der Grenzsteuersatz, desto grösser der Steuervorteil der 3a-Einzahlung.",
     calculator: {
@@ -174,16 +174,16 @@ const L2_CASES: VorsorgeCase[] = [
     options: [
       {
         key: "A",
-        text: "\"Alles gut – die Einlagensicherung schützt 3a-Konten bis CHF 100'000 pro Bank vollständig, und beim Bezug zur Pensionierung ist nur der Gesamtbetrag steuerlich massgebend, nicht die Anzahl Konten.\"",
+        text: "\"Ab CHF 50'000 empfehle ich ein zweites 3a-Konto zu eröffnen. Beim Bezug werden 3a-Konten separat besteuert – gestaffelte Bezüge über mehrere Jahre reduzieren die Steuerbelastung massiv.\"",
       },
       {
         key: "B",
-        text: "\"Ab CHF 50'000 empfehle ich ein zweites 3a-Konto zu eröffnen. Beim Bezug werden 3a-Konten separat besteuert – gestaffelte Bezüge über mehrere Jahre reduzieren die Steuerbelastung massiv.\"",
+        text: "\"Alles gut – die Einlagensicherung schützt 3a-Konten bis CHF 100'000 pro Bank vollständig, und beim Bezug zur Pensionierung ist nur der Gesamtbetrag steuerlich massgebend, nicht die Anzahl Konten.\"",
       },
       { key: "C", text: "\"Das bestehende Konto saldieren und in ein 3a-Wertschriftendepot umschichten – Fonds erzielen langfristig bessere Rendite als Kontoguthaben, und steuerlich ändert sich beim Bezug nichts.\"" },
       { key: "D", text: "\"Ab CHF 50'000 gilt für 3a-Konten ein reduzierter Zinssatz. Die Bank ist verpflichtet, ab diesem Betrag die Einlagen aufzuteilen, damit der höhere Zinssatz weiterhin gilt.\"" },
     ],
-    correct: "B",
+    correct: "A",
     feedback:
       "3a-Bezüge werden separat vom ordentlichen Einkommen besteuert – zu einem reduzierten Satz. Bei mehreren Konten können Bezüge über verschiedene Jahre gestaffelt werden, was jedes Mal einen tieferen Steuersatz ergibt. Ab CHF 50'000 ist ein zweites Konto dringend empfohlen!",
   },
@@ -238,10 +238,10 @@ const L3_CASES: (VorsorgeCase | LückentextCase)[] = [
       "Kunde, 40 Jahre, sagt: 'Ich habe 2025 vergessen in die 3a einzuzahlen. Sind diese CHF 7'000 verloren?'",
     question: "Was antwortest du?",
     options: [
-      { key: "A", text: "\"Ja leider – die Einzahlungsmöglichkeit in die Säule 3a ist streng auf das laufende Steuerjahr begrenzt. Das Bundesgesetz schliesst Nachzahlungen für alle Steuerpflichtigen aus, auch rückwirkend für 2025.\"" },
+      { key: "A", text: "\"Nein! Ab 2026 können verpasste Einzahlungen ab 2025 nachgeholt werden. Bedingung: Der aktuelle Maximalbetrag CHF 7'258 muss zuerst vollständig einbezahlt sein. Lücken vor 2025 leider nicht nachholbar.\"" },
       {
         key: "B",
-        text: "\"Nein! Ab 2026 können verpasste Einzahlungen ab 2025 nachgeholt werden. Bedingung: Der aktuelle Maximalbetrag CHF 7'258 muss zuerst vollständig einbezahlt sein. Lücken vor 2025 leider nicht nachholbar.\"",
+        text: "\"Ja leider – die Einzahlungsmöglichkeit in die Säule 3a ist streng auf das laufende Steuerjahr begrenzt. Das Bundesgesetz schliesst Nachzahlungen für alle Steuerpflichtigen aus, auch rückwirkend für 2025.\"",
       },
       {
         key: "C",
@@ -249,7 +249,7 @@ const L3_CASES: (VorsorgeCase | LückentextCase)[] = [
       },
       { key: "D", text: "\"Nachzahlung gilt ab 2026 für Selbständige: Sie können Lücken aus Vorjahren bis zu drei Jahresmaximalbeträge auf einmal einzahlen. Für Angestellte mit PK-Anschluss bleibt das weiterhin ausgeschlossen.\"" },
     ],
-    correct: "B",
+    correct: "A",
     feedback:
       "Neue Regelung ab 2026: Beitragslücken ab dem Jahr 2025 können nachgeholt werden. Bedingung: Der aktuelle Maximalbetrag (CHF 7'258) muss im laufenden Jahr zuerst vollständig ausgeschöpft sein. Lücken vor 2025 sind nicht nachholbar. Nachzahlungen sind ebenfalls steuerlich abzugsfähig!",
   },

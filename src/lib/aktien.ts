@@ -62,11 +62,11 @@ const L2_CASES: SubmoduleCase[] = [
     question: "Wie hoch ist die Dividendenrendite von Petra Kochs Nestlé-Position?",
     options: [
       { key: "A", text: "2.85% – das ist die Dividende je Aktie in Franken" },
-      { key: "B", text: "3.0% – Dividende je Aktie geteilt durch Kurs" },
+      { key: "B", text: "0.3% – Dividende als Promille des Kurses" },
       { key: "C", text: "5.7% – Dividende × 2 für Halbjahresberechnung" },
-      { key: "D", text: "0.3% – Dividende als Promille des Kurses" },
+      { key: "D", text: "3.0% – Dividende je Aktie geteilt durch Kurs" },
     ],
-    correct: "B",
+    correct: "D",
     feedback:
       "Dividendenrendite = Dividende je Aktie / Aktienkurs × 100 = CHF 2.85 / CHF 95 = 3.0%. Sie zeigt, wie viel Ausschüttung du im Verhältnis zum investierten Kapital erhältst. Nestlé ist bekannt für stabile, wachsende Dividenden – attraktiv für einkommensorientierte Anleger.",
     warum:

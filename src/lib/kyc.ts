@@ -57,12 +57,12 @@ export const KYC_LEVELS: KycLevelConfig[] = [
           "Du arbeitest am Schalter. Ein Mann kommt und möchte den Kontostand seiner Ehefrau wissen. Er hat deren Bankkarte dabei, kennt aber die PIN nicht und hat keine Vollmacht.",
         question: "Was machst du?",
         options: [
-          { key: "A", text: "Kontostand mitteilen – er ist ja der Ehemann" },
-          { key: "B", text: "Keine Auskunft geben – kein Zugriff ohne Vollmacht" },
+          { key: "A", text: "Keine Auskunft geben – kein Zugriff ohne Vollmacht" },
+          { key: "B", text: "Kontostand mitteilen – er ist ja der Ehemann" },
           { key: "C", text: "Nur den ungefähren Betrag nennen" },
           { key: "D", text: "Die Ehefrau anrufen und fragen" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Das Bankkundengeheimnis schützt jeden Kunden individuell. Auch Ehepartner haben ohne Vollmacht keinen Anspruch auf Kontoinformationen. Du darfst keinerlei Auskunft geben – nicht einmal bestätigen, dass ein Konto existiert.",
       },
@@ -74,11 +74,11 @@ export const KYC_LEVELS: KycLevelConfig[] = [
         question: "Was antwortest du?",
         options: [
           { key: "A", text: "\"Ja, er ist Kunde bei uns\"" },
-          { key: "B", text: "\"Das kann ich dir leider nicht sagen\"" },
+          { key: "B", text: "\"Frag ihn doch selbst\"" },
           { key: "C", text: "\"Ich habe ihn heute nicht gesehen\"" },
-          { key: "D", text: "\"Frag ihn doch selbst\"" },
+          { key: "D", text: "\"Das kann ich dir leider nicht sagen\"" },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Das Bankkundengeheimnis gilt auch ausserhalb der Arbeitszeit und im Privatleben. Du darfst weder bestätigen noch verneinen, ob jemand Kunde bei eurer Bank ist. Auch gegenüber Freunden und Familie gilt absolute Verschwiegenheit.",
       },
@@ -96,12 +96,12 @@ export const KYC_LEVELS: KycLevelConfig[] = [
           "Eine neue Kundin möchte ein Konto eröffnen. Sie sagt, das Geld auf dem Konto gehöre eigentlich ihrem Bruder im Ausland, sie verwalte es nur für ihn.",
         question: "Was ist in dieser Situation zwingend?",
         options: [
-          { key: "A", text: "Nur die Kundin identifizieren – sie ist die Vertragspartnerin und trägt die rechtliche Verantwortung für das Konto. Die Herkunft der Mittel und allfällige wirtschaftliche Berechtigungen müssen nicht separat dokumentiert werden." },
-          { key: "B", text: "Formular A ausfüllen – wirtschaftlich Berechtigter ist der Bruder" },
+          { key: "A", text: "Formular A ausfüllen – wirtschaftlich Berechtigter ist der Bruder" },
+          { key: "B", text: "Nur die Kundin identifizieren – sie ist die Vertragspartnerin und trägt die rechtliche Verantwortung für das Konto. Die Herkunft der Mittel und allfällige wirtschaftliche Berechtigungen müssen nicht separat dokumentiert werden." },
           { key: "C", text: "Konto grundsätzlich ablehnen – Konten für Dritte sind nur mit schriftlicher Treuhandvereinbarung und Compliance-Genehmigung zulässig. Ohne genehmigtes Mandat darf die Bank keine Vermögenswerte für Dritte entgegennehmen." },
           { key: "D", text: "Formular K ausfüllen – das ist das Standardformular für Treuhandverhältnisse. Es ersetzt bei klarer Drittberechtigung das Formular A und wird direkt an die FINMA weitergeleitet." },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Wenn der wirtschaftlich Berechtigte nicht identisch mit dem Vertragspartner ist, muss zwingend Formular A ausgefüllt werden. Darin wird festgehalten, wer der tatsächliche wirtschaftliche Eigentümer der Vermögenswerte ist. Dies ist eine Kernpflicht gemäss VSB und GwG.",
       },
@@ -155,12 +155,12 @@ export const KYC_LEVELS: KycLevelConfig[] = [
           { key: "A", text: "Erklärung des Kunden im CRM-System als 'Grossauftrag bestätigt' erfassen und das Transaktionsverhalten 3 Monate beobachten. Wenn keine weiteren Auffälligkeiten auftreten, sind keine GwG-Massnahmen notwendig." },
           {
             key: "B",
-            text: "Erneute Identifikation, Abklärung der Herkunft, Dokumentation – bei Verdacht Meldung an MROS",
+            text: "Compliance-Ticket eröffnen und abwarten – der interne Sachbearbeiter prüft den Sachverhalt und entscheidet gemäss GwG-Schwellenwert selbst, ob eine Meldung an die MROS nötig ist. Als Betreuer sind keine weiteren Schritte erforderlich.",
           },
           { key: "C", text: "Konto präventiv sperren und den Kunden schriftlich über die laufende Überprüfung informieren. Erst nach der Rückmeldung des Kunden mit Belegen entscheidet die Compliance über Weiterführung oder MROS-Meldung." },
-          { key: "D", text: "Compliance-Ticket eröffnen und abwarten – der interne Sachbearbeiter prüft den Sachverhalt und entscheidet gemäss GwG-Schwellenwert selbst, ob eine Meldung an die MROS nötig ist. Als Betreuer sind keine weiteren Schritte erforderlich." },
+          { key: "D", text: "Erneute Identifikation, Abklärung der Herkunft, Dokumentation – bei Verdacht Meldung an MROS" },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Bei ungewöhnlichen Veränderungen im Transaktionsverhalten greift GwG Art. 5 und 6: erneute Identifikation und Feststellung des wirtschaftlich Berechtigten sowie besondere Abklärungspflicht. Erhärtet sich Verdacht: Meldepflicht an MROS, Sperrpflicht der Vermögenswerte und Informationsverbot gegenüber dem Kunden (Art. 10a GwG).",
       },
@@ -190,15 +190,15 @@ export const KYC_LEVELS: KycLevelConfig[] = [
           "Dein langjähriger Kollege bittet dich, ihm kurz Zugang zu einem Kundenkonto zu geben, weil er selbst gerade keinen Zugriff hat. Der Kunde sei einverstanden.",
         question: "Was machst du?",
         options: [
-          { key: "A", text: "Zugang geben – der Kollege untersteht demselben Berufsgeheimnis wie du. Ein kurzfristiger Zugangstausch unter Bankmitarbeitenden ist im Rahmen des internen Organisationsrechts zulässig, solange keine Kundendaten kopiert werden." },
+          { key: "A", text: "Zugang verweigern – jeder Mitarbeiter darf nur auf Konten zugreifen für die er berechtigt ist" },
           {
             key: "B",
-            text: "Zugang verweigern – jeder Mitarbeiter darf nur auf Konten zugreifen für die er berechtigt ist",
+            text: "Zugang geben – der Kollege untersteht demselben Berufsgeheimnis wie du. Ein kurzfristiger Zugangstausch unter Bankmitarbeitenden ist im Rahmen des internen Organisationsrechts zulässig, solange keine Kundendaten kopiert werden.",
           },
           { key: "C", text: "Zugang gewähren und im Ticketsystem als 'temporärer Zugangstausch aus betrieblichen Gründen' erfassen – die Dokumentation schützt beide Parteien und gilt datenschutzrechtlich als hinreichende Rechtfertigung bei kurzem Zugang." },
           { key: "D", text: "Zugang temporär gewähren und den Vorgesetzten kurz informieren – wenn der Kollege die Verantwortung übernimmt, ist das datenschutzrechtlich abgedeckt." },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Das Need-to-know-Prinzip gilt absolut. Jeder Mitarbeiter darf nur auf Kundendaten zugreifen, für die er eine klare Berechtigung hat. Unbefugter Zugriff verletzt das Bankkundengeheimnis und den Datenschutz – unabhängig davon ob der Kollege vertrauenswürdig ist oder der Kunde einverstanden war. Dies kann strafrechtliche Konsequenzen haben.",
       },

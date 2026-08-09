@@ -54,12 +54,12 @@ export const SK_LEVELS: SkLevelConfig[] = [
           "Eine Kundin, 23 Jahre, hat ihre erste Wohnung gemietet. Monatsmiete CHF 1'200. Der Vermieter verlangt eine Kaution.",
         question: "Was erklärst du ihr?",
         options: [
-          { key: "A", text: "Geld bar dem Vermieter übergeben" },
-          { key: "B", text: "Mieterkautionskonto eröffnen über 2-3 Monatsmieten" },
+          { key: "A", text: "Mieterkautionskonto eröffnen über 2-3 Monatsmieten" },
+          { key: "B", text: "Geld bar dem Vermieter übergeben" },
           { key: "C", text: "Geld auf Sparkonto legen" },
           { key: "D", text: "Kaution ist freiwillig" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Mietkaution max. 3 Monatsmieten (CHF 3'600). Spezielles Konto auf Namen der Mieterin, an Vermieter verpfändet. Nur beide Parteien gemeinsam verfügungsberechtigt.",
       },
@@ -73,12 +73,12 @@ export const SK_LEVELS: SkLevelConfig[] = [
           { key: "A", text: "«Das entscheidet die Bank einfach so»" },
           {
             key: "B",
-            text: "«Je länger die Bank über dein Geld verfügen kann, desto mehr Zins – Sparkonto hat engere Rückzugslimiten»",
+            text: "«Privatkonto hat eigentlich den besseren Zins»",
           },
           { key: "C", text: "«Sparkonto ist sicherer»" },
-          { key: "D", text: "«Privatkonto hat eigentlich den besseren Zins»" },
+          { key: "D", text: "«Je länger die Bank über dein Geld verfügen kann, desto mehr Zins – Sparkonto hat engere Rückzugslimiten»" },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Zins und Rückzugsbedingungen hängen direkt zusammen. Sparkonto = höherer Zins, engere Limiten. Privatkonto = tiefer Zins, hohe Verfügbarkeit.",
       },
@@ -96,12 +96,12 @@ export const SK_LEVELS: SkLevelConfig[] = [
           "Frau Berger möchte ihr Sparkonto saldieren. Du siehst: Kontostand CHF 4'200, offene Kreditkartenrechnung CHF 340, pendenter Dauerauftrag CHF 150 morgen.",
         question: "Was machst du?",
         options: [
-          { key: "A", text: "Sofort saldieren" },
-          { key: "B", text: "Erst alle pendenten Positionen prüfen und klären" },
+          { key: "A", text: "Erst alle pendenten Positionen prüfen und klären" },
+          { key: "B", text: "Sofort saldieren" },
           { key: "C", text: "Nur Restbetrag auszahlen" },
           { key: "D", text: "CHF 4'200 sofort auszahlen – Kreditkartenrechnung und Dauerauftrag werden in der nächsten Verarbeitungsperiode automatisch abgewickelt." },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Vor Saldierung: alle pendenten Aufträge, offene Kreditkartenrechnungen und Daueraufträge prüfen. Erst dann Konto auflösen. Zinsen gutschreiben, Gebühren belasten.",
       },
@@ -132,11 +132,11 @@ export const SK_LEVELS: SkLevelConfig[] = [
         question: "Was erklärst du?",
         options: [
           { key: "A", text: "«Ja, direkt aufs Privatkonto»" },
-          { key: "B", text: "«Nein – muss auf Freizügigkeitskonto bis neue PK»" },
+          { key: "B", text: "«Sofort in 3a einzahlen»" },
           { key: "C", text: "«PK-Geld verfällt bei Kündigung»" },
-          { key: "D", text: "«Sofort in 3a einzahlen»" },
+          { key: "D", text: "«Nein – muss auf Freizügigkeitskonto bis neue PK»" },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "PK-Guthaben → Freizügigkeitskonto → neue Pensionskasse. Konto ist gesperrt. Vorbezug nur unter Sonderbedingungen (Eigenheim, Auswanderung, Selbständigkeit).",
       },
@@ -168,15 +168,15 @@ export const SK_LEVELS: SkLevelConfig[] = [
           "Kunde: «Ich habe 2025 vergessen in meine 3a einzuzahlen. Das Geld ist verloren?»",
         question: "Was antwortest du?",
         options: [
-          { key: "A", text: "«Ja leider – nicht mehr möglich»" },
+          { key: "A", text: "«Ab 2026 können Lücken nachgeholt werden – aber erst wenn aktueller Maximalbetrag ausgeschöpft»" },
           {
             key: "B",
-            text: "«Ab 2026 können Lücken nachgeholt werden – aber erst wenn aktueller Maximalbetrag ausgeschöpft»",
+            text: "«Ja leider – nicht mehr möglich»",
           },
           { key: "C", text: "«Einfach zusätzlich einzahlen»" },
           { key: "D", text: "«Nur Selbständige können nachzahlen»" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Neu ab 2026: Beitragslücken ab 2025 können rückwirkend nachgeholt werden. Bedingung: aktueller Maximalbetrag muss zuerst ausgeschöpft sein. Lücken vor 2025 nicht möglich.",
       },

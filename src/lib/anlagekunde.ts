@@ -38,15 +38,15 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
           "Kundin Rita Müller, 62 Jahre, geht in 3 Jahren in Rente. Sie hat CHF 150'000 gespart und möchte das Geld anlegen. Sie sagt: «Ich brauche das Geld für meine Rente – ich darf nichts verlieren.»",
         question: "Welche Risikoklasse passt zu Rita?",
         options: [
-          { key: "A", text: "Hoch – sie hat genug Zeit" },
+          { key: "A", text: "Sehr klein / Klein – kurzer Horizont, Kapitalerhalt im Vordergrund, kein Verlust tolerierbar." },
           {
             key: "B",
-            text: "Sehr klein / Klein – kurzer Horizont, Kapitalerhalt im Vordergrund, kein Verlust tolerierbar.",
+            text: "Hoch – sie hat genug Zeit",
           },
           { key: "C", text: "Mittel – Kompromiss" },
           { key: "D", text: "Erhöht – mehr Rendite möglich" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Kurzer Anlagehorizont (3 Jahre) + Kapitalerhalt als Ziel + keine Verlusttoleranz = konservatives Profil. Aktien oder risikoreiche Anlagen wären hier falsch.",
       },
@@ -60,12 +60,12 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
           { key: "A", text: "Anlageberatung – Bank berät, Kunde entscheidet" },
           {
             key: "B",
-            text: "Vermögensverwaltung – Bank handelt im Auftrag des Kunden, Kunde muss nicht jeden Entscheid selbst treffen.",
+            text: "Depot eröffnen und selbst handeln",
           },
           { key: "C", text: "Sparkonto – sicherer" },
-          { key: "D", text: "Depot eröffnen und selbst handeln" },
+          { key: "D", text: "Vermögensverwaltung – Bank handelt im Auftrag des Kunden, Kunde muss nicht jeden Entscheid selbst treffen." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Vermögensverwaltung = Bank handelt eigenständig im Rahmen der vereinbarten Anlagestrategie. Anlageberatung = Bank empfiehlt, Kunde entscheidet selbst.",
       },
@@ -95,15 +95,15 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
           "Kunde ruft an: «Ich habe eine Depotgebühr von CHF 350 erhalten. Ich habe das nie vereinbart!» Du siehst im System: Depoteröffnung vor 6 Monaten, Preisliste bei Eröffnung mitgegeben und quittiert.",
         question: "Wie gehst du vor?",
         options: [
-          { key: "A", text: "Gebühr sofort gutschreiben – Kunde ist König" },
+          { key: "A", text: "Sachverhalt prüfen, Gebührenstruktur erklären, Kulanzlösung prüfen, bei Bedarf günstigeres Kontomodell aufzeigen." },
           {
             key: "B",
-            text: "Sachverhalt prüfen, Gebührenstruktur erklären, Kulanzlösung prüfen, bei Bedarf günstigeres Kontomodell aufzeigen.",
+            text: "Gebühr sofort gutschreiben – Kunde ist König",
           },
           { key: "C", text: "Reklamation ablehnen – Vertrag ist Vertrag" },
           { key: "D", text: "Reklamation ans interne Beschwerdemanagement eskalieren – bei Gebührenstreitigkeiten über CHF 100 ist das Eskalationsprotokoll vorgeschrieben." },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Reklamationsbearbeitung: Zuerst prüfen (war Preisliste abgegeben und quittiert?), dann erklären (welche Leistungen deckt die Gebühr ab?), Kulanzlösung prüfen und Alternative aufzeigen. Sofortige Gutschrift ohne Prüfung ist genauso falsch wie sofortige Ablehnung.",
         concepts: ["Reklamationsbearbeitung", "Preistransparenz"],
@@ -124,16 +124,16 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
         options: [
           {
             key: "A",
-            text: "Alles korrekt – hohe Rendite und schnell verkaufen ist möglich",
+            text: "Widerspruch: Hohe Rendite erfordert hohes Risiko und langen Horizont. Sofort verkaufen bei Verlust passt nicht zu aggressiver Strategie.",
           },
           {
             key: "B",
-            text: "Widerspruch: Hohe Rendite erfordert hohes Risiko und langen Horizont. Sofort verkaufen bei Verlust passt nicht zu aggressiver Strategie.",
+            text: "Alles korrekt – hohe Rendite und schnell verkaufen ist möglich",
           },
           { key: "C", text: "Kunde hat recht – Timing ist alles" },
           { key: "D", text: "Einfach Obligationen empfehlen" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Risikobereitschaft und Risikofähigkeit müssen übereinstimmen. Wer bei Kursrückgang sofort verkauft, hat keine echte Risikobereitschaft für Aktien. Profil muss angepasst werden.",
       },
@@ -189,12 +189,12 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
           { key: "A", text: "Aktien empfehlen – bei CHF 200'000 und einem typischen Anlagehorizont von über 10 Jahren ist ein Wachstumsportfolio mit 70% Aktienanteil die renditestärkste Option. Das Anlegerprofil kann gleichzeitig mit dem Kaufauftrag ausgefüllt werden." },
           {
             key: "B",
-            text: "Ist-Analyse: Einnahmen, Ausgaben, Verpflichtungen, Anlagehorizont, Risikobereitschaft und bestehende Vorsorge erfassen – erst dann Anlegerprofil erstellen.",
+            text: "Depot sofort eröffnen und ein ausgewogenes Startportfolio zusammenstellen – bei CHF 200'000 und erkennbar langfristigem Horizont ist das Profil 'Mittel' plausibel. Das formelle Anlegerprofil kann beim nächsten Termin nachgeholt werden.",
           },
           { key: "C", text: "3a-Konto empfehlen – steuerlich optimal und für diese Summe ideal. Mit CHF 200'000 kann der Maximalbetrag von CHF 7'258 über mehrere Konten verteilt werden und bietet die beste Kombination aus Sicherheit und Steuerersparnis." },
-          { key: "D", text: "Depot sofort eröffnen und ein ausgewogenes Startportfolio zusammenstellen – bei CHF 200'000 und erkennbar langfristigem Horizont ist das Profil 'Mittel' plausibel. Das formelle Anlegerprofil kann beim nächsten Termin nachgeholt werden." },
+          { key: "D", text: "Ist-Analyse: Einnahmen, Ausgaben, Verpflichtungen, Anlagehorizont, Risikobereitschaft und bestehende Vorsorge erfassen – erst dann Anlegerprofil erstellen." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "FIDLEG Pflicht: Know Your Customer vor jeder Empfehlung. Ohne vollständige Ist-Analyse kann keine geeignete Strategie empfohlen werden. Produktempfehlung ohne Kenntnis der Kundensituation ist eine Sorgfaltspflichtverletzung – unabhängig davon wie gut die Produkte klingen.",
         concepts: ["FIDLEG", "Know Your Customer", "Anlegerprofil"],
@@ -255,12 +255,12 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
           { key: "A", text: "Kein akutes Problem – Broschüre wurde abgegeben und die Risiken wurden mündlich besprochen. Das genügt für eine FIDLEG-konforme Dokumentation." },
           {
             key: "B",
-            text: "Anlegerprofil fehlt – Bank hat Sorgfaltspflicht verletzt. Kunde kann Schadenersatz fordern. Ohne Profil kann nicht bewiesen werden, dass die Strategie zum Kunden passte.",
+            text: "30% Verlust ist für eine Wachstumsstrategie marktüblich und als Kursrisiko einzustufen. Ohne nachweisbares Fehlverhalten liegt kein Haftungsfall vor.",
           },
           { key: "C", text: "Kunde trägt die Verantwortung – er hat die Wachstumsstrategie selbst gewählt und das Informationsdokument unterschrieben. Die Bank handelte in gutem Glauben." },
-          { key: "D", text: "30% Verlust ist für eine Wachstumsstrategie marktüblich und als Kursrisiko einzustufen. Ohne nachweisbares Fehlverhalten liegt kein Haftungsfall vor." },
+          { key: "D", text: "Anlegerprofil fehlt – Bank hat Sorgfaltspflicht verletzt. Kunde kann Schadenersatz fordern. Ohne Profil kann nicht bewiesen werden, dass die Strategie zum Kunden passte." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Broschüre alleine reicht nicht! Anlegerprofil ist Pflicht. Ohne Profil kann Bank nicht beweisen, dass Strategie geeignet war. Bei Pflichtverletzung haftet die Bank für Verluste.",
       },

@@ -116,15 +116,15 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Kundin ruft an: «Ich habe meine Maestrokarte verloren – was soll ich tun?»",
         question: "Was sind die Sofortmassnahmen?",
         options: [
-          { key: "A", text: "Neue Karte bestellen – alte läuft weiter" },
+          { key: "A", text: "Karte sofort sperren lassen via Sperrhotline, dann Ersatzkarte beantragen." },
           {
             key: "B",
-            text: "Karte sofort sperren lassen via Sperrhotline, dann Ersatzkarte beantragen.",
+            text: "Neue Karte bestellen – alte läuft weiter",
           },
           { key: "C", text: "Warten ob Karte wieder auftaucht" },
           { key: "D", text: "Nur Limit reduzieren" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Bei Kartenverlust sofort sperren – 24h Sperrhotline: 0800 80 40 40 (CH). Gesperrte Karte kann nicht mehr verwendet werden. Danach Ersatzkarte beantragen. Bis zur neuen Karte kann Kunde am Schalter Geld beziehen.",
         warum:
@@ -147,12 +147,12 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           { key: "A", text: "Passwort direkt per E-Mail zusenden" },
           {
             key: "B",
-            text: "Zuerst Kunden legitimieren, dann Sperrgrund im System prüfen und Entsperrprozess einleiten. Kein Passwort per E-Mail oder Telefon.",
+            text: "Kunden ohne Erklärung in die Filiale schicken",
           },
           { key: "C", text: "Sofort entsperren ohne Rückfragen" },
-          { key: "D", text: "Kunden ohne Erklärung in die Filiale schicken" },
+          { key: "D", text: "Zuerst Kunden legitimieren, dann Sperrgrund im System prüfen und Entsperrprozess einleiten. Kein Passwort per E-Mail oder Telefon." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "E-Banking Sperrung: Erst legitimieren (Sicherheitsprinzip!), dann Ursache prüfen (zu viele Fehlversuche? Verdächtige Aktivität?), dann Entsperrprozess gemäss Bankstandard einleiten. Passwörter werden nie per E-Mail oder Telefon mitgeteilt – das wäre eine Einladung für Betrüger.",
         warum:
@@ -169,15 +169,15 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Kundin ruft an: «Ich habe eine Kontoführungsgebühr von CHF 60 erhalten. Das finde ich zu viel – ich möchte das zurück.»",
         question: "Wie gehst du vor?",
         options: [
-          { key: "A", text: "Gebühr sofort zurückerstatten" },
+          { key: "A", text: "Sachverhalt prüfen: Ist Gebühr im Preisblatt ausgewiesen? Gebührenstruktur erklären, Kulanzlösung intern prüfen, günstigeres Kontomodell aufzeigen." },
           {
             key: "B",
-            text: "Sachverhalt prüfen: Ist Gebühr im Preisblatt ausgewiesen? Gebührenstruktur erklären, Kulanzlösung intern prüfen, günstigeres Kontomodell aufzeigen.",
+            text: "Gebühr sofort zurückerstatten",
           },
           { key: "C", text: "Reklamation ohne Erklärung ablehnen" },
           { key: "D", text: "Gebühr sofort stornieren – Kunde hat immer recht" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Gebührenreklamation: Erst prüfen ob die Gebühr korrekt verrechnet wurde (Preisblatt, Kontomodell). Dann dem Kunden erklären, was die Gebühr abdeckt. Falls Kulanz sinnvoll: intern eskalieren. Falls günstigeres Modell passt: proaktiv aufzeigen. Sofortige Rückerstattung ohne Prüfung setzt ein falsches Präzedens.",
         warum:
@@ -201,15 +201,15 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Eine Zahlung von CHF 5'000 wurde retourniert mit Vermerk: «Konto gesperrt». Was machst du?",
         question: "Wie gehst du vor?",
         options: [
-          { key: "A", text: "Zahlung nochmals ausführen" },
+          { key: "A", text: "Betrag dem Auftraggeber zurückbuchen, Kunden informieren dass Empfängerkonto gesperrt ist, neue Zahlungsdetails anfordern." },
           {
             key: "B",
-            text: "Betrag dem Auftraggeber zurückbuchen, Kunden informieren dass Empfängerkonto gesperrt ist, neue Zahlungsdetails anfordern.",
+            text: "Zahlung nochmals ausführen",
           },
           { key: "C", text: "Direkt ans Empfängerinstitut eskalieren" },
           { key: "D", text: "Abwarten" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Retournierte Zahlung = Betrag geht zurück zum Auftraggeber. Kunde muss informiert werden und neue gültige Zahlungsdetails liefern. Gesperrtes Konto kann nicht beliefert werden.",
         warum:
@@ -232,12 +232,12 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           { key: "A", text: "Zahlung ohne BIC ausführen" },
           {
             key: "B",
-            text: "Zahlung zurückhalten – BIC ist bei Auslandzahlungen zwingend. Kunde muss BIC nachliefern.",
+            text: "Als Inlandzahlung verbuchen",
           },
           { key: "C", text: "BIC selbst recherchieren und ergänzen" },
-          { key: "D", text: "Als Inlandzahlung verbuchen" },
+          { key: "D", text: "Zahlung zurückhalten – BIC ist bei Auslandzahlungen zwingend. Kunde muss BIC nachliefern." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Bei Auslandzahlungen sind IBAN und BIC (Bank Identifier Code) zwingend. Ohne BIC kann die Zahlung nicht korrekt weitergeleitet werden. Niemals selbst ergänzen – Kundenfehler gehören dem Kunden.",
         warum:
@@ -288,12 +288,12 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           { key: "A", text: "Zahlung sofort stornieren – der Fehler liegt beim Kunden" },
           {
             key: "B",
-            text: "Recall-Anfrage ans Empfängerinstitut senden. Kunden informieren: Rückruf möglich, aber nicht garantiert. Keine sofortige Stornierung möglich.",
+            text: "Abwarten, bis der Empfänger das Geld freiwillig zurückschickt",
           },
           { key: "C", text: "Polizei informieren – möglicher Betrug" },
-          { key: "D", text: "Abwarten, bis der Empfänger das Geld freiwillig zurückschickt" },
+          { key: "D", text: "Recall-Anfrage ans Empfängerinstitut senden. Kunden informieren: Rückruf möglich, aber nicht garantiert. Keine sofortige Stornierung möglich." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Einmal ausgeführte Zahlungen können nicht einseitig storniert werden. Die Bank kann eine Recall-Anfrage ans Empfängerinstitut stellen – dieses leitet sie an den Empfänger weiter. Stimmt der Empfänger zu, wird der Betrag zurückgebucht. Bei Verweigerung hat der Auftraggeber zivilrechtliche Möglichkeiten (ungerechtfertigte Bereicherung OR Art. 62). Kunden realistisch informieren: kein Automatismus, keine Garantie.",
         warum:
@@ -313,15 +313,15 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Beim Tagesabschluss stellst du fest: Ein Dauerauftrag von Kundin Müller (Konto ...456) für CHF 1'200 Miete wurde fälschlicherweise dem Konto ...465 belastet – du hast die letzten zwei Ziffern vertauscht. Der Betrag ist bereits ausgeführt.",
         question: "Was musst du jetzt tun?",
         options: [
-          { key: "A", text: "Morgen korrigieren – heute Feierabend" },
+          { key: "A", text: "Sofort intern eskalieren, Fehlbuchung dokumentieren, Rückbuchung auf das richtige Konto einleiten, beide betroffenen Kunden informieren." },
           {
             key: "B",
-            text: "Sofort intern eskalieren, Fehlbuchung dokumentieren, Rückbuchung auf das richtige Konto einleiten, beide betroffenen Kunden informieren.",
+            text: "Morgen korrigieren – heute Feierabend",
           },
           { key: "C", text: "Nur Kundin Müller informieren – der andere Kunde merkt es schon selbst" },
           { key: "D", text: "Den Dauerauftrag löschen und neu erfassen" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Operative Fehler der Bank müssen sofort gemeldet, dokumentiert und korrigiert werden. Beide Konten sind betroffen: Konto ...456 (Müller) wurde nicht belastet und die Miete fehlt; Konto ...465 wurde fälschlicherweise belastet. Beide Kunden haben Anspruch auf proaktive Information. Warten erhöht das Risiko: fehlende Mietzahlung, mögliche Overdraft-Situation beim falsch belasteten Kunden.",
         warum:
@@ -344,12 +344,12 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           { key: "A", text: "Nichts tun – die Karte ist physisch vorhanden, also kein Missbrauch möglich" },
           {
             key: "B",
-            text: "Karte sofort sperren, Chargeback-Verfahren einleiten, Kundin über nächste Schritte informieren.",
+            text: "Abwarten ob weitere Transaktionen kommen, dann entscheiden",
           },
           { key: "C", text: "Kundin direkt an den Online-Händler verweisen – die Bank ist nicht zuständig" },
-          { key: "D", text: "Abwarten ob weitere Transaktionen kommen, dann entscheiden" },
+          { key: "D", text: "Karte sofort sperren, Chargeback-Verfahren einleiten, Kundin über nächste Schritte informieren." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Karte physisch vorhanden ≠ Karte sicher. Kartendaten können ohne physischen Kartenverlust gestohlen werden (Phishing, Datenleck beim Händler, Skimming). Sofortmassnahmen: Karte sperren, Chargeback-Antrag stellen, Kundin beraten. Die Bank prüft die Rückforderung beim Händler über das Kartennetzwerk.",
         warum:
@@ -369,15 +369,15 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           "Du erhältst eine formelle Recall-Anfrage der PostFinance: CHF 6'200 wurden am Montag irrtümlich auf das Konto eures Kunden Thomas Gerber (Konto ...712) überwiesen – ein Buchungsfehler der PostFinance. Gerbers Kontostand beträgt CHF 14'800. Er ist ein langjähriger Bestandeskunde ohne Auffälligkeiten.",
         question: "Wie gehst du vor?",
         options: [
-          { key: "A", text: "Betrag sofort zurückbuchen – das Geld gehört dem Kunden nicht" },
+          { key: "A", text: "Thomas Gerber informieren und seine Zustimmung zur Rückbuchung einholen. Ohne Zustimmung kein Rückzug möglich." },
           {
             key: "B",
-            text: "Thomas Gerber informieren und seine Zustimmung zur Rückbuchung einholen. Ohne Zustimmung kein Rückzug möglich.",
+            text: "Betrag sofort zurückbuchen – das Geld gehört dem Kunden nicht",
           },
           { key: "C", text: "Recall-Anfrage ablehnen – die Bank ist nicht verpflichtet zu helfen" },
           { key: "D", text: "Nichts tun – PostFinance soll sich direkt an den Kunden wenden" },
         ],
-        correct: "B",
+        correct: "A",
         feedback:
           "Bei einer eingehenden Recall-Anfrage darf die Bank das Kundenkonto NICHT ohne dessen Zustimmung belasten – auch wenn der Betrag irrtümlich überwiesen wurde. Die Bank informiert den Kunden, erklärt die Situation und holt seine Zustimmung ein. Stimmt er zu: Rückbuchung. Verweigert er: PostFinance muss zivilrechtlich vorgehen (ungerechtfertigte Bereicherung OR Art. 62).",
         warum:
@@ -400,12 +400,12 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
           { key: "A", text: "Abwarten – der Firmenkunde soll die Situation mit seinen Mitarbeitenden klären" },
           {
             key: "B",
-            text: "Sofort intern eskalieren, Sammelrückruf einleiten, Firmenkunden informieren, alle Buchungen dokumentieren.",
+            text: "Doppelte Löhne direkt von den Mitarbeiterkonten abbuchen ohne Rücksprache",
           },
           { key: "C", text: "Nur den Firmenkunden anrufen – den Rückruf soll er selbst organisieren" },
-          { key: "D", text: "Doppelte Löhne direkt von den Mitarbeiterkonten abbuchen ohne Rücksprache" },
+          { key: "D", text: "Sofort intern eskalieren, Sammelrückruf einleiten, Firmenkunden informieren, alle Buchungen dokumentieren." },
         ],
-        correct: "B",
+        correct: "D",
         feedback:
           "Bei Batch-Fehlern gilt: Sofort eskalieren und Sammelrückruf einleiten. 4 Stunden sind wenig – die Zahlungen sind möglicherweise noch nicht wertgestellt. Firmenkunden sofort informieren: Er muss seine Mitarbeitenden ansprechen und zur freiwilligen Rückgabe auffordern. Individuelle Rückbuchungen ohne Zustimmung der Empfänger sind nicht zulässig.",
         warum:
