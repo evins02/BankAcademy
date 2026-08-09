@@ -141,13 +141,13 @@ export const BK_LEVELS: BlankokreditLevelConfig[] = [
         ],
         question: "Was ist dein Entscheid?",
         options: [
-          { key: "A", text: "Bewilligen – Einkommen vorhanden" },
+          { key: "A", text: "Bewilligen – Nettolohn CHF 4'200 ist stabil und die ZEK zeigt zum Zeitpunkt der Prüfung keine negativen Einträge." },
           {
             key: "B",
             text: "Ablehnen – Kreditfähigkeit nicht gegeben. Monatliche Amortisation CHF 1'056 übersteigt Freibetrag CHF 430 massiv.",
           },
-          { key: "C", text: "Teilbewilligung" },
-          { key: "D", text: "Zurückweisen" },
+          { key: "C", text: "Teilbewilligung CHF 20'000 auf 36 Monate – Amortisation sinkt auf CHF 556 und passt damit in den Freibetrag." },
+          { key: "D", text: "Zurückweisen mit Hinweis: In 6 Monaten neu einreichen, nach Abbau der Kreditkarte steigt der Freibetrag auf über CHF 800." },
         ],
         correct: "B",
         feedback:

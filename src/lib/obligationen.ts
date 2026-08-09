@@ -10,13 +10,13 @@ const L1_CASES: SubmoduleCase[] = [
       "Thomas Huber, 55 Jahre, konservativ, möchte CHF 50'000 sicher anlegen. Er sieht zwei Obligationen: Obligation A (Schweizer Eidgenossenschaft, Rating AAA, Coupon 1.5%) und Obligation B (Schwellenland-Emittent, Rating CCC, Coupon 6.5%). Er fragt: «Soll ich nicht die B nehmen – 6.5% klingt viel besser?»",
     question: "Was erklärst du Thomas Huber?",
     options: [
-      { key: "A", text: "Obligation B ist attraktiver – 6.5% Coupon ist deutlich mehr als 1.5%" },
+      { key: "A", text: "Obligation B ist klar die bessere Wahl – 6.5% Coupon ergibt CHF 3'250 Zins pro Jahr statt CHF 750. Bei einer so grossen Renditedifferenz überwiegt der Ertrag das theoretische Risiko." },
       {
         key: "B",
         text: "AAA bedeutet höchste Bonität und minimales Ausfallrisiko. CCC ist nahe am Ausfall. Der höhere Coupon ist die Risikoprämie – für Thomas als konservativen Anleger ist Obligation A die richtige Wahl.",
       },
-      { key: "C", text: "Beide sind gleich sicher – Obligationen haben grundsätzlich kein Ausfallrisiko" },
-      { key: "D", text: "Das Rating spielt keine Rolle, wichtig ist nur der Coupon" },
+      { key: "C", text: "Beide Obligationen sind vertraglich abgesichert und zahlen Coupon und Kapital zurück. Das Rating ist eine externe Einschätzung ohne Rechtsverbindlichkeit und beeinflusst nicht die Vertragspflichten." },
+      { key: "D", text: "Rating-Agenturen lagen in der Finanzkrise 2008 komplett daneben. Für erfahrene Anleger wie Thomas gilt: Coupon und Laufzeit entscheiden, nicht das Rating einer Agentur." },
     ],
     correct: "B",
     feedback:

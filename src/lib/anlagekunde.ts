@@ -76,13 +76,13 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
           "Ein neuer Kunde möchte sofort Aktien kaufen. Du hast ihm die Risiken noch nicht erklärt.",
         question: "Was machst du zuerst?",
         options: [
-          { key: "A", text: "Aktien direkt kaufen – Kunde weiss was er will" },
+          { key: "A", text: "Aktien direkt kaufen – der Kunde hat das Auftragsformular unterschrieben und bestätigt damit, dass er über die Risiken informiert ist." },
           {
             key: "B",
             text: "Zuerst Broschüre «Besondere Risiken im Effektenhandel» abgeben und Erhalt bestätigen lassen. Dann Anlegerprofil erstellen.",
           },
-          { key: "C", text: "Risiken kurz mündlich erklären und weitermachen" },
-          { key: "D", text: "Vorgesetzten fragen" },
+          { key: "C", text: "Risiken mündlich erläutern und im CRM-System als besprochen dokumentieren – das erfüllt die FIDLEG-Transparenzpflicht ohne unnötigen Aufwand." },
+          { key: "D", text: "Risikoaufklärung schriftlich im Beratungsprotokoll festhalten – eine separate Broschüre ist nur bei komplexen Derivaten und strukturierten Produkten Pflicht." },
         ],
         correct: "B",
         feedback:
@@ -252,13 +252,13 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
           "Kunde beschwert sich: «Mein Portfolio hat 30% verloren. Das haben Sie mir nie so erklärt!» Du findest: Risikobroschüre wurde abgegeben aber Anlegerprofil wurde nie ausgefüllt.",
         question: "Was ist das Problem?",
         options: [
-          { key: "A", text: "Kein Problem – Broschüre reicht" },
+          { key: "A", text: "Kein akutes Problem – Broschüre wurde abgegeben und die Risiken wurden mündlich besprochen. Das genügt für eine FIDLEG-konforme Dokumentation." },
           {
             key: "B",
             text: "Anlegerprofil fehlt – Bank hat Sorgfaltspflicht verletzt. Kunde kann Schadenersatz fordern. Ohne Profil kann nicht bewiesen werden, dass die Strategie zum Kunden passte.",
           },
-          { key: "C", text: "Kunde trägt selbst Verantwortung" },
-          { key: "D", text: "30% Verlust ist normal" },
+          { key: "C", text: "Kunde trägt die Verantwortung – er hat die Wachstumsstrategie selbst gewählt und das Informationsdokument unterschrieben. Die Bank handelte in gutem Glauben." },
+          { key: "D", text: "30% Verlust ist für eine Wachstumsstrategie marktüblich und als Kursrisiko einzustufen. Ohne nachweisbares Fehlverhalten liegt kein Haftungsfall vor." },
         ],
         correct: "B",
         feedback:

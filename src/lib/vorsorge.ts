@@ -58,13 +58,13 @@ const L1_CASES: VorsorgeCase[] = [
       "Junger Kunde, 22 Jahre, fragt: 'Ich höre immer von den 3 Säulen – was bedeutet das eigentlich?'",
     question: "Was erklärst du ihm?",
     options: [
-      { key: "A", text: "\"Das ist zu kompliziert zum Erklären – fragen Sie Ihren Steuerberater\"" },
+      { key: "A", text: "\"AHV und Pensionskasse decken zusammen 80–100% des letzten Lohns ab. Eine 3. Säule brauchen eigentlich nur Selbständige, die keine Pensionskasse haben.\"" },
       {
         key: "B",
         text: "\"Die 3 Säulen sind das Schweizer Vorsorgesystem. 1. Säule = AHV, staatlich, für alle. 2. Säule = Pensionskasse, beruflich, über Arbeitgeber. 3. Säule = privat, freiwillig, steuerlich attraktiv.\"",
       },
-      { key: "C", text: "\"Das regelt der Staat – Sie müssen sich nicht darum kümmern\"" },
-      { key: "D", text: "\"Nur die 3a ist für Sie relevant\"" },
+      { key: "C", text: "\"Die 1. Säule (AHV) ist für alle Pflicht und deckt die Grundbedürfnisse. Die 2. und 3. Säule sind freiwillige Ergänzungen – mit 22 Jahren noch nicht prioritär.\"" },
+      { key: "D", text: "\"1. Säule ist die AHV, gilt für alle. Die 2. Säule ist nur für Mitarbeitende von grossen Betrieben. Die 3. Säule mit dem 3a-Konto ist Ihr wichtigstes Sparinstrument.\"" },
     ],
     correct: "B",
     feedback:
@@ -152,13 +152,13 @@ const L2_CASES: VorsorgeCase[] = [
       "Kunde, 45 Jahre, fragt: 'Kann ich mein 3a-Geld vorzeitig beziehen? Ich brauche es für eine Renovation.'",
     question: "Was erklärst du ihm?",
     options: [
-      { key: "A", text: "\"Ja, jederzeit möglich – das ist Ihr Geld\"" },
+      { key: "A", text: "\"Ja, möglich – Sie müssen das Renovationsprojekt belegen und das Formular für den vorzeitigen Bezug einreichen. Wir überweisen dann direkt ans Handwerkerunternehmen.\"" },
       {
         key: "B",
         text: "\"Vorzeitiger Bezug ist nur unter bestimmten Bedingungen möglich: Kauf Eigenheim, WEF-Renovation, Aufnahme Selbständigkeit, Auswanderung oder Invalidität. Eine Renovation für eine Mietwohnung reicht nicht.\"",
       },
-      { key: "C", text: "\"Nein – niemals möglich vor der Pensionierung\"" },
-      { key: "D", text: "\"Ab 50 Jahren immer möglich\"" },
+      { key: "C", text: "\"Vorzeitiger Bezug ist nur beim Kauf von Wohneigentum erlaubt – nicht für Renovationen. Für Ihren Fall müssen Sie leider bis zur Pensionierung warten.\"" },
+      { key: "D", text: "\"Bezug ist möglich, wenn die Renovationskosten mindestens CHF 50'000 betragen. Bitte bringen Sie die Kostenvoranschläge mit, damit wir den Antrag stellen können.\"" },
     ],
     correct: "B",
     feedback:

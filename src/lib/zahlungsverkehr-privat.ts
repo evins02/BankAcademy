@@ -103,13 +103,13 @@ const L1_CASES: ZvFoCase[] = [
       "Herr Weber kommt zum Schalter. Er sagt: 'Ich zahle jeden Monat CHF 1'800 Miete. Ich vergesse das manchmal – gibt es eine automatische Lösung?'",
     question: "Was empfiehlst du?",
     options: [
-      { key: "A", text: "Kreditkarte einrichten" },
+      { key: "A", text: "Kreditkarte einrichten – monatlichen Mietbetrag auf die Karte buchen und über Lastschrift automatisch einziehen lassen." },
       {
         key: "B",
         text: "Dauerauftrag einrichten – gleicher Betrag, gleicher Empfänger, automatisch jeden Monat ausgeführt",
       },
-      { key: "C", text: "LSV einrichten" },
-      { key: "D", text: "E-Bill aktivieren" },
+      { key: "C", text: "LSV einrichten – der Vermieter gibt einen LSV-Auftrag auf und zieht die Miete automatisch vom Konto ein, ohne dass der Kunde etwas tun muss." },
+      { key: "D", text: "E-Bill aktivieren – der Vermieter schickt die Mietzinsrechnung jeden Monat digital ins E-Banking, der Kunde bestätigt mit einem Klick." },
     ],
     correct: "B",
     feedback:
@@ -288,13 +288,13 @@ const L3_CASES: ZvFoCase[] = [
       "Kunde kommt mit vier Anliegen: 1. Miete CHF 2'200 monatlich automatisch. 2. Krankenkasse mit variierendem Betrag. 3. Rechnungen papierlos erledigen. 4. Geld nach Japan überweisen.",
     question: "Welche Produkte empfiehlst du für jeden Punkt?",
     options: [
-      { key: "A", text: "Alles per Dauerauftrag erledigen" },
+      { key: "A", text: "1. Dauerauftrag  2. Dauerauftrag mit variablem Betrag  3. E-Bill  4. SEPA – Japan ist dem SEPA-Abkommen beigetreten, daher reicht die IBAN ohne BIC." },
       {
         key: "B",
         text: "1. Dauerauftrag  2. LSV  3. E-Bill aktivieren  4. SWIFT – ausserhalb EU/EWR, IBAN und BIC zwingend, höhere Gebühren bei JPY",
       },
-      { key: "C", text: "Alles per E-Banking manuell erledigen" },
-      { key: "D", text: "LSV für alle vier Punkte" },
+      { key: "C", text: "1. E-Bill  2. Dauerauftrag  3. LSV  4. SEPA mit IBAN – BIC ist in Europa seit 2016 nicht mehr nötig, auch für Japan gilt SEPA-Standard." },
+      { key: "D", text: "1. LSV  2. LSV  3. Dauerauftrag  4. SWIFT mit nur IBAN – Japan akzeptiert als G7-Land europäische Zahlungsstandards ohne BIC." },
     ],
     correct: "B",
     feedback:

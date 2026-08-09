@@ -198,7 +198,7 @@ const L2_CASES: FondsCase[] = [
     options: [
       {
         key: "A",
-        text: "\"Kosten sind unwichtig – nur die Rendite zählt\"",
+        text: "\"Die Renditehistorie ist entscheidender als die TER. Fonds B hat in den letzten 5 Jahren 7.8% pro Jahr erzielt, Fonds A nur 6.1% – die Mehrkosten sind durch die Mehrrendite mehr als gedeckt.\"",
       },
       {
         key: "B",
@@ -206,9 +206,9 @@ const L2_CASES: FondsCase[] = [
       },
       {
         key: "C",
-        text: "\"Höhere Kosten bedeuten bessere Qualität und mehr Rendite\"",
+        text: "\"Aktiv verwaltete Fonds haben höhere TER, weil der Fondsmanager täglich analysiert und optimiert. Das zahlt sich aus: Aktive Fonds schlagen langfristig passive ETFs, weil sie auf Krisen reagieren können.\"",
       },
-      { key: "D", text: "\"TER unter 2% ist immer in Ordnung\"" },
+      { key: "D", text: "\"TER bis 1.8% ist für aktive Fonds branchenüblich und von der FINMA so zugelassen. Entscheidend ist, ob Fonds B seinen Vergleichsindex langfristig schlägt – was er nachweislich tut.\"" },
     ],
     correct: "B",
     feedback:
@@ -298,14 +298,14 @@ const L3_CASES: FondsCase[] = [
     options: [
       {
         key: "A",
-        text: "Wachstum wie im Profil angegeben – er hat es so unterschrieben",
+        text: "Wachstumsstrategie beibehalten – das Profil wurde gemeinsam erstellt und unterschrieben. Profilanpassungen sind erst nötig, wenn der Kunde ein neues Anlageziel definiert.",
       },
       {
         key: "B",
         text: "Anlegerprofil muss angepasst werden! Der effektive Horizont ist 3 Jahre, nicht 7. Bei Wachstum riskiert er beim Hauskauf einen Kursrückgang. Empfehlung: Sparkonto oder Ertrag für diesen Betrag.",
       },
-      { key: "C", text: "Wachstum für 3 Jahre ist noch akzeptabel" },
-      { key: "D", text: "Die Anlage ablehnen – zu kompliziert" },
+      { key: "C", text: "Wachstum bei 3-jährigem Horizont ist noch vertretbar – Aktienmärkte erholen sich nach Korrekturen in der Regel innerhalb von 12–18 Monaten." },
+      { key: "D", text: "Portfolio auf Ausgewogen (50/50) umschichten – damit ist das Risiko halbiert und der Hauskauf in 3 Jahren ausreichend abgesichert." },
     ],
     correct: "B",
     feedback:

@@ -377,13 +377,13 @@ export const BKO_KYC_LEVELS: BkoKycLevelConfig[] = [
         ],
         question: "Du prüfst dieses Dossier. Was ist die richtige Entscheidung?",
         options: [
-          { key: "A", text: "Freigeben – Formular A ist vorhanden und Ausweis gültig" },
-          { key: "B", text: "Nur Beruf und Arbeitgeber nachfordern" },
+          { key: "A", text: "Freigeben – Formular A ist vorhanden, Ausweis ist gültig bis 2027 und der Herkunftsstaat ist EU-Mitglied, was das Risikoprofil deutlich reduziert." },
+          { key: "B", text: "Dossier zurückschicken und nur Beruf und Arbeitgeber mit Einkommensnachweis nachfordern – Formular A und Ausweis sind vorhanden, der Rest ist damit weitgehend vollständig." },
           {
             key: "C",
             text: "Vollständig zurückweisen – Beruf zu ungenau, Arbeitgeber/Einkommen fehlen, Mittelherkunft unbelegt, PEP-Prüfung fehlt",
           },
-          { key: "D", text: "Vorgesetzten informieren und abwarten" },
+          { key: "D", text: "Vorgesetzten informieren und Compliance einschalten – bei ausländischen Kunden mit unklarem Berufsprofil immer eskalieren, ohne eigene Entscheidung zu treffen." },
         ],
         correct: "C",
         commentHint:

@@ -110,13 +110,13 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
           "Kunde möchte CHF 25'000 Konsumkredit für ein Occasionsauto. Er hat eine Festanstellung und fragt: «Wann bekomme ich das Geld?»",
         question: "Was muss zwingend vor Auszahlung geprüft werden?",
         options: [
-          { key: "A", text: "Nur Ausweis und Unterschrift reichen" },
+          { key: "A", text: "Aktuelle Lohnabrechnung und Selbstauskunft reichen – bei Konsumkrediten unter CHF 30'000 ist gemäss KKG ein vereinfachtes Prüfverfahren zulässig." },
           {
             key: "B",
             text: "Kreditfähigkeitsprüfung gemäss KKG: Lohnausweise (mind. 3 Monate), Betreibungsregisterauszug, alle bestehenden Kreditverpflichtungen einrechnen. Kredit nur wenn nachweislich tragbar.",
           },
-          { key: "C", text: "Genügt wenn Kunde seinen Lohn nennt" },
-          { key: "D", text: "Kreditprüfung ist optional bei gutem Eindruck" },
+          { key: "C", text: "Lohnausweise und ZEK-Abfrage genügen. Bestehende Kreditverpflichtungen müssen nur eingerechnet werden, wenn der Antragsbetrag CHF 30'000 übersteigt." },
+          { key: "D", text: "Lohnbescheinigung des Arbeitgebers und unterschriebene Selbstdeklaration reichen aus. ZEK-Abfrage liegt gemäss KKG im Ermessen der Bank." },
         ],
         correct: "B",
         feedback:
@@ -333,13 +333,13 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
           "Jungunternehmer (28) hat ein Tech-Startup gegründet. Jahresumsatz: CHF 0 (Gründungsphase, 6 Monate alt). Er beantragt CHF 100'000 Betriebskredit, ohne Sicherheiten und ohne Jahresrechnung.",
         question: "Was machst du?",
         options: [
-          { key: "A", text: "Kredit gewähren – gute Idee braucht Kapital" },
+          { key: "A", text: "Kredit grundsätzlich prüfen – Businessplan und Gründerprofil reichen als Basis. Jahresrechnungen kann der Kunde nach 12 Monaten nachreichen, Sicherheiten sind bei überzeugender Idee optional." },
           {
             key: "B",
             text: "Kredit in dieser Form nicht möglich: keine Jahresrechnung, keine Sicherheiten. Alternativen aufzeigen: Bürgschaftsgenossenschaft BG Mitte, Innosuisse-Förderung, Crowdfunding, Eigenkapital-Runde. Kreditentscheid möglich sobald Jahresrechnung und Sicherheiten vorliegen.",
           },
-          { key: "C", text: "Privatbürgschaft des Vaters als alleinige Lösung" },
-          { key: "D", text: "Kleinstkredit CHF 10'000 sofort gewähren" },
+          { key: "C", text: "Privatbürgschaft des Vaters als Hauptsicherheit aufnehmen – damit ist das Risiko ausreichend abgedeckt und der Kredit kann ohne weitere Unterlagen bewilligt werden." },
+          { key: "D", text: "Kleinstkredit CHF 10'000 sofort gewähren, Laufzeit 36 Monate. Sobald erste Jahresrechnung vorliegt, Kredit auf den beantragten Betrag aufstocken." },
         ],
         correct: "B",
         feedback:
