@@ -175,7 +175,7 @@ export const BKO_KYC_LEVELS: BkoKycLevelConfig[] = [
           { key: "A", text: "Zurückweisen – Einkommen fehlt" },
           { key: "B", text: "Zurückweisen – Formular A fehlt" },
           { key: "C", text: "Freigeben – Dossier vollständig und korrekt" },
-          { key: "D", text: "Vorgesetzten fragen wegen Herkunft der Mittel" },
+          { key: "D", text: "Freigeben mit Vermerk – Erbschaft als Mittelherkunft muss durch Erbschein belegt werden, bevor die erste Transaktion ausgeführt werden darf." },
         ],
         correct: "C",
         commentHint: "",

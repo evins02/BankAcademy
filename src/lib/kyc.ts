@@ -44,7 +44,7 @@ export const KYC_LEVELS: KycLevelConfig[] = [
           { key: "A", text: "Konto eröffnen und Ausweis später nachreichen lassen" },
           { key: "B", text: "Konto nicht eröffnen – Identifikation ist zwingend vor Kontoeröffnung" },
           { key: "C", text: "Konto eröffnen aber sperren bis Ausweis vorliegt" },
-          { key: "D", text: "Vorgesetzten fragen" },
+          { key: "D", text: "Termin für nächste Woche vereinbaren und Kontounterlagen provisorisch vorbereiten – solange das Konto nicht aktiv ist, gilt die Identifikationspflicht noch nicht." },
         ],
         correct: "B",
         feedback:
@@ -196,7 +196,7 @@ export const KYC_LEVELS: KycLevelConfig[] = [
             text: "Zugang verweigern – jeder Mitarbeiter darf nur auf Konten zugreifen für die er berechtigt ist",
           },
           { key: "C", text: "Zugang geben aber dokumentieren" },
-          { key: "D", text: "Vorgesetzten fragen und dann entscheiden" },
+          { key: "D", text: "Zugang temporär gewähren und den Vorgesetzten kurz informieren – wenn der Kollege die Verantwortung übernimmt, ist das datenschutzrechtlich abgedeckt." },
         ],
         correct: "B",
         feedback:

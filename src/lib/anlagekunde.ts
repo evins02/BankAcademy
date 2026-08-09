@@ -101,7 +101,7 @@ export const AL_LEVELS: AnlageLevelConfig[] = [
             text: "Sachverhalt prüfen, Gebührenstruktur erklären, Kulanzlösung prüfen, bei Bedarf günstigeres Kontomodell aufzeigen.",
           },
           { key: "C", text: "Reklamation ablehnen – Vertrag ist Vertrag" },
-          { key: "D", text: "Vorgesetzten fragen ohne eigene Einschätzung" },
+          { key: "D", text: "Reklamation ans interne Beschwerdemanagement eskalieren – bei Gebührenstreitigkeiten über CHF 100 ist das Eskalationsprotokoll vorgeschrieben." },
         ],
         correct: "B",
         feedback:

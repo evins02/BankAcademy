@@ -282,7 +282,7 @@ export const CO_LEVELS: CreditOpsLevelConfig[] = [
             text: "Nicht auszahlen – 2 Punkte fehlen: Versicherungsnachweis und Wiedervorlage müssen vor Auszahlung erledigt sein.",
           },
           { key: "C", text: "Teilauszahlung" },
-          { key: "D", text: "Vorgesetzten fragen" },
+          { key: "D", text: "Auszahlen und fehlende Unterlagen als Nachauflage erfassen – der Versicherungsnachweis kann innerhalb von 30 Tagen nachgereicht werden, die Wiedervorlage gilt als gesetzt." },
         ],
         correct: "B",
         feedback:

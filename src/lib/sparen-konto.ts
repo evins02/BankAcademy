@@ -99,7 +99,7 @@ export const SK_LEVELS: SkLevelConfig[] = [
           { key: "A", text: "Sofort saldieren" },
           { key: "B", text: "Erst alle pendenten Positionen prüfen und klären" },
           { key: "C", text: "Nur Restbetrag auszahlen" },
-          { key: "D", text: "Vorgesetzten fragen" },
+          { key: "D", text: "CHF 4'200 sofort auszahlen – Kreditkartenrechnung und Dauerauftrag werden in der nächsten Verarbeitungsperiode automatisch abgewickelt." },
         ],
         correct: "B",
         feedback:
