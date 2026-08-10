@@ -107,11 +107,10 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      {/* Floating Feedback Button – icon-only to avoid covering content */}
+      {/* Floating Feedback Button */}
       {!feedbackDone && demoSession && (
         <button
           onClick={() => setFeedbackOpen(true)}
-          title="Feedback geben"
           style={{
             position: "fixed",
             bottom: 24,
@@ -120,19 +119,20 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
             background: TEAL,
             color: DARK,
             border: "none",
-            borderRadius: "50%",
-            width: 44,
-            height: 44,
-            fontSize: 20,
+            borderRadius: 50,
+            padding: "10px 18px",
+            fontSize: 13,
+            fontWeight: 700,
             cursor: "pointer",
             boxShadow: "0 4px 20px rgba(29,219,160,0.35)",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
+            gap: 7,
+            whiteSpace: "nowrap",
             transition: "transform 0.15s, box-shadow 0.15s",
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.1)";
+            (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.05)";
             (e.currentTarget as HTMLButtonElement).style.boxShadow =
               "0 6px 28px rgba(29,219,160,0.5)";
           }}
@@ -142,7 +142,7 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
               "0 4px 20px rgba(29,219,160,0.35)";
           }}
         >
-          💬
+          💬 Feedback
         </button>
       )}
     </>

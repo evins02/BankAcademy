@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Menu } from "lucide-react";
-import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 
 interface Props {
   onMenuToggle?: () => void;
@@ -12,17 +11,16 @@ export function DemoBanner({ onMenuToggle, onFeedback, onLogout }: Props) {
   return (
     <div
       style={{
-        background: "#fef3c7",
-        borderBottom: "1px solid #fcd34d",
-        padding: "10px 20px",
+        background: "#fffbeb",
+        borderBottom: "1px solid #fde68a",
+        padding: "5px 20px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: 8,
-        fontSize: 13,
+        gap: 10,
+        fontSize: 11,
         fontWeight: 500,
         color: "#92400e",
-        textAlign: "center",
         flexWrap: "wrap",
         flexShrink: 0,
         position: "relative",
@@ -35,52 +33,67 @@ export function DemoBanner({ onMenuToggle, onFeedback, onLogout }: Props) {
           aria-label="Menü öffnen"
           style={{ color: "#92400e" }}
         >
-          <Menu size={20} />
+          <Menu size={18} />
         </button>
       )}
-      <span className="mr-2 shrink-0">
-        <BankingLabLogo size="sm" />
+
+      {/* Demo badge */}
+      <span
+        style={{
+          background: "#fbbf24",
+          color: "#78350f",
+          fontSize: 9,
+          fontWeight: 800,
+          padding: "2px 7px",
+          borderRadius: 50,
+          letterSpacing: "0.06em",
+          flexShrink: 0,
+        }}
+      >
+        DEMO
       </span>
-      <span>
-        Demo Modus – Du siehst eine eingeschränkte Version von BankAcademy.
-      </span>
+
+      <span style={{ color: "#92400e" }}>Eingeschränkte Version –</span>
+
       <Link
         href="/kontakt"
-        style={{ fontWeight: 700, color: "#78350f", textDecoration: "underline" }}
+        style={{ fontWeight: 700, color: "#78350f", textDecoration: "underline", whiteSpace: "nowrap" }}
       >
         Vollzugang anfragen →
       </Link>
+
       {onFeedback && (
         <button
           onClick={onFeedback}
           style={{
-            padding: "4px 12px",
+            padding: "2px 10px",
             borderRadius: 50,
-            border: "1.5px solid #92400e",
+            border: "1px solid #b45309",
             background: "transparent",
             color: "#78350f",
-            fontSize: 12,
+            fontSize: 10,
             fontWeight: 700,
             cursor: "pointer",
             whiteSpace: "nowrap",
           }}
         >
-          Feedback geben →
+          Feedback →
         </button>
       )}
+
       {onLogout && (
         <button
           onClick={onLogout}
           style={{
-            padding: "4px 10px",
+            padding: "2px 8px",
             borderRadius: 50,
-            border: "1px solid #92400e",
+            border: "1px solid #b45309",
             background: "transparent",
             color: "#78350f",
-            fontSize: 11,
-            fontWeight: 600,
+            fontSize: 10,
+            fontWeight: 500,
             cursor: "pointer",
-            opacity: 0.65,
+            opacity: 0.6,
             whiteSpace: "nowrap",
           }}
         >
