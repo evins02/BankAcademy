@@ -70,12 +70,9 @@ export const SK_LEVELS: SkLevelConfig[] = [
           "Kunde fragt: «Warum bekomme ich auf meinem Sparkonto 0.4% Zins aber auf dem Privatkonto nur 0.1%?»",
         question: "Was antwortest du?",
         options: [
-          { key: "A", text: "«Das entscheidet die Bank einfach so»" },
-          {
-            key: "B",
-            text: "«Privatkonto hat eigentlich den besseren Zins»",
-          },
-          { key: "C", text: "«Sparkonto ist sicherer»" },
+          { key: "A", text: "«Weil die Bank Spargelder für Hypotheken nutzt und den Mehrertrag weitergeben kann»" },
+          { key: "B", text: "«Das ist eine gesetzliche Vorgabe – Spareinlagen müssen bevorzugt verzinst werden»" },
+          { key: "C", text: "«Weniger Transaktionen bedeuten tiefere Verwaltungskosten – davon profitierst du als Zinsvorteil»" },
           { key: "D", text: "«Je länger die Bank über dein Geld verfügen kann, desto mehr Zins – Sparkonto hat engere Rückzugslimiten»" },
         ],
         correct: "D",

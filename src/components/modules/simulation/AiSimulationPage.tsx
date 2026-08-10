@@ -105,13 +105,20 @@ export function AiSimulationPage() {
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
         let data: ChatApiResponse | null = null;
+        // Buffer partial lines – a data: event can be split across two read() chunks
+        let sseBuffer = "";
 
         outer: while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-          for (const line of decoder.decode(value, { stream: true }).split("\n")) {
+          sseBuffer += decoder.decode(value, { stream: true });
+          const lines = sseBuffer.split("\n");
+          sseBuffer = lines.pop() ?? "";
+          for (const line of lines) {
             if (!line.startsWith("data: ")) continue;
-            const parsed = JSON.parse(line.slice(6)) as ChatApiResponse & { error?: string };
+            const payload = line.slice(6).trim();
+            if (!payload) continue;
+            const parsed = JSON.parse(payload) as ChatApiResponse & { error?: string };
             if ("error" in parsed) throw new Error(parsed.error);
             data = parsed;
             break outer;

@@ -71,6 +71,13 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
         <DemoBanner
           onMenuToggle={() => setMobileOpen((v) => !v)}
           onFeedback={() => setFeedbackOpen(true)}
+          onLogout={() => {
+            try {
+              localStorage.removeItem("ba-demo-session");
+              localStorage.removeItem("demo-seen");
+            } catch {}
+            window.location.href = "/";
+          }}
         />
         <div style={{ display: "flex", flex: 1, overflow: "hidden", position: "relative" }}>
           {/* Mobile backdrop */}
@@ -100,10 +107,11 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      {/* Floating Feedback Button */}
+      {/* Floating Feedback Button – icon-only to avoid covering content */}
       {!feedbackDone && demoSession && (
         <button
           onClick={() => setFeedbackOpen(true)}
+          title="Feedback geben"
           style={{
             position: "fixed",
             bottom: 24,
@@ -112,20 +120,19 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
             background: TEAL,
             color: DARK,
             border: "none",
-            borderRadius: 50,
-            padding: "12px 20px",
-            fontSize: 14,
-            fontWeight: 700,
+            borderRadius: "50%",
+            width: 44,
+            height: 44,
+            fontSize: 20,
             cursor: "pointer",
             boxShadow: "0 4px 20px rgba(29,219,160,0.35)",
             display: "flex",
             alignItems: "center",
-            gap: 8,
-            whiteSpace: "nowrap",
+            justifyContent: "center",
             transition: "transform 0.15s, box-shadow 0.15s",
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.05)";
+            (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.1)";
             (e.currentTarget as HTMLButtonElement).style.boxShadow =
               "0 6px 28px rgba(29,219,160,0.5)";
           }}
@@ -135,7 +142,7 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
               "0 4px 20px rgba(29,219,160,0.35)";
           }}
         >
-          💬 Feedback geben
+          💬
         </button>
       )}
     </>

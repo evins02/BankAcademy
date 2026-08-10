@@ -4,9 +4,10 @@ import { Menu } from "lucide-react";
 interface Props {
   onMenuToggle?: () => void;
   onFeedback?: () => void;
+  onLogout?: () => void;
 }
 
-export function DemoBanner({ onMenuToggle, onFeedback }: Props) {
+export function DemoBanner({ onMenuToggle, onFeedback, onLogout }: Props) {
   return (
     <div
       style={{
@@ -61,6 +62,25 @@ export function DemoBanner({ onMenuToggle, onFeedback }: Props) {
           }}
         >
           Feedback geben →
+        </button>
+      )}
+      {onLogout && (
+        <button
+          onClick={onLogout}
+          style={{
+            padding: "4px 10px",
+            borderRadius: 50,
+            border: "1px solid #92400e",
+            background: "transparent",
+            color: "#78350f",
+            fontSize: 11,
+            fontWeight: 600,
+            cursor: "pointer",
+            opacity: 0.65,
+            whiteSpace: "nowrap",
+          }}
+        >
+          ← Abmelden
         </button>
       )}
     </div>
