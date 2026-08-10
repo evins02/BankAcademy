@@ -19,6 +19,8 @@ async function ensureTable() {
       apprenticeship_year TEXT,
       bank_name           TEXT,
       contact_consent     BOOLEAN NOT NULL DEFAULT FALSE,
+      email               TEXT,
+      vorname             TEXT,
       created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
@@ -34,7 +36,7 @@ export async function POST(req: NextRequest) {
         session_id, ease_of_use, scenario_relevance, usage_frequency,
         best_module, better_prepared, difficulty_rating, best_features,
         liked_most, improvements, would_recommend, apprenticeship_year,
-        bank_name, contact_consent
+        bank_name, contact_consent, email, vorname
       ) VALUES (
         ${body.sessionId ?? null},
         ${body.easeOfUse ?? null},
@@ -49,7 +51,9 @@ export async function POST(req: NextRequest) {
         ${body.wouldRecommend ?? null},
         ${body.apprenticeshipYear ?? null},
         ${body.bankName ?? null},
-        ${body.contactConsent ?? false}
+        ${body.contactConsent ?? false},
+        ${body.email ?? null},
+        ${body.vorname ?? null}
       )
     `;
 

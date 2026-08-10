@@ -4,40 +4,58 @@ import { useState } from "react";
 import { DemoBanner } from "./DemoBanner";
 import { DemoSidebar } from "./DemoSidebar";
 import { LockedModuleOverlay } from "./LockedModuleOverlay";
-import { DemoOnboardingModal } from "./DemoOnboardingModal";
+import { DemoEmailGate, type DemoSession } from "./DemoEmailGate";
 import { FeedbackModal } from "./FeedbackModal";
 import { ThemeApplier } from "@/components/shared/ThemeApplier";
 
 const TEAL = "#1ddba0";
 const DARK = "#0a1628";
 
+function loadSession(): DemoSession | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem("ba-demo-session");
+    if (raw) return JSON.parse(raw) as DemoSession;
+  } catch {}
+  return null;
+}
+
+function feedbackDoneStored(): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem("ba-pilot-feedback-sent") === "1";
+}
+
 export function DemoShell({ children }: { children: React.ReactNode }) {
   const [locked, setLocked] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [demoSession, setDemoSession] = useState<DemoSession | null>(() => loadSession());
   const [feedbackOpen, setFeedbackOpen] = useState(false);
-  const [feedbackDone, setFeedbackDone] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("ba-pilot-feedback-sent") === "1";
-    }
-    return false;
-  });
+  const [feedbackDone, setFeedbackDone] = useState(() => feedbackDoneStored());
+
+  function handleSessionComplete(session: DemoSession) {
+    setDemoSession(session);
+  }
 
   function handleFeedbackSubmitted() {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("ba-pilot-feedback-sent", "1");
-    }
+    try { localStorage.setItem("ba-pilot-feedback-sent", "1"); } catch {}
     setFeedbackDone(true);
   }
 
   return (
     <>
       <ThemeApplier />
-      <DemoOnboardingModal />
+
+      {/* Email gate — blocks until user registers */}
+      {!demoSession && <DemoEmailGate onComplete={handleSessionComplete} />}
+
       {locked && <LockedModuleOverlay onBack={() => setLocked(false)} />}
+
       {feedbackOpen && (
         <FeedbackModal
           onClose={() => setFeedbackOpen(false)}
           onSubmitted={handleFeedbackSubmitted}
+          email={demoSession?.email}
+          vorname={demoSession?.vorname}
         />
       )}
 
@@ -83,7 +101,7 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Floating Feedback Button */}
-      {!feedbackDone && (
+      {!feedbackDone && demoSession && (
         <button
           onClick={() => setFeedbackOpen(true)}
           style={{

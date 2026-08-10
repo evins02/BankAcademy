@@ -149,9 +149,11 @@ interface Props {
   onClose: () => void;
   onSubmitted: () => void;
   sessionId?: string;
+  email?: string;
+  vorname?: string;
 }
 
-export function FeedbackModal({ onClose, onSubmitted, sessionId }: Props) {
+export function FeedbackModal({ onClose, onSubmitted, sessionId, email, vorname }: Props) {
   const [answers, setAnswers] = useState<Answers>(INITIAL);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -179,6 +181,8 @@ export function FeedbackModal({ onClose, onSubmitted, sessionId }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sessionId: sessionId ?? null,
+          email: email ?? null,
+          vorname: vorname ?? null,
           easeOfUse: answers.easeOfUse || null,
           scenarioRelevance: answers.scenarioRelevance || null,
           usageFrequency: answers.usageFrequency || null,
