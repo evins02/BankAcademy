@@ -6,10 +6,14 @@ async function ensureTable() {
     CREATE TABLE IF NOT EXISTS pilot_users (
       id         SERIAL PRIMARY KEY,
       vorname    TEXT NOT NULL,
-      email      TEXT UNIQUE NOT NULL,
+      email      TEXT NOT NULL,
       opt_in     BOOLEAN NOT NULL DEFAULT FALSE,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
+  `;
+  // Add unique index if not already present (idempotent)
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS pilot_users_email_unique ON pilot_users (email)
   `;
 }
 
@@ -39,6 +43,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[demo-register] error:", err);
-    return NextResponse.json({ error: "Fehler beim Speichern" }, { status: 500 });
+    // Return success anyway so DB issues never block demo access
+    return NextResponse.json({ success: true, warn: "db_error" });
   }
 }

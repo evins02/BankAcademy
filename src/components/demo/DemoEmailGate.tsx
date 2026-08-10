@@ -39,28 +39,24 @@ export function DemoEmailGate({ onComplete }: Props) {
     }
 
     setLoading(true);
+    // Fire-and-forget DB save — errors never block demo access
+    fetch("/api/demo-register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ vorname: vTrim, email: eTrim, optIn }),
+    }).catch(() => {});
+
+    const session: DemoSession = { vorname: vTrim, email: eTrim };
     try {
-      const res = await fetch("/api/demo-register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ vorname: vTrim, email: eTrim, optIn }),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        setError(body.error ?? "Fehler. Bitte nochmals versuchen.");
-        return;
-      }
-      const session: DemoSession = { vorname: vTrim, email: eTrim };
-      try {
-        localStorage.setItem("ba-demo-session", JSON.stringify(session));
-        localStorage.setItem("demo-seen", "true");
-      } catch {}
-      onComplete(session);
-    } catch {
-      setError("Keine Verbindung. Bitte nochmals versuchen.");
-    } finally {
+      localStorage.setItem("ba-demo-session", JSON.stringify(session));
+      localStorage.setItem("demo-seen", "true");
+    } catch {}
+
+    // Small delay so the button shows loading state briefly
+    setTimeout(() => {
       setLoading(false);
-    }
+      onComplete(session);
+    }, 400);
   }
 
   const inputStyle: React.CSSProperties = {
