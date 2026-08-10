@@ -7,7 +7,14 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Always allow: static files, Next.js internals, public API endpoints, admin (own auth), demo
-  const PUBLIC_API = new Set(["/api/validate-access", "/api/register"]);
+  const PUBLIC_API = new Set([
+    "/api/validate-access",
+    "/api/register",
+    "/api/kyc-chat",
+    "/api/simulation/chat",
+    "/api/demo-register",
+    "/api/pilot-feedback",
+  ]);
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/admin") ||

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Menu } from "lucide-react";
+import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 
 interface Props {
   onMenuToggle?: () => void;
@@ -37,6 +38,9 @@ export function DemoBanner({ onMenuToggle, onFeedback, onLogout }: Props) {
           <Menu size={20} />
         </button>
       )}
+      <span className="mr-2 shrink-0">
+        <BankingLabLogo size="sm" />
+      </span>
       <span>
         Demo Modus – Du siehst eine eingeschränkte Version von BankAcademy.
       </span>
