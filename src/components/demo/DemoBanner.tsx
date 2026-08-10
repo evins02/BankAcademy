@@ -1,7 +1,12 @@
 import Link from "next/link";
 import { Menu } from "lucide-react";
 
-export function DemoBanner({ onMenuToggle }: { onMenuToggle?: () => void }) {
+interface Props {
+  onMenuToggle?: () => void;
+  onFeedback?: () => void;
+}
+
+export function DemoBanner({ onMenuToggle, onFeedback }: Props) {
   return (
     <div
       style={{
@@ -40,6 +45,24 @@ export function DemoBanner({ onMenuToggle }: { onMenuToggle?: () => void }) {
       >
         Vollzugang anfragen →
       </Link>
+      {onFeedback && (
+        <button
+          onClick={onFeedback}
+          style={{
+            padding: "4px 12px",
+            borderRadius: 50,
+            border: "1.5px solid #92400e",
+            background: "transparent",
+            color: "#78350f",
+            fontSize: 12,
+            fontWeight: 700,
+            cursor: "pointer",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Feedback geben →
+        </button>
+      )}
     </div>
   );
 }

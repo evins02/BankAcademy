@@ -1,0 +1,61 @@
+import { NextRequest, NextResponse } from "next/server";
+import { sql } from "@/lib/db";
+
+async function ensureTable() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS pilot_feedback (
+      id                  SERIAL PRIMARY KEY,
+      session_id          TEXT,
+      ease_of_use         SMALLINT,
+      scenario_relevance  SMALLINT,
+      usage_frequency     TEXT,
+      best_module         TEXT,
+      better_prepared     TEXT,
+      difficulty_rating   TEXT,
+      best_features       TEXT,
+      liked_most          TEXT,
+      improvements        TEXT,
+      would_recommend     TEXT,
+      apprenticeship_year TEXT,
+      bank_name           TEXT,
+      contact_consent     BOOLEAN NOT NULL DEFAULT FALSE,
+      created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    await ensureTable();
+
+    await sql`
+      INSERT INTO pilot_feedback (
+        session_id, ease_of_use, scenario_relevance, usage_frequency,
+        best_module, better_prepared, difficulty_rating, best_features,
+        liked_most, improvements, would_recommend, apprenticeship_year,
+        bank_name, contact_consent
+      ) VALUES (
+        ${body.sessionId ?? null},
+        ${body.easeOfUse ?? null},
+        ${body.scenarioRelevance ?? null},
+        ${body.usageFrequency ?? null},
+        ${body.bestModule ?? null},
+        ${body.betterPrepared ?? null},
+        ${body.difficultyRating ?? null},
+        ${Array.isArray(body.bestFeatures) ? body.bestFeatures.join(", ") : null},
+        ${body.likedMost ?? null},
+        ${body.improvements ?? null},
+        ${body.wouldRecommend ?? null},
+        ${body.apprenticeshipYear ?? null},
+        ${body.bankName ?? null},
+        ${body.contactConsent ?? false}
+      )
+    `;
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("[pilot-feedback] DB error:", err);
+    return NextResponse.json({ error: "Fehler beim Speichern" }, { status: 500 });
+  }
+}

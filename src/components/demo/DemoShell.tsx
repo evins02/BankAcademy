@@ -5,17 +5,42 @@ import { DemoBanner } from "./DemoBanner";
 import { DemoSidebar } from "./DemoSidebar";
 import { LockedModuleOverlay } from "./LockedModuleOverlay";
 import { DemoOnboardingModal } from "./DemoOnboardingModal";
+import { FeedbackModal } from "./FeedbackModal";
 import { ThemeApplier } from "@/components/shared/ThemeApplier";
+
+const TEAL = "#1ddba0";
+const DARK = "#0a1628";
 
 export function DemoShell({ children }: { children: React.ReactNode }) {
   const [locked, setLocked] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [feedbackDone, setFeedbackDone] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("ba-pilot-feedback-sent") === "1";
+    }
+    return false;
+  });
+
+  function handleFeedbackSubmitted() {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("ba-pilot-feedback-sent", "1");
+    }
+    setFeedbackDone(true);
+  }
 
   return (
     <>
       <ThemeApplier />
       <DemoOnboardingModal />
       {locked && <LockedModuleOverlay onBack={() => setLocked(false)} />}
+      {feedbackOpen && (
+        <FeedbackModal
+          onClose={() => setFeedbackOpen(false)}
+          onSubmitted={handleFeedbackSubmitted}
+        />
+      )}
+
       <div
         style={{
           display: "flex",
@@ -25,7 +50,10 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
           background: "var(--background, #F8F9FD)",
         }}
       >
-        <DemoBanner onMenuToggle={() => setMobileOpen((v) => !v)} />
+        <DemoBanner
+          onMenuToggle={() => setMobileOpen((v) => !v)}
+          onFeedback={() => setFeedbackOpen(true)}
+        />
         <div style={{ display: "flex", flex: 1, overflow: "hidden", position: "relative" }}>
           {/* Mobile backdrop */}
           {mobileOpen && (
@@ -53,6 +81,45 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
           </main>
         </div>
       </div>
+
+      {/* Floating Feedback Button */}
+      {!feedbackDone && (
+        <button
+          onClick={() => setFeedbackOpen(true)}
+          style={{
+            position: "fixed",
+            bottom: 24,
+            right: 24,
+            zIndex: 8000,
+            background: TEAL,
+            color: DARK,
+            border: "none",
+            borderRadius: 50,
+            padding: "12px 20px",
+            fontSize: 14,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 4px 20px rgba(29,219,160,0.35)",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            whiteSpace: "nowrap",
+            transition: "transform 0.15s, box-shadow 0.15s",
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.05)";
+            (e.currentTarget as HTMLButtonElement).style.boxShadow =
+              "0 6px 28px rgba(29,219,160,0.5)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
+            (e.currentTarget as HTMLButtonElement).style.boxShadow =
+              "0 4px 20px rgba(29,219,160,0.35)";
+          }}
+        >
+          💬 Feedback geben
+        </button>
+      )}
     </>
   );
 }
