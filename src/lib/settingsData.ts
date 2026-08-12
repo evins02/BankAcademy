@@ -1,7 +1,6 @@
 "use client";
 
 export interface AppSettings {
-  timerEnabled: boolean;
   autoAdvance: boolean;
   sounds: boolean;
   keyboardShortcuts: boolean;
@@ -11,7 +10,6 @@ export interface AppSettings {
 }
 
 const DEFAULTS: AppSettings = {
-  timerEnabled: true,
   autoAdvance: true,
   sounds: false,
   keyboardShortcuts: true,

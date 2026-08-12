@@ -261,9 +261,6 @@ export default function EinstellungenPage() {
           {/* 2. Lerneinstellungen */}
           <section className="rounded-2xl border border-border bg-surface p-6">
             <SectionHeader>Lerneinstellungen</SectionHeader>
-            <SettingsRow label="Timer anzeigen" description="Zeigt die verstrichene Zeit pro Szenario an">
-              <Toggle checked={settings.timerEnabled} onChange={(v) => patch("timerEnabled", v)} />
-            </SettingsRow>
             <SettingsRow label="Auto-Advance" description="Nächster Fall startet automatisch nach 5 Sekunden">
               <Toggle checked={settings.autoAdvance} onChange={(v) => patch("autoAdvance", v)} />
             </SettingsRow>

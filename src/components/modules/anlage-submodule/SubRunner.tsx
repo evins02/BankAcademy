@@ -191,7 +191,6 @@ export function SubRunner({
             label: levelConfig.cases[i]?.title ?? `Fall ${i + 1}`,
           }))}
           isLastLevel={activeLevel === MAX_LEVEL}
-          timeSeconds={levelElapsed}
           onNext={handleLevelNext}
           onRetry={handleRetry}
           onBack={() => setView("selector")}

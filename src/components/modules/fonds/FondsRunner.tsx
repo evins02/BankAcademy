@@ -15,7 +15,6 @@ import { NoteModal } from "@/components/shared/NoteModal";
 import { getProgress, saveProgress } from "@/lib/progressData";
 import { addAttemptRecord } from "@/lib/error-tracking";
 import { useGlossar } from "@/context/GlossarContext";
-import { getSettings } from "@/lib/settingsData";
 import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 
 type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete" | "module-complete";
@@ -179,8 +178,6 @@ export function FondsRunner() {
     }
   }, [activeLevel, levelScores]);
 
-  const timerEnabled = typeof window !== "undefined" ? getSettings().timerEnabled : true;
-
   return (
     <div className="flex-1 overflow-y-auto p-6">
       {view === "selector" && (
@@ -216,7 +213,6 @@ export function FondsRunner() {
             onSelect={setSelectedOption}
             onSubmit={handleSubmit}
             onOpenNote={() => setNoteOpen(true)}
-            levelStartTime={timerEnabled ? levelStartTime : undefined}
           />
         </>
       )}
@@ -242,7 +238,6 @@ export function FondsRunner() {
             label: levelConfig.cases[i]?.title ?? `Fall ${i + 1}`,
           }))}
           isLastLevel={activeLevel === MAX_LEVEL}
-          timeSeconds={levelElapsed}
           onNext={handleLevelNext}
           onRetry={handleRetry}
           onBack={() => setView("selector")}

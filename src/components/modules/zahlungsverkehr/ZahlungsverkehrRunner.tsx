@@ -20,7 +20,6 @@ import { SmartTipBanner } from "@/components/shared/SmartTipBanner";
 import { NoteModal } from "@/components/shared/NoteModal";
 import { getProgress, saveProgress } from "@/lib/progressData";
 import { useGlossar } from "@/context/GlossarContext";
-import { getSettings } from "@/lib/settingsData";
 import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
@@ -203,8 +202,6 @@ export function ZahlungsverkehrRunner() {
     }
   }, [activeLevel, levelScores]);
 
-  const timerEnabled = typeof window !== "undefined" ? getSettings().timerEnabled : true;
-
   return (
     <div className="flex-1 overflow-y-auto p-6">
       {view === "selector" && (
@@ -263,7 +260,6 @@ export function ZahlungsverkehrRunner() {
               onSelect={setSelectedOption}
               onSubmit={handleSubmit}
               onOpenNote={() => setNoteOpen(true)}
-              levelStartTime={timerEnabled ? levelStartTime : undefined}
             />
           </>
         )
@@ -319,7 +315,6 @@ export function ZahlungsverkehrRunner() {
             label: `Fall ${i + 1}`,
           }))}
           isLastLevel={activeLevel === MAX_LEVEL}
-          timeSeconds={levelElapsed}
           onNext={handleLevelNext}
           onRetry={handleRetry}
           onBack={() => setView("selector")}
