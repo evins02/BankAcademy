@@ -1,6 +1,7 @@
 "use client";
 
 import { ls, lsSet } from "./storage";
+import { scheduleSync } from "./progressSync";
 
 export const XP_LEVELS = [
   { min: 0, max: 500, title: "Einsteiger", color: "#6B7280" },
@@ -24,6 +25,7 @@ export function addXP(amount: number): number {
   const next = current + amount;
   if (typeof window !== "undefined") {
     lsSet("total-xp", String(next));
+    scheduleSync();
   }
   return next;
 }

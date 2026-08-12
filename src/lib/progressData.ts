@@ -1,6 +1,7 @@
 "use client";
 
 import { ls, lsSet } from "./storage";
+import { scheduleSync } from "./progressSync";
 
 export interface ModuleProgress {
   moduleId: string;
@@ -69,6 +70,7 @@ export function getProgress(): Record<string, ModuleProgress> {
 
 export function saveProgress(data: Record<string, ModuleProgress>) {
   write("progress", data);
+  scheduleSync();
 }
 
 export function getModuleProgress(moduleId: string): ModuleProgress | null {
@@ -345,6 +347,7 @@ export function recordCorrectAnswer() {
   lsSet("correct-streak", String(streak));
   const best = parseInt(ls("correct-streak-best") ?? "0");
   if (streak > best) lsSet("correct-streak-best", String(streak));
+  scheduleSync();
 }
 
 export function recordWrongAnswer() {
@@ -352,6 +355,7 @@ export function recordWrongAnswer() {
   const prevStreak = parseInt(ls("correct-streak") ?? "0");
   if (prevStreak === 0) lsSet("comeback-earned", "true");
   lsSet("correct-streak", "0");
+  scheduleSync();
 }
 
 export function computeBadges(): Badge[] {
@@ -412,6 +416,8 @@ export function computeBadges(): Badge[] {
 export function seedMockDataIfEmpty() {
   if (typeof window === "undefined") return;
   if (ls("mock-seeded")) return;
+  // Don't seed for demo users — their real data comes from Neon
+  if (localStorage.getItem("ba-demo-session")) return;
 
   const progress: Record<string, ModuleProgress> = {
     privatkunde: {

@@ -14,6 +14,7 @@ export function middleware(req: NextRequest) {
     "/api/simulation/chat",
     "/api/demo-register",
     "/api/pilot-feedback",
+    "/api/user-progress",
   ]);
   if (
     pathname.startsWith("/_next") ||

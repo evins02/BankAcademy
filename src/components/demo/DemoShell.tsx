@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DemoBanner } from "./DemoBanner";
 import { DemoSidebar } from "./DemoSidebar";
 import { LockedModuleOverlay } from "./LockedModuleOverlay";
 import { DemoEmailGate, type DemoSession } from "./DemoEmailGate";
 import { FeedbackModal } from "./FeedbackModal";
 import { ThemeApplier } from "@/components/shared/ThemeApplier";
+import { loadProgressFromDB } from "@/lib/progressSync";
 
 const TEAL = "#1ddba0";
 const DARK = "#0a1628";
@@ -31,9 +32,24 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
   const [demoSession, setDemoSession] = useState<DemoSession | null>(() => loadSession());
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [feedbackDone, setFeedbackDone] = useState(() => feedbackDoneStored());
+  // Incrementing this key remounts <main> so children re-read localStorage after a DB load
+  const [progressKey, setProgressKey] = useState(0);
+
+  // Returning visitor: load their saved progress from Neon on mount
+  useEffect(() => {
+    if (demoSession?.email) {
+      loadProgressFromDB(demoSession.email).then((loaded) => {
+        if (loaded) setProgressKey((k) => k + 1);
+      }).catch(() => {});
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleSessionComplete(session: DemoSession) {
     setDemoSession(session);
+    // New login: fire-and-forget load; if data exists, remount to apply it
+    loadProgressFromDB(session.email).then((loaded) => {
+      if (loaded) setProgressKey((k) => k + 1);
+    }).catch(() => {});
   }
 
   function handleFeedbackSubmitted() {
@@ -98,7 +114,9 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
             <DemoSidebar onLock={() => setLocked(true)} onClose={() => setMobileOpen(false)} />
           </div>
 
+          {/* key={progressKey} remounts children after a DB load so they re-read localStorage */}
           <main
+            key={progressKey}
             id="main-content"
             className="flex flex-1 flex-col overflow-hidden animate-fade-in min-w-0"
           >
