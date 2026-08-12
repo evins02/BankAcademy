@@ -76,7 +76,7 @@ const LOCKED_MODULES = [
   { title: "Credit Office", description: "Hypotheken, Blankokredit und periodische Prüfung." },
   { title: "Individual-Hypothek", description: "Hypothekarantrag prüfen und Tragbarkeit berechnen." },
   { title: "Challenge-Modus", description: "Prüfungssimulation mit realistischen Falldossiers." },
-  { title: "Leaderboard & Forum", description: "Community, Rangliste und Praxisfälle." },
+  { title: "Community & Forum", description: "Fragen stellen, Erfahrungen teilen, Praxisfälle diskutieren." },
 ];
 
 export default function DemoPage() {
@@ -259,7 +259,7 @@ export default function DemoPage() {
                 Bereit für den Vollzugang?
               </h3>
               <p style={{ margin: 0, fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
-                Alle Module · 150+ Szenarien · Challenge-Modus · Leaderboard
+                Alle Module · 150+ Szenarien · Challenge-Modus · Community
               </p>
             </div>
             <Link
