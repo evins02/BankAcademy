@@ -1,13 +1,16 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ArrowUp, AlertCircle, CheckCircle, XCircle, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
+import {
+  ArrowUp, AlertCircle, CheckCircle, XCircle,
+  Mic, MicOff, Volume2, VolumeX, PenLine,
+} from "lucide-react";
 import { KycFormCard } from "@/components/modules/kyc-form/KycFormCard";
 import type { KycFormData } from "@/components/modules/kyc-form/kyc-form-types";
 import { addXP } from "@/lib/xpData";
 import { Confetti } from "@/components/shared/Confetti";
 
-type Phase = "chat" | "transition" | "form" | "evaluating" | "feedback";
+type Phase = "briefing" | "chat" | "summary" | "form" | "evaluating" | "feedback";
 type Message = { role: "user" | "assistant"; content: string };
 type Evaluation = {
   result: "BESTANDEN" | "NICHT BESTANDEN";
@@ -23,12 +26,22 @@ type Evaluation = {
   feedback: string;
 };
 
+const CHECKLIST_ITEMS = [
+  "Vollständiger Name",
+  "Geburtsdatum",
+  "Staatsangehörigkeit",
+  "Wohnadresse",
+  "Ausweisdokument (Typ & Nummer)",
+  "Beruf / Arbeitgeber",
+  "Zweck der Kontoverbindung",
+] as const;
+
 interface Props {
   onBack: () => void;
 }
 
 export function KycConversationRunner({ onBack }: Props) {
-  const [phase, setPhase] = useState<Phase>("chat");
+  const [phase, setPhase] = useState<Phase>("briefing");
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,6 +49,12 @@ export function KycConversationRunner({ onBack }: Props) {
   const [attempt, setAttempt] = useState(0);
   const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+
+  const [notes, setNotes] = useState("");
+  const [notesOpen, setNotesOpen] = useState(false);
+  const [checklist, setChecklist] = useState<boolean[]>(
+    Array(CHECKLIST_ITEMS.length).fill(false)
+  );
 
   // Speech state
   const [isListening, setIsListening] = useState(false);
@@ -49,7 +68,6 @@ export function KycConversationRunner({ onBack }: Props) {
   const recognitionRef = useRef<any>(null);
   const pendingTranscriptRef = useRef<string>("");
 
-  // Detect browser speech support and mic permission state
   useEffect(() => {
     if (typeof window === "undefined") return;
     setSpeechSupported(
@@ -61,7 +79,6 @@ export function KycConversationRunner({ onBack }: Props) {
     }).catch(() => {});
   }, []);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       recognitionRef.current?.abort();
@@ -80,13 +97,6 @@ export function KycConversationRunner({ onBack }: Props) {
   }, [loading, phase]);
 
   useEffect(() => {
-    if (phase === "transition") {
-      const t = setTimeout(() => setPhase("form"), 3000);
-      return () => clearTimeout(t);
-    }
-  }, [phase]);
-
-  useEffect(() => {
     if (phase !== "feedback" || !evaluation) return;
     const passed = evaluation.result === "BESTANDEN";
     addXP(passed ? 200 : 40);
@@ -97,7 +107,7 @@ export function KycConversationRunner({ onBack }: Props) {
     }
   }, [phase, evaluation]);
 
-  // TTS: read Thomas's response aloud via Web Speech API
+  // TTS: read Thomas's response aloud
   const lastThomas = [...messages].reverse().find((m) => m.role === "assistant");
   useEffect(() => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
@@ -163,10 +173,9 @@ export function KycConversationRunner({ onBack }: Props) {
       return;
     }
 
-    // Explicitly request mic permission — ensures Chrome shows the permission dialog
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach((t) => t.stop()); // release immediately; SpeechRecognition manages its own stream
+      stream.getTracks().forEach((t) => t.stop());
     } catch {
       setSpeechError("Mikrofon-Zugriff verweigert – bitte in den Browser-Einstellungen erlauben.");
       return;
@@ -190,11 +199,9 @@ export function KycConversationRunner({ onBack }: Props) {
     recognition.onend = () => {
       setIsListening(false);
       pendingTranscriptRef.current = "";
-      // Text bleibt im Eingabefeld – User sendet manuell per Enter oder Button
     };
 
     recognition.onerror = (event: any) => {
-      console.error("Sprachfehler:", event.error);
       const msgs: Record<string, string> = {
         "not-allowed": "Mikrofon-Zugriff verweigert – bitte in den Browser-Einstellungen erlauben.",
         "no-speech": "Kein Ton erkannt – bitte nochmals versuchen.",
@@ -252,35 +259,157 @@ export function KycConversationRunner({ onBack }: Props) {
     setEvaluation(null);
     setLoading(false);
     setError(null);
-    setPhase("chat");
+    setPhase("briefing");
     setAttempt((a) => a + 1);
+    setChecklist(Array(CHECKLIST_ITEMS.length).fill(false));
+    setNotes("");
   }
 
   const questionCount = messages.filter((m) => m.role === "user").length;
 
-  // ── Transition ─────────────────────────────────────────────────────────────
-  if (phase === "transition") {
+  // ── Briefing ───────────────────────────────────────────────────────────────
+  if (phase === "briefing") {
     return (
-      <div className="flex-1 flex items-center justify-center p-6">
-        <div className="max-w-sm text-center space-y-4">
-          <div
-            className="w-14 h-14 rounded-full flex items-center justify-center mx-auto"
-            style={{ background: "rgba(13,27,75,0.08)" }}
+      <div className="flex-1 overflow-y-auto p-6">
+        <div className="mx-auto max-w-lg w-full space-y-5">
+          <button
+            onClick={onBack}
+            className="text-xs text-text-secondary hover:text-text-primary transition-colors flex items-center gap-1"
           >
-            <span className="text-2xl">📋</span>
-          </div>
-          <h2 className="text-lg font-bold text-text-primary">Gespräch abgeschlossen</h2>
-          <p className="text-sm text-text-secondary leading-relaxed">
-            Füllen Sie nun das KYC-Formular aus –{" "}
-            <strong className="text-text-primary">ohne zurück zum Gespräch zu schauen.</strong>
-          </p>
-          <p className="text-sm text-text-secondary">Das Formular erscheint in Kürze…</p>
-          <div className="flex justify-center">
+            ← Zurück zur Übersicht
+          </button>
+
+          <div className="text-center py-2">
             <div
-              className="w-8 h-8 rounded-full border-4 border-t-transparent animate-spin"
-              style={{ borderColor: "var(--primary, #0D1B4B)", borderTopColor: "transparent" }}
-            />
+              className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+              style={{ background: "rgba(37,99,235,0.1)" }}
+            >
+              <span className="text-3xl">🎯</span>
+            </div>
+            <h2 className="text-2xl font-bold text-text-primary">KYC Gespräch</h2>
+            <p className="text-text-secondary mt-2 text-sm leading-relaxed">
+              Du bist Bankberater. Thomas Kowalski möchte ein Privatkonto eröffnen.
+              Stelle gezielte Fragen und sammle alle nötigen KYC-Informationen.
+            </p>
           </div>
+
+          <div
+            className="rounded-xl p-4 flex items-start gap-3"
+            style={{ background: "#fffbeb", border: "1px solid #fde68a" }}
+          >
+            <span className="text-lg shrink-0">💡</span>
+            <div>
+              <p className="font-semibold text-sm" style={{ color: "#92400e" }}>Tipp</p>
+              <p className="text-sm mt-1 leading-relaxed" style={{ color: "#78350f" }}>
+                Du hast genau <strong>9 Fragen</strong>. Thomas antwortet nur auf das, was du direkt fragst –
+                plane deine Fragen sorgfältig. Nutze das Notizbuch-Symbol im Gespräch, um Antworten festzuhalten.
+              </p>
+            </div>
+          </div>
+
+          <div className="rounded-xl bg-surface border border-border p-5">
+            <p className="text-sm font-bold text-text-primary mb-3">
+              Folgende Informationen musst du sammeln:
+            </p>
+            <div className="space-y-2">
+              {CHECKLIST_ITEMS.map((item, i) => (
+                <div key={i} className="flex items-center gap-3 text-sm text-text-secondary">
+                  <div
+                    className="w-4 h-4 rounded flex-shrink-0 border-2 border-border"
+                    style={{ marginTop: 1 }}
+                  />
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <button
+            onClick={() => setPhase("chat")}
+            className="w-full py-3 rounded-xl text-sm font-semibold text-white transition-colors"
+            style={{ background: "#2563eb" }}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "#1d4ed8")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "#2563eb")}
+          >
+            Gespräch starten →
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Summary ────────────────────────────────────────────────────────────────
+  if (phase === "summary") {
+    const checked = checklist.filter(Boolean).length;
+    return (
+      <div className="flex-1 overflow-y-auto p-6">
+        <div className="mx-auto max-w-lg space-y-5">
+          <div className="text-center py-2">
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
+              style={{ background: "rgba(37,99,235,0.1)" }}
+            >
+              <span className="text-2xl">📋</span>
+            </div>
+            <h2 className="text-xl font-bold text-text-primary">Gespräch beendet</h2>
+            <p className="text-sm text-text-secondary mt-1">
+              Prüfe deine Checkliste – dann füllst du das Formular aus dem Gedächtnis aus.
+            </p>
+          </div>
+
+          <div className="rounded-xl bg-surface border border-border p-5">
+            <p className="text-sm font-bold text-text-primary mb-3">
+              Gesammelte Informationen ({checked}/{CHECKLIST_ITEMS.length})
+            </p>
+            <div className="space-y-2">
+              {CHECKLIST_ITEMS.map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 text-sm"
+                  style={{ color: checklist[i] ? "#15803d" : "#dc2626" }}
+                >
+                  {checklist[i] ? (
+                    <CheckCircle size={14} className="shrink-0" />
+                  ) : (
+                    <XCircle size={14} className="shrink-0" />
+                  )}
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {notes.trim() && (
+            <div
+              className="rounded-xl p-4"
+              style={{ background: "#fffbeb", border: "1px solid #fde68a" }}
+            >
+              <p className="text-sm font-bold mb-2" style={{ color: "#92400e" }}>Deine Notizen</p>
+              <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: "#78350f" }}>
+                {notes}
+              </p>
+            </div>
+          )}
+
+          <div
+            className="rounded-xl p-4"
+            style={{ background: "#eff6ff", border: "1px solid #bfdbfe" }}
+          >
+            <p className="text-sm" style={{ color: "#1d4ed8" }}>
+              <strong>Jetzt:</strong> Fülle das KYC-Formular aus dem Gedächtnis aus.
+              Das Gespräch ist nicht mehr sichtbar.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setPhase("form")}
+            className="w-full py-3 rounded-xl text-sm font-semibold text-white transition-colors"
+            style={{ background: "#2563eb" }}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "#1d4ed8")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "#2563eb")}
+          >
+            Formular ausfüllen →
+          </button>
         </div>
       </div>
     );
@@ -420,18 +549,59 @@ export function KycConversationRunner({ onBack }: Props) {
   }
 
   // ── Chat ───────────────────────────────────────────────────────────────────
+  const counterColor = questionCount >= 9 ? "#f87171" : questionCount >= 8 ? "#fb923c" : "#93c5fd";
+
   return (
     <>
       <Confetti active={showConfetti} />
+
+      {/* Notebook overlay */}
+      {notesOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col items-stretch justify-end">
+          <div
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setNotesOpen(false)}
+          />
+          <div
+            className="relative rounded-t-2xl p-5 shadow-2xl"
+            style={{ background: "#1a1a2e", maxHeight: "60vh" }}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-semibold text-white flex items-center gap-2">
+                <PenLine size={14} /> Notizen
+              </p>
+              <button
+                onClick={() => setNotesOpen(false)}
+                className="text-gray-400 hover:text-white text-lg leading-none"
+              >
+                ✕
+              </button>
+            </div>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Notiere dir die Antworten von Thomas…"
+              className="w-full resize-none rounded-xl px-3 py-2 text-sm text-white placeholder-gray-500 outline-none focus:ring-2 focus:ring-blue-500"
+              style={{ background: "rgba(255,255,255,0.08)", minHeight: 160 }}
+              rows={7}
+              autoFocus
+            />
+            <p className="text-[10px] text-gray-500 mt-2">
+              Diese Notizen siehst du nach dem Gespräch noch einmal.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-1 overflow-hidden">
-        {/* Left: conversation history */}
+        {/* Left: conversation history + checklist */}
         <div className="flex w-64 shrink-0 flex-col border-r border-white/10 bg-[#111111]">
           <div className="border-b border-white/10 px-3 py-2">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-500">
               Gesprächsverlauf
             </p>
           </div>
-          <div ref={historyRef} className="flex-1 space-y-2 overflow-y-auto p-3">
+          <div ref={historyRef} className="flex-1 space-y-2 overflow-y-auto p-3 min-h-0">
             {messages.length === 0 && (
               <p className="text-[11px] text-gray-600 text-center pt-4">
                 Begrüssen Sie den Kunden und stellen Sie die KYC-Fragen.
@@ -469,6 +639,45 @@ export function KycConversationRunner({ onBack }: Props) {
               </div>
             )}
           </div>
+
+          {/* Checklist */}
+          <div className="border-t border-white/10 px-3 py-3 shrink-0">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-500 mb-2">
+              Checkliste ({checklist.filter(Boolean).length}/{CHECKLIST_ITEMS.length})
+            </p>
+            <div className="space-y-1.5">
+              {CHECKLIST_ITEMS.map((item, i) => (
+                <button
+                  key={i}
+                  onClick={() =>
+                    setChecklist((prev) => prev.map((v, j) => (j === i ? !v : v)))
+                  }
+                  className="flex items-center gap-2 w-full text-left transition-colors"
+                  style={{ color: checklist[i] ? "#6b7280" : "#9ca3af" }}
+                >
+                  <div
+                    className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded border"
+                    style={{
+                      background: checklist[i] ? "#22c55e" : "transparent",
+                      borderColor: checklist[i] ? "#22c55e" : "#4b5563",
+                    }}
+                  >
+                    {checklist[i] && (
+                      <span className="text-white" style={{ fontSize: 8, lineHeight: 1 }}>
+                        ✓
+                      </span>
+                    )}
+                  </div>
+                  <span
+                    className="text-[11px] leading-tight"
+                    style={{ textDecoration: checklist[i] ? "line-through" : "none" }}
+                  >
+                    {item}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Right: office background */}
@@ -481,13 +690,17 @@ export function KycConversationRunner({ onBack }: Props) {
             backgroundPosition: "center top",
           }}
         >
-          {/* Fragen counter – top right */}
+          {/* Question counter – top right */}
           <div className="absolute right-4 top-4 z-10 flex flex-col items-center rounded-xl border border-blue-500/40 bg-black/40 px-3 py-2 backdrop-blur-sm">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
               Fragen
             </p>
-            <p className="text-xl font-bold tabular-nums text-blue-300">{questionCount}/9</p>
-            <p className="text-[9px] text-gray-500">gestellt</p>
+            <p className="text-xl font-bold tabular-nums" style={{ color: counterColor }}>
+              {questionCount}/9
+            </p>
+            <p className="text-[9px]" style={{ color: counterColor }}>
+              {questionCount >= 9 ? "Maximum!" : questionCount >= 8 ? "Letzte Frage" : "gestellt"}
+            </p>
           </div>
 
           {/* Speech bubble */}
@@ -616,7 +829,7 @@ export function KycConversationRunner({ onBack }: Props) {
 
           {/* Control bar */}
           <div className="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between border-t border-white/10 bg-[#111111]/95 px-6 py-3 backdrop-blur-sm">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               {/* TTS toggle */}
               <button
                 onClick={() => {
@@ -629,12 +842,19 @@ export function KycConversationRunner({ onBack }: Props) {
                 {ttsEnabled ? <Volume2 size={13} /> : <VolumeX size={13} />}
                 <span>Stimme {ttsEnabled ? "an" : "aus"}</span>
               </button>
-              <p className="text-xs text-gray-500">
-                {questionCount} {questionCount === 1 ? "Frage" : "Fragen"} gestellt
-              </p>
+
+              {/* Notebook button */}
+              <button
+                onClick={() => setNotesOpen(true)}
+                className="flex items-center gap-1.5 rounded-lg bg-white/10 px-2.5 py-1.5 text-xs text-gray-300 transition-colors hover:bg-white/20"
+              >
+                <PenLine size={13} />
+                <span>Notizen{notes.trim() ? " ●" : ""}</span>
+              </button>
             </div>
+
             <button
-              onClick={() => setPhase("transition")}
+              onClick={() => setPhase("summary")}
               className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
             >
               Weiter zum Formular →
