@@ -643,35 +643,6 @@ export function KycConversationRunner({ onBack }: Props) {
             )}
           </div>
 
-          {/* Checklist counter — labels hidden to prevent copy-paste cheating */}
-          <div className="border-t border-white/10 px-3 py-2.5 shrink-0">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
-              Checkliste
-            </p>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {CHECKLIST_ITEMS.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() =>
-                    setChecklist((prev) => prev.map((v, j) => (j === i ? !v : v)))
-                  }
-                  title={checklist[i] ? "Abhaken rückgängig machen" : "Als erledigt markieren"}
-                  className="flex h-5 w-5 items-center justify-center rounded transition-all"
-                  style={{
-                    background: checklist[i] ? "#22c55e" : "rgba(255,255,255,0.06)",
-                    border: `1px solid ${checklist[i] ? "#22c55e" : "#4b5563"}`,
-                  }}
-                >
-                  {checklist[i] && (
-                    <span className="text-white" style={{ fontSize: 9, lineHeight: 1 }}>✓</span>
-                  )}
-                </button>
-              ))}
-              <span className="text-[10px] text-gray-600 ml-1">
-                {checklist.filter(Boolean).length}/{CHECKLIST_ITEMS.length}
-              </span>
-            </div>
-          </div>
         </div>
 
         {/* Right: office background */}
