@@ -594,8 +594,11 @@ export function KycConversationRunner({ onBack }: Props) {
       )}
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Left: conversation history + checklist */}
-        <div className="flex w-64 shrink-0 flex-col border-r border-white/10 bg-[#111111]">
+        {/* Left: conversation history only (checklist intentionally hidden during chat) */}
+        <div
+          className="flex w-64 shrink-0 flex-col border-r border-white/10 bg-[#111111]"
+          style={{ userSelect: "none" }}
+        >
           <div className="border-b border-white/10 px-3 py-2">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-500">
               Gesprächsverlauf
@@ -640,42 +643,33 @@ export function KycConversationRunner({ onBack }: Props) {
             )}
           </div>
 
-          {/* Checklist */}
-          <div className="border-t border-white/10 px-3 py-3 shrink-0">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-500 mb-2">
-              Checkliste ({checklist.filter(Boolean).length}/{CHECKLIST_ITEMS.length})
+          {/* Checklist counter — labels hidden to prevent copy-paste cheating */}
+          <div className="border-t border-white/10 px-3 py-2.5 shrink-0">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
+              Checkliste
             </p>
-            <div className="space-y-1.5">
-              {CHECKLIST_ITEMS.map((item, i) => (
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {CHECKLIST_ITEMS.map((_, i) => (
                 <button
                   key={i}
                   onClick={() =>
                     setChecklist((prev) => prev.map((v, j) => (j === i ? !v : v)))
                   }
-                  className="flex items-center gap-2 w-full text-left transition-colors"
-                  style={{ color: checklist[i] ? "#6b7280" : "#9ca3af" }}
+                  title={checklist[i] ? "Abhaken rückgängig machen" : "Als erledigt markieren"}
+                  className="flex h-5 w-5 items-center justify-center rounded transition-all"
+                  style={{
+                    background: checklist[i] ? "#22c55e" : "rgba(255,255,255,0.06)",
+                    border: `1px solid ${checklist[i] ? "#22c55e" : "#4b5563"}`,
+                  }}
                 >
-                  <div
-                    className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded border"
-                    style={{
-                      background: checklist[i] ? "#22c55e" : "transparent",
-                      borderColor: checklist[i] ? "#22c55e" : "#4b5563",
-                    }}
-                  >
-                    {checklist[i] && (
-                      <span className="text-white" style={{ fontSize: 8, lineHeight: 1 }}>
-                        ✓
-                      </span>
-                    )}
-                  </div>
-                  <span
-                    className="text-[11px] leading-tight"
-                    style={{ textDecoration: checklist[i] ? "line-through" : "none" }}
-                  >
-                    {item}
-                  </span>
+                  {checklist[i] && (
+                    <span className="text-white" style={{ fontSize: 9, lineHeight: 1 }}>✓</span>
+                  )}
                 </button>
               ))}
+              <span className="text-[10px] text-gray-600 ml-1">
+                {checklist.filter(Boolean).length}/{CHECKLIST_ITEMS.length}
+              </span>
             </div>
           </div>
         </div>
