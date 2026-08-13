@@ -10,7 +10,7 @@ import type { KycFormData } from "@/components/modules/kyc-form/kyc-form-types";
 import { addXP } from "@/lib/xpData";
 import { Confetti } from "@/components/shared/Confetti";
 
-type Phase = "briefing" | "chat" | "summary" | "form" | "evaluating" | "feedback";
+type Phase = "briefing" | "chat" | "summary" | "form" | "evaluating" | "feedback" | "aborted";
 type Message = { role: "user" | "assistant"; content: string };
 type Evaluation = {
   result: "BESTANDEN" | "NICHT BESTANDEN";
@@ -142,7 +142,11 @@ export function KycConversationRunner({ onBack }: Props) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`);
 
-      setMessages([...newMessages, { role: "assistant", content: data.message }]);
+      const finalMessages: Message[] = [...newMessages, { role: "assistant", content: data.message }];
+      setMessages(finalMessages);
+      if (data.conversationAborted) {
+        setTimeout(() => setPhase("aborted"), 1800);
+      }
     } catch (e) {
       setMessages(snapshot);
       setError(e instanceof Error ? e.message : String(e));
@@ -333,6 +337,61 @@ export function KycConversationRunner({ onBack }: Props) {
           >
             Gespräch starten →
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Aborted ───────────────────────────────────────────────────────────────
+  if (phase === "aborted") {
+    return (
+      <div className="flex-1 flex items-center justify-center p-6">
+        <div className="mx-auto max-w-md w-full space-y-5 text-center">
+          <div
+            className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
+            style={{ background: "rgba(220,38,38,0.1)" }}
+          >
+            <span className="text-3xl">🚫</span>
+          </div>
+          <h2 className="text-xl font-bold" style={{ color: "#dc2626" }}>
+            Gespräch abgebrochen
+          </h2>
+          <p className="text-sm text-text-secondary leading-relaxed">
+            Thomas Kowalski hat das Gespräch aufgrund eines <strong>respektlosen oder unangemessenen Verhaltens</strong> sofort beendet.
+          </p>
+          <div
+            className="rounded-xl p-4 text-left text-sm leading-relaxed"
+            style={{ background: "rgba(220,38,38,0.06)", border: "1px solid rgba(220,38,38,0.2)" }}
+          >
+            <p className="font-semibold mb-2" style={{ color: "#dc2626" }}>Was ist schiefgelaufen?</p>
+            <ul className="space-y-1 text-text-secondary list-disc list-inside">
+              <li>Unangemessene oder beleidigende Wortwahl</li>
+              <li>Diskriminierende oder abwertende Bemerkungen</li>
+              <li>Aggressiver oder herablassender Ton</li>
+              <li>Fragen ohne KYC-Bezug / Eingriff in die Privatsphäre</li>
+            </ul>
+          </div>
+          <p className="text-xs text-text-secondary">
+            Professionelle Kommunikation ist in der Bankenbranche nicht optional.
+            Ein realer Kunde würde die Bank verlassen und Beschwerde einreichen.
+          </p>
+          <div className="flex gap-3">
+            <button
+              onClick={handleRetry}
+              className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors"
+              style={{ background: "#dc2626" }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "#b91c1c")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "#dc2626")}
+            >
+              Nochmals versuchen
+            </button>
+            <button
+              onClick={onBack}
+              className="flex-1 py-2.5 rounded-xl border border-border text-sm font-medium text-text-primary hover:bg-surface transition-colors"
+            >
+              Zurück zur Übersicht
+            </button>
+          </div>
         </div>
       </div>
     );
