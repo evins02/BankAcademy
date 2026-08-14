@@ -177,8 +177,11 @@ export default function AdminPage() {
       const res = await fetch("/api/admin/registrations", {
         headers: { "x-admin-code": code },
       });
-      if (!res.ok) { setError("Falscher Code."); return; }
       const data = await res.json();
+      if (!res.ok) {
+        setError(data?.error ?? `Fehler ${res.status}`);
+        return;
+      }
       setStats(data.stats);
       setUsers(data.users ?? []);
       setFeedback(data.feedback ?? []);

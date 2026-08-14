@@ -2,9 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
 
 export async function GET(req: NextRequest) {
+  const adminPassword = process.env.ADMIN_PASSWORD ?? process.env.ADMIN_CODE;
+
+  if (!adminPassword) {
+    console.error("[admin] ADMIN_PASSWORD env var is not set");
+    return NextResponse.json(
+      { error: "Admin-Passwort nicht konfiguriert (ADMIN_PASSWORD fehlt in Vercel)" },
+      { status: 503 }
+    );
+  }
+
   const code = req.headers.get("x-admin-code");
-  if (!code || code !== process.env.ADMIN_PASSWORD) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!code || code !== adminPassword) {
+    return NextResponse.json({ error: "Falscher Code" }, { status: 401 });
   }
 
   try {
@@ -28,14 +38,12 @@ export async function GET(req: NextRequest) {
         LEFT JOIN pilot_feedback f ON LOWER(f.email) = LOWER(u.email)
         ORDER BY u.created_at DESC
       `,
-      sql`
-        SELECT * FROM pilot_feedback ORDER BY created_at DESC
-      `,
+      sql`SELECT * FROM pilot_feedback ORDER BY created_at DESC`,
     ]);
 
     return NextResponse.json({ stats: statsRows[0], users, feedback });
   } catch (err) {
     console.error("[admin] DB error:", err);
-    return NextResponse.json({ error: "DB-Fehler" }, { status: 500 });
+    return NextResponse.json({ error: "DB-Fehler – Tabellen existieren möglicherweise noch nicht" }, { status: 500 });
   }
 }
