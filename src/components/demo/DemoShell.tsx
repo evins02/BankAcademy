@@ -53,10 +53,14 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
   }
 
   function handleFeedbackSubmitted() {
-    try { localStorage.setItem("ba-pilot-feedback-sent", "1"); } catch {}
-    setFeedbackDone(true);
-  }
-
+  try { localStorage.setItem("ba-pilot-feedback-sent", "1"); } catch {}
+  setFeedbackDone(true);
+  try {
+    localStorage.removeItem("ba-demo-session");
+    localStorage.removeItem("demo-seen");
+  } catch {}
+  window.location.href = "/";
+}
   return (
     <>
       <ThemeApplier />
