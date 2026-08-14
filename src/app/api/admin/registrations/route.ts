@@ -7,11 +7,35 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const rows = await sql`
-    SELECT id, vorname, email, opt_in, created_at
-    FROM pilot_users
-    ORDER BY created_at DESC
-  `;
+  try {
+    const [statsRows, users, feedback] = await Promise.all([
+      sql`
+        SELECT
+          (SELECT COUNT(*)::int FROM pilot_users)                                              AS total_users,
+          (SELECT COUNT(*)::int FROM pilot_feedback)                                           AS total_feedback,
+          (SELECT COUNT(*)::int FROM pilot_users WHERE opt_in = true)                          AS total_opt_ins,
+          (SELECT ROUND(AVG(ease_of_use)::numeric, 1)
+             FROM pilot_feedback WHERE ease_of_use IS NOT NULL)                                AS avg_ease,
+          (SELECT ROUND(AVG(scenario_relevance)::numeric, 1)
+             FROM pilot_feedback WHERE scenario_relevance IS NOT NULL)                         AS avg_relevance
+      `,
+      sql`
+        SELECT
+          u.id, u.vorname, u.email, u.opt_in, u.created_at,
+          f.apprenticeship_year, f.bank_name,
+          (f.id IS NOT NULL) AS has_feedback
+        FROM pilot_users u
+        LEFT JOIN pilot_feedback f ON LOWER(f.email) = LOWER(u.email)
+        ORDER BY u.created_at DESC
+      `,
+      sql`
+        SELECT * FROM pilot_feedback ORDER BY created_at DESC
+      `,
+    ]);
 
-  return NextResponse.json({ registrations: rows });
+    return NextResponse.json({ stats: statsRows[0], users, feedback });
+  } catch (err) {
+    console.error("[admin] DB error:", err);
+    return NextResponse.json({ error: "DB-Fehler" }, { status: 500 });
+  }
 }
