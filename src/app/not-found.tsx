@@ -30,7 +30,7 @@ export default function NotFound() {
             Diese Seite existiert nicht oder wurde verschoben.
           </p>
           <Link
-            href="/dashboard"
+            href="/"
             style={{
               display: "inline-block",
               background: "#0D1B4B",
@@ -42,7 +42,7 @@ export default function NotFound() {
               fontWeight: 600,
             }}
           >
-            Zurück zum Dashboard
+            Zur Startseite
           </Link>
         </div>
       </body>
