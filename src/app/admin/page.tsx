@@ -177,15 +177,18 @@ export default function AdminPage() {
       const res = await fetch("/api/admin/registrations", {
         headers: { "x-admin-code": code },
       });
-      const data = await res.json();
+      let data: any = {};
+      try { data = await res.json(); } catch { /* non-JSON response */ }
       if (!res.ok) {
-        setError(data?.error ?? `Fehler ${res.status}`);
+        setError(data?.error ?? `HTTP ${res.status} – prüfe /api/admin/ping`);
         return;
       }
       setStats(data.stats);
       setUsers(data.users ?? []);
       setFeedback(data.feedback ?? []);
       setAuthed(true);
+    } catch (err) {
+      setError(`Netzwerkfehler: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setLoading(false);
     }
