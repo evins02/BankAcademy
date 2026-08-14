@@ -8,8 +8,8 @@ export async function GET(req: NextRequest) {
   }
 
   const rows = await sql`
-    SELECT id, vorname, nachname, email, opt_in, created_at
-    FROM registrations
+    SELECT id, vorname, email, opt_in, created_at
+    FROM pilot_users
     ORDER BY created_at DESC
   `;
 

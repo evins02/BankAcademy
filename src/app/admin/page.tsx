@@ -6,7 +6,6 @@ import { Download, Users, CheckCircle2, XCircle, Loader2, Lock } from "lucide-re
 interface Registration {
   id: number;
   vorname: string;
-  nachname: string;
   email: string;
   opt_in: boolean;
   created_at: string;
@@ -23,10 +22,10 @@ function formatDate(iso: string) {
 }
 
 function exportCsv(rows: Registration[]) {
-  const header = "Datum,Vorname,Nachname,E-Mail,Kontakt-Opt-in";
+  const header = "Datum,Vorname,E-Mail,Kontakt-Opt-in";
   const lines = rows.map(
     (r) =>
-      `"${formatDate(r.created_at)}","${r.vorname}","${r.nachname}","${r.email}","${r.opt_in ? "Ja" : "Nein"}"`
+      `"${formatDate(r.created_at)}","${r.vorname}","${r.email}","${r.opt_in ? "Ja" : "Nein"}"`
   );
   const csv = [header, ...lines].join("\n");
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -163,7 +162,7 @@ export default function AdminPage() {
                         {formatDate(r.created_at)}
                       </td>
                       <td className="px-4 py-3 font-medium text-gray-900">
-                        {r.vorname} {r.nachname}
+                        {r.vorname}
                       </td>
                       <td className="px-4 py-3 text-gray-600">{r.email}</td>
                       <td className="px-4 py-3">
