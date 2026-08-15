@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
   try {
     await ensureTables();
 
-    const [statsRows, users, feedback] = await Promise.all([
+    const [statsRows, users, feedback, progressRows] = await Promise.all([
       sql`
         SELECT
           (SELECT COUNT(*)::int FROM pilot_users)                                              AS total_users,
@@ -78,9 +78,19 @@ export async function GET(req: NextRequest) {
         ORDER BY u.created_at DESC
       `,
       sql`SELECT * FROM pilot_feedback ORDER BY created_at DESC`,
+      sql`SELECT email, progress_data FROM user_progress`,
     ]);
 
-    return NextResponse.json({ stats: statsRows[0], users, feedback });
+    // Build analytics map: email -> module-analytics object
+    const analyticsMap: Record<string, Record<string, unknown>> = {};
+    for (const row of progressRows) {
+      const data = row.progress_data as Record<string, unknown> | null;
+      if (data?.["module-analytics"]) {
+        analyticsMap[row.email as string] = data["module-analytics"] as Record<string, unknown>;
+      }
+    }
+
+    return NextResponse.json({ stats: statsRows[0], users, feedback, analyticsMap });
   } catch (err) {
     console.error("[admin] DB error:", err);
     return NextResponse.json({ error: "DB-Fehler – Tabellen existieren möglicherweise noch nicht" }, { status: 500 });
