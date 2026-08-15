@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import { X, Search, ChevronDown, BookOpen } from "lucide-react";
+import { X, Search, ChevronDown, BookOpen, ExternalLink } from "lucide-react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useGlossar } from "@/context/GlossarContext";
 import {
@@ -208,12 +209,9 @@ export function GlossarDrawer() {
   }, []);
 
   const scrollToTerm = useCallback((id: string) => {
-    // Expand the term first
     setExpanded((prev) => new Set([...prev, id]));
-    // Switch tab if needed
     const term = GLOSSAR_TERMS.find((t) => t.id === id);
     if (term) setActiveTab(term.category);
-    // Clear search so the term is visible
     setQuery("");
 
     setTimeout(() => {
@@ -247,7 +245,6 @@ export function GlossarDrawer() {
         )}
       >
         <span className="text-lg font-bold leading-none select-none">?</span>
-        {/* Tooltip */}
         <span className="pointer-events-none absolute bottom-14 right-0 rounded-lg bg-[#0D1B4B] px-2.5 py-1 text-xs font-medium text-white opacity-0 transition-opacity group-hover:opacity-100 dark:bg-[#00C9B1] dark:text-[#0D1B4B] whitespace-nowrap">
           Glossar
         </span>
@@ -284,12 +281,22 @@ export function GlossarDrawer() {
               <p className="text-[11px] text-text-secondary">Schnell nachschlagen</p>
             </div>
           </div>
-          <button
-            onClick={close}
-            className="rounded-lg p-1.5 text-text-secondary hover:bg-gray-100 hover:text-text-primary"
-          >
-            <X size={18} />
-          </button>
+          <div className="flex items-center gap-1">
+            <Link
+              href="/glossar"
+              onClick={close}
+              title="Vollansicht öffnen"
+              className="rounded-lg p-1.5 text-text-secondary hover:bg-gray-100 hover:text-text-primary"
+            >
+              <ExternalLink size={16} />
+            </Link>
+            <button
+              onClick={close}
+              className="rounded-lg p-1.5 text-text-secondary hover:bg-gray-100 hover:text-text-primary"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
 
         {/* Search */}
