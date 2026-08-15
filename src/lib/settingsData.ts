@@ -4,6 +4,7 @@ export interface AppSettings {
   autoAdvance: boolean;
   sounds: boolean;
   keyboardShortcuts: boolean;
+  timerEnabled: boolean;
   difficultyPreference: "einsteiger" | "alle" | "challenge";
   theme: "light" | "dark" | "system";
   avatarColor: string;
@@ -13,6 +14,7 @@ const DEFAULTS: AppSettings = {
   autoAdvance: true,
   sounds: false,
   keyboardShortcuts: true,
+  timerEnabled: true,
   difficultyPreference: "alle",
   theme: "light",
   avatarColor: "#0D1B4B",
