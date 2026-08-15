@@ -34,8 +34,8 @@ function BackBar({
   );
 }
 
-export function KontoeöffnungHub() {
-  useModuleTracking("privatkunde-kontoeöffnung", "Kontoeöffnung");
+export function KontoeröffnungHub() {
+  useModuleTracking("privatkunde-kontoeröffnung", "Kontoeröffnung");
 
   const [view, setView] = useState<HubView>("hub");
 
@@ -70,7 +70,7 @@ export function KontoeöffnungHub() {
     <div className="flex-1 overflow-y-auto p-6">
       <div className="mx-auto max-w-2xl space-y-6">
         <p className="text-sm text-text-secondary">
-          Wähle eine Übung aus dem Modul Kontoeöffnung:
+          Wähle eine Übung aus dem Modul Kontoeröffnung:
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -171,7 +171,7 @@ export function KontoeöffnungHub() {
           <p>
             Know Your Customer (KYC) bezeichnet den Identifikations- und Dokumentationsprozess beim
             Onboarding neuer Kunden. Das KYC-Formular ist das zentrale Dokument jeder
-            Kontoeöffnung und Pflicht gemäss{" "}
+            Kontoeröffnung und Pflicht gemäss{" "}
             <span className="font-semibold text-text-primary">VSB 20</span> und{" "}
             <span className="font-semibold text-text-primary">GwG Art. 3–5</span>.
           </p>
