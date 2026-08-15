@@ -2,7 +2,6 @@
 
 import { ls, lsSet } from "./storage";
 
-// Logical key names (session prefix added automatically by ls/lsSet)
 const SYNC_KEYS = [
   "progress",
   "total-xp",
@@ -13,6 +12,7 @@ const SYNC_KEYS = [
   "first-visit",
   "comeback-earned",
   "mock-seeded",
+  "module-analytics",
 ] as const;
 
 function getDemoEmail(): string | null {
