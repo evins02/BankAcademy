@@ -10,11 +10,13 @@ import { ZV_FO_LEVELS, type LevelNum } from "@/lib/zahlungsverkehr-privat";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { addAttemptRecord } from "@/lib/error-tracking";
-import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
+import { useModuleTracking, trackCaseResult } from "@/lib/moduleAnalytics";
 
-type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete";
+type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete";
 
 export function ZvPrivatRunner() {
+  useModuleTracking("privatkunde-zahlungsverkehr", "Zahlungsverkehr");
+
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
 
@@ -23,8 +25,6 @@ export function ZvPrivatRunner() {
   const [caseIndex, setCaseIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [sessionResults, setSessionResults] = useState<CaseResult[]>([]);
-  const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
-  const [isMcqSecondAttempt, setIsMcqSecondAttempt] = useState(false);
 
   const levelConfig = ZV_FO_LEVELS.find((l) => l.level === activeLevel)!;
   const activeCases = useMemo(
@@ -49,24 +49,14 @@ export function ZvPrivatRunner() {
   }, []);
 
   const handleSubmit = useCallback(() => {
-    if (view === "soft-feedback") {
-      setIsMcqSecondAttempt(true);
-      setView("feedback");
-      return;
-    }
-    const isCorrect = selectedOption === currentCase.correct;
-    if (!isCorrect) {
-      setSoftFeedbackMessage("Du hast eine falsche Antwort gewählt. Du hast noch einen Versuch.");
-      setView("soft-feedback");
-    } else {
-      setView("feedback");
-    }
-  }, [view, selectedOption, currentCase]);
+    setView("feedback");
+  }, []);
 
   const handleNext = useCallback(() => {
     if (!selectedOption) return;
 
     const isCorrect = selectedOption === currentCase.correct;
+    trackCaseResult("privatkunde-zahlungsverkehr", isCorrect);
     const newResults: CaseResult[] = [
       ...sessionResults,
       { caseId: currentCase.id, correct: isCorrect, selectedOption },
@@ -79,7 +69,7 @@ export function ZvPrivatRunner() {
       levelNum: activeLevel,
       caseId: currentCase.id,
       caseTitle: String((currentCase as unknown as Record<string, unknown>).title ?? (currentCase as unknown as Record<string, unknown>).label ?? currentCase.id),
-      attempt: isMcqSecondAttempt ? 2 : 1,
+      attempt: 1,
       timestamp: Date.now(),
       score: isCorrect ? 100 : 0,
       correct: isCorrect,
@@ -97,16 +87,14 @@ export function ZvPrivatRunner() {
     } else {
       setCaseIndex((i) => i + 1);
       setSelectedOption(null);
-      setIsMcqSecondAttempt(false);
       setView("playing");
     }
-  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, isMcqSecondAttempt]);
+  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel]);
 
   const handleRetry = useCallback(() => {
     setCaseIndex(0);
     setSelectedOption(null);
     setSessionResults([]);
-    setIsMcqSecondAttempt(false);
     setView("lernblock");
   }, []);
 
@@ -131,18 +119,15 @@ export function ZvPrivatRunner() {
 
       {view === "lernblock" && <LernblockCards onContinue={handleLernblockDone} />}
 
-      {(view === "playing" || view === "soft-feedback") && (
-        <>
-          {view === "soft-feedback" && <SoftFeedbackBanner message={softFeedbackMessage} />}
-          <CaseCard
-            zvCase={currentCase}
-            caseIndex={caseIndex}
-            total={total}
-            selectedOption={selectedOption}
-            onSelect={setSelectedOption}
-            onSubmit={handleSubmit}
-          />
-        </>
+      {view === "playing" && (
+        <CaseCard
+          zvCase={currentCase}
+          caseIndex={caseIndex}
+          total={total}
+          selectedOption={selectedOption}
+          onSelect={setSelectedOption}
+          onSubmit={handleSubmit}
+        />
       )}
 
       {view === "feedback" && selectedOption && (
@@ -153,7 +138,6 @@ export function ZvPrivatRunner() {
           total={total}
           isLastCase={isLastCase}
           onNext={handleNext}
-          onSkip={handleNext}
         />
       )}
 

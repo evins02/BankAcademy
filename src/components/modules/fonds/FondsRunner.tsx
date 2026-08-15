@@ -15,13 +15,16 @@ import { NoteModal } from "@/components/shared/NoteModal";
 import { getProgress, saveProgress } from "@/lib/progressData";
 import { addAttemptRecord } from "@/lib/error-tracking";
 import { useGlossar } from "@/context/GlossarContext";
-import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
+import { getSettings } from "@/lib/settingsData";
+import { useModuleTracking, trackCaseResult, trackModuleComplete } from "@/lib/moduleAnalytics";
 
-type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete" | "module-complete";
+type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
 
 const MAX_LEVEL = 3 as LevelNum;
 
 export function FondsRunner() {
+  useModuleTracking("privatkunde-fonds", "Fonds");
+
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
 
@@ -37,8 +40,6 @@ export function FondsRunner() {
   const [levelElapsed, setLevelElapsed] = useState<number | undefined>(undefined);
   const [noteOpen, setNoteOpen] = useState(false);
   const [moduleAccuracy, setModuleAccuracy] = useState<number | undefined>(undefined);
-  const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
-  const [isMcqSecondAttempt, setIsMcqSecondAttempt] = useState(false);
 
   const { open: openGlossar } = useGlossar();
 
@@ -63,24 +64,14 @@ export function FondsRunner() {
   }, []);
 
   const handleSubmit = useCallback(() => {
-    if (view === "soft-feedback") {
-      setIsMcqSecondAttempt(true);
-      setView("feedback");
-      return;
-    }
-    const isCorrect = selectedOption === currentCase.correct;
-    if (!isCorrect) {
-      setSoftFeedbackMessage("Du hast eine falsche Antwort gewählt. Du hast noch einen Versuch.");
-      setView("soft-feedback");
-    } else {
-      setView("feedback");
-    }
-  }, [view, selectedOption, currentCase]);
+    setView("feedback");
+  }, []);
 
   const handleNext = useCallback(() => {
     if (!selectedOption) return;
 
     const isCorrect = selectedOption === currentCase.correct;
+    trackCaseResult("privatkunde-fonds", isCorrect);
     const newResults: CaseResult[] = [
       ...sessionResults,
       { caseId: currentCase.id, correct: isCorrect, selectedOption },
@@ -92,7 +83,7 @@ export function FondsRunner() {
       levelNum: activeLevel,
       caseId: currentCase.id,
       caseTitle: currentCase.title ?? currentCase.id,
-      attempt: isMcqSecondAttempt ? 2 : 1,
+      attempt: 1,
       timestamp: Date.now(),
       score: isCorrect ? 100 : 0,
       correct: isCorrect,
@@ -143,10 +134,9 @@ export function FondsRunner() {
     } else {
       setCaseIndex((i) => i + 1);
       setSelectedOption(null);
-      setIsMcqSecondAttempt(false);
       setView("playing");
     }
-  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, wrongStreak, levelStartTime, isMcqSecondAttempt]);
+  }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, wrongStreak, levelStartTime]);
 
   const handleRetry = useCallback(() => {
     setCaseIndex(0);
@@ -154,7 +144,6 @@ export function FondsRunner() {
     setSessionResults([]);
     setWrongStreak(0);
     setShowSmartTip(false);
-    setIsMcqSecondAttempt(false);
     setView("lernblock");
   }, []);
 
@@ -174,9 +163,12 @@ export function FondsRunner() {
       const totalCorrect = Object.values(allScores).reduce((s, sc) => s + (sc ?? 0), 0);
       const totalCases = FONDS_LEVELS.reduce((s, l) => s + l.cases.length, 0);
       setModuleAccuracy(Math.round((totalCorrect / totalCases) * 100));
+      trackModuleComplete("privatkunde-fonds");
       setView("module-complete");
     }
   }, [activeLevel, levelScores]);
+
+  const timerEnabled = typeof window !== "undefined" ? getSettings().timerEnabled : true;
 
   return (
     <div className="flex-1 overflow-y-auto p-6">
@@ -202,19 +194,17 @@ export function FondsRunner() {
         />
       )}
 
-      {(view === "playing" || view === "soft-feedback") && currentCase && (
-        <>
-          {view === "soft-feedback" && <SoftFeedbackBanner message={softFeedbackMessage} />}
-          <CaseCard
-            fondsCase={currentCase}
-            caseIndex={caseIndex}
-            total={total}
-            selectedOption={selectedOption}
-            onSelect={setSelectedOption}
-            onSubmit={handleSubmit}
-            onOpenNote={() => setNoteOpen(true)}
-          />
-        </>
+      {view === "playing" && currentCase && (
+        <CaseCard
+          fondsCase={currentCase}
+          caseIndex={caseIndex}
+          total={total}
+          selectedOption={selectedOption}
+          onSelect={setSelectedOption}
+          onSubmit={handleSubmit}
+          onOpenNote={() => setNoteOpen(true)}
+          levelStartTime={timerEnabled ? levelStartTime : undefined}
+        />
       )}
 
       {view === "feedback" && currentCase && selectedOption && (
@@ -225,7 +215,6 @@ export function FondsRunner() {
           total={total}
           isLastCase={isLastCase}
           onNext={handleNext}
-          onSkip={handleNext}
         />
       )}
 
@@ -238,6 +227,7 @@ export function FondsRunner() {
             label: levelConfig.cases[i]?.title ?? `Fall ${i + 1}`,
           }))}
           isLastLevel={activeLevel === MAX_LEVEL}
+          timeSeconds={levelElapsed}
           onNext={handleLevelNext}
           onRetry={handleRetry}
           onBack={() => setView("selector")}

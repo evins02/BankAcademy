@@ -8,10 +8,13 @@ import { LevelComplete, type LevelResult } from "./LevelComplete";
 import { BKO_KYC_LEVELS, type LevelNum, type SubmissionResult } from "@/lib/backoffice-kyc";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
+import { useModuleTracking } from "@/lib/moduleAnalytics";
 
 type View = "selector" | "playing" | "feedback" | "level-complete";
 
 export function BkoKycRunner() {
+  useModuleTracking("backoffice-kyc", "KYC / Compliance");
+
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
 
@@ -109,7 +112,6 @@ export function BkoKycRunner() {
           total={total}
           isLastScenario={isLastScenario}
           onNext={handleNext}
-          onSkip={handleNext}
         />
       )}
 

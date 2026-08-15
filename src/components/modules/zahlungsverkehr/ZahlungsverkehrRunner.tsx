@@ -20,15 +20,18 @@ import { SmartTipBanner } from "@/components/shared/SmartTipBanner";
 import { NoteModal } from "@/components/shared/NoteModal";
 import { getProgress, saveProgress } from "@/lib/progressData";
 import { useGlossar } from "@/context/GlossarContext";
+import { getSettings } from "@/lib/settingsData";
 import { resolveSessionCases, resetAllSessions } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
-import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
+import { useModuleTracking, trackCaseResult, trackModuleComplete } from "@/lib/moduleAnalytics";
 
-type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete" | "module-complete";
+type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
 
 const MAX_LEVEL = 3 as LevelNum;
 
 export function ZahlungsverkehrRunner() {
+  useModuleTracking("banking-operations-zahlungsverkehr", "Zahlungsverkehr Back Office");
+
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
 
@@ -46,7 +49,6 @@ export function ZahlungsverkehrRunner() {
   const [levelElapsed, setLevelElapsed] = useState<number | undefined>(undefined);
   const [noteOpen, setNoteOpen] = useState(false);
   const [moduleAccuracy, setModuleAccuracy] = useState<number | undefined>(undefined);
-  const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
 
   const { open: openGlossar } = useGlossar();
 
@@ -84,22 +86,8 @@ export function ZahlungsverkehrRunner() {
   }, []);
 
   const handleSubmit = useCallback(() => {
-    if (isLt(currentCase) || isOf(currentCase)) {
-      setView("feedback");
-      return;
-    }
-    if (view === "soft-feedback") {
-      setView("feedback");
-      return;
-    }
-    const isCorrect = selectedOption === (currentCase as { correct: OptionKey }).correct;
-    if (!isCorrect) {
-      setSoftFeedbackMessage("Du hast eine falsche Antwort gewählt. Du hast noch einen Versuch.");
-      setView("soft-feedback");
-    } else {
-      setView("feedback");
-    }
-  }, [view, currentCase, selectedOption]);
+    setView("feedback");
+  }, []);
 
   const handleNext = useCallback(() => {
     const isLückentext = isLt(currentCase);
@@ -111,6 +99,7 @@ export function ZahlungsverkehrRunner() {
       : isLückentext
         ? checkLückentextAnswer(lückentextAnswer, (currentCase as LückentextCase).answer, (currentCase as LückentextCase).tolerance)
         : selectedOption === (currentCase as { correct: OptionKey }).correct;
+    trackCaseResult("banking-operations-zahlungsverkehr", isCorrect);
     const newResults: CaseResult[] = [
       ...sessionResults,
       { caseId: currentCase.id, correct: isCorrect, selectedOption: selectedOption ?? "" },
@@ -165,7 +154,6 @@ export function ZahlungsverkehrRunner() {
       setSelectedOption(null);
       setLückentextAnswer("");
       setOffeneFrageAnswer("");
-      setSoftFeedbackMessage("");
       setView("playing");
     }
   }, [selectedOption, currentCase, sessionResults, isLastCase, activeLevel, wrongStreak, levelStartTime, lückentextAnswer, offeneFrageAnswer]);
@@ -198,9 +186,12 @@ export function ZahlungsverkehrRunner() {
       const totalCorrect = Object.values(allScores).reduce((s, sc) => s + (sc ?? 0), 0);
       const totalCases = ZV_LEVELS.reduce((s, l) => s + l.cases.length, 0);
       setModuleAccuracy(Math.round((totalCorrect / totalCases) * 100));
+      trackModuleComplete("banking-operations-zahlungsverkehr");
       setView("module-complete");
     }
   }, [activeLevel, levelScores]);
+
+  const timerEnabled = typeof window !== "undefined" ? getSettings().timerEnabled : true;
 
   return (
     <div className="flex-1 overflow-y-auto p-6">
@@ -226,7 +217,7 @@ export function ZahlungsverkehrRunner() {
         />
       )}
 
-      {(view === "playing" || view === "soft-feedback") && currentCase && (
+      {view === "playing" && currentCase && (
         isLt(currentCase) ? (
           <LückentextCard
             c={currentCase}
@@ -250,18 +241,16 @@ export function ZahlungsverkehrRunner() {
             onSubmit={handleSubmit}
           />
         ) : (
-          <>
-            {view === "soft-feedback" && <SoftFeedbackBanner message={softFeedbackMessage} />}
-            <CaseCard
-              zvCase={currentCase}
-              caseIndex={caseIndex}
-              total={total}
-              selectedOption={selectedOption}
-              onSelect={setSelectedOption}
-              onSubmit={handleSubmit}
-              onOpenNote={() => setNoteOpen(true)}
-            />
-          </>
+          <CaseCard
+            zvCase={currentCase}
+            caseIndex={caseIndex}
+            total={total}
+            selectedOption={selectedOption}
+            onSelect={setSelectedOption}
+            onSubmit={handleSubmit}
+            onOpenNote={() => setNoteOpen(true)}
+            levelStartTime={timerEnabled ? levelStartTime : undefined}
+          />
         )
       )}
 
@@ -278,7 +267,6 @@ export function ZahlungsverkehrRunner() {
             isLastCase={isLastCase}
             nextLabel={isLastCase ? "Level abschliessen" : undefined}
             onNext={handleNext}
-            onSkip={handleNext}
           />
         ) : isOf(currentCase) ? (
           <OffeneFrageResultCard
@@ -291,7 +279,6 @@ export function ZahlungsverkehrRunner() {
             isLastCase={isLastCase}
             nextLabel={isLastCase ? "Level abschliessen" : undefined}
             onNext={handleNext}
-            onSkip={handleNext}
           />
         ) : (
           <FeedbackPanel
@@ -301,7 +288,6 @@ export function ZahlungsverkehrRunner() {
             total={total}
             isLastCase={isLastCase}
             onNext={handleNext}
-            onSkip={handleNext}
           />
         )
       )}
@@ -315,6 +301,7 @@ export function ZahlungsverkehrRunner() {
             label: `Fall ${i + 1}`,
           }))}
           isLastLevel={activeLevel === MAX_LEVEL}
+          timeSeconds={levelElapsed}
           onNext={handleLevelNext}
           onRetry={handleRetry}
           onBack={() => setView("selector")}

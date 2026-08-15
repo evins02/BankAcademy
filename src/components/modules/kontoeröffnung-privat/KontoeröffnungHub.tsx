@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useModuleTracking } from "@/lib/moduleAnalytics";
 import { ArrowLeft, FileText, ClipboardCheck, MessageSquare, Clock, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +35,8 @@ function BackBar({
 }
 
 export function KontoeröffnungHub() {
+  useModuleTracking("privatkunde-kontoeröffnung", "Kontoeröffnung");
+
   const [view, setView] = useState<HubView>("hub");
 
   if (view === "levels") {
@@ -141,7 +144,7 @@ export function KontoeröffnungHub() {
             <div className="flex-1">
               <h3 className="text-base font-bold text-text-primary mb-2">KYC Gespräch &amp; Formular</h3>
               <p className="text-sm text-text-secondary leading-relaxed">
-                Stelle gezielte Fragen um alle KYC-Informationen zu sammeln – dann fülle das Formular aus dem Gedächtnis aus. Du hast nur 9 Fragen.
+                Führe das KYC-Gespräch mit Thomas Kowalski und fülle das Formular aus dem Gedächtnis aus.
               </p>
               <div className="mt-3 flex flex-wrap gap-2 text-xs">
                 <span className="flex items-center gap-1 text-text-secondary">
