@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useModuleTracking } from "@/lib/moduleAnalytics";
 import { ArrowLeft, FileText, ClipboardCheck, MessageSquare, Clock, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +34,9 @@ function BackBar({
   );
 }
 
-export function KontoeröffnungHub() {
+export function KontoöffnungHub() {
+  useModuleTracking("privatkunde-kontoöffnung", "Kontoöffnung");
+
   const [view, setView] = useState<HubView>("hub");
 
   if (view === "levels") {
@@ -67,7 +70,7 @@ export function KontoeröffnungHub() {
     <div className="flex-1 overflow-y-auto p-6">
       <div className="mx-auto max-w-2xl space-y-6">
         <p className="text-sm text-text-secondary">
-          Wähle eine Übung aus dem Modul Kontoeröffnung:
+          Wähle eine Übung aus dem Modul Kontoöffnung:
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -141,7 +144,7 @@ export function KontoeröffnungHub() {
             <div className="flex-1">
               <h3 className="text-base font-bold text-text-primary mb-2">KYC Gespräch &amp; Formular</h3>
               <p className="text-sm text-text-secondary leading-relaxed">
-                Stelle gezielte Fragen um alle KYC-Informationen zu sammeln – dann fülle das Formular aus dem Gedächtnis aus. Du hast nur 9 Fragen.
+                Führe das KYC-Gespräch mit Thomas Kowalski und fülle das Formular aus dem Gedächtnis aus.
               </p>
               <div className="mt-3 flex flex-wrap gap-2 text-xs">
                 <span className="flex items-center gap-1 text-text-secondary">
@@ -168,7 +171,7 @@ export function KontoeröffnungHub() {
           <p>
             Know Your Customer (KYC) bezeichnet den Identifikations- und Dokumentationsprozess beim
             Onboarding neuer Kunden. Das KYC-Formular ist das zentrale Dokument jeder
-            Kontoeröffnung und Pflicht gemäss{" "}
+            Kontoöffnung und Pflicht gemäss{" "}
             <span className="font-semibold text-text-primary">VSB 20</span> und{" "}
             <span className="font-semibold text-text-primary">GwG Art. 3–5</span>.
           </p>
