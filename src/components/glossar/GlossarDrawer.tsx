@@ -16,6 +16,7 @@ import {
   BEREICH_LABELS,
   type HKBereich,
 } from "@/lib/handlungskompetenzenData";
+import { getModulesForHk } from "@/lib/hkModuleMapping";
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -225,37 +226,55 @@ function HkView({ query }: { query: string }) {
             >
               <div className="overflow-hidden">
                 <div className="border-t border-border divide-y divide-border">
-                  {hks.map((hk) => (
-                    <div key={hk.code} className="px-4 py-3">
-                      <div className="flex items-start gap-2 mb-1.5">
-                        <span className="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold bg-[#0D1B4B]/10 text-[#0D1B4B]">
-                          {hk.code.toUpperCase()}
-                        </span>
-                        <span className="text-xs font-semibold text-text-primary leading-snug">
-                          <HighlightText text={hk.titel} query={query} />
-                        </span>
-                        {hk.bankspezifisch && (
-                          <span className="shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-semibold bg-amber-100 text-amber-700">
-                            Vertiefung
+                  {hks.map((hk) => {
+                    const modules = getModulesForHk(hk.code);
+                    return (
+                      <div key={hk.code} className="px-4 py-3">
+                        <div className="flex items-start gap-2 mb-1.5">
+                          <span className="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold bg-[#0D1B4B]/10 text-[#0D1B4B]">
+                            {hk.code.toUpperCase()}
                           </span>
+                          <span className="text-xs font-semibold text-text-primary leading-snug">
+                            <HighlightText text={hk.titel} query={query} />
+                          </span>
+                          {hk.bankspezifisch && (
+                            <span className="shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-semibold bg-amber-100 text-amber-700">
+                              Vertiefung
+                            </span>
+                          )}
+                        </div>
+                        {hk.leitfragen.length > 0 ? (
+                          <ul className="space-y-1 pl-1">
+                            {hk.leitfragen.map((lf) => (
+                              <li key={lf.code} className="flex items-start gap-1.5">
+                                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#0D1B4B]/40" />
+                                <span className="text-[11px] text-text-secondary leading-relaxed">
+                                  <HighlightText text={lf.frage} query={query} />
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p className="text-[11px] text-text-secondary/60 italic pl-1">Details folgen</p>
+                        )}
+                        {modules.length > 0 && (
+                          <div className="mt-2 flex flex-wrap items-center gap-1">
+                            <span className="text-[10px] font-semibold uppercase tracking-wider text-text-secondary mr-0.5">
+                              Module:
+                            </span>
+                            {modules.map((m) => (
+                              <span
+                                key={m.moduleId}
+                                className="rounded-full bg-[#0D1B4B]/8 px-2 py-0.5 text-[10px] font-medium text-[#0D1B4B]"
+                              >
+                                {m.name}
+                              </span>
+                            ))}
+                          </div>
                         )}
                       </div>
-                      {hk.leitfragen.length > 0 ? (
-                        <ul className="space-y-1 pl-1">
-                          {hk.leitfragen.map((lf) => (
-                            <li key={lf.code} className="flex items-start gap-1.5">
-                              <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#0D1B4B]/40" />
-                              <span className="text-[11px] text-text-secondary leading-relaxed">
-                                <HighlightText text={lf.frage} query={query} />
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p className="text-[11px] text-text-secondary/60 italic pl-1">Details folgen</p>
-                      )}
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
