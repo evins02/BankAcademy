@@ -11,8 +11,13 @@ import {
   type GlossarCategory,
   type GlossarTerm,
 } from "@/lib/glossarData";
+import {
+  HANDLUNGSKOMPETENZEN,
+  BEREICH_LABELS,
+  type HKBereich,
+} from "@/lib/handlungskompetenzenData";
 
-// ── helpers ──────────────────────────────────────────────────────────────────
+// ── helpers ───────────────────────────────────────────────────────────────────
 
 function escapeRegex(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -36,7 +41,7 @@ function HighlightText({ text, query }: { text: string; query: string }) {
   );
 }
 
-// ── category tabs ─────────────────────────────────────────────────────────────
+// ── constants ─────────────────────────────────────────────────────────────────
 
 const TABS: Array<GlossarCategory | "Alle"> = [
   "Alle",
@@ -46,7 +51,9 @@ const TABS: Array<GlossarCategory | "Alle"> = [
   "Vorsorge",
 ];
 
-// ── term card ─────────────────────────────────────────────────────────────────
+const BEREICHE: HKBereich[] = ["a", "b", "c", "d", "e"];
+
+// ── term card (Thema-Ansicht) ─────────────────────────────────────────────────
 
 function TermCard({
   term,
@@ -78,7 +85,6 @@ function TermCard({
           : "border-border bg-surface"
       )}
     >
-      {/* Header row — always visible */}
       <button
         onClick={onToggle}
         className="flex w-full items-start justify-between gap-3 px-4 py-3 text-left hover:bg-gray-50"
@@ -111,7 +117,6 @@ function TermCard({
         />
       </button>
 
-      {/* Expandable detail */}
       <div
         className={cn(
           "grid transition-all duration-200",
@@ -123,7 +128,6 @@ function TermCard({
             <p className="text-xs text-text-primary leading-relaxed">
               <HighlightText text={term.detail} query={query} />
             </p>
-
             {term.related.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-1.5">
                 <span className="text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
@@ -160,11 +164,114 @@ function TermCard({
   );
 }
 
+// ── HK-Ansicht ────────────────────────────────────────────────────────────────
+
+function HkView({ query }: { query: string }) {
+  const [openBereiche, setOpenBereiche] = useState<Set<HKBereich>>(new Set(["a"]));
+
+  const toggleBereich = (b: HKBereich) =>
+    setOpenBereiche((prev) => {
+      const next = new Set(prev);
+      if (next.has(b)) next.delete(b);
+      else next.add(b);
+      return next;
+    });
+
+  const q = query.toLowerCase();
+
+  return (
+    <div className="space-y-2">
+      {BEREICHE.map((bereich) => {
+        const hks = HANDLUNGSKOMPETENZEN.filter((hk) => {
+          if (hk.bereich !== bereich) return false;
+          if (!q) return true;
+          return (
+            hk.code.toLowerCase().includes(q) ||
+            hk.titel.toLowerCase().includes(q) ||
+            hk.leitfragen.some((lf) => lf.frage.toLowerCase().includes(q))
+          );
+        });
+        if (hks.length === 0) return null;
+
+        const isOpen = openBereiche.has(bereich);
+        return (
+          <div key={bereich} className="rounded-xl border border-border bg-surface overflow-hidden">
+            <button
+              onClick={() => toggleBereich(bereich)}
+              className="flex w-full items-center justify-between gap-2 px-4 py-3 text-left hover:bg-gray-50"
+            >
+              <div className="flex items-center gap-2">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#0D1B4B] text-[11px] font-bold text-white">
+                  {bereich.toUpperCase()}
+                </span>
+                <span className="text-xs font-semibold text-[#0D1B4B] leading-snug">
+                  {BEREICH_LABELS[bereich]}
+                </span>
+              </div>
+              <ChevronDown
+                size={14}
+                className={cn(
+                  "shrink-0 text-text-secondary transition-transform duration-200",
+                  isOpen && "rotate-180"
+                )}
+              />
+            </button>
+
+            <div
+              className={cn(
+                "grid transition-all duration-200",
+                isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+              )}
+            >
+              <div className="overflow-hidden">
+                <div className="border-t border-border divide-y divide-border">
+                  {hks.map((hk) => (
+                    <div key={hk.code} className="px-4 py-3">
+                      <div className="flex items-start gap-2 mb-1.5">
+                        <span className="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold bg-[#0D1B4B]/10 text-[#0D1B4B]">
+                          {hk.code.toUpperCase()}
+                        </span>
+                        <span className="text-xs font-semibold text-text-primary leading-snug">
+                          <HighlightText text={hk.titel} query={query} />
+                        </span>
+                        {hk.bankspezifisch && (
+                          <span className="shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-semibold bg-amber-100 text-amber-700">
+                            Vertiefung
+                          </span>
+                        )}
+                      </div>
+                      {hk.leitfragen.length > 0 ? (
+                        <ul className="space-y-1 pl-1">
+                          {hk.leitfragen.map((lf) => (
+                            <li key={lf.code} className="flex items-start gap-1.5">
+                              <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#0D1B4B]/40" />
+                              <span className="text-[11px] text-text-secondary leading-relaxed">
+                                <HighlightText text={lf.frage} query={query} />
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-[11px] text-text-secondary/60 italic pl-1">Details folgen</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 // ── main drawer ───────────────────────────────────────────────────────────────
 
 export function GlossarDrawer() {
   const { isOpen, open, close } = useGlossar();
 
+  const [view, setView] = useState<"thema" | "hk">("thema");
   const [query, setQuery] = useState("");
   const [activeTab, setActiveTab] = useState<GlossarCategory | "Alle">("Alle");
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
@@ -174,12 +281,10 @@ export function GlossarDrawer() {
   const listRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
-  // Focus search when drawer opens
   useEffect(() => {
     if (isOpen) setTimeout(() => searchRef.current?.focus(), 320);
   }, [isOpen]);
 
-  // Close on Escape
   useEffect(() => {
     function handler(e: KeyboardEvent) {
       if (e.key === "Escape" && isOpen) close();
@@ -213,7 +318,6 @@ export function GlossarDrawer() {
     const term = GLOSSAR_TERMS.find((t) => t.id === id);
     if (term) setActiveTab(term.category);
     setQuery("");
-
     setTimeout(() => {
       const el = termRefs.current[id];
       if (el && listRef.current) {
@@ -233,7 +337,7 @@ export function GlossarDrawer() {
 
   return (
     <>
-      {/* ── Floating button ─────────────────────────────────────────────── */}
+      {/* ── Floating button ───────────────────────────────────────────────── */}
       <button
         onClick={open}
         title="Glossar"
@@ -250,7 +354,7 @@ export function GlossarDrawer() {
         </span>
       </button>
 
-      {/* ── Backdrop ────────────────────────────────────────────────────── */}
+      {/* ── Backdrop ──────────────────────────────────────────────────────── */}
       <div
         aria-hidden
         onClick={close}
@@ -260,18 +364,18 @@ export function GlossarDrawer() {
         )}
       />
 
-      {/* ── Drawer panel ────────────────────────────────────────────────── */}
+      {/* ── Drawer panel ──────────────────────────────────────────────────── */}
       <div
         role="dialog"
         aria-modal
         aria-label="Banking Glossar"
         className={cn(
-          "fixed right-0 top-0 z-50 flex h-full w-full flex-col bg-surface shadow-2xl transition-transform duration-300 ease-in-out md:w-[380px]",
+          "fixed right-0 top-0 z-50 flex h-full w-full flex-col bg-surface shadow-2xl transition-transform duration-300 ease-in-out md:w-[400px]",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
         {/* Header */}
-        <div className="flex shrink-0 items-start justify-between border-b border-border px-5 py-4">
+        <div className="flex shrink-0 items-center justify-between border-b border-border px-5 py-4">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0D1B4B]">
               <BookOpen size={16} className="text-white" />
@@ -299,8 +403,29 @@ export function GlossarDrawer() {
           </div>
         </div>
 
-        {/* Search */}
-        <div className="shrink-0 px-4 pt-3 pb-2">
+        {/* View toggle + Search */}
+        <div className="shrink-0 px-4 pt-3 pb-2 space-y-2">
+          <div className="flex rounded-lg bg-gray-100 p-0.5">
+            <button
+              onClick={() => setView("thema")}
+              className={cn(
+                "flex-1 rounded-md py-1.5 text-xs font-medium transition-colors",
+                view === "thema" ? "bg-white text-[#0D1B4B] shadow-sm" : "text-text-secondary hover:text-text-primary"
+              )}
+            >
+              Nach Thema
+            </button>
+            <button
+              onClick={() => setView("hk")}
+              className={cn(
+                "flex-1 rounded-md py-1.5 text-xs font-medium transition-colors",
+                view === "hk" ? "bg-white text-[#0D1B4B] shadow-sm" : "text-text-secondary hover:text-text-primary"
+              )}
+            >
+              Nach HK
+            </button>
+          </div>
+
           <div className="relative">
             <Search
               size={14}
@@ -310,7 +435,7 @@ export function GlossarDrawer() {
               ref={searchRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Begriff suchen…"
+              placeholder={view === "hk" ? "HK suchen…" : "Begriff suchen…"}
               className="w-full rounded-xl border border-border bg-background py-2 pl-8 pr-8 text-sm text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-[#0D1B4B]/20"
             />
             {query && (
@@ -324,57 +449,59 @@ export function GlossarDrawer() {
           </div>
         </div>
 
-        {/* Filter tabs */}
-        <div className="shrink-0 flex gap-1.5 overflow-x-auto px-4 pb-3 scrollbar-hide">
-          {TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={cn(
-                "shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors",
-                activeTab === tab
-                  ? "bg-[#0D1B4B] text-white"
-                  : "bg-gray-100 text-text-secondary hover:bg-gray-200"
-              )}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-
-        {/* Term count */}
-        <div className="shrink-0 px-4 pb-2">
-          <p className="text-[11px] text-text-secondary">
-            {filteredTerms.length} Begriff{filteredTerms.length !== 1 ? "e" : ""}
-            {query && ` für „${query}"`}
-          </p>
-        </div>
+        {/* Category tabs (nur in Thema-Ansicht) */}
+        {view === "thema" && (
+          <>
+            <div className="shrink-0 flex gap-1.5 overflow-x-auto px-4 pb-2 scrollbar-hide">
+              {TABS.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={cn(
+                    "shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors",
+                    activeTab === tab
+                      ? "bg-[#0D1B4B] text-white"
+                      : "bg-gray-100 text-text-secondary hover:bg-gray-200"
+                  )}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+            <div className="shrink-0 px-4 pb-2">
+              <p className="text-[11px] text-text-secondary">
+                {filteredTerms.length} Begriff{filteredTerms.length !== 1 ? "e" : ""}
+                {query && ` für „${query}"`}
+              </p>
+            </div>
+          </>
+        )}
 
         {/* Scrollable list */}
         <div ref={listRef} className="flex-1 overflow-y-auto px-4 pb-6 space-y-2">
-          {filteredTerms.length === 0 ? (
-            <div className="py-12 text-center">
-              <p className="text-3xl">🔍</p>
-              <p className="mt-3 text-sm font-medium text-text-primary">
-                Kein Begriff gefunden
-              </p>
-              <p className="mt-1 text-xs text-text-secondary">
-                Versuche einen anderen Suchbegriff.
-              </p>
-            </div>
+          {view === "thema" ? (
+            filteredTerms.length === 0 ? (
+              <div className="py-12 text-center">
+                <p className="text-3xl">🔍</p>
+                <p className="mt-3 text-sm font-medium text-text-primary">Kein Begriff gefunden</p>
+                <p className="mt-1 text-xs text-text-secondary">Versuche einen anderen Suchbegriff.</p>
+              </div>
+            ) : (
+              filteredTerms.map((term) => (
+                <TermCard
+                  key={term.id}
+                  term={term}
+                  query={query}
+                  isExpanded={expanded.has(term.id)}
+                  isHighlighted={highlighted === term.id}
+                  onToggle={() => toggleExpand(term.id)}
+                  onRelatedClick={scrollToTerm}
+                  termRef={setTermRef(term.id)}
+                />
+              ))
+            )
           ) : (
-            filteredTerms.map((term) => (
-              <TermCard
-                key={term.id}
-                term={term}
-                query={query}
-                isExpanded={expanded.has(term.id)}
-                isHighlighted={highlighted === term.id}
-                onToggle={() => toggleExpand(term.id)}
-                onRelatedClick={scrollToTerm}
-                termRef={setTermRef(term.id)}
-              />
-            ))
+            <HkView query={query} />
           )}
         </div>
       </div>
