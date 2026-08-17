@@ -9,17 +9,15 @@ const CY = "#00D4B8";
 type Tab = "lernender" | "bank";
 
 interface LF {
-  vorname: string; nachname: string; email: string;
-  nachricht: string; einverstanden: boolean;
+  vorname: string; nachname: string; email: string; nachricht: string;
 }
 interface BF {
   vorname: string; nachname: string; institution: string;
-  funktion: string; email: string; anzahlLernende: string;
-  nachricht: string; einverstanden: boolean;
+  funktion: string; email: string; anzahlLernende: string; nachricht: string;
 }
 
-const EMPTY_LF: LF = { vorname: "", nachname: "", email: "", nachricht: "", einverstanden: false };
-const EMPTY_BF: BF = { vorname: "", nachname: "", institution: "", funktion: "", email: "", anzahlLernende: "", nachricht: "", einverstanden: false };
+const EMPTY_LF: LF = { vorname: "", nachname: "", email: "", nachricht: "" };
+const EMPTY_BF: BF = { vorname: "", nachname: "", institution: "", funktion: "", email: "", anzahlLernende: "", nachricht: "" };
 
 const inp = (err: boolean): React.CSSProperties => ({
   width: "100%", padding: "12px 16px", borderRadius: 10,
@@ -66,7 +64,6 @@ export function ContactForms({ initialTab }: { initialTab?: Tab } = {}) {
     if (!f.email.trim()) e.email = "Pflichtfeld";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) e.email = "Ungültige E-Mail";
     if (!f.nachricht.trim()) e.nachricht = "Pflichtfeld";
-    if (!f.einverstanden) e.einverstanden = "Pflichtfeld";
     if (tab === "bank") {
       const b = bf;
       if (!b.institution.trim()) e.institution = "Pflichtfeld";
@@ -215,26 +212,6 @@ export function ContactForms({ initialTab }: { initialTab?: Tab } = {}) {
             placeholder="Was möchtest du uns mitteilen?" rows={4}
           />
         </Field>
-
-        {/* Einverständnis */}
-        <div>
-          <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
-            <input
-              type="checkbox"
-              checked={g.einverstanden as boolean}
-              onChange={e => setG("einverstanden", e.target.checked)}
-              style={{ marginTop: 2, width: 16, height: 16, flexShrink: 0, accentColor: CY, cursor: "pointer" }}
-            />
-            <span style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.55 }}>
-              Ich bin damit einverstanden dass BankAcademy mich kontaktieren darf *
-            </span>
-          </label>
-          {errors.einverstanden && (
-            <p style={{ margin: "4px 0 0 26px", fontSize: 12, color: "#ef4444" }}>
-              Bitte bestätige dein Einverständnis.
-            </p>
-          )}
-        </div>
 
         {serverError && <p style={{ margin: 0, fontSize: 13, color: "#ef4444" }}>{serverError}</p>}
 

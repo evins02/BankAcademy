@@ -13,6 +13,7 @@ export function middleware(req: NextRequest) {
     "/api/demo-register",
     "/api/demo-access",
     "/api/pilot-feedback",
+    "/api/contact",
   ]);
   // Not in PUBLIC_API — enforces X-Demo-Session header auth inside the route handler
   const SESSION_AUTH_API = new Set(["/api/user-progress"]);
