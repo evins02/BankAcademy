@@ -11,12 +11,28 @@ async function ensureTable() {
   `;
 }
 
+function getSessionEmail(req: NextRequest): string | null {
+  const header = req.headers.get("X-Demo-Session");
+  if (!header) return null;
+  try {
+    return (JSON.parse(header) as { email?: string }).email?.trim().toLowerCase() ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function GET(req: NextRequest) {
   try {
     const email = req.nextUrl.searchParams.get("email")?.trim().toLowerCase();
     if (!email) {
       return NextResponse.json({ error: "email required" }, { status: 400 });
     }
+
+    const sessionEmail = getSessionEmail(req);
+    if (!sessionEmail || sessionEmail !== email) {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
+
     await ensureTable();
     const rows = await sql`
       SELECT progress_data FROM user_progress WHERE email = ${email}
@@ -35,6 +51,12 @@ export async function POST(req: NextRequest) {
     if (!cleanEmail) {
       return NextResponse.json({ error: "email required" }, { status: 400 });
     }
+
+    const sessionEmail = getSessionEmail(req);
+    if (!sessionEmail || sessionEmail !== cleanEmail) {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
+
     await ensureTable();
     await sql`
       INSERT INTO user_progress (email, progress_data, updated_at)

@@ -52,8 +52,8 @@ export async function POST(req: NextRequest) {
         ${body.apprenticeshipYear ?? null},
         ${body.bankName ?? null},
         ${body.contactConsent ?? false},
-        ${body.email ?? null},
-        ${body.vorname ?? null}
+        ${body.contactConsent ? (body.email ?? null) : null},
+        ${body.contactConsent ? (body.vorname ?? null) : null}
       )
     `;
 

@@ -15,12 +15,14 @@ const SYNC_KEYS = [
   "module-analytics",
 ] as const;
 
-function getDemoEmail(): string | null {
+function getDemoSession(): { email: string; raw: string } | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem("ba-demo-session");
     if (!raw) return null;
-    return (JSON.parse(raw) as { email?: string }).email ?? null;
+    const email = (JSON.parse(raw) as { email?: string }).email ?? null;
+    if (!email) return null;
+    return { email, raw };
   } catch {
     return null;
   }
@@ -31,9 +33,14 @@ function getDemoEmail(): string | null {
 export async function loadProgressFromDB(email: string): Promise<boolean> {
   if (typeof window === "undefined") return false;
   try {
+    const session = getDemoSession();
+    if (!session) return false;
     const res = await fetch(
       `/api/user-progress?email=${encodeURIComponent(email)}`,
-      { cache: "no-store" }
+      {
+        cache: "no-store",
+        headers: { "X-Demo-Session": session.raw },
+      }
     );
     if (!res.ok) return false;
     const { data } = (await res.json()) as { data: Record<string, unknown> | null };
@@ -59,8 +66,8 @@ export function scheduleSync(): void {
   if (syncTimer) clearTimeout(syncTimer);
   syncTimer = setTimeout(() => {
     syncTimer = null;
-    const email = getDemoEmail();
-    if (!email) return;
+    const session = getDemoSession();
+    if (!session) return;
 
     const data: Record<string, unknown> = {};
     for (const key of SYNC_KEYS) {
@@ -71,8 +78,11 @@ export function scheduleSync(): void {
 
     fetch("/api/user-progress", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, data }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Demo-Session": session.raw,
+      },
+      body: JSON.stringify({ email: session.email, data }),
     }).catch(() => {});
   }, 3000);
 }

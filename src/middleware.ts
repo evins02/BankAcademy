@@ -14,8 +14,9 @@ export function middleware(req: NextRequest) {
     "/api/simulation/chat",
     "/api/demo-register",
     "/api/pilot-feedback",
-    "/api/user-progress",
   ]);
+  // Not in PUBLIC_API — enforces X-Demo-Session header auth inside the route handler
+  const SESSION_AUTH_API = new Set(["/api/user-progress"]);
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/admin") ||
@@ -26,6 +27,7 @@ export function middleware(req: NextRequest) {
     pathname === "/sitemap.xml" ||
     pathname === "/robots.txt" ||
     PUBLIC_API.has(pathname) ||
+    SESSION_AUTH_API.has(pathname) ||
     PUBLIC.has(pathname)
   ) {
     return NextResponse.next();
