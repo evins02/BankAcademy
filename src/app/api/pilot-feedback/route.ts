@@ -57,6 +57,12 @@ export async function POST(req: NextRequest) {
       )
     `;
 
+    // If the user explicitly revoked contact consent, honour it in pilot_users as well
+    if (!body.contactConsent && body.email) {
+      const cleanEmail = String(body.email).trim().toLowerCase();
+      sql`UPDATE pilot_users SET opt_in = false WHERE email = ${cleanEmail}`.catch(() => {});
+    }
+
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[pilot-feedback] DB error:", err);
