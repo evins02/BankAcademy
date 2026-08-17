@@ -37,10 +37,10 @@ export default function ImpressumPage() {
             <p>
               E-Mail:{" "}
               <a
-                href="mailto:evinsariaratnam@gmail.com"
+                href="mailto:evins@bankacademy.ch"
                 className="text-blue-600 hover:underline"
               >
-                evinsariaratnam@gmail.com
+                evins@bankacademy.ch
               </a>
             </p>
           </Section>
@@ -95,7 +95,7 @@ export default function ImpressumPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-gray-400">
-          © 2025 BankAcademy ·{" "}
+          © 2026 BankAcademy ·{" "}
           <Link href="/" className="hover:text-gray-600">
             Startseite
           </Link>
