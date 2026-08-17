@@ -6,23 +6,31 @@ import { addXP } from "@/lib/xpData";
 import { ls, lsSet } from "@/lib/storage";
 
 const CHALLENGES = [
-  { label: "Zahlungsverkehr", module: "Back Office", href: "/privatkunde/basis/zahlungsverkehr", emoji: "💸" },
-  { label: "Fonds", module: "Privatkunde · Basis", href: "/privatkunde/basis/fonds", emoji: "📈" },
-  { label: "KYC / Compliance", module: "Back Office", href: "/backoffice/banking-operations/kyc", emoji: "🔍" },
-  { label: "Kontoeröffnung", module: "Privatkunde · Basis", href: "/privatkunde/basis/kontoeröffnung", emoji: "📋" },
-  { label: "Hypotheken", module: "Privatkunde · Individual", href: "/privatkunde/individual/hypotheken", emoji: "🏠" },
-  { label: "Firmenkunde Tragbarkeit", module: "Firmenkunde", href: "/firmenkunde/tragbarkeit", emoji: "🏢" },
-  { label: "Vorsorge 3a", module: "Privatkunde · Basis", href: "/privatkunde/basis/vorsorge", emoji: "🏦" },
+  { label: "Kontoeröffnung", module: "Privatkunde · Basis", href: "/privatkunde/basis/kontoeröffnung", emoji: "📋", minLevel: 1 },
+  { label: "Zahlungsverkehr", module: "Privatkunde · Basis", href: "/privatkunde/basis/zahlungsverkehr", emoji: "💸", minLevel: 1 },
+  { label: "Sparen & Konto", module: "Privatkunde · Basis", href: "/privatkunde/basis/sparen-konto", emoji: "💰", minLevel: 1 },
+  { label: "Fonds", module: "Privatkunde · Basis", href: "/privatkunde/basis/fonds", emoji: "📈", minLevel: 2 },
+  { label: "KYC / Compliance", module: "Back Office", href: "/backoffice/banking-operations/kyc", emoji: "🔍", minLevel: 2 },
+  { label: "Vorsorge 3a", module: "Privatkunde · Basis", href: "/privatkunde/basis/vorsorge", emoji: "🏦", minLevel: 2 },
+  { label: "Hypotheken", module: "Privatkunde · Individual", href: "/privatkunde/individual/hypotheken", emoji: "🏠", minLevel: 3 },
+  { label: "Firmenkunde Tragbarkeit", module: "Firmenkunde", href: "/firmenkunde/tragbarkeit", emoji: "🏢", minLevel: 3 },
 ];
+
+const LEHRJAHR_TO_LEVEL: Record<string, number> = {
+  lj1: 1, lj2: 2, lj3: 3, quereinsteiger: 2,
+};
 
 function todayKey() {
   return `daily-challenge-${new Date().toISOString().slice(0, 10)}`;
 }
 
-function getChallenge() {
+function getChallenge(lehrjahr?: string) {
+  const level = LEHRJAHR_TO_LEVEL[lehrjahr ?? ""] ?? 2;
+  const pool = CHALLENGES.filter((c) => c.minLevel <= level);
+  const active = pool.length > 0 ? pool : CHALLENGES;
   const start = new Date(new Date().getFullYear(), 0, 1);
   const day = Math.floor((Date.now() - start.getTime()) / 86400000);
-  return CHALLENGES[day % CHALLENGES.length];
+  return active[day % active.length];
 }
 
 function formatCountdown() {
@@ -36,10 +44,10 @@ function formatCountdown() {
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 
-export function DailyChallenge() {
+export function DailyChallenge({ lehrjahr }: { lehrjahr?: string }) {
   const [completed, setCompleted] = useState(false);
   const [countdown, setCountdown] = useState(formatCountdown());
-  const challenge = getChallenge();
+  const challenge = getChallenge(lehrjahr);
 
   useEffect(() => {
     setCompleted(ls(todayKey()) === "true");

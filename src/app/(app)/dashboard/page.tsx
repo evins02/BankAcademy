@@ -35,6 +35,104 @@ interface UserProfile {
   ziel?: string;
 }
 
+// ── Personalisierung ────────────────────────────────────────────
+
+const ABTEILUNG_LABELS: Record<string, string> = {
+  privatkunde: "Privatkunde",
+  firmenkunde: "Firmenkunde",
+  anlagekunde: "Anlagekunde",
+  backoffice: "Backoffice & ZV",
+  kreditgeschaeft: "Credit Operations",
+  "credit-office": "Credit Office",
+};
+
+const LEHRJAHR_LABELS: Record<string, string> = {
+  lj1: "1. Lehrjahr",
+  lj2: "2. Lehrjahr",
+  lj3: "3. Lehrjahr",
+  quereinsteiger: "Quereinsteiger",
+};
+
+const LEHRJAHR_LEVEL: Record<string, 1 | 2 | 3> = {
+  lj1: 1, lj2: 2, lj3: 3, quereinsteiger: 2,
+};
+
+const LEVEL_LABEL: Record<1 | 2 | 3, string> = {
+  1: "Level 1 – Einsteiger",
+  2: "Level 2 – Fortgeschritten",
+  3: "Level 3 – Challenge",
+};
+
+// Primary recommended module per abteilung
+const ABTEILUNG_PRIMARY: Record<string, string> = {
+  privatkunde: "privatkunde",
+  firmenkunde: "firmenkunde",
+  anlagekunde: "anlagekunde",
+  backoffice: "banking-operations",
+  kreditgeschaeft: "credit-operations",
+  "credit-office": "credit-office",
+};
+
+// Deep link per module × level
+const MODULE_LEVEL_HREFS: Record<string, Record<1 | 2 | 3, string>> = {
+  privatkunde: {
+    1: "/privatkunde/basis/kontoeröffnung",
+    2: "/privatkunde/basis/kyc",
+    3: "/privatkunde/individual/hypotheken",
+  },
+  firmenkunde: {
+    1: "/firmenkunde",
+    2: "/firmenkunde",
+    3: "/firmenkunde",
+  },
+  anlagekunde: {
+    1: "/anlagekunde/fonds",
+    2: "/anlagekunde",
+    3: "/anlagekunde",
+  },
+  "banking-operations": {
+    1: "/backoffice/banking-operations/kontoeröffnungen",
+    2: "/backoffice/banking-operations/kyc",
+    3: "/backoffice/banking-operations/zahlungsverkehr",
+  },
+  "credit-operations": {
+    1: "/backoffice/credit-operations",
+    2: "/backoffice/credit-operations/sicherheiten",
+    3: "/backoffice/credit-operations",
+  },
+  "credit-office": {
+    1: "/backoffice/credit-office",
+    2: "/backoffice/credit-office/hypothek",
+    3: "/backoffice/credit-office/hypothek",
+  },
+};
+
+// Within-section sort order per abteilung
+const FRONT_SORT: Record<string, string[]> = {
+  firmenkunde: ["firmenkunde", "anlagekunde", "privatkunde"],
+  anlagekunde: ["anlagekunde", "privatkunde", "firmenkunde"],
+};
+const BACK_SORT: Record<string, string[]> = {
+  backoffice: ["banking-operations", "credit-operations", "credit-office"],
+  kreditgeschaeft: ["credit-operations", "credit-office", "banking-operations"],
+  "credit-office": ["credit-office", "credit-operations", "banking-operations"],
+};
+
+// Back Office should appear first for these abteilungen
+const BACK_FIRST = new Set(["backoffice", "kreditgeschaeft", "credit-office"]);
+
+function sortByPriority<T extends { moduleId: string }>(
+  items: T[],
+  priority: string[] | undefined
+): T[] {
+  if (!priority?.length) return items;
+  return [...items].sort((a, b) => {
+    const ai = priority.indexOf(a.moduleId);
+    const bi = priority.indexOf(b.moduleId);
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+  });
+}
+
 const FRONT_OFFICE_MODULES = [
   {
     title: "Privatkunde",
@@ -137,43 +235,47 @@ function WeakModulesSection({ progress }: { progress: Record<string, ModuleProgr
   );
 }
 
-function PersonalizedBanner({
+function RecommendedLernpfad({
   profile,
-  recommended,
+  module,
 }: {
   profile: UserProfile;
-  recommended: { title: string; href: string; icon: LucideIcon };
+  module: { title: string; href: string; icon: LucideIcon; moduleId: string };
 }) {
   if (!profile.abteilung || profile.abteilung === "keine") return null;
-
-  const ABTEILUNG_LABELS: Record<string, string> = {
-    privatkunde: "Privatkunde",
-    firmenkunde: "Firmenkunde",
-    anlagekunde: "Anlagekunde",
-    backoffice: "Backoffice & Zahlungsverkehr",
-    kreditgeschaeft: "Credit Operations",
-    "credit-office": "Credit Office",
-  };
-
+  const level = LEHRJAHR_LEVEL[profile.lehrjahr ?? ""] ?? 2;
+  const levelLabel = LEVEL_LABEL[level];
+  const deepHref = MODULE_LEVEL_HREFS[module.moduleId]?.[level] ?? module.href;
   const abteilungLabel = ABTEILUNG_LABELS[profile.abteilung] ?? profile.abteilung;
-  const RecommendedIcon = recommended.icon;
+  const lehrjahrLabel = LEHRJAHR_LABELS[profile.lehrjahr ?? ""];
+  const RecommendedIcon = module.icon;
 
   return (
-    <div className="mb-6 rounded-xl border border-primary/20 bg-primary-light p-4">
-      <div className="flex items-center gap-1.5 mb-3">
+    <div className="mb-6 rounded-2xl border border-primary/20 bg-primary-light p-5">
+      <div className="flex items-center gap-1.5 mb-2">
         <Sparkles size={13} className="text-primary" />
-        <p className="text-xs font-bold uppercase tracking-wider text-primary">
-          Dein Bereich · {abteilungLabel}
-        </p>
+        <p className="text-xs font-bold uppercase tracking-wider text-primary">Empfohlener Lernpfad</p>
       </div>
-      <Link href={recommended.href}>
-        <div className="flex items-center gap-3 rounded-lg border border-primary/15 bg-white/60 px-4 py-3 transition-all hover:bg-white hover:shadow-sm">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg" style={{ background: "#E8EBF7" }}>
-            <RecommendedIcon size={18} style={{ color: "#0D1B4B" }} />
+      <p className="text-sm text-text-secondary mb-3 leading-relaxed">
+        Starte mit{" "}
+        <span className="font-semibold text-text-primary">
+          {module.title} · {levelLabel}
+        </span>{" "}
+        – das passt zu{lehrjahrLabel ? ` deinem ${lehrjahrLabel}` : ""} und deiner Abteilung ({abteilungLabel}).
+      </p>
+      <Link href={deepHref}>
+        <div className="flex items-center gap-3 rounded-xl border border-primary/20 bg-white/70 px-4 py-3 transition-all hover:bg-white hover:shadow-sm">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg" style={{ background: "#E8EBF7" }}>
+            <RecommendedIcon size={20} style={{ color: "#0D1B4B" }} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-text-primary">{recommended.title}</p>
-            <p className="text-xs text-text-secondary">Direkt zu deinem Schwerpunkt →</p>
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-sm font-semibold text-text-primary">{module.title}</p>
+              <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-bold text-green-700">
+                Für dich · {levelLabel}
+              </span>
+            </div>
+            <p className="text-xs text-text-secondary mt-0.5">Direkt zu deinem empfohlenen Level →</p>
           </div>
         </div>
       </Link>
@@ -310,17 +412,23 @@ export default function DashboardPage() {
     );
   })();
 
-  const frontModules = FRONT_OFFICE_MODULES.map((m) => ({
-    ...m,
-    status: statusFromProgress(progress[m.moduleId], m.totalScenarios),
-    completedScenarios: progress[m.moduleId]?.completed ?? 0,
-  }));
+  const frontModules = sortByPriority(
+    FRONT_OFFICE_MODULES.map((m) => ({
+      ...m,
+      status: statusFromProgress(progress[m.moduleId], m.totalScenarios),
+      completedScenarios: progress[m.moduleId]?.completed ?? 0,
+    })),
+    FRONT_SORT[profile.abteilung ?? ""]
+  );
 
-  const backModules = BACK_OFFICE_MODULES.map((m) => ({
-    ...m,
-    status: statusFromProgress(progress[m.moduleId], m.totalScenarios),
-    completedScenarios: progress[m.moduleId]?.completed ?? 0,
-  }));
+  const backModules = sortByPriority(
+    BACK_OFFICE_MODULES.map((m) => ({
+      ...m,
+      status: statusFromProgress(progress[m.moduleId], m.totalScenarios),
+      completedScenarios: progress[m.moduleId]?.completed ?? 0,
+    })),
+    BACK_SORT[profile.abteilung ?? ""]
+  );
 
   const countStreak = useCountUp(loaded ? streak.current : 0);
   const countCompleted = useCountUp(loaded ? totalCompleted : 0);
@@ -329,18 +437,10 @@ export default function DashboardPage() {
   // Empty state: new user with no progress yet
   const isEmptyState = loaded && totalCompleted === 0;
 
-  // Recommend module based on onboarding abteilung (falls back to role-based)
-  const abteilungToModule: Record<string, { title: string; href: string; icon: LucideIcon }> = {
-    privatkunde: { title: "Privatkunde", href: "/privatkunde", icon: User },
-    firmenkunde: { title: "Firmenkunde", href: "/firmenkunde", icon: Building2 },
-    anlagekunde: { title: "Anlagekunde", href: "/anlagekunde", icon: TrendingUp },
-    backoffice: { title: "Banking Operations", href: "/backoffice", icon: Landmark },
-    kreditgeschaeft: { title: "Credit Operations", href: "/backoffice/credit-operations", icon: Settings2 },
-    "credit-office": { title: "Credit Office", href: "/backoffice/credit-office/hypothek", icon: Settings2 },
-  };
-  const recommended: { title: string; href: string; icon: LucideIcon } =
-    (profile.abteilung ? abteilungToModule[profile.abteilung] : undefined) ??
-    { title: "Privatkunde", href: "/privatkunde", icon: User };
+  const primaryModuleId = ABTEILUNG_PRIMARY[profile.abteilung ?? ""] ?? "privatkunde";
+  const recommendedModule =
+    [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES].find((m) => m.moduleId === primaryModuleId) ??
+    FRONT_OFFICE_MODULES[0];
 
   const allModulesList = [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES];
   const completedModulesList = allModulesList.filter((m) => {
@@ -374,13 +474,13 @@ export default function DashboardPage() {
                 <Sparkles size={14} className="text-primary" />
                 <p className="text-xs font-bold uppercase tracking-wider text-primary">Empfohlen für dich</p>
               </div>
-              <Link href={recommended.href}>
+              <Link href={recommendedModule.href}>
                 <div className="flex items-center gap-4 rounded-xl border border-primary/20 bg-white/60 p-4 transition-all hover:bg-white hover:shadow-sm">
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl" style={{ background: "#E8EBF7" }}>
-                    <recommended.icon size={24} style={{ color: "#0D1B4B" }} />
+                    <recommendedModule.icon size={24} style={{ color: "#0D1B4B" }} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold text-text-primary">{recommended.title}</p>
+                    <p className="font-bold text-text-primary">{recommendedModule.title}</p>
                     <p className="text-sm text-text-secondary">Jetzt starten und erstes Szenario absolvieren</p>
                   </div>
                   <div className="rounded-full px-4 py-2 text-sm font-bold text-white" style={{ background: "#0D1B4B" }}>
@@ -486,29 +586,59 @@ export default function DashboardPage() {
 
         {loaded && <WeakScenariosBanner />}
 
-        {loaded && <DailyChallenge />}
+        {loaded && <DailyChallenge lehrjahr={profile.lehrjahr} />}
 
-        {loaded && (
-          <PersonalizedBanner profile={profile} recommended={recommended} />
+        {loaded && <RecommendedLernpfad profile={profile} module={recommendedModule} />}
+
+        {BACK_FIRST.has(profile.abteilung ?? "") ? (
+          <>
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
+              Back Office
+            </h2>
+            <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {!loaded
+                ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
+                : backModules.map((m) => (
+                    <ModuleCard key={m.title} {...m} recommended={m.moduleId === primaryModuleId} />
+                  ))}
+            </div>
+
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
+              Front Office
+            </h2>
+            <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {!loaded
+                ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
+                : frontModules.map((m) => (
+                    <ModuleCard key={m.title} {...m} recommended={m.moduleId === primaryModuleId} />
+                  ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
+              Front Office
+            </h2>
+            <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {!loaded
+                ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
+                : frontModules.map((m) => (
+                    <ModuleCard key={m.title} {...m} recommended={m.moduleId === primaryModuleId} />
+                  ))}
+            </div>
+
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
+              Back Office
+            </h2>
+            <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {!loaded
+                ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
+                : backModules.map((m) => (
+                    <ModuleCard key={m.title} {...m} recommended={m.moduleId === primaryModuleId} />
+                  ))}
+            </div>
+          </>
         )}
-
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-          Front Office
-        </h2>
-        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {!loaded
-            ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
-            : frontModules.map((m) => <ModuleCard key={m.title} {...m} />)}
-        </div>
-
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-          Back Office
-        </h2>
-        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {!loaded
-            ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
-            : backModules.map((m) => <ModuleCard key={m.title} {...m} />)}
-        </div>
 
         {/* Certificates for completed modules */}
         {loaded && completedModulesList.length > 0 && (

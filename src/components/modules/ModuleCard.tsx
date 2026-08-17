@@ -18,6 +18,7 @@ interface ModuleCardProps {
   status: ModuleStatus;
   completedScenarios: number;
   totalScenarios: number;
+  recommended?: boolean;
 }
 
 export function ModuleCard({
@@ -28,29 +29,40 @@ export function ModuleCard({
   status,
   completedScenarios,
   totalScenarios,
+  recommended,
 }: ModuleCardProps) {
   const s = STATUS_CONFIG[status];
   const pct = totalScenarios > 0 ? Math.round((completedScenarios / totalScenarios) * 100) : 0;
 
   return (
     <Link href={href} className="group block h-full">
-      <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg">
+      <div className={`flex h-full flex-col overflow-hidden rounded-2xl border bg-surface transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg ${recommended ? "border-green-300 shadow-sm shadow-green-100" : "border-border"}`}>
         {/* Gradient accent bar */}
-        <div className="h-[3px] w-full flex-shrink-0" style={{ background: "linear-gradient(90deg, #0D1B4B 0%, #00C9B1 100%)" }} />
+        <div
+          className="h-[3px] w-full flex-shrink-0"
+          style={{ background: recommended ? "linear-gradient(90deg, #16a34a 0%, #4ade80 100%)" : "linear-gradient(90deg, #0D1B4B 0%, #00C9B1 100%)" }}
+        />
 
         <div className="flex flex-1 flex-col p-5">
-          {/* Icon + status */}
+          {/* Icon + badge */}
           <div className="mb-4 flex items-start justify-between gap-2">
             <div
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
-              style={{ background: "#E8EBF7" }}
+              style={{ background: recommended ? "#dcfce7" : "#E8EBF7" }}
             >
-              <Icon size={24} style={{ color: "#0D1B4B" }} />
+              <Icon size={24} style={{ color: recommended ? "#16a34a" : "#0D1B4B" }} />
             </div>
-            <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${s.className}`}>
-              {status === "active" && <span className="h-1.5 w-1.5 rounded-full bg-accent" />}
-              {s.label}
-            </span>
+            {recommended ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-[11px] font-semibold text-green-700">
+                <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                Für dich
+              </span>
+            ) : (
+              <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${s.className}`}>
+                {status === "active" && <span className="h-1.5 w-1.5 rounded-full bg-accent" />}
+                {s.label}
+              </span>
+            )}
           </div>
 
           {/* Title + description */}
@@ -72,7 +84,7 @@ export function ModuleCard({
           {/* CTA */}
           <div
             className="w-full rounded-full py-2.5 text-center text-sm font-bold text-white transition-opacity group-hover:opacity-90"
-            style={{ background: "#0D1B4B" }}
+            style={{ background: recommended ? "#16a34a" : "#0D1B4B" }}
           >
             {status === "idle" ? "Starten →" : status === "active" ? "Fortfahren →" : "Wiederholen →"}
           </div>
