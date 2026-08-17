@@ -74,14 +74,8 @@ EK-Quote: ${ekQuote}%`;
     const match = text.match(/\{[\s\S]*\}/);
     if (!match) throw new Error("No JSON");
     return NextResponse.json(JSON.parse(match[0]));
-  } catch {
-    return NextResponse.json({
-      result: "BESTANDEN",
-      richtigCount: 9,
-      totalCount: 10,
-      fehler: [],
-      feedback:
-        "Demo-Auswertung: Alle Felder korrekt erfasst. Cashflow CHF 220'000 und EK-Quote 35% stimmen.",
-    });
+  } catch (err) {
+    console.error("[credit-operations/rating] error:", err);
+    return NextResponse.json({ error: "Auswertung momentan nicht verfügbar" }, { status: 500 });
   }
 }

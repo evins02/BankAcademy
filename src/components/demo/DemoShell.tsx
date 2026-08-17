@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { DemoBanner } from "./DemoBanner";
 import { DemoSidebar } from "./DemoSidebar";
@@ -24,6 +24,11 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const isUrlLocked = !DEMO_UNLOCKED_PATHS.has(pathname);
+
+  // Ensure the demo access cookie is set so AI endpoints (kyc-chat, simulation/chat) work
+  useEffect(() => {
+    fetch("/api/demo-access", { method: "POST" }).catch(() => {});
+  }, []);
 
   const [sidebarLocked, setSidebarLocked] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);

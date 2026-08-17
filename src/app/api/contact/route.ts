@@ -18,6 +18,15 @@ async function ensureTable() {
   `;
 }
 
+function esc(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { type, vorname, nachname, email, institution, funktion, anzahlLernende, nachricht } = body;
@@ -59,14 +68,14 @@ export async function POST(req: NextRequest) {
 
       const rows = [
         ["Typ", isBank ? "Bank / Institution" : "Lernende/r"],
-        ["Name", `${vorname} ${nachname}`],
+        ["Name", esc(`${vorname} ${nachname}`)],
         ...(isBank ? [
-          ["Institution", institution],
-          ["Funktion", funktion],
+          ["Institution", esc(institution ?? "")],
+          ["Funktion", esc(funktion ?? "")],
         ] : []),
-        ["E-Mail", email],
-        ...(isBank ? [["Anzahl Lernende", anzahlLernende]] : []),
-        ["Nachricht", nachricht.replace(/\n/g, "<br>")],
+        ["E-Mail", esc(email)],
+        ...(isBank ? [["Anzahl Lernende", esc(String(anzahlLernende ?? ""))]] : []),
+        ["Nachricht", esc(nachricht).replace(/\n/g, "<br>")],
         ["Zeitstempel", new Date().toLocaleString("de-CH", { timeZone: "Europe/Zurich" })],
       ] as [string, string][];
 
