@@ -123,14 +123,9 @@ export default function EinstellungenPage() {
       setTimeout(() => setConfirmReset(false), 4000);
       return;
     }
-    [
-      "progress", "streak", "notifications", "badge-dates", "total-xp",
-      "mock-seeded", "correct-streak", "correct-streak-best", "first-visit",
-      "comeback-earned", "module-analytics", "scenario-notes", "scenario-ratings",
-      "scenario-bookmarks", "activity-dates", "notif-generated-date",
-      "notif-weekly-shown", "last-weekly-report", "lap-best-score",
-    ].forEach((k) => lsRemove(k));
-    window.location.replace("/dashboard");
+    localStorage.clear();
+    localStorage.setItem("fullAccess", "true");
+    window.location.replace("/onboarding");
   }
 
   const xpLevel = getXPLevel(xp);
@@ -211,7 +206,7 @@ export default function EinstellungenPage() {
                   onChange={(e) => setProfile((p) => ({ ...p, abteilung: e.target.value }))}
                   className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">&ndash; nicht gesetzt &ndash;</option>
+                  <option value="">– nicht gesetzt –</option>
                   <option value="privatkunde">Privatkunde</option>
                   <option value="firmenkunde">Firmenkunde</option>
                   <option value="anlagekunde">Anlagekunde</option>
@@ -230,7 +225,7 @@ export default function EinstellungenPage() {
                   onChange={(e) => setProfile((p) => ({ ...p, lehrjahr: e.target.value }))}
                   className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">&ndash; nicht gesetzt &ndash;</option>
+                  <option value="">– nicht gesetzt –</option>
                   <option value="lj1">1. Lehrjahr</option>
                   <option value="lj2">2. Lehrjahr</option>
                   <option value="lj3">3. Lehrjahr</option>
@@ -246,11 +241,11 @@ export default function EinstellungenPage() {
                   onChange={(e) => setProfile((p) => ({ ...p, ziel: e.target.value }))}
                   className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">&ndash; nicht gesetzt &ndash;</option>
-                  <option value="neueinstieg">Neueinstieg &ndash; Grundlagen aufbauen</option>
-                  <option value="auffrischung">Auffrischung &ndash; Wissen festigen</option>
-                  <option value="pruefung">Prüfungsvorbereitung &ndash; gezielt üben</option>
-                  <option value="challenge">Challenge &ndash; alles auf höchstem Level</option>
+                  <option value="">– nicht gesetzt –</option>
+                  <option value="neueinstieg">Neueinstieg – Grundlagen aufbauen</option>
+                  <option value="auffrischung">Auffrischung – Wissen festigen</option>
+                  <option value="pruefung">Prüfungsvorbereitung – gezielt üben</option>
+                  <option value="challenge">Challenge – alles auf höchstem Level</option>
                 </select>
               </div>
             </div>

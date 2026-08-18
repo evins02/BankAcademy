@@ -118,15 +118,9 @@ export function Header({ title, subtitle }: HeaderProps) {
 
   function resetProgress() {
     if (!confirm("Möchtest du deinen Fortschritt wirklich zurücksetzen? Diese Aktion kann nicht rükgängig gemacht werden.")) return;
-    [
-      "progress", "streak", "notifications", "badge-dates", "total-xp",
-      "mock-seeded", "correct-streak", "correct-streak-best", "first-visit",
-      "comeback-earned", "module-analytics", "scenario-notes", "scenario-ratings",
-      "scenario-bookmarks", "activity-dates", "notif-generated-date",
-      "notif-weekly-shown", "last-weekly-report", "lap-best-score",
-    ].forEach((k) => lsRemove(k));
-    setProfileOpen(false);
-    window.location.replace("/dashboard");
+    localStorage.clear();
+    localStorage.setItem("fullAccess", "true");
+    window.location.replace("/onboarding");
   }
 
   async function abmelden() {
