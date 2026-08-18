@@ -85,48 +85,60 @@ export function DemoBanner({ onMenuToggle, onFeedback, onLogout, userName }: Pro
         </button>
       )}
 
-      {initials && (
-        <div
-          title={userName}
-          style={{
-            width: 26,
-            height: 26,
-            borderRadius: "50%",
-            background: "#0D1B4B",
-            color: "#fff",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 10,
-            fontWeight: 800,
-            letterSpacing: "0.02em",
-            flexShrink: 0,
-            userSelect: "none",
-          }}
-        >
-          {initials}
-        </div>
-      )}
-
-      {onLogout && (
-        <button
-          onClick={onLogout}
-          style={{
-            padding: "2px 8px",
-            borderRadius: 50,
-            border: "1px solid #b45309",
-            background: "transparent",
-            color: "#78350f",
-            fontSize: 10,
-            fontWeight: 500,
-            cursor: "pointer",
-            opacity: 0.6,
-            whiteSpace: "nowrap",
-          }}
-        >
-          ← Abmelden
-        </button>
-      )}
+      {/* Profile + logout — pinned top-right */}
+      <div
+        style={{
+          position: "absolute",
+          right: 16,
+          top: "50%",
+          transform: "translateY(-50%)",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        {initials && (
+          <div
+            title={userName}
+            style={{
+              width: 26,
+              height: 26,
+              borderRadius: "50%",
+              background: "#0D1B4B",
+              color: "#fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 10,
+              fontWeight: 800,
+              letterSpacing: "0.02em",
+              flexShrink: 0,
+              userSelect: "none",
+            }}
+          >
+            {initials}
+          </div>
+        )}
+        {onLogout && (
+          <button
+            onClick={onLogout}
+            style={{
+              padding: "2px 8px",
+              borderRadius: 50,
+              border: "1px solid #b45309",
+              background: "transparent",
+              color: "#78350f",
+              fontSize: 10,
+              fontWeight: 500,
+              cursor: "pointer",
+              opacity: 0.6,
+              whiteSpace: "nowrap",
+            }}
+          >
+            ← Abmelden
+          </button>
+        )}
+      </div>
     </div>
   );
 }

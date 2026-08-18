@@ -33,6 +33,7 @@ export function DemoOnboardingModal() {
     } catch {}
 
     try {
+      localStorage.clear();
       localStorage.setItem("demo-seen", "true");
       localStorage.setItem("demo-vorname", v);
       localStorage.setItem("demo-email", e.toLowerCase());
