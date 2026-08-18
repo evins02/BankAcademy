@@ -34,8 +34,36 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
   const [sidebarLocked, setSidebarLocked] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [demoEmail, setDemoEmail] = useState("");
+  const [demoVorname, setDemoVorname] = useState("");
+
+  useEffect(() => {
+    try {
+      setDemoEmail(localStorage.getItem("demo-email") ?? "");
+      setDemoVorname(localStorage.getItem("demo-vorname") ?? "");
+    } catch {}
+  }, []);
 
   const locked = isUrlLocked || sidebarLocked;
+
+  function clearDemoSession() {
+    try {
+      localStorage.removeItem("demo-seen");
+      localStorage.removeItem("demo-email");
+      localStorage.removeItem("demo-vorname");
+    } catch {}
+  }
+
+  function handleLogout() {
+    clearDemoSession();
+    router.push("/");
+  }
+
+  function handleFeedbackSubmitted() {
+    setFeedbackOpen(false);
+    clearDemoSession();
+    router.push("/");
+  }
 
   function handleOverlayBack() {
     if (isUrlLocked) {
@@ -52,7 +80,9 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
       {feedbackOpen && (
         <FeedbackModal
           onClose={() => setFeedbackOpen(false)}
-          onSubmitted={() => setFeedbackOpen(false)}
+          onSubmitted={handleFeedbackSubmitted}
+          email={demoEmail}
+          vorname={demoVorname}
         />
       )}
       {locked && <LockedModuleOverlay onBack={handleOverlayBack} />}
@@ -68,7 +98,7 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
         <DemoBanner
           onMenuToggle={() => setMobileOpen((v) => !v)}
           onFeedback={() => setFeedbackOpen(true)}
-          onLogout={() => router.push("/")}
+          onLogout={handleLogout}
         />
         <div style={{ display: "flex", flex: 1, overflow: "hidden", position: "relative" }}>
           {/* Mobile backdrop */}
@@ -97,6 +127,36 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
           </main>
         </div>
       </div>
+
+      {/* Floating feedback bubble */}
+      {!feedbackOpen && (
+        <button
+          onClick={() => setFeedbackOpen(true)}
+          style={{
+            position: "fixed",
+            bottom: 24,
+            left: 24,
+            zIndex: 900,
+            background: "#0D1B4B",
+            color: "#fff",
+            border: "none",
+            borderRadius: 50,
+            padding: "11px 20px",
+            fontSize: 13,
+            fontWeight: 600,
+            cursor: "pointer",
+            boxShadow: "0 4px 24px rgba(13,27,75,0.35)",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            transition: "opacity 0.15s, transform 0.15s",
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.opacity = "0.88"; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = "1"; }}
+        >
+          💬 Feedback geben
+        </button>
+      )}
     </>
   );
 }

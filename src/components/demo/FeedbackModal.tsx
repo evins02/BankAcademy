@@ -462,7 +462,7 @@ export function FeedbackModal({ onClose, onSubmitted, sessionId, email, vorname 
 
           <Q num={11} label="In welchem Lehrjahr bist du?">
             <ChipGroup
-              options={["1.", "2.", "3.", "Quereinsteiger"]}
+              options={["1.", "2.", "3.", "Praktikant"]}
               value={answers.apprenticeshipYear}
               onChange={(v) => setField("apprenticeshipYear", v as string)}
             />
