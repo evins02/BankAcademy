@@ -6,6 +6,7 @@ import { DemoBanner } from "./DemoBanner";
 import { DemoSidebar } from "./DemoSidebar";
 import { LockedModuleOverlay } from "./LockedModuleOverlay";
 import { DemoOnboardingModal } from "./DemoOnboardingModal";
+import { FeedbackModal } from "./FeedbackModal";
 import { ThemeApplier } from "@/components/shared/ThemeApplier";
 
 // Muss synchron mit DEMO_UNLOCKED in DemoSidebar.tsx gehalten werden
@@ -32,6 +33,7 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
 
   const [sidebarLocked, setSidebarLocked] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   const locked = isUrlLocked || sidebarLocked;
 
@@ -47,6 +49,12 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
     <>
       <ThemeApplier />
       <DemoOnboardingModal />
+      {feedbackOpen && (
+        <FeedbackModal
+          onClose={() => setFeedbackOpen(false)}
+          onSubmitted={() => setFeedbackOpen(false)}
+        />
+      )}
       {locked && <LockedModuleOverlay onBack={handleOverlayBack} />}
       <div
         style={{
@@ -57,7 +65,11 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
           background: "var(--background, #F8F9FD)",
         }}
       >
-        <DemoBanner onMenuToggle={() => setMobileOpen((v) => !v)} />
+        <DemoBanner
+          onMenuToggle={() => setMobileOpen((v) => !v)}
+          onFeedback={() => setFeedbackOpen(true)}
+          onLogout={() => router.push("/")}
+        />
         <div style={{ display: "flex", flex: 1, overflow: "hidden", position: "relative" }}>
           {/* Mobile backdrop */}
           {mobileOpen && (
