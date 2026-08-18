@@ -12,7 +12,7 @@ import { ThemeApplier } from "@/components/shared/ThemeApplier";
 // Muss synchron mit DEMO_UNLOCKED in DemoSidebar.tsx gehalten werden
 const DEMO_UNLOCKED_PATHS = new Set([
   "/demo",
-  "/demo/privatkunde/basis/kontoöffnung",
+  "/demo/privatkunde/basis/kontoeröffnung",
   "/demo/privatkunde/basis/sparen-konto",
   "/demo/privatkunde/basis/zahlungsverkehr",
   "/demo/privatkunde/basis/fonds",
