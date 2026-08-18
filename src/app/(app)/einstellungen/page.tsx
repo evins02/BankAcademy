@@ -123,10 +123,14 @@ export default function EinstellungenPage() {
       setTimeout(() => setConfirmReset(false), 4000);
       return;
     }
-    ["progress", "streak", "notifications", "badge-dates", "mock-seeded", "total-xp", "scenario-notes"].forEach((k) =>
-      lsRemove(k)
-    );
-    window.location.reload();
+    [
+      "progress", "streak", "notifications", "badge-dates", "total-xp",
+      "mock-seeded", "correct-streak", "correct-streak-best", "first-visit",
+      "comeback-earned", "module-analytics", "scenario-notes", "scenario-ratings",
+      "scenario-bookmarks", "activity-dates", "notif-generated-date",
+      "notif-weekly-shown", "last-weekly-report", "lap-best-score",
+    ].forEach((k) => lsRemove(k));
+    window.location.replace("/dashboard");
   }
 
   const xpLevel = getXPLevel(xp);
@@ -207,7 +211,7 @@ export default function EinstellungenPage() {
                   onChange={(e) => setProfile((p) => ({ ...p, abteilung: e.target.value }))}
                   className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">– nicht gesetzt –</option>
+                  <option value="">&ndash; nicht gesetzt &ndash;</option>
                   <option value="privatkunde">Privatkunde</option>
                   <option value="firmenkunde">Firmenkunde</option>
                   <option value="anlagekunde">Anlagekunde</option>
@@ -226,7 +230,7 @@ export default function EinstellungenPage() {
                   onChange={(e) => setProfile((p) => ({ ...p, lehrjahr: e.target.value }))}
                   className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">– nicht gesetzt –</option>
+                  <option value="">&ndash; nicht gesetzt &ndash;</option>
                   <option value="lj1">1. Lehrjahr</option>
                   <option value="lj2">2. Lehrjahr</option>
                   <option value="lj3">3. Lehrjahr</option>
@@ -242,11 +246,11 @@ export default function EinstellungenPage() {
                   onChange={(e) => setProfile((p) => ({ ...p, ziel: e.target.value }))}
                   className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">– nicht gesetzt –</option>
-                  <option value="neueinstieg">Neueinstieg – Grundlagen aufbauen</option>
-                  <option value="auffrischung">Auffrischung – Wissen festigen</option>
-                  <option value="pruefung">Prüfungsvorbereitung – gezielt üben</option>
-                  <option value="challenge">Challenge – alles auf höchstem Level</option>
+                  <option value="">&ndash; nicht gesetzt &ndash;</option>
+                  <option value="neueinstieg">Neueinstieg &ndash; Grundlagen aufbauen</option>
+                  <option value="auffrischung">Auffrischung &ndash; Wissen festigen</option>
+                  <option value="pruefung">Prüfungsvorbereitung &ndash; gezielt üben</option>
+                  <option value="challenge">Challenge &ndash; alles auf höchstem Level</option>
                 </select>
               </div>
             </div>
@@ -302,7 +306,7 @@ export default function EinstellungenPage() {
             </SettingsRow>
             <SettingsRow label="Sprache" description="Weitere Sprachen folgen">
               <span className="rounded-lg border border-border px-3 py-1.5 text-xs text-text-secondary">
-                🇩🇪 Deutsch
+                🇞🇪 Deutsch
               </span>
             </SettingsRow>
           </section>
@@ -328,7 +332,7 @@ export default function EinstellungenPage() {
             <div className="rounded-xl border border-red-200 bg-red-50 p-4">
               <p className="text-sm font-semibold text-red-800">Fortschritt zurücksetzen</p>
               <p className="mt-1 text-xs text-red-700">
-                Löscht alle Lernfortschritte, XP, Badges und Notizen. Nicht rückgängig zu machen.
+                Löscht alle Lernfortschritte, XP, Badges und Notizen. Nicht rükgängig zu machen.
               </p>
               <button
                 onClick={handleReset}
@@ -346,7 +350,7 @@ export default function EinstellungenPage() {
 
           {/* 5. Export */}
           <section className="rounded-2xl border border-border bg-surface p-6">
-            <SectionHeader>Export & Druck</SectionHeader>
+            <SectionHeader>Export &amp; Druck</SectionHeader>
             <SettingsRow label="Lernbericht exportieren" description="Erstellt einen druckbaren Lernbericht mit deinem Fortschritt, Badges und XP">
               <button
                 onClick={() => {

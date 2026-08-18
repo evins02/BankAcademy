@@ -10,7 +10,7 @@ import { NotificationBell } from "@/components/layout/NotificationBell";
 import { NAV_GROUPS } from "@/lib/constants";
 import { getStreak } from "@/lib/progressData";
 import { getXP, getXPLevel, getXPProgress } from "@/lib/xpData";
-import { lsClearSession, lsRemove } from "@/lib/storage";
+import { lsRemove } from "@/lib/storage";
 import { useFocusMode } from "@/context/FocusModeContext";
 import { useMobileMenu } from "@/context/MobileMenuContext";
 
@@ -117,19 +117,23 @@ export function Header({ title, subtitle }: HeaderProps) {
   }
 
   function resetProgress() {
-    if (!confirm("Möchtest du deinen Fortschritt wirklich zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.")) return;
-    ["progress", "streak", "notifications", "badge-dates", "total-xp", "mock-seeded", "activity-dates"].forEach((k) =>
-      lsRemove(k)
-    );
+    if (!confirm("Möchtest du deinen Fortschritt wirklich zurücksetzen? Diese Aktion kann nicht rükgängig gemacht werden.")) return;
+    [
+      "progress", "streak", "notifications", "badge-dates", "total-xp",
+      "mock-seeded", "correct-streak", "correct-streak-best", "first-visit",
+      "comeback-earned", "module-analytics", "scenario-notes", "scenario-ratings",
+      "scenario-bookmarks", "activity-dates", "notif-generated-date",
+      "notif-weekly-shown", "last-weekly-report", "lap-best-score",
+    ].forEach((k) => lsRemove(k));
     setProfileOpen(false);
-    router.push("/dashboard");
-    router.refresh();
+    window.location.replace("/dashboard");
   }
 
-  function abmelden() {
-    lsClearSession();
+  async function abmelden() {
+    try { await fetch("/api/logout", { method: "POST" }); } catch {}
+    localStorage.clear();
     setProfileOpen(false);
-    router.push("/");
+    window.location.replace("/");
   }
 
   const results = query.trim()
