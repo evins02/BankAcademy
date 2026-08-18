@@ -135,7 +135,7 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
           style={{
             position: "fixed",
             bottom: 24,
-            left: 24,
+            right: 24,
             zIndex: 900,
             background: "#0D1B4B",
             color: "#fff",

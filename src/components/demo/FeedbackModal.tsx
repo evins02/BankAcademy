@@ -368,7 +368,7 @@ export function FeedbackModal({ onClose, onSubmitted, sessionId, email, vorname 
         </div>
 
         {/* Scrollable form */}
-        <div style={{ overflowY: "auto", padding: "24px 24px 8px", flex: 1 }}>
+        <div style={{ overflowY: "auto", padding: "24px 24px 8px", flex: 1, minHeight: 0 }}>
           <Q num={1} label="Wie einfach war die App zu bedienen?">
             <StarRating
               value={answers.easeOfUse}
