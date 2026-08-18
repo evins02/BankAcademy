@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 
-const LEHRJAHRE = ["1. Lehrjahr", "2. Lehrjahr", "3. Lehrjahr", "Quereinsteiger"];
+const LEHRJAHRE = ["1. Lehrjahr", "2. Lehrjahr", "3. Lehrjahr", "Praktikant"];
 
 export default function StartPage() {
   const router = useRouter();
