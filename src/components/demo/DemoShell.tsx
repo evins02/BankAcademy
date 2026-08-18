@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { DemoBanner } from "./DemoBanner";
 import { DemoSidebar } from "./DemoSidebar";
 import { LockedModuleOverlay } from "./LockedModuleOverlay";
@@ -9,22 +9,8 @@ import { DemoOnboardingModal } from "./DemoOnboardingModal";
 import { FeedbackModal } from "./FeedbackModal";
 import { ThemeApplier } from "@/components/shared/ThemeApplier";
 
-// Muss synchron mit DEMO_UNLOCKED in DemoSidebar.tsx gehalten werden
-const DEMO_UNLOCKED_PATHS = new Set([
-  "/demo",
-  "/demo/privatkunde/basis/kontoeröffnung",
-  "/demo/privatkunde/basis/sparen-konto",
-  "/demo/privatkunde/basis/zahlungsverkehr",
-  "/demo/privatkunde/basis/fonds",
-  "/demo/backoffice/banking-operations/kyc",
-  "/demo/backoffice/banking-operations/zahlungsverkehr",
-  "/demo/backoffice/credit-operations/schuldbrief",
-]);
-
 export function DemoShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
   const router = useRouter();
-  const isUrlLocked = !DEMO_UNLOCKED_PATHS.has(pathname);
 
   // Ensure the demo access cookie is set so AI endpoints (kyc-chat, simulation/chat) work
   useEffect(() => {
@@ -43,8 +29,6 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
       setDemoVorname(localStorage.getItem("demo-vorname") ?? "");
     } catch {}
   }, []);
-
-  const locked = isUrlLocked || sidebarLocked;
 
   function clearDemoSession() {
     try {
@@ -65,14 +49,6 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
     router.push("/");
   }
 
-  function handleOverlayBack() {
-    if (isUrlLocked) {
-      router.replace("/demo");
-    } else {
-      setSidebarLocked(false);
-    }
-  }
-
   return (
     <>
       <ThemeApplier />
@@ -85,7 +61,7 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
           vorname={demoVorname}
         />
       )}
-      {locked && <LockedModuleOverlay onBack={handleOverlayBack} />}
+      {sidebarLocked && <LockedModuleOverlay onBack={() => setSidebarLocked(false)} />}
       <div
         style={{
           display: "flex",
