@@ -34,9 +34,9 @@ function CodeEingabeForm() {
       });
       const data = await res.json();
       if (data.valid) {
+        localStorage.clear();
         localStorage.setItem("fullAccess", "true");
-        const onboarded = localStorage.getItem("onboarding-complete");
-        window.location.replace(onboarded === "true" ? "/dashboard" : "/onboarding");
+        window.location.replace("/onboarding");
       } else {
         setError(true);
         setCode("");
