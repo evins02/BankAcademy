@@ -4,11 +4,15 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 
+const LEHRJAHRE = ["1. Lehrjahr", "2. Lehrjahr", "3. Lehrjahr", "Quereinsteiger"];
+
 export default function StartPage() {
   const router = useRouter();
   const [vorname, setVorname] = useState("");
   const [nachname, setNachname] = useState("");
   const [email, setEmail] = useState("");
+  const [lehrjahr, setLehrjahr] = useState("");
+  const [bank, setBank] = useState("");
   const [optIn, setOptIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -32,7 +36,11 @@ export default function StartPage() {
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ vorname, nachname, email, optIn }),
+      body: JSON.stringify({
+        vorname, nachname, email, optIn,
+        apprenticeshipYear: lehrjahr || null,
+        bankName: bank || null,
+      }),
     });
 
     const data = await res.json();
@@ -51,19 +59,19 @@ export default function StartPage() {
 
   if (checking) return null;
 
+  const inp = "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-[#0D1B4B] focus:ring-2 focus:ring-[#0D1B4B]/10";
+
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
       style={{ background: "linear-gradient(135deg, #0D1B4B 0%, #00C9B1 100%)" }}
     >
       <div className="w-full max-w-md">
-        {/* Logo / Titel */}
         <div className="mb-8 text-center">
           <div className="mb-4 text-5xl">🏦</div>
           <h1 className="text-3xl font-bold text-white">BankAcademy</h1>
         </div>
 
-        {/* Card */}
         <div className="rounded-2xl bg-white p-8 shadow-2xl">
           <h2 className="mb-1 text-xl font-bold text-gray-900">Kurz anmelden</h2>
           <p className="mb-6 text-sm text-gray-500">
@@ -73,63 +81,54 @@ export default function StartPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="mb-1 block text-xs font-semibold text-gray-600">
-                  Vorname *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={vorname}
-                  onChange={(e) => setVorname(e.target.value)}
-                  placeholder="Anna"
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-[#0D1B4B] focus:ring-2 focus:ring-[#0D1B4B]/10"
-                />
+                <label className="mb-1 block text-xs font-semibold text-gray-600">Vorname *</label>
+                <input type="text" required value={vorname} onChange={e => setVorname(e.target.value)}
+                  placeholder="Anna" className={inp} />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-semibold text-gray-600">
-                  Nachname *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={nachname}
-                  onChange={(e) => setNachname(e.target.value)}
-                  placeholder="Müller"
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-[#0D1B4B] focus:ring-2 focus:ring-[#0D1B4B]/10"
-                />
+                <label className="mb-1 block text-xs font-semibold text-gray-600">Nachname *</label>
+                <input type="text" required value={nachname} onChange={e => setNachname(e.target.value)}
+                  placeholder="Müller" className={inp} />
               </div>
             </div>
 
             <div>
-              <label className="mb-1 block text-xs font-semibold text-gray-600">
-                E-Mail *
-              </label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="anna.mueller@bank.ch"
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-[#0D1B4B] focus:ring-2 focus:ring-[#0D1B4B]/10"
-              />
+              <label className="mb-1 block text-xs font-semibold text-gray-600">E-Mail *</label>
+              <input type="email" required value={email} onChange={e => setEmail(e.target.value)}
+                placeholder="anna.mueller@bank.ch" className={inp} />
             </div>
 
-            {/* Opt-in */}
+            <div>
+              <label className="mb-2 block text-xs font-semibold text-gray-600">In welchem Lehrjahr bist du?</label>
+              <div className="flex flex-wrap gap-2">
+                {LEHRJAHRE.map(j => (
+                  <button
+                    key={j} type="button"
+                    onClick={() => setLehrjahr(lehrjahr === j ? "" : j)}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      lehrjahr === j
+                        ? "border-[#0D1B4B] bg-[#0D1B4B] text-white"
+                        : "border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300"
+                    }`}
+                  >
+                    {j}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-gray-600">Bei welcher Bank machst du die Lehre?</label>
+              <input type="text" value={bank} onChange={e => setBank(e.target.value)}
+                placeholder="z.B. Kantonalbank, Raiffeisen, UBS…" className={inp} />
+            </div>
+
             <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 p-4">
               <div className="relative mt-0.5 shrink-0">
-                <input
-                  type="checkbox"
-                  checked={optIn}
-                  onChange={(e) => setOptIn(e.target.checked)}
-                  className="sr-only"
-                />
-                <div
-                  className={`flex h-5 w-5 items-center justify-center rounded border-2 transition-colors ${
-                    optIn
-                      ? "border-[#0D1B4B] bg-[#0D1B4B]"
-                      : "border-gray-300 bg-white"
-                  }`}
-                >
+                <input type="checkbox" checked={optIn} onChange={e => setOptIn(e.target.checked)} className="sr-only" />
+                <div className={`flex h-5 w-5 items-center justify-center rounded border-2 transition-colors ${
+                  optIn ? "border-[#0D1B4B] bg-[#0D1B4B]" : "border-gray-300 bg-white"
+                }`}>
                   {optIn && <CheckCircle2 size={12} className="text-white" />}
                 </div>
               </div>
@@ -147,32 +146,21 @@ export default function StartPage() {
             )}
 
             <button
-              type="submit"
-              disabled={loading}
+              type="submit" disabled={loading}
               className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
               style={{ background: "#0D1B4B" }}
             >
               {loading ? (
-                <>
-                  <Loader2 size={15} className="animate-spin" />
-                  Wird gespeichert…
-                </>
+                <><Loader2 size={15} className="animate-spin" />Wird gespeichert…</>
               ) : (
                 "Jetzt starten →"
               )}
             </button>
           </form>
 
-          {/* DSG-Hinweis */}
           <p className="mt-5 text-center text-[11px] leading-relaxed text-gray-400">
-            Deine Daten werden nur für BankAcademy verwendet und nicht an Dritte
-            weitergegeben.{" "}
-            <a
-              href="/datenschutz"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-gray-600"
-            >
+            Deine Daten werden nur für BankAcademy verwendet und nicht an Dritte weitergegeben.{" "}
+            <a href="/datenschutz" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-600">
               Datenschutzerklärung
             </a>
           </p>

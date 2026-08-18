@@ -16,14 +16,18 @@ async function ensureTables() {
   `;
   await sql`
     CREATE TABLE IF NOT EXISTS registrations (
-      id         SERIAL PRIMARY KEY,
-      vorname    TEXT NOT NULL,
-      nachname   TEXT NOT NULL,
-      email      TEXT NOT NULL,
-      opt_in     BOOLEAN NOT NULL DEFAULT false,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      id                  SERIAL PRIMARY KEY,
+      vorname             TEXT NOT NULL,
+      nachname            TEXT NOT NULL,
+      email               TEXT NOT NULL,
+      opt_in              BOOLEAN NOT NULL DEFAULT false,
+      apprenticeship_year TEXT,
+      bank_name           TEXT,
+      created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
+  await sql`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS apprenticeship_year TEXT`;
+  await sql`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS bank_name TEXT`;
   await sql`
     CREATE TABLE IF NOT EXISTS user_progress (
       email         TEXT PRIMARY KEY,
@@ -93,12 +97,17 @@ export async function GET(req: NextRequest) {
       sql`
         SELECT
           u.id, u.vorname, u.email, u.opt_in, u.created_at, u.source,
-          f.apprenticeship_year, f.bank_name,
+          COALESCE(u.apprenticeship_year, f.apprenticeship_year) AS apprenticeship_year,
+          COALESCE(u.bank_name, f.bank_name) AS bank_name,
           (f.id IS NOT NULL) AS has_feedback
         FROM (
-          SELECT id, vorname, email, opt_in, created_at, 'pilot' AS source FROM pilot_users
+          SELECT id, vorname, email, opt_in, created_at, 'pilot' AS source,
+                 NULL::text AS apprenticeship_year, NULL::text AS bank_name
+          FROM pilot_users
           UNION ALL
-          SELECT id, vorname, email, opt_in, created_at, 'access' AS source FROM registrations
+          SELECT id, vorname, email, opt_in, created_at, 'access' AS source,
+                 apprenticeship_year, bank_name
+          FROM registrations
         ) u
         LEFT JOIN pilot_feedback f ON LOWER(f.email) = LOWER(u.email)
         ORDER BY u.created_at DESC
@@ -107,7 +116,6 @@ export async function GET(req: NextRequest) {
       sql`SELECT email, progress_data FROM user_progress`,
     ]);
 
-    // Build analytics map: email -> module-analytics object
     const analyticsMap: Record<string, Record<string, unknown>> = {};
     for (const row of progressRows) {
       const data = row.progress_data as Record<string, unknown> | null;
