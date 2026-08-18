@@ -15,6 +15,13 @@ async function ensureTables() {
     CREATE UNIQUE INDEX IF NOT EXISTS pilot_users_email_unique ON pilot_users (email)
   `;
   await sql`
+    CREATE TABLE IF NOT EXISTS user_progress (
+      email         TEXT PRIMARY KEY,
+      progress_data JSONB,
+      updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
     CREATE TABLE IF NOT EXISTS pilot_feedback (
       id                  SERIAL PRIMARY KEY,
       session_id          TEXT,
