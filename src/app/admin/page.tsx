@@ -6,7 +6,7 @@ import {
   Loader2, Lock, Star,
 } from "lucide-react";
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// ── Types ──────────────────────────────────────────────────────────────────────────────────
 
 interface Stats {
   total_users: number;
@@ -25,6 +25,7 @@ interface UserRow {
   apprenticeship_year: string | null;
   bank_name: string | null;
   has_feedback: boolean;
+  source: "pilot" | "access";
 }
 
 interface FeedbackRow {
@@ -49,7 +50,7 @@ interface FeedbackRow {
 
 type Tab = "users" | "feedback" | "export";
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// ── Helpers ─────────────────────────────────────────────────────────────────────────────
 
 function fmt(iso: string) {
   return new Date(iso).toLocaleString("de-CH", {
@@ -107,9 +108,10 @@ function esc(v: unknown) {
 }
 
 function exportUsersCsv(rows: UserRow[]) {
-  const header = "Datum,Vorname,E-Mail,Lehrjahr,Bank,Opt-in,Feedback";
+  const header = "Datum,Typ,Vorname,E-Mail,Lehrjahr,Bank,Opt-in,Feedback";
   const lines = rows.map((r) =>
-    [fmt(r.created_at), r.vorname, r.email,
+    [fmt(r.created_at), r.source === "access" ? "App" : "Demo",
+      r.vorname, r.email,
       r.apprenticeship_year ?? "", r.bank_name ?? "",
       r.opt_in ? "Ja" : "Nein", r.has_feedback ? "Ja" : "Nein"]
       .map(esc).join(",")
@@ -137,10 +139,11 @@ function exportFeedbackCsv(rows: FeedbackRow[]) {
 
 function exportCombinedCsv(users: UserRow[], feedback: FeedbackRow[]) {
   const fbMap = new Map(feedback.map((f) => [f.email?.toLowerCase(), f]));
-  const header = "Datum,Vorname,E-Mail,Opt-in,Lehrjahr,Bank,Bedienung,Praxisnähe,Nutzung,Modul,Vorbereitet,Schwierigkeit,Weiterempfehlen,Kontakt,Feedback Datum";
+  const header = "Datum,Typ,Vorname,E-Mail,Opt-in,Lehrjahr,Bank,Bedienung,Praxisnähe,Nutzung,Modul,Vorbereitet,Schwierigkeit,Weiterempfehlen,Kontakt,Feedback Datum";
   const lines = users.map((u) => {
     const f = fbMap.get(u.email.toLowerCase());
-    return [fmt(u.created_at), u.vorname, u.email,
+    return [fmt(u.created_at), u.source === "access" ? "App" : "Demo",
+      u.vorname, u.email,
       u.opt_in ? "Ja" : "Nein",
       u.apprenticeship_year ?? f?.apprenticeship_year ?? "",
       u.bank_name ?? f?.bank_name ?? "",
@@ -155,7 +158,7 @@ function exportCombinedCsv(users: UserRow[], feedback: FeedbackRow[]) {
     `export-kombiniert-${new Date().toISOString().slice(0, 10)}.csv`);
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// ── Component ─────────────────────────────────────────────────────────────────────────────
 
 export default function AdminPage() {
   const [code, setCode] = useState("");
@@ -194,7 +197,7 @@ export default function AdminPage() {
     }
   }
 
-  // ── Login gate ─────────────────────────────────────────────────────────────
+  // ── Login gate ───────────────────────────────────────────────────────────────────
   if (!authed) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
@@ -231,7 +234,7 @@ export default function AdminPage() {
     );
   }
 
-  // ── Derived data ───────────────────────────────────────────────────────────
+  // ── Derived data ─────────────────────────────────────────────────────────────────────
   const allYears = [...new Set(users.map((u) => u.apprenticeship_year).filter(Boolean))] as string[];
   const allBanks = [...new Set(users.map((u) => u.bank_name).filter(Boolean))] as string[];
 
@@ -249,7 +252,7 @@ export default function AdminPage() {
     { key: "export", label: "Export" },
   ];
 
-  // ── Main UI ────────────────────────────────────────────────────────────────
+  // ── Main UI ────────────────────────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -293,7 +296,7 @@ export default function AdminPage() {
           ))}
         </div>
 
-        {/* ── Tab 1: Nutzer ─────────────────────────────────────────────────── */}
+        {/* ── Tab 1: Nutzer ───────────────────────────────────────────────────────────────────── */}
         {tab === "users" && (
           <div className="space-y-4">
             {/* Filters */}
@@ -335,7 +338,7 @@ export default function AdminPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50 text-left">
-                        {["Datum", "Vorname", "E-Mail", "Lehrjahr", "Bank", "Opt-in", "Feedback"].map((h) => (
+                        {["Datum", "Typ", "Vorname", "E-Mail", "Lehrjahr", "Bank", "Opt-in", "Feedback"].map((h) => (
                           <th key={h} className="px-4 py-3 text-xs font-semibold text-gray-500">{h}</th>
                         ))}
                       </tr>
@@ -344,6 +347,11 @@ export default function AdminPage() {
                       {filteredUsers.map((r, i) => (
                         <tr key={r.id} className={`border-b border-gray-50 ${i % 2 ? "bg-gray-50/40" : ""}`}>
                           <td className="px-4 py-2.5 text-xs text-gray-400 tabular-nums whitespace-nowrap">{fmt(r.created_at)}</td>
+                          <td className="px-4 py-2.5">
+                            <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${r.source === "access" ? "bg-blue-50 text-blue-700" : "bg-purple-50 text-purple-700"}`}>
+                              {r.source === "access" ? "App" : "Demo"}
+                            </span>
+                          </td>
                           <td className="px-4 py-2.5 font-medium text-gray-900">{r.vorname}</td>
                           <td className="px-4 py-2.5 text-gray-600">{r.email}</td>
                           <td className="px-4 py-2.5 text-gray-600">{r.apprenticeship_year ?? "–"}</td>
@@ -360,7 +368,7 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* ── Tab 2: Feedback ───────────────────────────────────────────────── */}
+        {/* ── Tab 2: Feedback ───────────────────────────────────────────────────────────────────── */}
         {tab === "feedback" && (
           <div className="space-y-4">
             {/* Avg stars */}
@@ -436,7 +444,7 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* ── Tab 3: Export ─────────────────────────────────────────────────── */}
+        {/* ── Tab 3: Export ───────────────────────────────────────────────────────────────────── */}
         {tab === "export" && (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {[

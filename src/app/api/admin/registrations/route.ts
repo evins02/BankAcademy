@@ -15,6 +15,16 @@ async function ensureTables() {
     CREATE UNIQUE INDEX IF NOT EXISTS pilot_users_email_unique ON pilot_users (email)
   `;
   await sql`
+    CREATE TABLE IF NOT EXISTS registrations (
+      id         SERIAL PRIMARY KEY,
+      vorname    TEXT NOT NULL,
+      nachname   TEXT NOT NULL,
+      email      TEXT NOT NULL,
+      opt_in     BOOLEAN NOT NULL DEFAULT false,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
     CREATE TABLE IF NOT EXISTS user_progress (
       email         TEXT PRIMARY KEY,
       progress_data JSONB,
@@ -67,9 +77,14 @@ export async function GET(req: NextRequest) {
     const [statsRows, users, feedback, progressRows] = await Promise.all([
       sql`
         SELECT
-          (SELECT COUNT(*)::int FROM pilot_users)                                              AS total_users,
+          (SELECT COUNT(*)::int FROM (
+            SELECT email FROM pilot_users UNION SELECT email FROM registrations
+          ) all_users)                                                                         AS total_users,
           (SELECT COUNT(*)::int FROM pilot_feedback)                                           AS total_feedback,
-          (SELECT COUNT(*)::int FROM pilot_users WHERE opt_in = true)                          AS total_opt_ins,
+          (SELECT COUNT(*)::int FROM (
+            SELECT email FROM pilot_users WHERE opt_in = true
+            UNION SELECT email FROM registrations WHERE opt_in = true
+          ) opted_in)                                                                          AS total_opt_ins,
           (SELECT ROUND(AVG(ease_of_use)::numeric, 1)
              FROM pilot_feedback WHERE ease_of_use IS NOT NULL)                                AS avg_ease,
           (SELECT ROUND(AVG(scenario_relevance)::numeric, 1)
@@ -77,10 +92,14 @@ export async function GET(req: NextRequest) {
       `,
       sql`
         SELECT
-          u.id, u.vorname, u.email, u.opt_in, u.created_at,
+          u.id, u.vorname, u.email, u.opt_in, u.created_at, u.source,
           f.apprenticeship_year, f.bank_name,
           (f.id IS NOT NULL) AS has_feedback
-        FROM pilot_users u
+        FROM (
+          SELECT id, vorname, email, opt_in, created_at, 'pilot' AS source FROM pilot_users
+          UNION ALL
+          SELECT id, vorname, email, opt_in, created_at, 'access' AS source FROM registrations
+        ) u
         LEFT JOIN pilot_feedback f ON LOWER(f.email) = LOWER(u.email)
         ORDER BY u.created_at DESC
       `,
