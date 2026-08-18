@@ -99,6 +99,7 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
           onMenuToggle={() => setMobileOpen((v) => !v)}
           onFeedback={() => setFeedbackOpen(true)}
           onLogout={handleLogout}
+          userName={demoVorname || undefined}
         />
         <div style={{ display: "flex", flex: 1, overflow: "hidden", position: "relative" }}>
           {/* Mobile backdrop */}

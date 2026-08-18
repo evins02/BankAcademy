@@ -5,9 +5,13 @@ interface Props {
   onMenuToggle?: () => void;
   onFeedback?: () => void;
   onLogout?: () => void;
+  userName?: string;
 }
 
-export function DemoBanner({ onMenuToggle, onFeedback, onLogout }: Props) {
+export function DemoBanner({ onMenuToggle, onFeedback, onLogout, userName }: Props) {
+  const initials = userName
+    ? userName.trim().split(/\s+/).map(w => w[0]?.toUpperCase() ?? "").join("").slice(0, 2)
+    : "";
   return (
     <div
       style={{
@@ -79,6 +83,29 @@ export function DemoBanner({ onMenuToggle, onFeedback, onLogout }: Props) {
         >
           Feedback →
         </button>
+      )}
+
+      {initials && (
+        <div
+          title={userName}
+          style={{
+            width: 26,
+            height: 26,
+            borderRadius: "50%",
+            background: "#0D1B4B",
+            color: "#fff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 10,
+            fontWeight: 800,
+            letterSpacing: "0.02em",
+            flexShrink: 0,
+            userSelect: "none",
+          }}
+        >
+          {initials}
+        </div>
       )}
 
       {onLogout && (
