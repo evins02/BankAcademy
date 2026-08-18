@@ -35,6 +35,9 @@ function CodeEingabeForm() {
       const data = await res.json();
       if (data.valid) {
         localStorage.clear();
+        const _sid = Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 10);
+        localStorage.setItem("ba-sid", _sid);
+        localStorage.setItem(_sid + "::mock-seeded", "true");
         localStorage.setItem("fullAccess", "true");
         window.location.replace("/onboarding");
       } else {

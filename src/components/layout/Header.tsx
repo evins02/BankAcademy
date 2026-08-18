@@ -117,8 +117,11 @@ export function Header({ title, subtitle }: HeaderProps) {
   }
 
   function resetProgress() {
-    if (!confirm("Möchtest du deinen Fortschritt wirklich zurücksetzen? Diese Aktion kann nicht rükgängig gemacht werden.")) return;
+    if (!confirm("Möchtest du deinen Fortschritt wirklich zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.")) return;
     localStorage.clear();
+    const _sid = Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem("ba-sid", _sid);
+    localStorage.setItem(_sid + "::mock-seeded", "true");
     localStorage.setItem("fullAccess", "true");
     window.location.replace("/onboarding");
   }
