@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 async function ensureTable() {
   await sql`
     CREATE TABLE IF NOT EXISTS pilot_feedback (
@@ -57,10 +59,14 @@ export async function POST(req: NextRequest) {
       )
     `;
 
-    // If the user explicitly revoked contact consent, honour it in pilot_users as well
-    if (!body.contactConsent && body.email) {
+    // Honour consent revocation only from authenticated sessions
+    if (!body.contactConsent && body.email && EMAIL_RE.test(String(body.email))) {
       const cleanEmail = String(body.email).trim().toLowerCase();
-      sql`UPDATE pilot_users SET opt_in = false WHERE email = ${cleanEmail}`.catch(() => {});
+      const demoCookie = req.cookies.get("bankacademy_demo");
+      const accessCookie = req.cookies.get("bankacademy_access");
+      if (demoCookie?.value === "1" || accessCookie?.value === "1") {
+        sql`UPDATE pilot_users SET opt_in = false WHERE email = ${cleanEmail}`.catch(() => {});
+      }
     }
 
     return NextResponse.json({ success: true });

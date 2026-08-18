@@ -9,7 +9,7 @@ import { lsRemove } from "@/lib/storage";
 import { getProgress, getStreak, computeBadges } from "@/lib/progressData";
 import { getXP, getXPLevel } from "@/lib/xpData";
 import { getAverageRating } from "@/lib/ratingsData";
-import { Check, RotateCcw, Printer } from "lucide-react";
+import { Check, RotateCcw, Printer, Trash2 } from "lucide-react";
 
 const AVATAR_COLORS = [
   { hex: "#0D1B4B", label: "Navy" },
@@ -70,6 +70,10 @@ export default function EinstellungenPage() {
   const [profile, setProfile] = useState({ name: "", role: "", focus: "", avatarColor: "#0D1B4B", abteilung: "", lehrjahr: "", ziel: "" });
   const [saved, setSaved] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [deleteEmail, setDeleteEmail] = useState("");
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteResult, setDeleteResult] = useState<"success" | "error" | null>(null);
 
   // Stats
   const [xp, setXp] = useState(0);
@@ -93,7 +97,10 @@ export default function EinstellungenPage() {
           lehrjahr: p.lehrjahr ?? "",
           ziel: p.ziel ?? "",
         });
+        if (p.email) setDeleteEmail(p.email);
       }
+      const demoEmail = localStorage.getItem("demo-email");
+      if (demoEmail) setDeleteEmail(demoEmail);
     } catch {}
     const prog = getProgress();
     setTotalCompleted(Object.values(prog).reduce((s, m) => s + m.completed, 0));
@@ -129,6 +136,37 @@ export default function EinstellungenPage() {
     localStorage.setItem(_sid + "::mock-seeded", "true");
     localStorage.setItem("fullAccess", "true");
     window.location.replace("/onboarding");
+  }
+
+  async function handleDeleteData() {
+    if (!deleteConfirm) {
+      setDeleteConfirm(true);
+      setTimeout(() => setDeleteConfirm(false), 5000);
+      return;
+    }
+    setDeleteLoading(true);
+    setDeleteResult(null);
+    try {
+      const res = await fetch("/api/user/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: deleteEmail }),
+      });
+      if (res.ok) {
+        setDeleteResult("success");
+        setTimeout(() => {
+          localStorage.clear();
+          window.location.replace("/");
+        }, 2000);
+      } else {
+        setDeleteResult("error");
+      }
+    } catch {
+      setDeleteResult("error");
+    } finally {
+      setDeleteLoading(false);
+      setDeleteConfirm(false);
+    }
   }
 
   const xpLevel = getXPLevel(xp);
@@ -407,7 +445,45 @@ export default function EinstellungenPage() {
             </SettingsRow>
           </section>
 
-          {/* 6. Über BankAcademy */}
+          {/* 6. Datenschutz & DSGVO */}
+          <section className="rounded-2xl border border-border bg-surface p-6">
+            <SectionHeader>Datenschutz &amp; DSGVO</SectionHeader>
+            <div className="rounded-xl border border-red-200 bg-red-50 p-4">
+              <p className="text-sm font-semibold text-red-800">Meine Daten löschen (Art. 17 DSGVO)</p>
+              <p className="mt-1 text-xs text-red-700">
+                Löscht alle gespeicherten Daten zu dieser E-Mail-Adresse aus unserer Datenbank. Nicht rükgängig zu machen.
+              </p>
+              <div className="mt-3 flex flex-col gap-2">
+                <input
+                  type="email"
+                  value={deleteEmail}
+                  onChange={(e) => { setDeleteEmail(e.target.value); setDeleteResult(null); setDeleteConfirm(false); }}
+                  placeholder="E-Mail-Adresse bestätigen"
+                  className="rounded-lg border border-red-300 bg-white px-3 py-2 text-xs text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-red-400"
+                />
+                {deleteResult === "success" && (
+                  <p className="text-xs text-green-700">Daten erfolgreich gelöscht. Du wirst abgemeldet…</p>
+                )}
+                {deleteResult === "error" && (
+                  <p className="text-xs text-red-700">Fehler beim Löschen. Bitte erneut versuchen.</p>
+                )}
+                <button
+                  onClick={handleDeleteData}
+                  disabled={deleteLoading || !deleteEmail.trim() || deleteResult === "success"}
+                  className={`flex w-fit items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-colors disabled:opacity-50 ${
+                    deleteConfirm
+                      ? "bg-red-600 text-white hover:bg-red-700"
+                      : "border border-red-300 text-red-700 hover:bg-red-100"
+                  }`}
+                >
+                  <Trash2 size={12} />
+                  {deleteLoading ? "Wird gelöscht…" : deleteConfirm ? "Wirklich löschen?" : "Daten löschen"}
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* 7. Über BankAcademy */}
           <section className="rounded-2xl border border-border bg-surface p-6">
             <SectionHeader>Über BankAcademy</SectionHeader>
             <div className="space-y-3 text-sm text-text-secondary">

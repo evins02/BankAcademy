@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
+import { rateLimit, getIp } from "@/lib/rateLimit";
 
 async function ensureTable() {
   await sql`
@@ -19,6 +20,11 @@ async function ensureTable() {
 }
 
 export async function POST(req: NextRequest) {
+  const ip = getIp(req);
+  if (!rateLimit(`register:${ip}`, 5, 60 * 60 * 1000)) {
+    return NextResponse.json({ error: "Zu viele Anfragen. Bitte später versuchen." }, { status: 429 });
+  }
+
   const { vorname, nachname, email, optIn, apprenticeshipYear, bankName } = await req.json();
 
   if (!vorname?.trim() || !nachname?.trim() || !email?.trim()) {

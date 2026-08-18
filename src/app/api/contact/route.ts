@@ -27,6 +27,8 @@ function esc(s: string): string {
     .replace(/'/g, "&#39;");
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { type, vorname, nachname, email, institution, funktion, anzahlLernende, nachricht } = body;
@@ -34,11 +36,13 @@ export async function POST(req: NextRequest) {
   if (!type || !vorname?.trim() || !nachname?.trim() || !email?.trim() || !nachricht?.trim()) {
     return NextResponse.json({ error: "Pflichtfelder fehlen" }, { status: 400 });
   }
+  if (!EMAIL_RE.test(email)) {
+    return NextResponse.json({ error: "Ungültige E-Mail-Adresse" }, { status: 400 });
+  }
   if (type === "bank" && (!institution?.trim() || !funktion?.trim() || !anzahlLernende)) {
     return NextResponse.json({ error: "Pflichtfelder fehlen" }, { status: 400 });
   }
 
-  // Persist to DB
   try {
     await ensureTable();
     await sql`
@@ -54,7 +58,6 @@ export async function POST(req: NextRequest) {
     console.error("[contact] DB error:", err);
   }
 
-  // Send email via Resend — requires RESEND_API_KEY + verified bankacademy.ch domain in Resend dashboard
   const apiKey = process.env.RESEND_API_KEY;
   if (apiKey) {
     try {

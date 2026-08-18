@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
+import { rateLimit, getIp } from "@/lib/rateLimit";
 
 async function ensureTables() {
   await sql`
@@ -60,6 +61,11 @@ async function ensureTables() {
 }
 
 export async function GET(req: NextRequest) {
+  const ip = getIp(req);
+  if (!rateLimit(`admin:${ip}`, 5, 15 * 60 * 1000)) {
+    return NextResponse.json({ error: "Zu viele Versuche." }, { status: 429 });
+  }
+
   const adminPassword = process.env.ADMIN_PASSWORD ?? process.env.ADMIN_CODE;
 
   if (!adminPassword) {
