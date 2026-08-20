@@ -12,6 +12,7 @@ import { NAV_GROUPS } from "@/lib/constants";
 import { getStreak } from "@/lib/progressData";
 import { getXP, getXPLevel, getXPProgress } from "@/lib/xpData";
 import { lsRemove } from "@/lib/storage";
+import { syncNow } from "@/lib/progressSync";
 import { useFocusMode } from "@/context/FocusModeContext";
 import { useMobileMenu } from "@/context/MobileMenuContext";
 
@@ -130,8 +131,9 @@ export function Header({ title, subtitle }: HeaderProps) {
   }
 
   async function abmelden() {
-    localStorage.clear();
     setProfileOpen(false);
+    await syncNow();
+    localStorage.clear();
     await signOut({ redirectUrl: "/" });
   }
 

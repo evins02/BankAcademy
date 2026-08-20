@@ -46,6 +46,33 @@ export async function loadProgressFromDB(): Promise<boolean> {
   }
 }
 
+function buildSyncData(): Record<string, unknown> {
+  const data: Record<string, unknown> = {};
+  for (const key of SYNC_KEYS) {
+    const raw = ls(key);
+    if (raw === null) continue;
+    try { data[key] = JSON.parse(raw); } catch { data[key] = raw; }
+  }
+  for (const key of DIRECT_KEYS) {
+    const raw = localStorage.getItem(key);
+    if (raw === null) continue;
+    try { data[key] = JSON.parse(raw); } catch { data[key] = raw; }
+  }
+  return data;
+}
+
+/** Immediate write of current localStorage progress to Neon.
+ *  Returns a promise so callers can await it (e.g. before logout). */
+export async function syncNow(): Promise<void> {
+  if (typeof window === "undefined") return;
+  const data = buildSyncData();
+  await fetch("/api/user-progress", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data }),
+  }).catch(() => {});
+}
+
 let syncTimer: ReturnType<typeof setTimeout> | null = null;
 
 /** Debounced (3 s) write of current localStorage progress to Neon.
@@ -55,24 +82,10 @@ export function scheduleSync(): void {
   if (syncTimer) clearTimeout(syncTimer);
   syncTimer = setTimeout(() => {
     syncTimer = null;
-
-    const data: Record<string, unknown> = {};
-    for (const key of SYNC_KEYS) {
-      const raw = ls(key);
-      if (raw === null) continue;
-      try { data[key] = JSON.parse(raw); } catch { data[key] = raw; }
-    }
-
-    for (const key of DIRECT_KEYS) {
-      const raw = localStorage.getItem(key);
-      if (raw === null) continue;
-      try { data[key] = JSON.parse(raw); } catch { data[key] = raw; }
-    }
-
     fetch("/api/user-progress", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data }),
+      body: JSON.stringify({ data: buildSyncData() }),
     }).catch(() => {});
   }, 3000);
 }
