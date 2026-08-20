@@ -9,13 +9,20 @@ import { MobileMenuProvider, useMobileMenu } from "@/context/MobileMenuContext";
 import { GlossarDrawer } from "@/components/glossar/GlossarDrawer";
 import { NavigationProgress } from "@/components/shared/NavigationProgress";
 import { ThemeApplier } from "@/components/shared/ThemeApplier";
-import { loadProgressFromDB } from "@/lib/progressSync";
+import { loadProgressFromDB, scheduleSync } from "@/lib/progressSync";
 
 function ProfileLoader() {
   const { isLoaded, isSignedIn } = useUser();
   useEffect(() => {
     if (!isLoaded || !isSignedIn) return;
-    if (localStorage.getItem("onboarding-complete")) return;
+
+    if (localStorage.getItem("onboarding-complete")) {
+      // Profile is in localStorage — make sure it's saved to DB
+      scheduleSync();
+      return;
+    }
+
+    // Profile missing — try to restore from DB (other device/browser)
     loadProgressFromDB().then((loaded) => {
       if (loaded && localStorage.getItem("onboarding-complete")) {
         window.location.reload();
