@@ -176,7 +176,7 @@ export async function GET(req: NextRequest) {
       const resend = new Resend(apiKey);
       await resend.emails.send({
         from: "BankAcademy Monitoring <noreply@bankacademy.ch>",
-        to: "evins02@bankacademy.ch",
+        to: "evins@bankacademy.ch",
         subject: `Weekly Report ${week} – ${health.every((h) => h.ok) ? "✅ Alles OK" : "❌ Fehler erkannt"}`,
         html: buildHtml(health, stats, week),
       });
