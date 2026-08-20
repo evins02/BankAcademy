@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
 import { Sidebar } from "./Sidebar";
 import { GlossarProvider } from "@/context/GlossarContext";
 import { FocusModeProvider, useFocusMode } from "@/context/FocusModeContext";
@@ -7,6 +9,21 @@ import { MobileMenuProvider, useMobileMenu } from "@/context/MobileMenuContext";
 import { GlossarDrawer } from "@/components/glossar/GlossarDrawer";
 import { NavigationProgress } from "@/components/shared/NavigationProgress";
 import { ThemeApplier } from "@/components/shared/ThemeApplier";
+import { loadProgressFromDB } from "@/lib/progressSync";
+
+function ProfileLoader() {
+  const { isLoaded, isSignedIn } = useUser();
+  useEffect(() => {
+    if (!isLoaded || !isSignedIn) return;
+    if (localStorage.getItem("onboarding-complete")) return;
+    loadProgressFromDB().then((loaded) => {
+      if (loaded && localStorage.getItem("onboarding-complete")) {
+        window.location.reload();
+      }
+    });
+  }, [isLoaded, isSignedIn]);
+  return null;
+}
 
 function AppShellInner({ children }: { children: React.ReactNode }) {
   const { focusMode } = useFocusMode();
@@ -46,6 +63,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <GlossarProvider>
       <FocusModeProvider>
         <MobileMenuProvider>
+          <ProfileLoader />
           <ThemeApplier />
           <NavigationProgress />
           <AppShellInner>{children}</AppShellInner>

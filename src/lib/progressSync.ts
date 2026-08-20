@@ -15,6 +15,9 @@ const SYNC_KEYS = [
   "module-analytics",
 ] as const;
 
+// These keys are stored directly in localStorage (not ba-sid prefixed)
+const DIRECT_KEYS = ["user-profile", "onboarding-complete", "settings"] as const;
+
 /** Load progress from Neon into the current session's localStorage.
  *  Returns true if data was found and written. */
 export async function loadProgressFromDB(): Promise<boolean> {
@@ -30,6 +33,13 @@ export async function loadProgressFromDB(): Promise<boolean> {
       if (val === undefined || val === null) continue;
       lsSet(key, typeof val === "string" ? val : JSON.stringify(val));
     }
+
+    for (const key of DIRECT_KEYS) {
+      const val = data[key];
+      if (val === undefined || val === null) continue;
+      localStorage.setItem(key, typeof val === "string" ? val : JSON.stringify(val));
+    }
+
     return true;
   } catch {
     return false;
@@ -49,6 +59,12 @@ export function scheduleSync(): void {
     const data: Record<string, unknown> = {};
     for (const key of SYNC_KEYS) {
       const raw = ls(key);
+      if (raw === null) continue;
+      try { data[key] = JSON.parse(raw); } catch { data[key] = raw; }
+    }
+
+    for (const key of DIRECT_KEYS) {
+      const raw = localStorage.getItem(key);
       if (raw === null) continue;
       try { data[key] = JSON.parse(raw); } catch { data[key] = raw; }
     }
