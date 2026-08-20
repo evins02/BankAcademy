@@ -1,40 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { Lock } from "lucide-react";
+import { Lock, ArrowRight } from "lucide-react";
 
 export function LockedModuleOverlay({ onBack }: { onBack: () => void }) {
-  const [code, setCode] = useState("");
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!code || loading) return;
-    setLoading(true);
-    setError(false);
-    try {
-      const res = await fetch("/api/validate-access", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
-      const data = await res.json();
-      if (data.valid) {
-        localStorage.setItem("fullAccess", "true");
-        window.location.replace("/dashboard");
-      } else {
-        setError(true);
-        setCode("");
-      }
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
     <div
       style={{
@@ -76,95 +45,67 @@ export function LockedModuleOverlay({ onBack }: { onBack: () => void }) {
         >
           <Lock size={36} color="#0D1B4B" />
         </div>
-        <h2
-          style={{
-            margin: "0 0 12px",
-            fontSize: 18,
-            fontWeight: 700,
-            color: "#0D1B4B",
-            lineHeight: 1.35,
-          }}
-        >
+
+        <h2 style={{ margin: "0 0 12px", fontSize: 18, fontWeight: 700, color: "#0D1B4B", lineHeight: 1.35 }}>
           Vollzugang erforderlich
         </h2>
-        <p
-          style={{
-            margin: "0 0 28px",
-            fontSize: 14,
-            color: "#6b7280",
-            lineHeight: 1.65,
-          }}
-        >
-          Gib deinen Zugangscode ein, um alle Module freizuschalten.
+        <p style={{ margin: "0 0 28px", fontSize: 14, color: "#6b7280", lineHeight: 1.65 }}>
+          Dieses Modul ist nur in der Vollversion verfügbar. Erstelle ein Konto oder melde dich an, um alle Module freizuschalten.
         </p>
 
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <input
-            type="password"
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck={false}
-            value={code}
-            onChange={(e) => { setCode(e.target.value); setError(false); }}
-            disabled={loading}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <Link
+            href="/sign-up"
             style={{
-              width: "100%",
-              padding: "12px 16px",
-              borderRadius: 10,
-              border: error ? "1px solid #ef4444" : "1px solid #e5e7eb",
-              fontSize: 14,
-              color: "#0D1B4B",
-              background: "#f9fafb",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
-          {error && (
-            <p style={{ margin: 0, fontSize: 13, color: "#ef4444", textAlign: "left" }}>
-              Code ungültig
-            </p>
-          )}
-          <button
-            type="submit"
-            disabled={!code || loading}
-            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
               padding: "13px 24px",
               borderRadius: 100,
-              background: !code || loading ? "#9ca3af" : "#0D1B4B",
+              background: "#0D1B4B",
               color: "#fff",
               fontSize: 14,
               fontWeight: 700,
-              border: "none",
-              cursor: !code || loading ? "not-allowed" : "pointer",
+              textDecoration: "none",
             }}
           >
-            {loading ? "Prüfen…" : "Freischalten"}
-          </button>
-          <button
-            type="button"
-            onClick={onBack}
+            Konto erstellen <ArrowRight size={15} />
+          </Link>
+          <Link
+            href="/sign-in"
             style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               padding: "13px 24px",
               borderRadius: 100,
               border: "1px solid #e5e7eb",
               background: "transparent",
-              color: "#6b7280",
+              color: "#374151",
               fontSize: 14,
               fontWeight: 600,
+              textDecoration: "none",
+            }}
+          >
+            Bereits ein Konto? Anmelden
+          </Link>
+          <button
+            type="button"
+            onClick={onBack}
+            style={{
+              padding: "10px 24px",
+              borderRadius: 100,
+              border: "none",
+              background: "transparent",
+              color: "#9ca3af",
+              fontSize: 13,
               cursor: "pointer",
             }}
           >
-            Zurück
+            Zurück zur Demo
           </button>
-        </form>
-
-        <p style={{ margin: "20px 0 0", fontSize: 12, color: "#9ca3af" }}>
-          Noch keinen Code?{" "}
-          <Link href="/kontakt" style={{ color: "#6b7280", textDecoration: "underline" }}>
-            Vollzugang anfragen →
-          </Link>
-        </p>
+        </div>
       </div>
     </div>
   );

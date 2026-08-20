@@ -15,33 +15,12 @@ const SYNC_KEYS = [
   "module-analytics",
 ] as const;
 
-function getDemoSession(): { email: string; raw: string } | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem("ba-demo-session");
-    if (!raw) return null;
-    const email = (JSON.parse(raw) as { email?: string }).email ?? null;
-    if (!email) return null;
-    return { email, raw };
-  } catch {
-    return null;
-  }
-}
-
 /** Load progress from Neon into the current session's localStorage.
  *  Returns true if data was found and written. */
-export async function loadProgressFromDB(email: string): Promise<boolean> {
+export async function loadProgressFromDB(): Promise<boolean> {
   if (typeof window === "undefined") return false;
   try {
-    const session = getDemoSession();
-    if (!session) return false;
-    const res = await fetch(
-      `/api/user-progress?email=${encodeURIComponent(email)}`,
-      {
-        cache: "no-store",
-        headers: { "X-Demo-Session": session.raw },
-      }
-    );
+    const res = await fetch("/api/user-progress", { cache: "no-store" });
     if (!res.ok) return false;
     const { data } = (await res.json()) as { data: Record<string, unknown> | null };
     if (!data || typeof data !== "object") return false;
@@ -66,8 +45,6 @@ export function scheduleSync(): void {
   if (syncTimer) clearTimeout(syncTimer);
   syncTimer = setTimeout(() => {
     syncTimer = null;
-    const session = getDemoSession();
-    if (!session) return;
 
     const data: Record<string, unknown> = {};
     for (const key of SYNC_KEYS) {
@@ -78,11 +55,8 @@ export function scheduleSync(): void {
 
     fetch("/api/user-progress", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Demo-Session": session.raw,
-      },
-      body: JSON.stringify({ email: session.email, data }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data }),
     }).catch(() => {});
   }, 3000);
 }

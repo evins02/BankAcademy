@@ -4,6 +4,7 @@ import { Search, Maximize2, Minimize2, User, Settings, RotateCcw, LogOut, Menu }
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useUser, useClerk } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 import { NotificationBell } from "@/components/layout/NotificationBell";
@@ -40,6 +41,8 @@ const ALL_LINKS = flatLinks();
 
 export function Header({ title, subtitle }: HeaderProps) {
   const router = useRouter();
+  const { user } = useUser();
+  const { signOut } = useClerk();
   const { focusMode, toggleFocusMode } = useFocusMode();
   const { toggleMobile } = useMobileMenu();
   const [searchOpen, setSearchOpen] = useState(false);
@@ -50,10 +53,20 @@ export function Header({ title, subtitle }: HeaderProps) {
   const [xp, setXp] = useState(0);
   const [xpProgress, setXpProgress] = useState(0);
   const [xpLevelTitle, setXpLevelTitle] = useState("");
-  const [initials, setInitials] = useState("?");
-  const [avatarColor, setAvatarColor] = useState("#0D1B4B");
+  const [avatarColor] = useState("#0D1B4B");
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+
+  // Initials from Clerk user, fallback to localStorage profile
+  const initials = (() => {
+    if (user?.firstName || user?.lastName) {
+      return ((user.firstName?.[0] ?? "") + (user.lastName?.[0] ?? "")).toUpperCase() || "?";
+    }
+    if (user?.primaryEmailAddress?.emailAddress) {
+      return user.primaryEmailAddress.emailAddress[0].toUpperCase();
+    }
+    return "?";
+  })();
 
   useEffect(() => {
     try {
@@ -63,15 +76,6 @@ export function Header({ title, subtitle }: HeaderProps) {
       setXp(totalXP);
       setXpProgress(getXPProgress(totalXP));
       setXpLevelTitle(getXPLevel(totalXP).title);
-      const raw = localStorage.getItem("user-profile");
-      if (raw) {
-        const profile = JSON.parse(raw);
-        const name = profile.name?.trim();
-        if (name) {
-          setInitials(name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase());
-        }
-        if (profile.avatarColor) setAvatarColor(profile.avatarColor);
-      }
     } catch {}
   }, []);
 
@@ -122,15 +126,13 @@ export function Header({ title, subtitle }: HeaderProps) {
     const _sid = Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 10);
     localStorage.setItem("ba-sid", _sid);
     localStorage.setItem(_sid + "::mock-seeded", "true");
-    localStorage.setItem("fullAccess", "true");
     window.location.replace("/onboarding");
   }
 
   async function abmelden() {
-    try { await fetch("/api/logout", { method: "POST" }); } catch {}
     localStorage.clear();
     setProfileOpen(false);
-    window.location.replace("/");
+    await signOut({ redirectUrl: "/" });
   }
 
   const results = query.trim()
@@ -248,7 +250,9 @@ export function Header({ title, subtitle }: HeaderProps) {
                 <div className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white mb-2" style={{ background: avatarColor }}>
                   {initials}
                 </div>
-                <p className="text-xs font-semibold text-text-primary">Mein Konto</p>
+                <p className="text-xs font-semibold text-text-primary truncate max-w-[160px]">
+                  {user?.primaryEmailAddress?.emailAddress ?? "Mein Konto"}
+                </p>
               </div>
               <div className="py-1">
                 <Link
