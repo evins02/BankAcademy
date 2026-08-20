@@ -28,7 +28,7 @@ export default function SignInPage() {
         Bank<span style={{ color: "#00D4B8" }}>Academy</span>
       </a>
 
-      <SignIn afterSignInUrl="/dashboard" />
+      <SignIn />
 
       <a
         href="/"
