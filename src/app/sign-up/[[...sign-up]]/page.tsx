@@ -30,10 +30,31 @@ export default function SignUpPage() {
 
       <SignUp />
 
+      <p
+        style={{
+          marginTop: 16,
+          fontSize: 12,
+          color: "rgba(248,250,252,0.4)",
+          textAlign: "center",
+          maxWidth: 320,
+          lineHeight: 1.6,
+        }}
+      >
+        Mit der Registrierung akzeptierst du unsere{" "}
+        <a href="/nutzungsbedingungen" style={{ color: "rgba(248,250,252,0.65)", textDecoration: "underline" }}>
+          Nutzungsbedingungen
+        </a>{" "}
+        und{" "}
+        <a href="/datenschutz" style={{ color: "rgba(248,250,252,0.65)", textDecoration: "underline" }}>
+          Datenschutzerklärung
+        </a>
+        .
+      </p>
+
       <a
         href="/"
         style={{
-          marginTop: 24,
+          marginTop: 16,
           fontSize: 13,
           color: "rgba(248,250,252,0.45)",
           textDecoration: "none",
