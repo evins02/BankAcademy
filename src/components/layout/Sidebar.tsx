@@ -62,6 +62,8 @@ const ICONS: Record<string, LucideIcon> = {
 interface UserProfile {
   name?: string;
   role?: string;
+  lehrjahr?: string;
+  abteilung?: string;
 }
 
 function initials(name?: string) {
@@ -122,16 +124,8 @@ export function Sidebar() {
 
   useEffect(() => {
     if (!isLoaded) return;
-    try {
-      const raw = localStorage.getItem("user-profile");
-      if (raw) {
-        setProfile(JSON.parse(raw));
-        return;
-      }
-      // Fallback: read from Clerk unsafeMetadata (survives logout/login)
-      const meta = user?.unsafeMetadata?.profile as UserProfile | undefined;
-      if (meta?.name) setProfile(meta);
-    } catch {}
+    const meta = user?.unsafeMetadata?.profile as UserProfile | undefined;
+    if (meta?.name) setProfile(meta);
   }, [isLoaded, user]);
 
   // Close mobile sidebar on navigation
@@ -416,7 +410,9 @@ export function Sidebar() {
                 {profile.name || "Gast"}
               </p>
               <p className="truncate text-[11px] text-text-secondary">
-                {profile.role || "Profil einrichten"}
+                {profile.name
+                  ? (({ lj1: "1. Lehrjahr", lj2: "2. Lehrjahr", lj3: "3. Lehrjahr", quereinsteiger: "Quereinsteiger" } as Record<string, string>)[profile.lehrjahr ?? ""] ?? "Lernende")
+                  : "Profil einrichten"}
               </p>
             </div>
           )}
