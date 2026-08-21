@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
@@ -66,6 +67,7 @@ function SettingsRow({
 }
 
 export default function EinstellungenPage() {
+  const { user } = useUser();
   const [settings, setSettings] = useState<AppSettings>(getSettings());
   const [profile, setProfile] = useState({ name: "", role: "", focus: "", avatarColor: "#0D1B4B", abteilung: "", lehrjahr: "", ziel: "" });
   const [saved, setSaved] = useState(false);
@@ -82,23 +84,26 @@ export default function EinstellungenPage() {
   const [streakRecord, setStreakRecord] = useState(0);
   const [avgRating, setAvgRating] = useState(0);
 
+  // Load profile from Clerk metadata
+  useEffect(() => {
+    if (!user) return;
+    const p = user.unsafeMetadata?.profile as typeof profile | undefined;
+    if (p) {
+      setProfile({
+        name: p.name ?? "",
+        role: p.role ?? "",
+        focus: p.focus ?? "",
+        avatarColor: p.avatarColor ?? "#0D1B4B",
+        abteilung: p.abteilung ?? "",
+        lehrjahr: p.lehrjahr ?? "",
+        ziel: p.ziel ?? "",
+      });
+    }
+  }, [user]);
+
   useEffect(() => {
     setSettings(getSettings());
     try {
-      const raw = localStorage.getItem("user-profile");
-      if (raw) {
-        const p = JSON.parse(raw);
-        setProfile({
-          name: p.name ?? "",
-          role: p.role ?? "",
-          focus: p.focus ?? "",
-          avatarColor: p.avatarColor ?? "#0D1B4B",
-          abteilung: p.abteilung ?? "",
-          lehrjahr: p.lehrjahr ?? "",
-          ziel: p.ziel ?? "",
-        });
-        if (p.email) setDeleteEmail(p.email);
-      }
       const demoEmail = localStorage.getItem("demo-email");
       if (demoEmail) setDeleteEmail(demoEmail);
     } catch {}
@@ -118,8 +123,8 @@ export default function EinstellungenPage() {
     if (key === "theme") applyTheme(next.theme);
   }
 
-  function saveProfile() {
-    localStorage.setItem("user-profile", JSON.stringify(profile));
+  async function saveProfile() {
+    await user?.update({ unsafeMetadata: { profile } }).catch(() => {});
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
