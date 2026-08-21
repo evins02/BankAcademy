@@ -49,28 +49,20 @@ export default function DatenschutzPage() {
           </Section>
 
           <Section title="2. Welche Daten wir erfassen">
-            <p className="font-medium text-gray-700">Bei der Registrierung:</p>
+            <p className="font-medium text-gray-700">Bei der Kontoerstellung (Clerk):</p>
             <ul className="ml-4 list-disc space-y-1">
-              <li>Vorname und Nachname</li>
               <li>E-Mail-Adresse</li>
-              <li>Opt-in für Kontaktaufnahme (freiwillig, Ja/Nein)</li>
-              <li>Zeitstempel der Registrierung</li>
+              <li>Passwort (verschlüsselt, verwaltet durch Clerk)</li>
+              <li>Profilangaben: Vorname, Abteilung, Lehrjahr, Lernziel</li>
+              <li>Zeitstempel der Registrierung und letzten Anmeldung</li>
             </ul>
 
-            <p className="mt-3 font-medium text-gray-700">Bei der App-Nutzung:</p>
+            <p className="mt-3 font-medium text-gray-700">Bei der App-Nutzung (eingeloggte Nutzende):</p>
             <ul className="ml-4 list-disc space-y-1">
               <li>
-                Lernfortschritt, Testergebnisse, Streak, XP, Badges sowie dein
-                Fehlerprotokoll (Frage, deine Antwort, Musterlösung) werden bei{" "}
-                <span className="font-medium text-gray-700">allen Nutzenden lokal in deinem Browser</span>{" "}
-                gespeichert.
-              </li>
-              <li>
-                Bei <span className="font-medium text-gray-700">Demo-Nutzenden</span> wird
-                zusätzlich eine Kopie des Lernfortschritts und des Fehlerprotokolls auf
-                unseren Servern (Neon-Datenbank) gespeichert, damit dein Fortschritt
-                geräteübergreifend verfügbar bleibt. Bei regulären Access-Code-Nutzenden
-                bleibt dein Fortschritt vollständig lokal auf deinem Gerät.
+                Lernfortschritt, Streak, XP, Badges sowie Testergebnisse werden{" "}
+                <span className="font-medium text-gray-700">lokal in deinem Browser und als Kopie auf unseren Servern (Neon-Datenbank)</span>{" "}
+                gespeichert, damit dein Fortschritt geräteübergreifend verfügbar bleibt.
               </li>
               <li>
                 Deine &ldquo;Top Schwächstellen&rdquo; (häufige Fehlerarten) werden
@@ -93,6 +85,12 @@ export default function DatenschutzPage() {
                 Dabei werden keine personenbezogenen Daten von dir übertragen.
               </li>
             </ul>
+
+            <p className="mt-3 font-medium text-gray-700">Bei der Demo-Nutzung (ohne Konto):</p>
+            <p>
+              Im Demo-Modus werden keine personenbezogenen Daten erfasst. Dein Fortschritt
+              bleibt vollständig lokal in deinem Browser.
+            </p>
 
             <p className="mt-3 font-medium text-gray-700">Kontaktformular:</p>
             <p>
@@ -148,10 +146,18 @@ export default function DatenschutzPage() {
                 </thead>
                 <tbody>
                   <tr className="border-b border-gray-50">
+                    <td className="px-3 py-2 font-medium text-gray-800">Clerk</td>
+                    <td className="px-3 py-2 text-gray-600">
+                      Authentifizierung &amp; Kontoverwaltung (E-Mail, Passwort-Hash,
+                      Profilangaben, Sessions)
+                    </td>
+                    <td className="px-3 py-2 text-gray-600">USA</td>
+                  </tr>
+                  <tr className="border-b border-gray-50">
                     <td className="px-3 py-2 font-medium text-gray-800">Neon</td>
                     <td className="px-3 py-2 text-gray-600">
-                      Hosting &amp; Datenbank (Registrierungsdaten, Fortschritt von
-                      Demo-Nutzenden, Kontaktformular-Inhalte)
+                      Datenbank (Lernfortschritt, XP, Streak, Badges aller eingeloggten
+                      Nutzenden; Kontaktformular-Inhalte)
                     </td>
                     <td className="px-3 py-2 text-gray-600">EU (Frankfurt)</td>
                   </tr>
@@ -222,13 +228,16 @@ export default function DatenschutzPage() {
           <Section title="8. Cookies & lokale Speicherung">
             <p>
               Die App verwendet{" "}
-              <span className="font-medium text-gray-700">keine Tracking-Cookies</span>.
-              Dein Lernfortschritt wird bei Access-Code-Nutzenden ausschliesslich lokal
-              im Browser gespeichert — das ist eine bewusste Funktion, damit du flexibel
-              bleibst und nicht an unsere Server gebunden bist. Bei Demo-Nutzenden wird
-              zusätzlich eine Kopie auf unseren Servern gespeichert (siehe Abschnitt 2).
-              Du kannst deine lokal gespeicherten Daten jederzeit über deinen Browser
-              löschen.
+              <span className="font-medium text-gray-700">keine Tracking-Cookies</span>{" "}
+              und keine Werbenetzwerke. Für die Authentifizierung setzt Clerk eine
+              Session-Cookie, die technisch notwendig ist und nach dem Abmelden gelöscht wird.
+            </p>
+            <p>
+              Dein Lernfortschritt wird zusätzlich lokal in deinem Browser (localStorage)
+              zwischengespeichert und bei eingeloggten Nutzenden mit unserer Datenbank
+              synchronisiert, damit du geräteübergreifend weiterlernen kannst. Du kannst
+              deine lokal gespeicherten Daten jederzeit über die Browser-Einstellungen löschen.
+              Im Demo-Modus bleibt dein Fortschritt ausschliesslich lokal.
             </p>
           </Section>
 
