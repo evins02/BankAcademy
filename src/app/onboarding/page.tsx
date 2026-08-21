@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronRight, Check } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 import { saveSettings } from "@/lib/settingsData";
 import { syncNow } from "@/lib/progressSync";
 
@@ -99,6 +100,7 @@ function StepProgress({ current, total }: { current: number; total: number }) {
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const { user } = useUser();
   const [step, setStep] = useState<Step>("name");
   const [name, setName] = useState("");
   const [abteilung, setAbteilung] = useState("");
@@ -134,19 +136,19 @@ export default function OnboardingPage() {
     if (finalZiel === "challenge") diff = "challenge";
     else if (lehrjahr === "lj1") diff = "einsteiger";
 
-    localStorage.setItem(
-      "user-profile",
-      JSON.stringify({
-        name: name.trim(),
-        role: "Lernende",
-        abteilung,
-        lehrjahr,
-        ziel: finalZiel,
-        avatarColor: "#0D1B4B",
-      })
-    );
+    const profileData = {
+      name: name.trim(),
+      role: "Lernende",
+      abteilung,
+      lehrjahr,
+      ziel: finalZiel,
+      avatarColor: "#0D1B4B",
+    };
+    localStorage.setItem("user-profile", JSON.stringify(profileData));
     saveSettings({ difficultyPreference: diff });
     localStorage.setItem("onboarding-complete", "true");
+    // Save to Clerk so profile survives logout/login on any device
+    user?.update({ unsafeMetadata: { profile: profileData } }).catch(() => {});
     syncNow();
     setStep("done");
   }

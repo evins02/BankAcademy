@@ -31,6 +31,7 @@ import {
   PanelLeftOpen,
   type LucideIcon,
 } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { NAV_GROUPS } from "@/lib/constants";
 import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
@@ -98,6 +99,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const { open: openGlossar } = useGlossar();
   const { closeMobile } = useMobileMenu();
+  const { user, isLoaded } = useUser();
   const [profile, setProfile] = useState<UserProfile>({});
   const [search, setSearch] = useState("");
   const [collapsed, setCollapsed] = useState(false);
@@ -113,12 +115,24 @@ export function Sidebar() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem("user-profile");
-      if (raw) setProfile(JSON.parse(raw));
       const saved = localStorage.getItem("sidebar-collapsed");
       if (saved === "true") setCollapsed(true);
     } catch {}
   }, []);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    try {
+      const raw = localStorage.getItem("user-profile");
+      if (raw) {
+        setProfile(JSON.parse(raw));
+        return;
+      }
+      // Fallback: read from Clerk unsafeMetadata (survives logout/login)
+      const meta = user?.unsafeMetadata?.profile as UserProfile | undefined;
+      if (meta?.name) setProfile(meta);
+    } catch {}
+  }, [isLoaded, user]);
 
   // Close mobile sidebar on navigation
   useEffect(() => {
