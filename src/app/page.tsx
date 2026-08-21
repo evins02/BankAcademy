@@ -1969,9 +1969,24 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
           <p style={{ margin: 0, fontSize: 12, color: WM }}>
             © 2026 BankAcademy. Alle Rechte vorbehalten.
           </p>
-          <p style={{ margin: 0, fontSize: 12, color: WM }}>
-            Für Lernende und Ausbildner in Schweizer Banken.
-          </p>
+          <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "center" }}>
+            {[
+              { label: "Impressum", href: "/impressum" },
+              { label: "Datenschutz", href: "/datenschutz" },
+              { label: "Nutzungsbedingungen", href: "/nutzungsbedingungen" },
+              { label: "Kontakt", href: "/kontakt" },
+            ].map(({ label, href }) => (
+              <a
+                key={href}
+                href={href}
+                style={{ fontSize: 12, color: WM, textDecoration: "none", transition: "color 0.15s" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = WH; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = WM; }}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
