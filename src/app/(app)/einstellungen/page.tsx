@@ -220,7 +220,6 @@ export default function EinstellungenPage() {
             <div className="space-y-4">
               {[
                 { key: "name", label: "Name", placeholder: "Vorname Nachname" },
-                { key: "role", label: "Rolle", placeholder: "z.B. Kundenberater/in" },
                 { key: "focus", label: "Fokus", placeholder: "z.B. Hypotheken, KMU" },
               ].map(({ key, label, placeholder }) => (
                 <div key={key}>
@@ -424,7 +423,7 @@ export default function EinstellungenPage() {
                     <div class="section">
                       <p class="section-title">Lernender</p>
                       <div class="row"><span>Name</span><strong>${profile.name || "–"}</strong></div>
-                      <div class="row"><span>Rolle</span><strong>${profile.role || "–"}</strong></div>
+
                       ${profile.focus ? `<div class="row"><span>Fokus</span><strong>${profile.focus}</strong></div>` : ""}
                     </div>
                     <div class="section">
