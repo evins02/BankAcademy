@@ -1485,7 +1485,7 @@ function AccessCodeModal({ onClose }: { onClose: () => void }) {
       });
       const data = await res.json();
       if (data.valid) {
-        window.location.replace("/sign-in");
+        window.location.replace("/dashboard");
       } else {
         setError(true);
         setCode("");
