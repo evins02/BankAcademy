@@ -16,7 +16,7 @@ const SYNC_KEYS = [
 ] as const;
 
 // These keys are stored directly in localStorage (not ba-sid prefixed)
-const DIRECT_KEYS = ["user-profile", "onboarding-complete", "settings"] as const;
+const DIRECT_KEYS = ["settings"] as const;
 
 /** Load progress from Neon into the current session's localStorage.
  *  Returns true if data was found and written. */

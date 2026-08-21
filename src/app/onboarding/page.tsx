@@ -100,7 +100,7 @@ function StepProgress({ current, total }: { current: number; total: number }) {
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const [step, setStep] = useState<Step>("name");
   const [name, setName] = useState("");
   const [abteilung, setAbteilung] = useState("");
@@ -108,15 +108,13 @@ export default function OnboardingPage() {
   const [ziel, setZiel] = useState("");
   const [barWidth, setBarWidth] = useState(0);
 
-  // Skip if already completed
+  // Skip if already completed (check Clerk metadata)
   useEffect(() => {
-    if (
-      localStorage.getItem("user-profile") &&
-      localStorage.getItem("onboarding-complete")
-    ) {
+    if (!isLoaded) return;
+    if (user?.unsafeMetadata?.profile) {
       router.replace("/dashboard");
     }
-  }, [router]);
+  }, [isLoaded, user, router]);
 
   // Auto-redirect from done step
   useEffect(() => {
@@ -144,10 +142,8 @@ export default function OnboardingPage() {
       ziel: finalZiel,
       avatarColor: "#0D1B4B",
     };
-    localStorage.setItem("user-profile", JSON.stringify(profileData));
     saveSettings({ difficultyPreference: diff });
-    localStorage.setItem("onboarding-complete", "true");
-    // Save to Clerk so profile survives logout/login on any device
+    // Store profile in Clerk — survives logout/login on any device
     user?.update({ unsafeMetadata: { profile: profileData } }).catch(() => {});
     syncNow();
     setStep("done");

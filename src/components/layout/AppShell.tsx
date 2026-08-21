@@ -15,19 +15,9 @@ function ProfileLoader() {
   const { isLoaded, isSignedIn } = useUser();
   useEffect(() => {
     if (!isLoaded || !isSignedIn) return;
-
-    if (localStorage.getItem("onboarding-complete")) {
-      // Profile is in localStorage — make sure it's saved to DB
-      scheduleSync();
-      return;
-    }
-
-    // Profile missing — try to restore from DB (other device/browser)
-    loadProgressFromDB().then((loaded) => {
-      if (loaded && localStorage.getItem("onboarding-complete")) {
-        window.location.reload();
-      }
-    });
+    // Sync XP/streak/progress from DB on login
+    loadProgressFromDB();
+    scheduleSync();
   }, [isLoaded, isSignedIn]);
   return null;
 }
