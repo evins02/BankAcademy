@@ -428,6 +428,10 @@ export function Sidebar() {
               Datenschutz
             </Link>
             <span className="text-[10px] text-text-secondary opacity-40">·</span>
+            <Link href="/nutzungsbedingungen" className="text-[10px] text-text-secondary transition-colors hover:text-text-primary">
+              AGB
+            </Link>
+            <span className="text-[10px] text-text-secondary opacity-40">·</span>
             <Link href="/kontakt" className="text-[10px] text-text-secondary transition-colors hover:text-text-primary">
               Kontakt
             </Link>

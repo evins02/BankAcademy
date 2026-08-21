@@ -1899,6 +1899,7 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
     Legal: [
       { label: "Impressum", action: () => { window.location.href = "/impressum"; } },
       { label: "Datenschutz", action: () => { window.location.href = "/datenschutz"; } },
+      { label: "Nutzungsbedingungen", action: () => { window.location.href = "/nutzungsbedingungen"; } },
       { label: "Kontakt", action: () => { window.location.href = "/kontakt"; } },
     ],
   };
