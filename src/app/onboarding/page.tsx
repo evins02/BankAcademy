@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronRight, Check } from "lucide-react";
 import { saveSettings } from "@/lib/settingsData";
-import { scheduleSync } from "@/lib/progressSync";
+import { syncNow } from "@/lib/progressSync";
 
 // ─── Data ────────────────────────────────────────────────────────────────────────────
 
@@ -147,7 +147,7 @@ export default function OnboardingPage() {
     );
     saveSettings({ difficultyPreference: diff });
     localStorage.setItem("onboarding-complete", "true");
-    scheduleSync();
+    syncNow();
     setStep("done");
   }
 

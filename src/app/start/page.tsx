@@ -22,7 +22,7 @@ export default function StartPage() {
     if (typeof window === "undefined") return;
     const done = localStorage.getItem("registration-complete");
     if (done === "true") {
-      router.replace("/code-eingabe");
+      router.replace("/sign-in");
     } else {
       setChecking(false);
     }
@@ -54,7 +54,7 @@ export default function StartPage() {
     localStorage.setItem("registration-complete", "true");
     localStorage.setItem("registered-email", email.trim().toLowerCase());
 
-    router.push("/code-eingabe?registered=true");
+    router.push("/sign-in");
   }
 
   if (checking) return null;
