@@ -53,10 +53,11 @@ Antwort des Lernenden: "${studentText}"
 Antworte ausschliesslich mit einem JSON-Objekt (kein Markdown, keine Codeblöcke, keine Erklärungen darum):
 {"verdict":"RICHTIG"|"TEILWEISE"|"FALSCH","richtig":"Was der Lernende korrekt erfasst hat (1-2 Sätze) – schreibe '–' falls nichts korrekt war","fehlt":"Was fehlt oder ist ungenau (1-2 Sätze)","ideal":"Die ideale Kurz-Antwort (1-2 Sätze)"}
 
-Regeln:
-- verdict = RICHTIG: Kernaussage vollständig und korrekt erfasst
-- verdict = TEILWEISE: Ansatz stimmt, aber wichtige Punkte fehlen oder sind ungenau
-- verdict = FALSCH: Die Antwort ist inhaltlich falsch, irrelevant oder geht nicht auf die Frage ein
+Regeln zur Einstufung (verdict):
+- RICHTIG: Alle inhaltlich relevanten Punkte aus der Musterlösung wurden genannt – auch wenn kurz, in eigenen Worten oder ohne Gesetzesartikel – und nichts davon ist falsch. Eine knappe, aber vollständige und korrekte Antwort ist RICHTIG, nicht TEILWEISE.
+- TEILWEISE: Mindestens ein inhaltlich relevanter Punkt fehlt komplett, oder eine Aussage ist ungenau/missverständlich – aber nichts Genanntes ist grob falsch.
+- FALSCH: Mindestens eine Aussage ist inhaltlich falsch, oder die Antwort geht am Thema vorbei bzw. beantwortet die Frage nicht.
+- Bewerte nach inhaltlicher Vollständigkeit und Korrektheit, nicht nach Wortwahl, Stil oder fehlenden Gesetzeszitaten.
 - Halte jedes Feld auf maximal 2 kurze Sätze
 - Deutsch, Schweizer Schreibweise
 - Wenn die Antwort sehr gut ist: fehlt = "Vollständig – nichts Wesentliches fehlt."
