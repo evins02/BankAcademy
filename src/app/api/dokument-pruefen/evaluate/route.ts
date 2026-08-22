@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { DOKUMENT_REGISTRY } from "@/lib/dokument-pruefen/registry";
 
 export const runtime = "edge";
+export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
 interface FeedbackResult {

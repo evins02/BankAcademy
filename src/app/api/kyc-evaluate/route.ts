@@ -5,6 +5,7 @@ import type { KycFormData } from "@/components/modules/kyc-form/kyc-form-types";
 type Message = { role: string; content: string };
 
 export const runtime = "edge";
+export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });

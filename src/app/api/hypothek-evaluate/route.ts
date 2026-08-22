@@ -3,6 +3,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { HypothekFormData } from "@/components/modules/hypothek-antrag/hypothek-antrag-types";
 
 export const runtime = "edge";
+export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });

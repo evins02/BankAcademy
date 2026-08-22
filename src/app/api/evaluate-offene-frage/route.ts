@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import type { OffeneFrageEvalResult } from "@/lib/offene-frage";
 
 export const runtime = "edge";
+export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
 const client = new Anthropic();
