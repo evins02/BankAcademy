@@ -7,6 +7,7 @@ interface AiResult {
   richtig: string;
   fehlt: string;
   ideal: string;
+  error?: boolean;
 }
 
 interface ActiveRecallPromptProps {
@@ -19,6 +20,7 @@ export function ActiveRecallPrompt({ feedback, promptText, onComplete }: ActiveR
   const [text, setText] = useState("");
   const [phase, setPhase] = useState<"input" | "loading" | "result" | "done">("input");
   const [aiResult, setAiResult] = useState<AiResult | null>(null);
+  const [isError, setIsError] = useState(false);
 
   async function handleSave() {
     if (!text.trim()) return;
@@ -35,11 +37,15 @@ export function ActiveRecallPrompt({ feedback, promptText, onComplete }: ActiveR
         body: JSON.stringify({ feedback, studentText: text }),
       });
       if (res.ok) {
-        const data = await res.json();
-        setAiResult(data as AiResult);
+        const data = (await res.json()) as AiResult;
+        setAiResult(data);
+        if (data.error) setIsError(true);
+      } else {
+        setIsError(true);
       }
       setPhase("result");
     } catch {
+      setIsError(true);
       setPhase("result");
     }
   }
@@ -103,7 +109,7 @@ export function ActiveRecallPrompt({ feedback, promptText, onComplete }: ActiveR
       {(phase === "result" || (phase === "done" && !!text.trim())) && (
         <>
           <p className="mb-2 text-sm font-medium text-primary">Gespeichert ✓</p>
-          {aiResult && (
+          {aiResult && !isError && (
             <div className="mt-1 space-y-2 rounded-lg border border-border bg-surface p-3">
               <div className="flex gap-2 text-sm">
                 <span className="shrink-0">✅</span>
@@ -128,8 +134,12 @@ export function ActiveRecallPrompt({ feedback, promptText, onComplete }: ActiveR
               </div>
             </div>
           )}
-          {!aiResult && phase === "result" && (
-            <p className="mt-1 text-xs text-text-secondary">KI-Auswertung nicht verfügbar.</p>
+          {isError && phase === "result" && (
+            <div className="mt-1 rounded-lg border border-amber-200 bg-amber-50 p-3">
+              <p className="text-xs text-amber-700">
+                KI-Bewertung momentan nicht verfügbar – deine Antwort wurde gespeichert.
+              </p>
+            </div>
           )}
           {phase === "result" && (
             <button

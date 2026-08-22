@@ -61,8 +61,8 @@ Regeln:
         // fall through to fallback
       }
     }
-    return NextResponse.json(FALLBACK);
+    return NextResponse.json({ ...FALLBACK, error: true });
   } catch {
-    return NextResponse.json(FALLBACK);
+    return NextResponse.json({ ...FALLBACK, error: true });
   }
 }

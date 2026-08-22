@@ -270,6 +270,8 @@ const L1_AUSWEIS_ABGELAUFEN: DocumentCase = {
   ],
   generalFeedback:
     "Ein abgelaufener Ausweis ist kein gültiges Identifikationsdokument – auch wenn 'das Foto noch stimmt'. Der gesamte weitere Prozess (Formular A, Basisvertrag, FATCA etc.) darf erst nach Vorlage eines gültigen Ausweises fortgesetzt werden. Es gibt keine Ausnahme über Compliance.",
+  recallMusterlösung:
+    "Gültigen Ausweis einfordern: Ein abgelaufenes Identifikationsdokument erfüllt GwG Art. 3 nicht – das Ablaufdatum macht es ungültig, unabhängig davon, ob das Foto noch erkennbar ist.\n\nNeuen Termin vereinbaren: Ohne gültige Identifikation ist keine Kontoeröffnung möglich. Frau Keller muss zuerst ihren Ausweis erneuern und danach mit einem gültigen Dokument zurückkommen.\n\nKein Ermessensspielraum: Es gibt keine Toleranzfrist und keine Compliance-Ausnahme für abgelaufene Ausweise – die Regel gilt absolut, unabhängig davon, wie kurz das Dokument schon abgelaufen ist.\n\nAlle weiteren Schritte (Basisvertrag, Formular A, FATCA) dürfen erst nach erfolgreicher Identifikation mit einem gültigen Dokument erfolgen.",
 };
 
 const L1_VOLLMACHT_MCQ: McqCase = {
@@ -405,6 +407,8 @@ const L2_AUSLAENDER: DocumentCase = {
   requiredOneOf: [["reisepass-ausl", "aufenthalt-b"]],
   generalFeedback:
     "Für ausländische Kunden gilt: Entweder der ausländische Pass ODER die Aufenthaltsbewilligung reicht für die Identifikation. Zusätzlich sind Basisvertrag, Eigenerklärung FATCA (natürliche Person), Formular A (VSB 20 – wirtschaftlich Berechtigter), Wohnsitznachweis und Unterschriftenprobe erforderlich. Bei einem normalen Angestelltenverhältnis besteht kein erhöhtes Risiko – kein EDD nötig.",
+  recallMusterlösung:
+    "Identifikation (Reisepass ODER Aufenthaltsbewilligung B): Für ausländische Kunden genügt eines der beiden anerkannten Dokumente – beide sind gleichwertig, es braucht nicht beide gleichzeitig.\n\nBasisvertrag: Wie bei jedem Kunden die rechtliche Grundlage der Geschäftsbeziehung, unabhängig von Nationalität oder Aufenthaltsstatus.\n\nEigenerklärung FATCA (natürliche Person): Die FATCA-Abklärung ist nationalitätsunabhängig – auch EU-Bürger müssen aktiv nach US-Verbindungen gefragt werden.\n\nFormular A (VSB 20): Der wirtschaftlich Berechtigte muss auch bei ausländischen Kunden dokumentiert werden.\n\nWohnsitzbestätigung und Unterschriftenprobe: Zusätzliche Standardnachweise bei ausländischen Neukunden ohne langjährige Kundenbeziehung.",
 };
 
 const L2_BAREINLAGE: DocumentCase = {
@@ -494,6 +498,8 @@ const L2_BAREINLAGE: DocumentCase = {
   ],
   generalFeedback:
     "Bei ungewöhnlichen Bareinlagen greift GwG Art. 6 (Abklärungspflicht der Mittelherkunft). Reihenfolge: 1) Identifizieren, 2) Herkunft schriftlich abklären, 3) intern eskalieren (Compliance), 4) dokumentieren. Konto erst nach positiver Abklärung eröffnen. MROS-Meldung via Compliance – nicht direkt zur Polizei.",
+  recallMusterlösung:
+    "Herkunft der Gelder abklären (GwG Art. 6): Bei einer ungewöhnlichen Bareinlage mit vager oder ausweichender Erklärung besteht eine gesetzliche Pflicht, die Mittelherkunft schriftlich abzuklären, bevor das Geld angenommen wird.\n\nVorgesetzte/Compliance informieren: Ein konkreter Verdachtsmoment darf nicht allein durch die Kundenberaterin entschieden werden – die interne Eskalation ist bei Geldwäscheverdacht zwingend.\n\nDokumentation: Der Vorfall und das Abklärungsresultat müssen lückenlos festgehalten werden – das schützt die Bank und die Nachvollziehbarkeit des Entscheids.\n\nStandarddokumente (Basisvertrag, Identifikation, FATCA, Formular A) bleiben zusätzlich Pflicht – die Abklärungspflicht ersetzt sie nicht, sondern ergänzt sie.",
 };
 
 const L2_MINDERJAEHRIG: DocumentCase = {
@@ -578,6 +584,8 @@ const L2_MINDERJAEHRIG: DocumentCase = {
   ],
   generalFeedback:
     "Bei Minderjährigen (unter 18 Jahren): Mindestens ein Elternteil muss persönlich erscheinen, sich ausweisen und die Kontoeröffnung unterzeichnen. Die Minderjährige selbst unterzeichnet keine Bankdokumente. Mündliche Zustimmung – auch per Telefon – genügt nicht.",
+  recallMusterlösung:
+    "Ausweis der Minderjährigen und des Elternteils: Auch Minderjährige werden identifiziert – zusätzlich muss mindestens ein Elternteil als gesetzlicher Vertreter persönlich erscheinen und sich ausweisen.\n\nUnterschrift des Elternteils: Da Minderjährige nicht voll handlungsfähig sind, muss die Kontoeröffnung vom gesetzlichen Vertreter unterzeichnet werden – die Minderjährige selbst unterschreibt keine Bankdokumente.\n\nKonto erst mit anwesendem Elternteil: Eine mündliche Zusicherung – auch telefonisch – genügt nicht. Die Eröffnung darf erst erfolgen, wenn der Elternteil persönlich vor Ort ist und unterschreibt.",
 };
 
 const L2_PEP_SCHMID: DocumentCase = {
@@ -699,6 +707,8 @@ const L2_PEP_SCHMID: DocumentCase = {
   ],
   generalFeedback:
     "Der zentrale Lernpunkt: Auch wenn ein Kunde seine politische Vergangenheit bagatellisiert ('nur Unternehmer'), muss die Bank selbst erkennen, dass ein ehemaliger Nationalrat als PEP gilt. Das löst verstärkte Sorgfaltspflichten aus – insbesondere PEP-Prüfung und Herkunftsnachweis Vermögen.",
+  recallMusterlösung:
+    "PEP-Prüfungsformular: Ein ehemaliger Nationalrat gilt auch nach Amtsende weiterhin als politisch exponierte Person – die Bank muss das selbst erkennen, auch wenn der Kunde seine politische Vergangenheit im Gespräch bagatellisiert ('nur Unternehmer').\n\nHerkunftsnachweis Vermögen: Bei PEP-Status gilt eine verstärkte Sorgfaltspflicht zur Prüfung der Vermögensherkunft – unabhängig davon, ob konkrete Verdachtsmomente vorliegen.\n\nStandarddokumente (Ausweis, Basisvertrag, Formular A, FATCA-Eigenerklärung): Bleiben wie bei jeder Kontoeröffnung zusätzlich zwingend – der PEP-Status ergänzt die Pflichten, ersetzt sie nicht.",
 };
 
 const L2_ERBSCHAFT_KELLER: DocumentCase = {
@@ -786,6 +796,8 @@ const L2_ERBSCHAFT_KELLER: DocumentCase = {
   ],
   generalFeedback:
     "Der zentrale Lernpunkt: Eine mündliche Aussage wie 'meine Schwester will nichts damit zu tun haben' hat keine rechtliche Wirkung. Es braucht immer die formelle Zustimmung aller Erben oder einen dokumentierten Erbverzicht, bevor das Konto aufgelöst und das Guthaben ausgezahlt werden darf.",
+  recallMusterlösung:
+    "Todesurkunde und Erbschein: Beide Dokumente sind Grundvoraussetzung, um den Erbfall und die Erbberechtigung rechtsgültig nachzuweisen, bevor die Bank über das Konto der Verstorbenen verfügt.\n\nZustimmung aller Erben: Eine mündliche Aussage wie 'meine Schwester will nichts damit zu tun haben' ersetzt keine formelle Zustimmung oder einen dokumentierten Erbverzicht – ohne diese darf das Konto nicht aufgelöst werden.\n\nAusweis des sich meldenden Erben: Die Identität der Person, die die Auflösung beantragt, muss wie bei jeder Bankhandlung geprüft werden.",
 };
 
 // ─────────────────────────────────────────────────────────
@@ -892,6 +904,8 @@ const L3_GEMEINSCHAFTSKONTO: DocumentCase = {
   ],
   generalFeedback:
     "Beim Gemeinschaftskonto: Basisvertrag + BEIDE Inhaber identifiziert (je Ausweis + Eigenerklärung FATCA (natürliche Person)). Zusätzlich: Formular A einmal pro Konto (VSB 20). Die Zeichnungsregelung richtet sich nach dem Kundenwunsch – hier Einzelzeichnung. Kollektivzeichnung wäre falsch, da das Ehepaar explizit einzeln verfügen möchte.",
+  recallMusterlösung:
+    "Beide Kontoinhaber identifizieren: Bei einem Gemeinschaftskonto müssen beide Personen einzeln identifiziert werden – nicht nur eine.\n\nFATCA-Eigenerklärung für jede Person separat: Auch beim gemeinsamen Konto braucht jeder wirtschaftlich Berechtigte eine eigene Erklärung, nicht eine gemeinsame für beide.\n\nFormular A: Wird einmal pro Konto ausgestellt, dokumentiert aber beide wirtschaftlich Berechtigten.\n\nZeichnungsregelung nach Kundenwunsch: Möchte das Ehepaar, dass jeder allein verfügen kann, ist eine Einzelzeichnungsvereinbarung nötig – eine Kollektivzeichnung würde dem ausdrücklichen Wunsch widersprechen.",
 };
 
 const L3_AUSWEIS_TRICK_MCQ: McqCase = {
@@ -1038,6 +1052,8 @@ const L3_HOCHRISIKO_PEP: DocumentCase = {
   ],
   generalFeedback:
     "Nigeria gilt als FATF-Risikoland. Regierungsverbindungen = PEP-Prüfung zwingend. Bei USD 480'000 aus einem unbekannten 'Deal': EDD-Formular + lückenloser Herkunftsnachweis + Freigabe durch Vorgesetzte. Das Konto darf erst nach vollständiger positiver Prüfung eröffnet werden.",
+  recallMusterlösung:
+    "PEP-Prüfung: Erwähnte Regierungsverbindungen lösen die Pflicht zur PEP-Prüfung aus, unabhängig davon, wie beiläufig sie erwähnt werden.\n\nHerkunftsnachweis und EDD: Ein Hochrisikoland (FATF-Einstufung) kombiniert mit PEP-Status und einer grossen, unklaren Einzahlung erfordert lückenlose Dokumentation der Mittelherkunft sowie ein EDD-Formular.\n\nGenehmigung durch Vorgesetzte: PEP-Konten dürfen nicht allein durch die Kundenberaterin freigegeben werden – es braucht die Zustimmung einer höheren Stelle.\n\nWeder Standardprozess noch Pauschalablehnung sind korrekt: Erst die vollständige Prüfung entscheidet, ob und wie das Konto eröffnet wird.",
 };
 
 // ─────────────────────────────────────────────────────────
@@ -1126,6 +1142,8 @@ const L2_NIEDERLASSUNGSBEWILLIGUNG_C: DocumentCase = {
   requiredOneOf: [["ausweis-c", "reisepass-rum"]],
   generalFeedback:
     "Der C-Ausweis (Niederlassungsbewilligung) ist ein anerkanntes Identifikationsdokument – gleichwertig mit einem ausländischen Reisepass. Trotzdem gilt: Der Kontoeröffnungsprozess ist identisch mit dem für B-Ausweis-Inhaber. Kein vereinfachter Prozess, kein Sonderstatus gegenüber Schweizern. Pflichtdokumente: Basisvertrag, Identifikation (C-Ausweis oder Reisepass), Eigenerklärung FATCA (natürliche Person), Formular A, Wohnsitznachweis.",
+  recallMusterlösung:
+    "Identifikation (C-Ausweis ODER Reisepass): Die Niederlassungsbewilligung C ist ein gleichwertiges, aber kein zusätzliches Identifikationsdokument – sie ersetzt den ausländischen Pass, verändert aber sonst den Prozess nicht.\n\nKein vereinfachter Prozess: Auch nach 12 Jahren in der Schweiz und mit C-Ausweis gibt es keinen Sonderstatus gegenüber einer Aufenthaltsbewilligung B – alle Standarddokumente bleiben Pflicht.\n\nBasisvertrag, FATCA-Eigenerklärung, Formular A, Wohnsitzbestätigung: Gelten unverändert wie bei jedem anderen Neukunden.",
 };
 
 const L2_BEISTANDSCHAFT: DocumentCase = {
@@ -1202,6 +1220,8 @@ const L2_BEISTANDSCHAFT: DocumentCase = {
   ],
   generalFeedback:
     "Beistandschaft nach ZGB kennt verschiedene Stufen: Begleit-Beistandschaft (Art. 393) lässt den Kunden voll handlungsfähig – die Beiständin unterstützt, hat aber kein Mitspracherecht bei Vertragsabschlüssen. Vertretungs-Beistandschaft (Art. 394) oder Umfassende Beistandschaft (Art. 398) schränken die Handlungsfähigkeit ein und würden ein anderes Vorgehen erfordern. Deshalb ist das Einsehen der Beistandsurkunde der entscheidende erste Schritt.",
+  recallMusterlösung:
+    "Beistandsurkunde einsehen: Der entscheidende erste Schritt – die Urkunde zeigt, welche Stufe der Beistandschaft vorliegt und bestimmt damit, ob der Kunde selbst rechtsgültig handeln kann.\n\nBegleit-Beistandschaft (Art. 393 ZGB): Die leichteste Form lässt den Kunden voll handlungsfähig – er unterschreibt selbst, die Beiständin hat kein Mitspracherecht bei Vertragsabschlüssen.\n\nAusweis von Herrn Zimmermann: Er bleibt Kontoinhaber und muss selbst identifiziert werden – die Beiständin ist nur Begleitperson, keine Vertragspartei.\n\nEine Beistandschaft allein ist niemals ein Ablehnungsgrund – erst die konkrete Form (Begleit-, Vertretungs- oder umfassende Beistandschaft) bestimmt das weitere Vorgehen.",
 };
 
 const L2_KLEINKIND_SORGE: DocumentCase = {
@@ -1303,6 +1323,8 @@ const L2_KLEINKIND_SORGE: DocumentCase = {
   ],
   generalFeedback:
     "Bei unverheirateten oder getrennten Eltern darf die Bank die elterliche Sorge nicht einfach mündlich abfragen, sondern muss sie amtlich belegen lassen (z.B. Auszug Zivilstandsregister). Besteht gemeinsame elterliche Sorge, braucht die Kontoeröffnung für das Kind die dokumentierte Zustimmung beider Elternteile – auch wenn nur einer persönlich erscheint. Die Standarddokumente (Basisvertrag, Ausweis des Kindes, FATCA, Formular A) bleiben zusätzlich zwingend.",
+  recallMusterlösung:
+    "Nachweis der elterlichen Sorge: Bei unverheirateten oder getrennten Eltern darf die Bank die Vertretungsbefugnis nicht mündlich abfragen – sie muss amtlich belegt werden, insbesondere wenn sich der anwesende Elternteil selbst unsicher zeigt.\n\nZustimmung der abwesenden Kindsmutter: Besteht gemeinsame elterliche Sorge, kann nicht ein Elternteil allein über die Kontoeröffnung für das Kind entscheiden – die Zustimmung des anderen muss dokumentiert vorliegen.\n\nAusweis des Kindes und des handelnden Elternteils: Auch Kleinkinder werden identifiziert, ebenso der gesetzliche Vertreter, der die Dokumente unterschreibt.\n\nStandarddokumente (Basisvertrag, FATCA, Formular A) bleiben zusätzlich zwingend, wie bei jeder Kontoeröffnung.",
 };
 
 const L2_SCHEIDUNG: DocumentCase = {
@@ -1411,6 +1433,8 @@ const L2_SCHEIDUNG: DocumentCase = {
   ],
   generalFeedback:
     "Nach einer Scheidung sind zwei getrennte Schritte nötig: 1) Die Namensänderung im Kundenstamm erfolgt nur gestützt auf die Scheidungsurkunde und den neuen Ausweis. 2) Die Zeichnungsberechtigung des Ex-Partners auf dem bisherigen Gemeinschaftskonto muss aktiv gelöscht oder angepasst werden – sie erlischt nicht automatisch mit der Scheidung. Das neue Einzelkonto wird unabhängig vom Ex-Partner eröffnet.",
+  recallMusterlösung:
+    "Scheidungsurkunde und neuer Ausweis: Die Namensänderung im Kundenstamm darf nur gestützt auf ein amtliches Dokument erfolgen, nicht aufgrund einer mündlichen Aussage.\n\nZeichnungsberechtigung des Ex-Partners löschen: Das ist der am häufigsten übersehene Schritt – die Berechtigung des Ex-Partners auf dem alten Gemeinschaftskonto erlischt nicht automatisch mit der Scheidung und muss aktiv angepasst werden.\n\nNeues Einzelkonto: Wird unabhängig vom Ex-Partner eröffnet, mit allen Standarddokumenten (Basisvertrag, Formular A, FATCA) und lautend auf den aktuellen, amtlichen Namen.",
 };
 
 const L2_VERDAECHTIGES_VERHALTEN: DocumentCase = {
@@ -1525,6 +1549,8 @@ const L2_VERDAECHTIGES_VERHALTEN: DocumentCase = {
   ],
   generalFeedback:
     "Auch ohne grosse Bareinlage lösen widersprüchliche Angaben zur Erwerbstätigkeit und auffälliges Verhalten (Nervosität, Vermeiden von Blickkontakt, Drängen auf rasches Gesprächsende) die Abklärungspflicht nach GwG Art. 6 aus. Massgebend ist die Plausibilität der Angaben, nicht allein die Höhe des Betrags. Vorgehen: abklären, dokumentieren, Vorgesetzte/Compliance einbeziehen – keine Pauschalablehnung und keine sofortige Kontoeröffnung ohne Prüfung.",
+  recallMusterlösung:
+    "Plausibilität abklären (GwG Art. 6): Widersprüchliche Angaben zur Erwerbstätigkeit sind ein eigenständiges Risikomerkmal – die Abklärungspflicht hängt nicht allein von der Höhe eines Betrags ab, sondern auch von auffälligem Verhalten.\n\nHerkunftsnachweis und EDD: Bei konkreten Risikomerkmalen wie unplausiblen Angaben sind ein Herkunftsbeleg und verstärkte Sorgfaltsprüfung (EDD) zwingend, auch bei moderaten Beträgen.\n\nVorgesetzte informieren und dokumentieren: Verdachtsmomente dürfen nicht allein entschieden werden – interne Eskalation und lückenlose Dokumentation sind Pflicht.\n\nKeine Pauschalreaktion: Weder sofortige Ablehnung noch sofortige Kontoeröffnung sind korrekt – erst abklären, dann entscheiden.",
 };
 
 // ─────────────────────────────────────────────────────────
@@ -1635,6 +1661,8 @@ const L3_SELBSTAENDIGER: DocumentCase = {
   ],
   generalFeedback:
     "Der zentrale Challenge-Lernpunkt: Ein Einzelunternehmer (Selbständigerwerbender) ist immer eine natürliche Person – steuerlich und im Sinne des GwG. Für sein Privatkonto gelten exakt die gleichen Regeln wie für jeden anderen Schweizer Privatkunden. Kein HR-Auszug, kein Jahresabschluss, und vor allem: FATCA-Eigenerklärung für 'natürliche Person' – nicht für 'juristische Person'. Das ist der klassische Challenge-Trickfehler.",
+  recallMusterlösung:
+    "Eigenerklärung FATCA (natürliche Person) – nicht juristische Person: Ein Einzelunternehmer ist steuerlich und im Sinne des GwG immer eine natürliche Person, auch wenn er ein separates Geschäftskonto führt. Die FATCA-Erklärung für juristische Personen gilt nur für GmbH, AG und Genossenschaften.\n\nKein Handelsregisterauszug, kein Jahresabschluss: Für ein Privatkonto ohne Kreditantrag sind Firmendokumente nicht erforderlich – auch nicht bei Selbständigen.\n\nStandarddokumente (Basisvertrag, Ausweis, Formular A): Gelten unverändert wie bei jedem anderen Schweizer Privatkunden.",
 };
 
 const L3_WIRTSCHAFTLICH_BERECHTIGTER_DRITTER: McqCase = {
@@ -1780,6 +1808,8 @@ const L3_DOPPELBUERGER_FATCA: DocumentCase = {
   ],
   generalFeedback:
     "FATCA definiert 'US Person' über die Staatsbürgerschaft bzw. den Geburtsort, nicht über den Wohnsitz. Auch wer seit Jahrzehnten ausschliesslich in der Schweiz lebt und nur den Schweizer Pass vorlegt, bleibt als in den USA geborene Person FATCA-pflichtig: W-9-Formular mit US-TIN und interne Kennzeichnung fürs IRS-Reporting sind zwingend zusätzlich zur Standard-Eigenerklärung. Eine pauschale Ablehnung ist nicht der korrekte Weg.",
+  recallMusterlösung:
+    "FATCA richtet sich nach Staatsbürgerschaft/Geburtsort, nicht nach Wohnsitz: Auch wer seit Jahrzehnten ausschliesslich in der Schweiz lebt, bleibt als in den USA geborene Person FATCA-pflichtig.\n\nW-9 Formular und US-TIN: Zusätzlich zur Standard-FATCA-Eigenerklärung muss eine US-Person ihre US-Steueridentifikationsnummer angeben – unabhängig vom vorgelegten Schweizer Pass.\n\nInterne Kennzeichnung als US-Person: Nötig, damit die Bank ihrer jährlichen Meldepflicht ans IRS nachkommen kann.\n\nKeine Ablehnung: Eine US-Staatsbürgerschaft ist kein automatischer Ablehnungsgrund – korrekt ist die vollständige Dokumentation, nicht die pauschale Verweigerung.",
 };
 
 const L3_VORSORGEAUFTRAG: DocumentCase = {
@@ -1889,6 +1919,8 @@ const L3_VORSORGEAUFTRAG: DocumentCase = {
   ],
   generalFeedback:
     "Ein Vorsorgeauftrag (Art. 360 ff. ZGB) ist eine private Vorausverfügung für den Fall der Urteilsunfähigkeit. Er entfaltet aber erst Wirkung, wenn die KESB die Urteilsunfähigkeit feststellt und die Wirksamkeit des Auftrags bestätigt – erst dann darf die Bank die vorsorgebeauftragte Person als Vertreterin anerkennen. Der urteilsunfähige Kontoinhaber bleibt Vertragspartei, unterschreibt aber nicht mehr selbst; die Vorsorgebeauftragte handelt in seinem Namen.",
+  recallMusterlösung:
+    "KESB-Wirksamkeitsbestätigung: Der entscheidende Punkt – ein Vorsorgeauftrag (Art. 360 ff. ZGB) entfaltet erst Wirkung, wenn die KESB die Urteilsunfähigkeit feststellt und die Wirksamkeit förmlich bestätigt. Der Vorsorgeauftrag allein genügt nicht.\n\nAusweis des Kontoinhabers und der Vorsorgebeauftragten: Herr Wyss bleibt Kontoinhaber und wird trotzdem identifiziert, auch wenn er selbst nicht mehr unterschreiben kann – Frau Bucher handelt als Vertreterin, wird aber nicht selbst Kontoinhaberin.\n\nBasisvertrag, Formular A, FATCA-Eigenerklärung: Bleiben zusätzlich Pflicht, unterzeichnet durch die Vorsorgebeauftragte an Stelle des urteilsunfähigen Kontoinhabers.",
 };
 
 // ─────────────────────────────────────────────────────────
