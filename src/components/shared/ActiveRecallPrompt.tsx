@@ -11,7 +11,6 @@ interface AiResult {
   fehlt: string;
   ideal: string;
   error?: boolean;
-  debugError?: string;
 }
 
 interface ActiveRecallPromptProps {
@@ -183,11 +182,6 @@ export function ActiveRecallPrompt({ feedback, promptText, onComplete }: ActiveR
               <p className="text-xs text-amber-700">
                 KI-Bewertung momentan nicht verfügbar – deine Antwort wurde gespeichert.
               </p>
-              {aiResult?.debugError && (
-                <p className="mt-2 break-words rounded bg-amber-100 p-2 font-mono text-[10px] text-amber-900">
-                  {aiResult.debugError}
-                </p>
-              )}
             </div>
           )}
           {phase === "result" && (
