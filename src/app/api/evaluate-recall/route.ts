@@ -75,12 +75,13 @@ Regeln:
           const verdict = validVerdicts.includes(parsed.verdict) ? parsed.verdict : "TEILWEISE";
           return jsonNoStore({ ...parsed, verdict });
         }
-      } catch {
-        // fall through to fallback
+        return jsonNoStore({ ...FALLBACK, error: true, debugError: `Felder fehlen. raw=${raw.slice(0, 200)}` });
+      } catch (e) {
+        return jsonNoStore({ ...FALLBACK, error: true, debugError: `JSON.parse failed: ${String(e)}. raw=${raw.slice(0, 200)}` });
       }
     }
-    return jsonNoStore({ ...FALLBACK, error: true });
-  } catch {
-    return jsonNoStore({ ...FALLBACK, error: true });
+    return jsonNoStore({ ...FALLBACK, error: true, debugError: `Kein JSON im Modelloutput. raw=${raw.slice(0, 200)}` });
+  } catch (e) {
+    return jsonNoStore({ ...FALLBACK, error: true, debugError: `Anthropic call failed: ${String(e)}` });
   }
 }
