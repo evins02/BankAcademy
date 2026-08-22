@@ -70,9 +70,10 @@ Regeln:
     if (jsonMatch) {
       try {
         const parsed = JSON.parse(jsonMatch[0]) as AiResult;
-        const validVerdict: Verdict[] = ["RICHTIG", "TEILWEISE", "FALSCH"];
-        if (parsed.richtig && parsed.fehlt && parsed.ideal && validVerdict.includes(parsed.verdict)) {
-          return jsonNoStore(parsed);
+        if (parsed.richtig && parsed.fehlt && parsed.ideal) {
+          const validVerdicts: Verdict[] = ["RICHTIG", "TEILWEISE", "FALSCH"];
+          const verdict = validVerdicts.includes(parsed.verdict) ? parsed.verdict : "TEILWEISE";
+          return jsonNoStore({ ...parsed, verdict });
         }
       } catch {
         // fall through to fallback
