@@ -7,13 +7,17 @@ export const maxDuration = 30;
 
 const client = new Anthropic();
 
+type Verdict = "RICHTIG" | "TEILWEISE" | "FALSCH";
+
 interface AiResult {
+  verdict: Verdict;
   richtig: string;
   fehlt: string;
   ideal: string;
 }
 
 const FALLBACK: AiResult = {
+  verdict: "TEILWEISE",
   richtig: "Deine Antwort wurde gespeichert.",
   fehlt: "Vergleiche deine Antwort mit der Erklärung unten.",
   ideal: "Lies die Erklärung sorgfältig durch.",
@@ -25,11 +29,6 @@ const NO_STORE_HEADERS = {
 
 function jsonNoStore(body: unknown) {
   return NextResponse.json(body, { headers: NO_STORE_HEADERS });
-}
-
-function debugTag(studentText: string) {
-  const id = Math.random().toString(36).slice(2, 8);
-  return ` [DEBUG ${id} len=${studentText.length} t=${new Date().toISOString()}]`;
 }
 
 export async function POST(req: NextRequest) {
@@ -52,9 +51,12 @@ Musterlösung: "${feedback}"
 Antwort des Lernenden: "${studentText}"
 
 Antworte ausschliesslich mit einem JSON-Objekt (kein Markdown, keine Erklärungen darum):
-{"richtig":"Was der Lernende korrekt erfasst hat (1-2 Sätze)","fehlt":"Was fehlt oder ist ungenau (1-2 Sätze)","ideal":"Die ideale Kurz-Antwort (1-2 Sätze)"}
+{"verdict":"RICHTIG"|"TEILWEISE"|"FALSCH","richtig":"Was der Lernende korrekt erfasst hat (1-2 Sätze) – schreibe '–' falls nichts korrekt war","fehlt":"Was fehlt oder ist ungenau (1-2 Sätze)","ideal":"Die ideale Kurz-Antwort (1-2 Sätze)"}
 
 Regeln:
+- verdict = RICHTIG: Kernaussage vollständig und korrekt erfasst
+- verdict = TEILWEISE: Ansatz stimmt, aber wichtige Punkte fehlen oder sind ungenau
+- verdict = FALSCH: Die Antwort ist inhaltlich falsch, irrelevant oder geht nicht auf die Frage ein
 - Halte das Feedback kurz und klar
 - Deutsch, Schweizer Schreibweise
 - Wenn die Antwort sehr gut ist: fehlt = "Vollständig – nichts Wesentliches fehlt."
@@ -68,15 +70,16 @@ Regeln:
     if (jsonMatch) {
       try {
         const parsed = JSON.parse(jsonMatch[0]) as AiResult;
-        if (parsed.richtig && parsed.fehlt && parsed.ideal) {
-          return jsonNoStore({ ...parsed, richtig: parsed.richtig + debugTag(studentText) });
+        const validVerdict: Verdict[] = ["RICHTIG", "TEILWEISE", "FALSCH"];
+        if (parsed.richtig && parsed.fehlt && parsed.ideal && validVerdict.includes(parsed.verdict)) {
+          return jsonNoStore(parsed);
         }
       } catch {
         // fall through to fallback
       }
     }
-    return jsonNoStore({ ...FALLBACK, error: true, richtig: FALLBACK.richtig + debugTag(studentText) });
+    return jsonNoStore({ ...FALLBACK, error: true });
   } catch {
-    return jsonNoStore({ ...FALLBACK, error: true, richtig: FALLBACK.richtig + debugTag(studentText) });
+    return jsonNoStore({ ...FALLBACK, error: true });
   }
 }
