@@ -19,11 +19,24 @@ const FALLBACK: AiResult = {
   ideal: "Lies die Erklärung sorgfältig durch.",
 };
 
+const NO_STORE_HEADERS = {
+  "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+};
+
+function jsonNoStore(body: unknown) {
+  return NextResponse.json(body, { headers: NO_STORE_HEADERS });
+}
+
+function debugTag(studentText: string) {
+  const id = Math.random().toString(36).slice(2, 8);
+  return ` [DEBUG ${id} len=${studentText.length} t=${new Date().toISOString()}]`;
+}
+
 export async function POST(req: NextRequest) {
   const { feedback, studentText } = await req.json();
 
   if (!studentText?.trim()) {
-    return NextResponse.json(FALLBACK);
+    return jsonNoStore(FALLBACK);
   }
 
   try {
@@ -56,14 +69,14 @@ Regeln:
       try {
         const parsed = JSON.parse(jsonMatch[0]) as AiResult;
         if (parsed.richtig && parsed.fehlt && parsed.ideal) {
-          return NextResponse.json(parsed);
+          return jsonNoStore({ ...parsed, richtig: parsed.richtig + debugTag(studentText) });
         }
       } catch {
         // fall through to fallback
       }
     }
-    return NextResponse.json({ ...FALLBACK, error: true });
+    return jsonNoStore({ ...FALLBACK, error: true, richtig: FALLBACK.richtig + debugTag(studentText) });
   } catch {
-    return NextResponse.json({ ...FALLBACK, error: true });
+    return jsonNoStore({ ...FALLBACK, error: true, richtig: FALLBACK.richtig + debugTag(studentText) });
   }
 }
