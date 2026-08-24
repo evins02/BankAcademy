@@ -16,6 +16,7 @@ interface AiResult {
 interface ActiveRecallPromptProps {
   feedback?: string;
   promptText?: string;
+  caseBriefing?: string;
   onComplete?: () => void;
 }
 
@@ -47,7 +48,7 @@ function hasContent(text: string) {
   return !!text.trim() && text.trim() !== "–" && text.trim() !== "-";
 }
 
-export function ActiveRecallPrompt({ feedback, promptText, onComplete }: ActiveRecallPromptProps) {
+export function ActiveRecallPrompt({ feedback, promptText, caseBriefing, onComplete }: ActiveRecallPromptProps) {
   const [text, setText] = useState("");
   const [phase, setPhase] = useState<"input" | "loading" | "result" | "done">("input");
   const [aiResult, setAiResult] = useState<AiResult | null>(null);
@@ -96,6 +97,14 @@ export function ActiveRecallPrompt({ feedback, promptText, onComplete }: ActiveR
       <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
         Aktive Wiederholung
       </p>
+      {caseBriefing && (
+        <div className="mb-2 rounded-lg border-l-2 border-primary/30 bg-surface/60 px-3 py-2">
+          <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
+            Der Fall
+          </p>
+          <p className="text-xs text-text-secondary">{caseBriefing}</p>
+        </div>
+      )}
       <p className="mb-2 text-sm text-text-primary">
         {promptText ?? "Schreib die richtige Antwort in deinen eigenen Worten:"}
       </p>

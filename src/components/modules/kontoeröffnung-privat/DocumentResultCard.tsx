@@ -84,6 +84,7 @@ export function DocumentResultCard({
       <ActiveRecallPrompt
         feedback={c.recallMusterlösung ?? c.generalFeedback}
         promptText="Begründe in deinen eigenen Worten, warum diese Dokumente für die Kontoeröffnung notwendig sind:"
+        caseBriefing={c.briefing}
         onComplete={() => setRecallDone(true)}
       />
 

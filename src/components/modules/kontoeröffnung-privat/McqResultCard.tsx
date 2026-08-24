@@ -48,6 +48,7 @@ export function McqResultCard({ c, selected, isLastCase, onNext, onSkip }: McqRe
       <ActiveRecallPrompt
         feedback={c.feedback}
         promptText={`Begründe in deinen eigenen Worten: ${c.question}`}
+        caseBriefing={c.briefing}
         onComplete={() => setRecallDone(true)}
       />
 
