@@ -117,12 +117,14 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
           </div>
 
           <div className="divide-y divide-border">
-            {scenario.dossierFields.map((field, i) => (
-              <div key={i} className="flex items-center px-4 py-2.5">
-                <span className="w-44 shrink-0 text-xs text-text-secondary">{field.label}</span>
-                <span className="flex-1 text-xs text-text-primary">{field.value}</span>
-              </div>
-            ))}
+            {scenario.dossierFields
+              .filter((field) => field.value !== "–")
+              .map((field, i) => (
+                <div key={i} className="flex items-center px-4 py-2.5">
+                  <span className="w-44 shrink-0 text-xs text-text-secondary">{field.label}</span>
+                  <span className="flex-1 text-xs text-text-primary">{field.value}</span>
+                </div>
+              ))}
           </div>
 
           <div className="border-t border-border bg-gray-50 px-4 py-2">
