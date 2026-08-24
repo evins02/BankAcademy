@@ -45,7 +45,11 @@ export function McqResultCard({ c, selected, isLastCase, onNext, onSkip }: McqRe
       </div>
 
       {/* Active recall before the answer is revealed */}
-      <ActiveRecallPrompt feedback={c.feedback} onComplete={() => setRecallDone(true)} />
+      <ActiveRecallPrompt
+        feedback={c.feedback}
+        promptText={`Begründe in deinen eigenen Worten: ${c.question}`}
+        onComplete={() => setRecallDone(true)}
+      />
 
       {/* Full breakdown — only after recall is done */}
       {recallDone && (
