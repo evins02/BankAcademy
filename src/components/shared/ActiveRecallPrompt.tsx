@@ -96,12 +96,12 @@ export function ActiveRecallPrompt({ feedback, promptText, onComplete }: ActiveR
       <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
         Aktive Wiederholung
       </p>
+      <p className="mb-2 text-sm text-text-primary">
+        {promptText ?? "Schreib die richtige Antwort in deinen eigenen Worten:"}
+      </p>
 
       {phase === "input" && (
         <>
-          <p className="mb-2 text-sm text-text-primary">
-            {promptText ?? "Schreib die richtige Antwort in deinen eigenen Worten:"}
-          </p>
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -139,6 +139,12 @@ export function ActiveRecallPrompt({ feedback, promptText, onComplete }: ActiveR
 
       {(phase === "result" || (phase === "done" && !!text.trim())) && (
         <>
+          <div className="mb-2 rounded-lg border border-border bg-surface p-3">
+            <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
+              Deine Antwort
+            </p>
+            <p className="text-sm text-text-primary">{text}</p>
+          </div>
           {aiResult && !isError && (() => {
             const cfg = VERDICT_CONFIG[aiResult.verdict];
             return (
