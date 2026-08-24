@@ -79,7 +79,11 @@ export function LückentextResultCard({
           )}
         </div>
 
-        <ActiveRecallPrompt feedback={c.feedback} onComplete={() => setRecallDone(true)} />
+        <ActiveRecallPrompt
+          feedback={c.feedback}
+          caseBriefing={c.briefing}
+          onComplete={() => setRecallDone(true)}
+        />
 
         {recallDone && (
           <>

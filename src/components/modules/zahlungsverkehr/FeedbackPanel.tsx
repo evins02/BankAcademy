@@ -86,7 +86,12 @@ export function FeedbackPanel({
             )}
           </div>
 
-          <ActiveRecallPrompt feedback={zvCase.feedback} onComplete={() => setRecallDone(true)} />
+          <ActiveRecallPrompt
+            feedback={zvCase.feedback}
+            promptText={`Begründe in deinen eigenen Worten: ${zvCase.question}`}
+            caseBriefing={zvCase.briefing}
+            onComplete={() => setRecallDone(true)}
+          />
           {recallDone && (
             <>
               <div className="mb-5 flex flex-col gap-2">

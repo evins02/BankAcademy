@@ -67,7 +67,12 @@ export function FeedbackCard({
           </p>
         </div>
 
-        <ActiveRecallPrompt feedback={vorsorgeCase.feedback} onComplete={() => setRecallDone(true)} />
+        <ActiveRecallPrompt
+          feedback={vorsorgeCase.feedback}
+          promptText={`Begründe in deinen eigenen Worten: ${vorsorgeCase.question}`}
+          caseBriefing={vorsorgeCase.situation}
+          onComplete={() => setRecallDone(true)}
+        />
         {recallDone && (
           <>
             <div className="mb-5 flex flex-col gap-2">

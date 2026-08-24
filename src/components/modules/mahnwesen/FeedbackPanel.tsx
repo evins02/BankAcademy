@@ -82,7 +82,12 @@ export function FeedbackPanel({
             )}
           </div>
 
-          <ActiveRecallPrompt feedback={mwCase.feedback} onComplete={() => setRecallDone(true)} />
+          <ActiveRecallPrompt
+            feedback={mwCase.feedback}
+            promptText={`Begründe in deinen eigenen Worten: ${mwCase.question}`}
+            caseBriefing={mwCase.briefing}
+            onComplete={() => setRecallDone(true)}
+          />
           {recallDone && (
             <>
               <div className="mb-5 flex flex-col gap-2">

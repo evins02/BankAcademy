@@ -82,7 +82,12 @@ export function FeedbackPanel({
             )}
           </div>
 
-          <ActiveRecallPrompt feedback={scenario.feedback} onComplete={() => setRecallDone(true)} />
+          <ActiveRecallPrompt
+            feedback={scenario.feedback}
+            promptText={`Begründe in deinen eigenen Worten: ${scenario.question}`}
+            caseBriefing={scenario.situation}
+            onComplete={() => setRecallDone(true)}
+          />
           {recallDone && (
             <>
               <div className="mb-6 flex flex-col gap-2">
