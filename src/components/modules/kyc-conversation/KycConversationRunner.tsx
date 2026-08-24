@@ -9,6 +9,7 @@ import { KycFormCard } from "@/components/modules/kyc-form/KycFormCard";
 import type { KycFormData } from "@/components/modules/kyc-form/kyc-form-types";
 import { addXP } from "@/lib/xpData";
 import { Confetti } from "@/components/shared/Confetti";
+import { KYC_PFLICHTFRAGEN } from "@/lib/kyc-conversation";
 
 type Phase = "briefing" | "chat" | "summary" | "form" | "evaluating" | "feedback" | "aborted";
 type Message = { role: "user" | "assistant"; content: string };
@@ -26,15 +27,7 @@ type Evaluation = {
   feedback: string;
 };
 
-const CHECKLIST_ITEMS = [
-  "Vollständiger Name",
-  "Geburtsdatum",
-  "Staatsangehörigkeit",
-  "Wohnadresse",
-  "Ausweisdokument (Typ & Nummer)",
-  "Beruf / Arbeitgeber",
-  "Zweck der Kontoverbindung",
-] as const;
+const CHECKLIST_ITEMS = KYC_PFLICHTFRAGEN;
 
 interface Props {
   onBack: () => void;
@@ -55,6 +48,7 @@ export function KycConversationRunner({ onBack }: Props) {
   const [checklist, setChecklist] = useState<boolean[]>(
     Array(CHECKLIST_ITEMS.length).fill(false)
   );
+  const [checklistLoading, setChecklistLoading] = useState(false);
 
   // Speech state
   const [isListening, setIsListening] = useState(false);
@@ -223,6 +217,24 @@ export function KycConversationRunner({ onBack }: Props) {
     } catch (e) {
       setSpeechError(`Spracherkennung konnte nicht gestartet werden: ${e instanceof Error ? e.message : String(e)}`);
     }
+  }
+
+  async function handleFinishChat() {
+    setChecklistLoading(true);
+    try {
+      const res = await fetch("/api/kyc-checklist-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages }),
+      });
+      const data = await res.json();
+      const covered: string[] = Array.isArray(data?.covered) ? data.covered : [];
+      setChecklist(CHECKLIST_ITEMS.map((item) => covered.includes(item)));
+    } catch {
+      // leave checklist as-is (all unchecked) if the check fails
+    }
+    setChecklistLoading(false);
+    setPhase("summary");
   }
 
   async function handleFormSubmit(formData: KycFormData) {
@@ -494,6 +506,23 @@ export function KycConversationRunner({ onBack }: Props) {
           </div>
         </div>
         <KycFormCard key={attempt} onSubmit={handleFormSubmit} hideDossier />
+
+        {notes.trim() && (
+          <div
+            className="fixed bottom-6 right-6 z-40 w-72 rounded-xl p-4 shadow-2xl"
+            style={{ background: "#fffbeb", border: "1px solid #fde68a" }}
+          >
+            <p className="mb-2 flex items-center gap-1.5 text-xs font-bold" style={{ color: "#92400e" }}>
+              <PenLine size={12} /> Deine Notizen
+            </p>
+            <p
+              className="max-h-48 overflow-y-auto whitespace-pre-wrap text-xs leading-relaxed"
+              style={{ color: "#78350f" }}
+            >
+              {notes}
+            </p>
+          </div>
+        )}
       </div>
     );
   }
@@ -878,10 +907,11 @@ export function KycConversationRunner({ onBack }: Props) {
             </div>
 
             <button
-              onClick={() => setPhase("summary")}
-              className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+              onClick={handleFinishChat}
+              disabled={checklistLoading}
+              className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Weiter zum Formular →
+              {checklistLoading ? "Wird geprüft…" : "Weiter zum Formular →"}
             </button>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import type { KycFormData } from "@/components/modules/kyc-form/kyc-form-types";
+import { KYC_PFLICHTFRAGEN } from "@/lib/kyc-conversation";
 
 type Message = { role: string; content: string };
 
@@ -31,15 +32,7 @@ ECHTE KUNDENDATEN:
 
 TEIL 1 – GESPRÄCH (9 Pflichtfragen):
 Prüfe ob der Kundenberater folgende Fragen gestellt hat:
-1. Beruf & Arbeitgeber
-2. Einkommen & Vermögen
-3. Herkunft der Mittel
-4. Andere Bankbeziehungen
-5. Zweck der Kontobeziehung
-6. Wirtschaftlich Berechtigter
-7. PEP Status
-8. FATCA / US-Verbindungen
-9. Ausweis eingesehen
+${KYC_PFLICHTFRAGEN.map((f, i) => `${i + 1}. ${f}`).join("\n")}
 
 TEIL 2 – FORMULAR (8 Prüfpunkte):
 P1. Personalien vollständig
