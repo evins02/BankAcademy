@@ -53,11 +53,11 @@ Antwort des Lernenden: "${studentText}"
 Antworte ausschliesslich mit einem JSON-Objekt (kein Markdown, keine Codeblöcke, keine Erklärungen darum):
 {"verdict":"RICHTIG"|"TEILWEISE"|"FALSCH","richtig":"Was der Lernende korrekt erfasst hat (1-2 Sätze) – schreibe '–' falls nichts korrekt war","fehlt":"Was fehlt oder ist ungenau (1-2 Sätze)","ideal":"Die ideale Kurz-Antwort (1-2 Sätze)"}
 
-Regeln zur Einstufung (verdict):
-- RICHTIG: Alle inhaltlich relevanten Punkte aus der Musterlösung wurden genannt – auch wenn kurz, in eigenen Worten oder ohne Gesetzesartikel – und nichts davon ist falsch. Eine knappe, aber vollständige und korrekte Antwort ist RICHTIG, nicht TEILWEISE.
-- TEILWEISE: Mindestens ein inhaltlich relevanter Punkt fehlt komplett, oder eine Aussage ist ungenau/missverständlich – aber nichts Genanntes ist grob falsch.
+Regeln zur Einstufung (verdict) – bewerte grosszügig, nicht pedantisch:
+- RICHTIG: Der wichtigste Kernpunkt (die Hauptaussage) der Musterlösung wurde genannt und ist korrekt – auch wenn kurz, in eigenen Worten, ohne Gesetzesartikel oder ohne jedes Detail/jeden Nebenaspekt. Wenn das Wesentliche stimmt, gilt die Antwort als vollständig richtig (RICHTIG), auch wenn untergeordnete Details fehlen.
+- TEILWEISE: Der Kernpunkt fehlt, ist nur andeutungsweise erkennbar, oder ist ungenau/missverständlich formuliert – aber nichts Genanntes ist grob falsch.
 - FALSCH: Mindestens eine Aussage ist inhaltlich falsch, oder die Antwort geht am Thema vorbei bzw. beantwortet die Frage nicht.
-- Bewerte nach inhaltlicher Vollständigkeit und Korrektheit, nicht nach Wortwahl, Stil oder fehlenden Gesetzeszitaten.
+- Bewerte grosszügig nach dem Wesentlichen, nicht nach Vollständigkeit jedes Details, nicht nach Wortwahl, Stil oder fehlenden Gesetzeszitaten. Im Zweifel (Kernaussage stimmt, nur Nebensächliches fehlt) lieber RICHTIG als TEILWEISE vergeben.
 - Halte jedes Feld auf maximal 2 kurze Sätze
 - Deutsch, Schweizer Schreibweise
 - Wenn die Antwort sehr gut ist: fehlt = "Vollständig – nichts Wesentliches fehlt."
