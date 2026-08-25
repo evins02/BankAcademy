@@ -426,7 +426,7 @@ export function KycConversationRunner({ onBack }: Props) {
             </div>
             <h2 className="text-xl font-bold text-text-primary">Gespräch beendet</h2>
             <p className="text-sm text-text-secondary mt-1">
-              Prüfe deine Checkliste – dann füllst du das Formular aus dem Gedächtnis aus.
+              Prüfe deine Checkliste – dann füllst du das Formular mithilfe deiner Notizen aus.
             </p>
           </div>
 
@@ -469,7 +469,7 @@ export function KycConversationRunner({ onBack }: Props) {
             style={{ background: "#eff6ff", border: "1px solid #bfdbfe" }}
           >
             <p className="text-sm" style={{ color: "#1d4ed8" }}>
-              <strong>Jetzt:</strong> Fülle das KYC-Formular aus dem Gedächtnis aus.
+              <strong>Jetzt:</strong> Fülle das Formular mithilfe deiner Notizen aus.
               Das Gespräch ist nicht mehr sichtbar.
             </p>
           </div>
@@ -501,7 +501,7 @@ export function KycConversationRunner({ onBack }: Props) {
             <div>
               <p className="text-sm font-bold text-text-primary">Phase 2 – Formular ausfüllen</p>
               <p className="text-sm text-text-secondary mt-0.5">
-                Füllen Sie das KYC-Formular aus dem Gedächtnis aus. Das Gespräch ist abgeschlossen
+                Füllen Sie das Formular mithilfe Ihrer Notizen aus. Das Gespräch ist abgeschlossen
                 und nicht mehr sichtbar.
               </p>
             </div>
