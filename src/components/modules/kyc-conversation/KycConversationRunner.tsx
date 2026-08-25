@@ -261,7 +261,7 @@ export function KycConversationRunner({ onBack }: Props) {
         formCorrect: [],
         criticalErrors: [],
         conversationScore: 0,
-        conversationTotal: 9,
+        conversationTotal: CHECKLIST_ITEMS.length,
         formScore: 0,
         formTotal: 8,
         feedback: "Die Auswertung ist momentan nicht verfügbar. Bitte erneut versuchen.",
@@ -317,8 +317,10 @@ export function KycConversationRunner({ onBack }: Props) {
             <div>
               <p className="font-semibold text-sm" style={{ color: "#92400e" }}>Tipp</p>
               <p className="text-sm mt-1 leading-relaxed" style={{ color: "#78350f" }}>
-                Du hast genau <strong>9 Fragen</strong>. Thomas antwortet nur auf das, was du direkt fragst –
-                plane deine Fragen sorgfältig. Nutze das Notizbuch-Symbol im Gespräch, um Antworten festzuhalten.
+                Du hast rund <strong>9 Fragen</strong> Zeit. Thomas antwortet nur auf das, was du direkt fragst –
+                fasse mehrere Angaben pro Frage zusammen (z.B. Name, Geburtsdatum und Adresse in einer Frage),
+                um alle {CHECKLIST_ITEMS.length} Punkte abzudecken. Nutze das Notizbuch-Symbol im Gespräch,
+                um Antworten festzuhalten.
               </p>
             </div>
           </div>

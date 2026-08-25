@@ -30,8 +30,11 @@ ECHTE KUNDENDATEN:
 - Zweck: Lohnkonto + Zahlungsverkehr, WiBe: selbst, PEP: Nein, keine US-Verbindung
 - Ausweis: Ausländischer Reisepass X1234567, gültig bis 14.05.2027 (Demo-Falle: Formular oft mit 12.03.2024 vorausgefüllt → abgelaufen)
 
-TEIL 1 – GESPRÄCH (9 Pflichtfragen):
-Prüfe ob der Kundenberater folgende Fragen gestellt hat:
+TEIL 1 – GESPRÄCH (${KYC_PFLICHTFRAGEN.length} Pflichtkategorien, max. 9 Fragen erlaubt):
+Prüfe ob der Kundenberater folgende Kategorien abgedeckt hat. Eine einzelne Frage kann
+mehrere Kategorien gleichzeitig abdecken (z.B. deckt das Einsehen des Ausweises meist
+automatisch Name, Geburtsdatum, Nationalität UND Ausweisdaten ab, wenn der Kunde diese
+Angaben in seiner Antwort nennt):
 ${KYC_PFLICHTFRAGEN.map((f, i) => `${i + 1}. ${f}`).join("\n")}
 
 TEIL 2 – FORMULAR (8 Prüfpunkte):
@@ -47,19 +50,19 @@ P8. FATCA vollständig
 Antworte NUR als gültiges JSON (kein Markdown):
 {
   "result": "BESTANDEN" oder "NICHT BESTANDEN",
-  "conversationAsked": ["Label der gestellten Pflichtfragen"],
-  "conversationMissing": ["Label der fehlenden Pflichtfragen"],
+  "conversationAsked": ["Label der abgedeckten Pflichtkategorien"],
+  "conversationMissing": ["Label der fehlenden Pflichtkategorien"],
   "formErrors": [{"field": "Feldbezeichnung", "message": "Erklärung + Rechtsgrundlage auf Deutsch"}],
   "formCorrect": ["Beschreibung korrekt ausgefüllter Punkte"],
   "criticalErrors": ["Kritische Fehler die zur Ablehnung führen"],
-  "conversationScore": <0-9>,
-  "conversationTotal": 9,
+  "conversationScore": <0-${KYC_PFLICHTFRAGEN.length}>,
+  "conversationTotal": ${KYC_PFLICHTFRAGEN.length},
   "formScore": <0-8>,
   "formTotal": 8,
   "feedback": "3-4 Sätze Ausbildner-Feedback auf Deutsch"
 }
 
-BESTANDEN nur wenn conversationScore = 9 UND formScore = 8.`;
+BESTANDEN nur wenn conversationScore = ${KYC_PFLICHTFRAGEN.length} UND formScore = 8.`;
 }
 
 export async function POST(req: Request) {

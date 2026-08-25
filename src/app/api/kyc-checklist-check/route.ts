@@ -35,11 +35,11 @@ export async function POST(req: Request) {
     const response = await anthropic.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 300,
-      system: `Du prüfst ein KYC-Gespräch eines Bankberaters mit Neukunde Thomas Kowalski (Projektleiter IT bei Swisscom, verheiratet, Einkommen CHF 95'000/Jahr, Vermögen CHF 45'000 aus Lohn, andere Bankbeziehung PostFinance, Zweck Lohnkonto, wirtschaftlich Berechtigter = er selbst, kein PEP, keine US-Verbindung, ausländischer Reisepass gültig bis 14.05.2027).
+      system: `Du prüfst ein KYC-Gespräch eines Bankberaters mit Neukunde Thomas Kowalski (geb. 14.06.1985, Polnisch, wohnhaft Bergstrasse 22, 3007 Bern, verheiratet mit 2 Kindern, Projektleiter IT bei Swisscom, Einkommen CHF 95'000/Jahr, Vermögen CHF 45'000 aus Lohn, andere Bankbeziehung PostFinance, Zweck Lohnkonto, wirtschaftlich Berechtigter = er selbst, kein PEP, keine US-Verbindung, ausländischer Reisepass Nr. X1234567 gültig bis 14.05.2027).
 
-Die 9 Pflichtfragen-Kategorien sind: ${KYC_PFLICHTFRAGEN.join(", ")}.
+Die Pflichtkategorien sind: ${KYC_PFLICHTFRAGEN.join(", ")}.
 
-Prüfe anhand des Gesprächsprotokolls, welche dieser Kategorien der Berater tatsächlich gezielt erfragt UND eine Antwort dazu erhalten hat. Reine Nebenerwähnungen ohne gezielte Frage zählen nicht.
+Prüfe anhand des Gesprächsprotokolls, welche dieser Kategorien der Berater tatsächlich gezielt erfragt UND eine Antwort dazu erhalten hat. Reine Nebenerwähnungen ohne gezielte Frage zählen nicht. Eine einzelne Frage kann mehrere Kategorien gleichzeitig abdecken – z.B. deckt das Einsehen/Erfragen des Ausweises oft automatisch Name, Geburtsdatum, Nationalität UND Ausweisdaten ab, wenn der Kunde diese in seiner Antwort nennt.
 
 Antworte NUR mit einem JSON-Objekt (kein Markdown):
 {"covered": ["exakte Labels aus der Liste oben, die abgedeckt wurden"]}`,
