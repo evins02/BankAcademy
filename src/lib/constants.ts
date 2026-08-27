@@ -47,6 +47,8 @@ export const NAV_GROUPS: NavGroup[] = [
               { label: "Konsumkredit", href: "/privatkunde/individual/konsumkredit" },
               { label: "Blankokredit", href: "/privatkunde/individual/blankokredit" },
               { label: "Simulation: Hypothek", href: "/privatkunde/individual/simulation-hypothek" },
+              { label: "Verpfändung PK / 3a", href: "/kreditgeschaefte/verpfaendung" },
+              { label: "Baukredit", href: "/kreditgeschaefte/baukredit" },
             ],
           },
         ],
@@ -92,6 +94,7 @@ export const NAV_GROUPS: NavGroup[] = [
             label: "Produkte & Themen",
             items: [
               { label: "Strukturierte Produkte", href: "/anlagekunde/strukturierte-produkte" },
+              { label: "Lombardkredit", href: "/anlagekunde/lombardkredit" },
               { label: "Vorsorge & 3a", href: "/anlagekunde/vorsorge-anlage" },
               { label: "Nachhaltige Anlagen ESG", href: "/anlagekunde/esg" },
               { label: "Währungsrisiken", href: "/anlagekunde/waehrungsrisiken" },
