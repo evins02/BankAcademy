@@ -1087,7 +1087,7 @@ function HowItWorks() {
 
 function FounderStory() {
   return (
-    <section style={{ background: N, padding: "112px 24px" }}>
+    <section style={{ background: N, padding: "148px 24px" }}>
       <div style={{ maxWidth: 680, margin: "0 auto" }}>
         <FadeIn>
           <div style={{ borderLeft: `3px solid ${CY}66`, paddingLeft: 28 }}>
@@ -1097,14 +1097,11 @@ function FounderStory() {
             <h2 style={{ margin: "0 0 32px", fontSize: "clamp(24px,3.5vw,36px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH, lineHeight: 1.25 }}>
               Weil ich das Tool vermisst habe,<br />das ich selbst gebraucht hätte.
             </h2>
-            <p style={{ margin: "0 0 20px", fontSize: 16, lineHeight: 1.75, color: WD }}>
-              Während meiner Lehre hab ich schnell gemerkt: Stures Auswendiglernen aus dem Lehrbuch war nie mein Ding. Ich hab Inhalte viel besser aufgenommen, wenn ich sie spielerisch üben konnte, statt sie nur zu lesen – und am meisten hängen geblieben ist das, was einen echten Praxisbezug hatte.
+            <p style={{ margin: "0 0 32px", fontSize: "clamp(20px, 2.4vw, 28px)", lineHeight: 1.55, color: WD, fontWeight: 400 }}>
+              In meiner Ausbildung war vieles verständlich – bis es in die Praxis ging.
             </p>
-            <p style={{ margin: "0 0 20px", fontSize: 16, lineHeight: 1.75, color: WD }}>
-              Nur gab es genau dafür kaum etwas. Also hab ich selbst gebaut, was ich mir gewünscht hätte: echte Bankszenarien zum Üben, statt trockener Theorie zum Auswendiglernen.
-            </p>
-            <p style={{ margin: "0 0 32px", fontSize: 16, lineHeight: 1.75, color: WH, fontWeight: 700 }}>
-              Heute ist BankAcademy genau das – lern faul, üb smart.
+            <p style={{ margin: "0 0 44px", fontSize: "clamp(20px, 2.4vw, 28px)", lineHeight: 1.55, color: CY, fontWeight: 700 }}>
+              Also habe ich das gebaut, was genau dort gefehlt hat.
             </p>
             <Link
               href="/kontakt"
