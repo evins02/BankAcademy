@@ -467,34 +467,19 @@ function Hero({ onStart }: { onStart: () => void }) {
       />
 
       <div style={{ position: "relative", maxWidth: 840, margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
-        {/* Badge */}
-        <div
+        {/* Eyebrow */}
+        <p
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 9,
-            border: `1px solid ${CY}44`,
-            background: `${CY}10`,
-            borderRadius: 100,
-            padding: "8px 18px",
-            marginBottom: 28,
-            fontSize: 14,
-            fontWeight: 500,
+            margin: "0 0 26px",
+            fontSize: 12,
+            fontWeight: 700,
             color: CY,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
           }}
         >
-          <span
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              background: CY,
-              display: "inline-block",
-              animation: "pulseDot 2.2s ease-in-out infinite",
-            }}
-          />
-          Der digitale Praxisausbildner für die Banklehre
-        </div>
+          Der digitale Praxisausbildner
+        </p>
 
         {/* Headline */}
         <h1
@@ -509,16 +494,7 @@ function Hero({ onStart }: { onStart: () => void }) {
         >
           Lern faul.{" "}
           <br />
-          <span
-            style={{
-              background: `linear-gradient(90deg, ${CY} 0%, ${PU} 100%)`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            Üb smart.
-          </span>
+          <span style={{ color: CY }}>Üb smart.</span>
         </h1>
 
         {/* Subtitle */}
@@ -531,11 +507,11 @@ function Hero({ onStart }: { onStart: () => void }) {
             color: WD,
           }}
         >
-          Kein Bock auf trockene Theorie? Wir auch nicht. So lernst du schneller und besser.
+          Echte Bankszenarien, echtes Feedback, echter Praxistransfer – statt Theorie aus dem Lehrbuch.
         </p>
 
         {/* Buttons */}
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12, marginBottom: 28 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12, marginBottom: 48 }}>
           <button
             onClick={onStart}
             style={{
@@ -588,6 +564,33 @@ function Hero({ onStart }: { onStart: () => void }) {
           </Link>
         </div>
 
+        {/* Signature-Case card */}
+        <div
+          style={{
+            background: NM,
+            borderTop: `1px solid ${BR}`,
+            borderRight: `1px solid ${BR}`,
+            borderBottom: `1px solid ${BR}`,
+            borderLeft: `3px solid ${CY}`,
+            borderRadius: 16,
+            padding: "36px 44px",
+            textAlign: "left",
+          }}
+        >
+          <p style={{ margin: "0 0 10px", fontSize: 12, color: WM, letterSpacing: "0.04em" }}>Montag, 08:42</p>
+          <p style={{ margin: "0 0 12px", fontSize: 11, fontWeight: 700, color: CY, letterSpacing: "0.1em", textTransform: "uppercase" }}>Neuer Auftrag</p>
+          <p style={{ margin: "0 0 6px", fontSize: 26, fontWeight: 600, color: WH, lineHeight: 1.3 }}>Meier Maschinenbau AG</p>
+          <p style={{ margin: "0 0 28px", fontSize: 15, color: WD }}>Betriebskredit CHF 250&apos;000 · Credit Office erwartet dein Dossier</p>
+          <div className="hero-flow">
+            <span style={{ fontSize: 13, color: WH, fontWeight: 600 }}>Kontext</span>
+            <span className="hero-flow-sep">→</span>
+            <span style={{ fontSize: 13, color: WM }}>Entscheidung</span>
+            <span className="hero-flow-sep">→</span>
+            <span style={{ fontSize: 13, color: WM }}>Konsequenz</span>
+            <span className="hero-flow-sep">→</span>
+            <span style={{ fontSize: 13, color: WM }}>Coaching</span>
+          </div>
+        </div>
       </div>
 
       {/* Bottom fade */}
@@ -2044,6 +2047,12 @@ export default function LandingPage() {
         @keyframes pulseDot {
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.45; transform: scale(0.8); }
+        }
+        .hero-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; }
+        .hero-flow-sep { color: rgba(248,250,252,0.28); margin: 0 14px; font-size: 12px; }
+        @media (max-width: 640px) {
+          .hero-flow { flex-direction: column; align-items: flex-start; gap: 8px; }
+          .hero-flow-sep { display: none; }
         }
       `}</style>
 
