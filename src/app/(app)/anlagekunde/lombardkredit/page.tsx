@@ -7,30 +7,77 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
 import { addXP } from "@/lib/xpData";
 
-const SCENARIOS = [
-  {
-    num: 1,
-    level: "Level 1 – Grundlagen",
-    situation: `Kundin hat folgendes Wertschriftendepot:
+type ScenarioItem = {
+  num: number;
+  level: string;
+  situation: string;
+  question: string;
+  options: { key: string; text: string }[];
+  correct: string;
+  feedback: string;
+};
+
+const SCENARIO_POOLS: ScenarioItem[][] = [
+  // ── Szenario 1 – Belehnungsberechnung ────────────────────────────────────
+  [
+    {
+      num: 1, level: "Level 1 – Grundlagen",
+      situation: `Kundin hat folgendes Wertschriftendepot:
 • Nestlé Aktien: Kurswert CHF 100'000 (Belehnungssatz 60%)
 • Obligationen BBB-Rating: Kurswert CHF 80'000 (Belehnungssatz 80%)
 
 Sie möchte einen Lombardkredit aufnehmen.`,
-    question: "Wie hoch ist der maximale Lombardkredit?",
-    options: [
-      { key: "A", text: "CHF 180'000 – 100% des Gesamtdepotwerts" },
-      { key: "B", text: "CHF 100'000 – nur auf die Aktienposition" },
-      { key: "C", text: "CHF 124'000 – CHF 60'000 (Aktien) + CHF 64'000 (Obligationen)" },
-      { key: "D", text: "CHF 150'000 – Durchschnitt der beiden Positionen" },
-    ],
-    correct: "C",
-    feedback:
-      "Nestlé Aktien: CHF 100'000 × 60% = CHF 60'000. Obligationen: CHF 80'000 × 80% = CHF 64'000. Maximaler Lombardkredit = CHF 124'000. Jede Position wird mit ihrem spezifischen Belehnungssatz gewichtet – sicherere Anlagen erhalten höhere Sätze.",
-  },
-  {
-    num: 2,
-    level: "Level 2 – Fortgeschritten",
-    situation: `Kunde hat Lombardkredit CHF 100'000 auf sein Aktien-Depot (100% Aktien).
+      question: "Wie hoch ist der maximale Lombardkredit?",
+      options: [
+        { key: "A", text: "CHF 180'000 – 100% des Gesamtdepotwerts" },
+        { key: "B", text: "CHF 100'000 – nur auf die Aktienposition" },
+        { key: "C", text: "CHF 124'000 – CHF 60'000 (Aktien) + CHF 64'000 (Obligationen)" },
+        { key: "D", text: "CHF 150'000 – Durchschnitt der beiden Positionen" },
+      ],
+      correct: "C",
+      feedback: "Nestlé Aktien: CHF 100'000 × 60% = CHF 60'000. Obligationen BBB: CHF 80'000 × 80% = CHF 64'000. Maximaler Lombardkredit = CHF 124'000. Jede Position wird mit ihrem spezifischen Belehnungssatz gewichtet – sicherere Anlagen erhalten höhere Sätze.",
+    },
+    {
+      num: 1, level: "Level 1 – Grundlagen",
+      situation: `Kundin Elena Bernasconi hat folgendes Wertschriftendepot:
+• ABB Aktien: Kurswert CHF 120'000 (Belehnungssatz 60%)
+• Obligationen A-Rating: Kurswert CHF 100'000 (Belehnungssatz 80%)
+
+Sie möchte einen Lombardkredit aufnehmen.`,
+      question: "Wie hoch ist der maximale Lombardkredit?",
+      options: [
+        { key: "A", text: "CHF 220'000 – 100% des Gesamtdepotwerts" },
+        { key: "B", text: "CHF 120'000 – nur auf die Aktienposition" },
+        { key: "C", text: "CHF 152'000 – CHF 72'000 (Aktien) + CHF 80'000 (Obligationen)" },
+        { key: "D", text: "CHF 110'000 – Durchschnitt der beiden Positionen" },
+      ],
+      correct: "C",
+      feedback: "ABB Aktien: CHF 120'000 × 60% = CHF 72'000. Obligationen A-Rating: CHF 100'000 × 80% = CHF 80'000. Maximaler Lombardkredit = CHF 152'000. Jede Position wird mit ihrem spezifischen Belehnungssatz gewichtet – sicherere Anlagen erhalten höhere Sätze.",
+    },
+    {
+      num: 1, level: "Level 1 – Grundlagen",
+      situation: `Kunde David Müller hat folgendes Wertschriftendepot:
+• Swiss Re Obligationen AA: Kurswert CHF 80'000 (Belehnungssatz 85%)
+• UBS Aktien: Kurswert CHF 60'000 (Belehnungssatz 60%)
+
+Er möchte einen Lombardkredit aufnehmen.`,
+      question: "Wie hoch ist der maximale Lombardkredit?",
+      options: [
+        { key: "A", text: "CHF 140'000 – 100% des Gesamtdepotwerts" },
+        { key: "B", text: "CHF 60'000 – nur auf die Aktienposition" },
+        { key: "C", text: "CHF 104'000 – CHF 68'000 (Obligationen) + CHF 36'000 (Aktien)" },
+        { key: "D", text: "CHF 72'500 – einheitlicher Durchschnittssatz auf beide Positionen" },
+      ],
+      correct: "C",
+      feedback: "Swiss Re Obligationen AA: CHF 80'000 × 85% = CHF 68'000. UBS Aktien: CHF 60'000 × 60% = CHF 36'000. Maximaler Lombardkredit = CHF 104'000. Jede Position wird mit ihrem spezifischen Belehnungssatz gewichtet – sicherere Anlagen erhalten höhere Sätze.",
+    },
+  ],
+
+  // ── Szenario 2 – Margin Call ──────────────────────────────────────────────
+  [
+    {
+      num: 2, level: "Level 2 – Fortgeschritten",
+      situation: `Kunde hat Lombardkredit CHF 100'000 auf sein Aktien-Depot (100% Aktien).
 
 Anfangssituation:
 • Depotwert: CHF 200'000
@@ -40,21 +87,67 @@ Aktuell nach Kursrückgang:
 • Depotwert: CHF 150'000
 • Neue Kreditlimite: CHF 90'000
 • Ausstehender Kredit: CHF 100'000`,
-    question: "Was passiert in dieser Situation?",
-    options: [
-      { key: "A", text: "Nichts – der Kredit läuft automatisch bis zum Verfall weiter" },
-      { key: "B", text: "Die Bank erhöht die Limite auf CHF 100'000, um dem Kunden zu helfen" },
-      { key: "C", text: "Margin Call: Kunde muss CHF 10'000 nachdecken oder Positionen werden zwangsliquidiert" },
-      { key: "D", text: "Der Kredit wird automatisch in eine Hypothek umgewandelt" },
-    ],
-    correct: "C",
-    feedback:
-      "Kredit CHF 100'000 übersteigt die neue Limite von CHF 90'000 → Unterdeckung CHF 10'000. Die Bank löst einen Margin Call aus: Sofortige Nachdeckung durch Einzahlung oder Depot-Aufstockung. Bei Nichtreaktion: Zwangsliquidierung von Positionen bis die Limite wieder eingehalten ist.",
-  },
-  {
-    num: 3,
-    level: "Level 3 – Experte",
-    situation: `Kundin Maria Müller, 55 Jahre, konservatives Risikoprofil.
+      question: "Was passiert in dieser Situation?",
+      options: [
+        { key: "A", text: "Nichts – der Kredit läuft automatisch bis zum Verfall weiter" },
+        { key: "B", text: "Die Bank erhöht die Limite auf CHF 100'000, um dem Kunden zu helfen" },
+        { key: "C", text: "Margin Call: Kunde muss CHF 10'000 nachdecken oder Positionen werden zwangsliquidiert" },
+        { key: "D", text: "Der Kredit wird automatisch in eine Hypothek umgewandelt" },
+      ],
+      correct: "C",
+      feedback: "Kredit CHF 100'000 übersteigt die neue Limite von CHF 90'000 → Unterdeckung CHF 10'000. Die Bank löst einen Margin Call aus: Sofortige Nachdeckung durch Einzahlung oder Depot-Aufstockung. Bei Nichtreaktion: Zwangsliquidierung von Positionen bis die Limite wieder eingehalten ist.",
+    },
+    {
+      num: 2, level: "Level 2 – Fortgeschritten",
+      situation: `Kundin Elena Bernasconi hat Lombardkredit CHF 140'000 auf ihr Aktien-Depot (100% Aktien).
+
+Anfangssituation:
+• Depotwert: CHF 280'000
+• Belehnungssatz: 60% → Kreditlimite: CHF 168'000 ✓
+
+Aktuell nach Kursrückgang:
+• Depotwert: CHF 210'000
+• Neue Kreditlimite: CHF 126'000
+• Ausstehender Kredit: CHF 140'000`,
+      question: "Was passiert in dieser Situation?",
+      options: [
+        { key: "A", text: "Nichts – der Kredit läuft automatisch bis zum Verfall weiter" },
+        { key: "B", text: "Die Bank erhöht die Limite auf CHF 140'000, um der Kundin zu helfen" },
+        { key: "C", text: "Margin Call: Kundin muss CHF 14'000 nachdecken oder Positionen werden zwangsliquidiert" },
+        { key: "D", text: "Der Kredit wird automatisch in eine Hypothek umgewandelt" },
+      ],
+      correct: "C",
+      feedback: "Kredit CHF 140'000 übersteigt die neue Limite von CHF 126'000 → Unterdeckung CHF 14'000. Die Bank löst einen Margin Call aus: Sofortige Nachdeckung durch Einzahlung oder Depot-Aufstockung. Bei Nichtreaktion: Zwangsliquidierung von Positionen bis die Limite wieder eingehalten ist.",
+    },
+    {
+      num: 2, level: "Level 2 – Fortgeschritten",
+      situation: `Kunde David Müller hat Lombardkredit CHF 120'000 auf sein Aktien-Depot (100% Aktien).
+
+Anfangssituation:
+• Depotwert: CHF 250'000
+• Belehnungssatz: 60% → Kreditlimite: CHF 150'000 ✓
+
+Aktuell nach Kursrückgang:
+• Depotwert: CHF 180'000
+• Neue Kreditlimite: CHF 108'000
+• Ausstehender Kredit: CHF 120'000`,
+      question: "Was passiert in dieser Situation?",
+      options: [
+        { key: "A", text: "Nichts – der Kredit läuft automatisch bis zum Verfall weiter" },
+        { key: "B", text: "Die Bank erhöht die Limite auf CHF 120'000, um dem Kunden zu helfen" },
+        { key: "C", text: "Margin Call: Kunde muss CHF 12'000 nachdecken oder Positionen werden zwangsliquidiert" },
+        { key: "D", text: "Der Kredit wird automatisch in eine Hypothek umgewandelt" },
+      ],
+      correct: "C",
+      feedback: "Kredit CHF 120'000 übersteigt die neue Limite von CHF 108'000 → Unterdeckung CHF 12'000. Die Bank löst einen Margin Call aus: Sofortige Nachdeckung durch Einzahlung oder Depot-Aufstockung. Bei Nichtreaktion: Zwangsliquidierung von Positionen bis die Limite wieder eingehalten ist.",
+    },
+  ],
+
+  // ── Szenario 3 – Profil-Empfehlung ───────────────────────────────────────
+  [
+    {
+      num: 3, level: "Level 3 – Experte",
+      situation: `Kundin Maria Müller, 55 Jahre, konservatives Risikoprofil.
 Depot: CHF 200'000 (70% Obligationen AA, 30% Nestlé Aktien)
 
 Belehnungsberechnung:
@@ -63,20 +156,64 @@ Belehnungsberechnung:
 • Maximale Limite: CHF 148'000
 
 Maria beantragt CHF 150'000 Lombardkredit zur Finanzierung einer Ferienwohnung.`,
-    question: "Was ist deine korrekte Empfehlung?",
-    options: [
-      { key: "A", text: "Kredit bewilligen – CHF 150'000 ist nur knapp über der Limite, vertretbar" },
-      { key: "B", text: "Antrag ablehnen: CHF 150'000 übersteigt die Limite; zudem ist Lombardkredit für Immobilien bei konservativem Profil ungeeignet" },
-      { key: "C", text: "Limite auf CHF 150'000 erhöhen – die Kundin wirkt solvent und zuverlässig" },
-      { key: "D", text: "Obligationen aus dem Belehnungswert ausschliessen und nur Aktien beliehen" },
-    ],
-    correct: "B",
-    feedback:
-      "CHF 150'000 übersteigt die Limite von CHF 148'000 – der Antrag ist abzulehnen. Zusätzlich: Lombardkredit für eine Immobilie bei konservativem Risikoprofil ist grundsätzlich ungeeignet (Klumpenrisiko, fehlende Liquidität des Sicherungsguts). Alternative: Hypothek auf die Ferienwohnung prüfen.",
-  },
+      question: "Was ist deine korrekte Empfehlung?",
+      options: [
+        { key: "A", text: "Kredit bewilligen – CHF 150'000 ist nur knapp über der Limite, vertretbar" },
+        { key: "B", text: "Antrag ablehnen: CHF 150'000 übersteigt die Limite; zudem ist Lombardkredit für Immobilien bei konservativem Profil ungeeignet" },
+        { key: "C", text: "Limite auf CHF 150'000 erhöhen – die Kundin wirkt solvent und zuverlässig" },
+        { key: "D", text: "Obligationen aus dem Belehnungswert ausschliessen und nur Aktien beliehen" },
+      ],
+      correct: "B",
+      feedback: "CHF 150'000 übersteigt die Limite von CHF 148'000 – der Antrag ist abzulehnen. Zusätzlich: Lombardkredit für eine Immobilie bei konservativem Risikoprofil ist grundsätzlich ungeeignet (Klumpenrisiko, fehlende Liquidität des Sicherungsguts). Alternative: Hypothek auf die Ferienwohnung prüfen.",
+    },
+    {
+      num: 3, level: "Level 3 – Experte",
+      situation: `Kundin Elena Bernasconi, 48 Jahre, konservatives Risikoprofil.
+Depot: CHF 300'000 (60% Obligationen AA, 40% ABB Aktien)
+
+Belehnungsberechnung:
+• Aktien CHF 120'000 × 60% = CHF 72'000
+• Obligationen CHF 180'000 × 85% = CHF 153'000
+• Maximale Limite: CHF 225'000
+
+Elena beantragt CHF 230'000 Lombardkredit zur Finanzierung eines Ferienhauses.`,
+      question: "Was ist deine korrekte Empfehlung?",
+      options: [
+        { key: "A", text: "Kredit bewilligen – CHF 230'000 ist nur knapp über der Limite, vertretbar" },
+        { key: "B", text: "Antrag ablehnen: CHF 230'000 übersteigt die Limite; zudem ist Lombardkredit für Immobilien bei konservativem Profil ungeeignet" },
+        { key: "C", text: "Limite auf CHF 230'000 erhöhen – die Kundin wirkt solvent und zuverlässig" },
+        { key: "D", text: "Obligationen aus dem Belehnungswert ausschliessen und nur Aktien beliehen" },
+      ],
+      correct: "B",
+      feedback: "CHF 230'000 übersteigt die Limite von CHF 225'000 – der Antrag ist abzulehnen. Zusätzlich: Lombardkredit für eine Immobilie bei konservativem Risikoprofil ist grundsätzlich ungeeignet (Klumpenrisiko, fehlende Liquidität des Sicherungsguts). Alternative: Hypothek auf das Ferienhaus prüfen.",
+    },
+    {
+      num: 3, level: "Level 3 – Experte",
+      situation: `Kunde David Müller, 62 Jahre, konservatives Risikoprofil.
+Depot: CHF 160'000 (75% Swiss Re Obligationen AA, 25% Zurich Aktien)
+
+Belehnungsberechnung:
+• Aktien CHF 40'000 × 60% = CHF 24'000
+• Obligationen CHF 120'000 × 85% = CHF 102'000
+• Maximale Limite: CHF 126'000
+
+David beantragt CHF 130'000 Lombardkredit zur Finanzierung einer Renovation.`,
+      question: "Was ist deine korrekte Empfehlung?",
+      options: [
+        { key: "A", text: "Kredit bewilligen – CHF 130'000 ist nur knapp über der Limite, vertretbar" },
+        { key: "B", text: "Antrag ablehnen: CHF 130'000 übersteigt die Limite; zudem ist Lombardkredit für Renovierungsvorhaben bei konservativem Profil kritisch zu prüfen" },
+        { key: "C", text: "Limite auf CHF 130'000 erhöhen – der Kunde wirkt solvent und zuverlässig" },
+        { key: "D", text: "Obligationen aus dem Belehnungswert ausschliessen und nur Aktien beliehen" },
+      ],
+      correct: "B",
+      feedback: "CHF 130'000 übersteigt die Limite von CHF 126'000 – der Antrag ist abzulehnen. Zusätzlich: Lombardkredit für Renovierungsvorhaben bei konservativem Risikoprofil ist kritisch – der Kreditbetrag überschreitet die verfügbare Limite und die Zweckbindung passt nicht zum Risikoprofil des Kunden. Alternative: Hypothekarkredit auf die Liegenschaft prüfen.",
+    },
+  ],
 ];
 
 export default function LombardkreditPage() {
+  const [variantIdx] = useState(() => Math.floor(Math.random() * 3));
+  const SCENARIOS = SCENARIO_POOLS.map((pool) => pool[variantIdx]);
   const [lernOpen, setLernOpen] = useState(true);
   const [correctCount, setCorrectCount] = useState(0);
   const [bonusAwarded, setBonusAwarded] = useState(false);
