@@ -588,7 +588,7 @@ function Hero({ onStart }: { onStart: () => void }) {
             <span className="hero-flow-sep">→</span>
             <span style={{ fontSize: 13, color: WM }}>Konsequenz</span>
             <span className="hero-flow-sep">→</span>
-            <span style={{ fontSize: 13, color: WM }}>Coaching</span>
+            <span style={{ fontSize: 13, color: WM }}>Auswertung</span>
           </div>
         </div>
       </div>
