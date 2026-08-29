@@ -2,7 +2,35 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronRight, Eye, EyeOff, Menu, X } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  BarChart2,
+  Building2,
+  CheckCircle2,
+  ChevronRight,
+  ClipboardList,
+  CreditCard,
+  Eye,
+  EyeOff,
+  GraduationCap,
+  Home,
+  Landmark,
+  Lightbulb,
+  Map,
+  Menu,
+  MessageSquare,
+  Scale,
+  Shield,
+  Target,
+  TrendingUp,
+  User,
+  Users,
+  X,
+  XCircle,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
 import { ContactForms } from "@/components/shared/ContactForms";
 
 /* ─── Design tokens ───────────────────────────────────────────────────────── */
@@ -777,7 +805,7 @@ function ProblemSolution() {
               <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
                 {PROBLEMS.map((p) => (
                   <li key={p} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, color: WD, lineHeight: 1.5 }}>
-                    <span style={{ flexShrink: 0, marginTop: 1 }}>❌</span> {p}
+                    <XCircle size={15} style={{ flexShrink: 0, marginTop: 1, color: "#f87171" }} /> {p}
                   </li>
                 ))}
               </ul>
@@ -795,7 +823,7 @@ function ProblemSolution() {
               <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
                 {SOLUTIONS.map((s) => (
                   <li key={s} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, color: WD, lineHeight: 1.5 }}>
-                    <span style={{ flexShrink: 0, marginTop: 1 }}>✅</span> {s}
+                    <CheckCircle2 size={15} style={{ flexShrink: 0, marginTop: 1, color: CY }} /> {s}
                   </li>
                 ))}
               </ul>
@@ -809,22 +837,22 @@ function ProblemSolution() {
 
 /* ─── Section: How it works ───────────────────────────────────────────────── */
 
-const HOW_STEPS = [
+const HOW_STEPS: { num: string; Icon: LucideIcon; title: string; text: string }[] = [
   {
     num: "01",
-    emoji: "📋",
+    Icon: ClipboardList,
     title: "Szenario erhalten",
     text: "Ein realistischer Fall landet auf deinem Tisch – KYC, Kredit, Zahlungsverkehr. Wie in der echten Bank.",
   },
   {
     num: "02",
-    emoji: "🤔",
+    Icon: Scale,
     title: "Entscheidung treffen",
     text: "Du entscheidest wie ein echter Banker – aber ohne Konsequenzen wenn's mal schiefläuft.",
   },
   {
     num: "03",
-    emoji: "💡",
+    Icon: Lightbulb,
     title: "Praxis verstehen",
     text: "Sofortiges Feedback: Was war falsch? Warum? Und wie würde es ein Profi lösen?",
   },
@@ -890,11 +918,10 @@ function HowItWorks() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 28,
                     marginBottom: 20,
                   }}
                 >
-                  {step.emoji}
+                  <step.Icon size={24} color={CY} strokeWidth={1.5} />
                 </div>
                 <h3 style={{ margin: "0 0 10px", fontSize: 16, fontWeight: 700, color: WH }}>{step.title}</h3>
                 <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: WD }}>{step.text}</p>
@@ -908,11 +935,9 @@ function HowItWorks() {
                     top: "50%",
                     transform: "translateY(-50%)",
                     zIndex: 10,
-                    fontSize: 20,
-                    color: WM,
                   }}
                 >
-                  →
+                  <ArrowRight size={16} color={WM} />
                 </div>
               )}
             </FadeIn>
@@ -975,11 +1000,11 @@ function FounderStory() {
 
 /* ─── Section: Warum BankAcademy ──────────────────────────────────────────── */
 
-const WARUM_ITEMS = [
-  { emoji: "🏦", title: "Aus der Praxis heraus", desc: "Entwickelt von jemandem, der die Banklehre selbst gemacht hat – keine Theorie aus dem Lehrbuch, sondern reale Erfahrung." },
-  { emoji: "🇨🇭", title: "Schweizer Regulatorik", desc: "GwG, VSB 20, FIDLEG – alle Szenarien sind präzise auf das Schweizer Bankwesen und dessen Anforderungen abgestimmt." },
-  { emoji: "🤖", title: "KI-Feedback in Echtzeit", desc: "Sofortiges, personalisiertes Feedback nach jedem Szenario – wie ein persönlicher Ausbildner, der immer verfügbar ist." },
-  { emoji: "📈", title: "Adaptives Lernen", desc: "Der Schwierigkeitsgrad passt sich deinem Level an – von Einsteiger bis Challenge-Niveau für die Abschlussprüfung." },
+const WARUM_ITEMS: { Icon: LucideIcon; title: string; desc: string }[] = [
+  { Icon: Landmark, title: "Aus der Praxis heraus", desc: "Entwickelt von jemandem, der die Banklehre selbst gemacht hat – keine Theorie aus dem Lehrbuch, sondern reale Erfahrung." },
+  { Icon: Shield, title: "Schweizer Regulatorik", desc: "GwG, VSB 20, FIDLEG – alle Szenarien sind präzise auf das Schweizer Bankwesen und dessen Anforderungen abgestimmt." },
+  { Icon: Zap, title: "KI-Feedback in Echtzeit", desc: "Sofortiges, personalisiertes Feedback nach jedem Szenario – wie ein persönlicher Ausbildner, der immer verfügbar ist." },
+  { Icon: TrendingUp, title: "Adaptives Lernen", desc: "Der Schwierigkeitsgrad passt sich deinem Level an – von Einsteiger bis Challenge-Niveau für die Abschlussprüfung." },
 ];
 
 function WarumBankAcademy() {
@@ -1027,9 +1052,9 @@ function WarumBankAcademy() {
                   width: 48, height: 48, borderRadius: 14,
                   background: `${CY}15`,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 26, flexShrink: 0,
+                  flexShrink: 0,
                 }}>
-                  {item.emoji}
+                  <item.Icon size={22} color={CY} strokeWidth={1.5} />
                 </div>
                 <div>
                   <h3 style={{ margin: "0 0 8px", fontSize: 15, fontWeight: 700, color: WH }}>{item.title}</h3>
@@ -1070,13 +1095,13 @@ function WarumBankAcademy() {
 
 /* ─── Section: Features ───────────────────────────────────────────────────── */
 
-const FEATURE_CARDS = [
-  { emoji: "🎯", title: "Praxisnahe Szenarien", text: "105+ Fälle aus dem echten Banking-Alltag – nicht aus dem Lehrbuch" },
-  { emoji: "⚠️", title: "Typische Fehler", text: "Lerne die häufigsten Fehler kennen bevor du sie in der Praxis machst" },
-  { emoji: "🧠", title: "Operative Denkweise", text: "Verstehe wie erfahrene Banker denken – nicht nur was sie tun" },
-  { emoji: "📊", title: "Messbarer Fortschritt", text: "XP, Streaks, Badges und detaillierte Lernstatistiken" },
-  { emoji: "🎓", title: "Challenge-Vorbereitung", text: "Spezifische Level-3 Szenarien für die Abschlussprüfung" },
-  { emoji: "💬", title: "Community", text: "Tausch dich mit anderen Lernenden aus und lerne voneinander" },
+const FEATURE_CARDS: { Icon: LucideIcon; title: string; text: string }[] = [
+  { Icon: Target, title: "Praxisnahe Szenarien", text: "105+ Fälle aus dem echten Banking-Alltag – nicht aus dem Lehrbuch" },
+  { Icon: AlertTriangle, title: "Typische Fehler", text: "Lerne die häufigsten Fehler kennen bevor du sie in der Praxis machst" },
+  { Icon: Scale, title: "Operative Denkweise", text: "Verstehe wie erfahrene Banker denken – nicht nur was sie tun" },
+  { Icon: BarChart2, title: "Messbarer Fortschritt", text: "XP, Streaks, Badges und detaillierte Lernstatistiken" },
+  { Icon: GraduationCap, title: "Challenge-Vorbereitung", text: "Spezifische Level-3 Szenarien für die Abschlussprüfung" },
+  { Icon: MessageSquare, title: "Community", text: "Tausch dich mit anderen Lernenden aus und lerne voneinander" },
 ];
 
 function Features() {
@@ -1127,11 +1152,10 @@ function Features() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 24,
                     marginBottom: 16,
                   }}
                 >
-                  {f.emoji}
+                  <f.Icon size={22} color={CY} strokeWidth={1.5} />
                 </div>
                 <h3 style={{ margin: "0 0 8px", fontSize: 15, fontWeight: 700, color: WH }}>{f.title}</h3>
                 <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: WD }}>{f.text}</p>
@@ -1146,7 +1170,7 @@ function Features() {
 
 /* ─── Section: Modules ────────────────────────────────────────────────────── */
 
-function ModuleItem({ emoji, title, desc }: { emoji: string; title: string; desc: string }) {
+function ModuleItem({ Icon, title, desc }: { Icon: LucideIcon; title: string; desc: string }) {
   return (
     <div
       style={{
@@ -1169,7 +1193,9 @@ function ModuleItem({ emoji, title, desc }: { emoji: string; title: string; desc
         (e.currentTarget as HTMLDivElement).style.borderColor = BR;
       }}
     >
-      <span style={{ fontSize: 22, flexShrink: 0, marginTop: 1 }}>{emoji}</span>
+      <div style={{ width: 34, height: 34, borderRadius: 10, background: `${CY}15`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+        <Icon size={16} color={CY} strokeWidth={1.5} />
+      </div>
       <div>
         <p style={{ margin: "0 0 4px", fontSize: 13, fontWeight: 700, color: WH }}>{title}</p>
         <p style={{ margin: 0, fontSize: 12, lineHeight: 1.5, color: WM }}>{desc}</p>
@@ -1197,9 +1223,9 @@ function Modules({ onStart: _onStart }: { onStart: () => void }) {
               Front Office
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <ModuleItem emoji="👤" title="Privatkunde" desc="Kontoeröffnung, Sparen & Konto, Zahlungsverkehr, 3a, Hypotheken" />
-              <ModuleItem emoji="🏢" title="Firmenkunde" desc="Jahresabschluss, Tragbarkeit, Hypothek Verlängerung" />
-              <ModuleItem emoji="📈" title="Anlagekunde" desc="Anlegerprofil, Obligationen, Aktien, Fonds & ETFs" />
+              <ModuleItem Icon={User} title="Privatkunde" desc="Kontoeröffnung, Sparen & Konto, Zahlungsverkehr, 3a, Hypotheken" />
+              <ModuleItem Icon={Building2} title="Firmenkunde" desc="Jahresabschluss, Tragbarkeit, Hypothek Verlängerung" />
+              <ModuleItem Icon={TrendingUp} title="Anlagekunde" desc="Anlegerprofil, Obligationen, Aktien, Fonds & ETFs" />
             </div>
           </FadeIn>
 
@@ -1208,8 +1234,8 @@ function Modules({ onStart: _onStart }: { onStart: () => void }) {
               Back Office
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <ModuleItem emoji="⚙️" title="Banking Operations" desc="KYC / Compliance, Zahlungsverkehr, Mahnwesen" />
-              <ModuleItem emoji="💳" title="Credit Operations" desc="Vertragserstellung, Auszahlung, Verlängerung, Kündigung" />
+              <ModuleItem Icon={Landmark} title="Banking Operations" desc="KYC / Compliance, Zahlungsverkehr, Mahnwesen" />
+              <ModuleItem Icon={CreditCard} title="Credit Operations" desc="Vertragserstellung, Auszahlung, Verlängerung, Kündigung" />
             </div>
           </FadeIn>
 
@@ -1218,8 +1244,8 @@ function Modules({ onStart: _onStart }: { onStart: () => void }) {
               Challenge-Vorbereitung
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <ModuleItem emoji="🎓" title="Challenge-Modus" desc="Prüfungsrelevante Level-3 Szenarien aller Module" />
-              <ModuleItem emoji="🗺️" title="Lernpfad" desc="Strukturierter Pfad von Grundlagen bis zur Abschlussprüfung" />
+              <ModuleItem Icon={GraduationCap} title="Challenge-Modus" desc="Prüfungsrelevante Level-3 Szenarien aller Module" />
+              <ModuleItem Icon={Map} title="Lernpfad" desc="Strukturierter Pfad von Grundlagen bis zur Abschlussprüfung" />
             </div>
           </FadeIn>
 
@@ -1228,8 +1254,8 @@ function Modules({ onStart: _onStart }: { onStart: () => void }) {
               Simulationen
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <ModuleItem emoji="🎭" title="Anlageberatung" desc="Vollständiges Beratungsgespräch mit VideoCall-Simulation" />
-              <ModuleItem emoji="🏠" title="Hypothek & Kontoeröffnung" desc="Interaktive Simulationen mit Kundendialogen" />
+              <ModuleItem Icon={Users} title="Anlageberatung" desc="Vollständiges Beratungsgespräch mit VideoCall-Simulation" />
+              <ModuleItem Icon={Home} title="Hypothek & Kontoeröffnung" desc="Interaktive Simulationen mit Kundendialogen" />
             </div>
           </FadeIn>
         </div>
@@ -1264,11 +1290,11 @@ function Modules({ onStart: _onStart }: { onStart: () => void }) {
 
 /* ─── Section: For Banks ──────────────────────────────────────────────────── */
 
-const B2B_CARDS = [
-  { emoji: "📊", title: "Fortschritt verfolgen", text: "Sehen Sie wie Ihre Lernenden vorankommen – Modul für Modul" },
-  { emoji: "🎯", title: "Praxisnah & aktuell", text: "Inhalte aus der echten Bankpraxis – abgestimmt auf Schweizer Bankstandards" },
-  { emoji: "🚀", title: "Sofort einsatzbereit", text: "Keine Installation, kein Setup – direkt im Browser, überall verfügbar" },
-  { emoji: "📋", title: "Compliance-konform", text: "Alle Inhalte nach GwG, VSB 20, FIDLEG und weiteren Regelwerken" },
+const B2B_CARDS: { Icon: LucideIcon; title: string; text: string }[] = [
+  { Icon: BarChart2, title: "Fortschritt verfolgen", text: "Sehen Sie wie Ihre Lernenden vorankommen – Modul für Modul" },
+  { Icon: Target, title: "Praxisnah & aktuell", text: "Inhalte aus der echten Bankpraxis – abgestimmt auf Schweizer Bankstandards" },
+  { Icon: Zap, title: "Sofort einsatzbereit", text: "Keine Installation, kein Setup – direkt im Browser, überall verfügbar" },
+  { Icon: Shield, title: "Compliance-konform", text: "Alle Inhalte nach GwG, VSB 20, FIDLEG und weiteren Regelwerken" },
 ];
 
 function ForBanks({ onBankContact }: { onBankContact: () => void }) {
@@ -1335,7 +1361,9 @@ function ForBanks({ onBankContact }: { onBankContact: () => void }) {
                     (e.currentTarget as HTMLDivElement).style.background = CB;
                   }}
                 >
-                  <span style={{ fontSize: 26, display: "block", marginBottom: 10 }}>{b.emoji}</span>
+                  <div style={{ width: 40, height: 40, borderRadius: 11, background: `${PU}18`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+                    <b.Icon size={19} color={PU} strokeWidth={1.5} />
+                  </div>
                   <h3 style={{ margin: "0 0 6px", fontSize: 13, fontWeight: 700, color: WH }}>{b.title}</h3>
                   <p style={{ margin: 0, fontSize: 12, lineHeight: 1.55, color: WD }}>{b.text}</p>
                 </div>
