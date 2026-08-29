@@ -1138,8 +1138,8 @@ function FounderStory() {
 const WARUM_ITEMS: { Icon: LucideIcon; title: string; desc: string }[] = [
   { Icon: Landmark, title: "Aus der Praxis heraus", desc: "Entwickelt von jemandem, der die Banklehre selbst gemacht hat – keine Theorie aus dem Lehrbuch, sondern reale Erfahrung." },
   { Icon: Shield, title: "Schweizer Regulatorik", desc: "GwG, VSB 20, FIDLEG – alle Szenarien sind präzise auf das Schweizer Bankwesen und dessen Anforderungen abgestimmt." },
-  { Icon: Zap, title: "KI-Feedback in Echtzeit", desc: "Sofortiges, personalisiertes Feedback nach jedem Szenario – wie ein persönlicher Ausbildner, der immer verfügbar ist." },
-  { Icon: TrendingUp, title: "Adaptives Lernen", desc: "Der Schwierigkeitsgrad passt sich deinem Level an – von Einsteiger bis Challenge-Niveau für die Abschlussprüfung." },
+  { Icon: Zap, title: "Feedback, das mitdenkt", desc: "Sofortiges, personalisiertes Feedback nach jedem Szenario – wie ein persönlicher Ausbildner, der immer verfügbar ist." },
+  { Icon: TrendingUp, title: "Wächst mit deinem Level", desc: "Der Schwierigkeitsgrad passt sich deinem Level an – von Einsteiger bis Challenge-Niveau für die Abschlussprüfung." },
 ];
 
 function WarumBankAcademy() {
@@ -1348,7 +1348,7 @@ function Modules({ onStart: _onStart }: { onStart: () => void }) {
             Inhalte
           </p>
           <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
-            Alle Module im Überblick
+            Deine Banking-Welt.
           </h2>
         </FadeIn>
 
@@ -1415,7 +1415,7 @@ function Modules({ onStart: _onStart }: { onStart: () => void }) {
             onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
           >
-            Mehr entdecken <ChevronRight size={15} />
+            Alle Fälle entdecken <ChevronRight size={15} />
           </button>
         </FadeIn>
       </div>
@@ -1443,7 +1443,7 @@ function ForBanks({ onBankContact }: { onBankContact: () => void }) {
               Für Banken & Ausbildner
             </span>
             <h2 style={{ margin: "0 0 16px", fontSize: "clamp(26px,4vw,36px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH, lineHeight: 1.15 }}>
-              Moderne Ausbildung
+              Praxisnahe Ausbildung
               <br />
               für Ihre Lernenden.
             </h2>
