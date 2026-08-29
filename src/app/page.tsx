@@ -853,7 +853,7 @@ function DemoVideo() {
 
 function StatsBar() {
   const { ref, visible } = useInView();
-  const c1 = useCountUp(105, visible);
+  const c1 = useCountUp(150, visible);
   const c2 = useCountUp(6, visible);
   const c3 = useCountUp(3, visible);
 
@@ -1134,7 +1134,7 @@ function FounderStory() {
 
 const WARUM_ITEMS: { Icon: LucideIcon; title: string; desc: string }[] = [
   { Icon: Landmark, title: "Aus der Praxis heraus", desc: "Entwickelt von jemandem, der die Banklehre selbst gemacht hat – keine Theorie aus dem Lehrbuch, sondern reale Erfahrung." },
-  { Icon: Shield, title: "Schweizer Regulatorik", desc: "GwG, VSB 20, FIDLEG – alle Szenarien sind präzise auf das Schweizer Bankwesen und dessen Anforderungen abgestimmt." },
+  { Icon: Shield, title: "Schweizer Bankpraxis", desc: "Ausgerichtet auf die Praxis des Schweizer Bankings und relevante regulatorische Grundlagen." },
   { Icon: Zap, title: "Feedback, das mitdenkt", desc: "Sofortiges, personalisiertes Feedback nach jedem Szenario – wie ein persönlicher Ausbildner, der immer verfügbar ist." },
   { Icon: TrendingUp, title: "Wächst mit deinem Level", desc: "Der Schwierigkeitsgrad passt sich deinem Level an – von Einsteiger bis Challenge-Niveau für die Abschlussprüfung." },
 ];
@@ -1228,10 +1228,10 @@ function WarumBankAcademy() {
 /* ─── Section: Features ───────────────────────────────────────────────────── */
 
 const FEATURE_CARDS: { Icon: LucideIcon; title: string; text: string }[] = [
-  { Icon: Target, title: "Praxisnahe Szenarien", text: "105+ Fälle aus dem echten Banking-Alltag – nicht aus dem Lehrbuch" },
+  { Icon: Target, title: "Praxisnahe Szenarien", text: "150+ Praxisfälle aus dem echten Banking-Alltag – nicht aus dem Lehrbuch" },
   { Icon: AlertTriangle, title: "Typische Fehler", text: "Lerne die häufigsten Fehler kennen bevor du sie in der Praxis machst" },
   { Icon: Scale, title: "Operative Denkweise", text: "Verstehe wie erfahrene Banker denken – nicht nur was sie tun" },
-  { Icon: BarChart2, title: "Messbarer Fortschritt", text: "XP, Streaks, Badges und detaillierte Lernstatistiken" },
+  { Icon: BarChart2, title: "Kompetenzen im Blick", text: "Sieh, welche Banking-Kompetenzen du bereits beherrschst – und wo du noch unsicher bist." },
   { Icon: GraduationCap, title: "Challenge-Vorbereitung", text: "Spezifische Level-3 Szenarien für die Abschlussprüfung" },
   { Icon: MessageSquare, title: "Community", text: "Tausch dich mit anderen Lernenden aus und lerne voneinander" },
 ];
@@ -1423,10 +1423,10 @@ function Modules({ onStart: _onStart }: { onStart: () => void }) {
 /* ─── Section: For Banks ──────────────────────────────────────────────────── */
 
 const B2B_CARDS: { Icon: LucideIcon; title: string; text: string }[] = [
-  { Icon: BarChart2, title: "Fortschritt verfolgen", text: "Sehen Sie wie Ihre Lernenden vorankommen – Modul für Modul" },
-  { Icon: Target, title: "Praxisnah & aktuell", text: "Inhalte aus der echten Bankpraxis – abgestimmt auf Schweizer Bankstandards" },
-  { Icon: Zap, title: "Sofort einsatzbereit", text: "Keine Installation, kein Setup – direkt im Browser, überall verfügbar" },
-  { Icon: Shield, title: "Compliance-konform", text: "Alle Inhalte nach GwG, VSB 20, FIDLEG und weiteren Regelwerken" },
+  { Icon: BarChart2, title: "Lernlücken erkennen", text: "Sehen Sie, wo Lernende noch unsicher sind – und fördern Sie gezielt, bevor es zählt." },
+  { Icon: Target, title: "Praxistransfer nachweisen", text: "Zeigen Sie, wie Lernende Wissen in realen Banksituationen anwenden." },
+  { Icon: Zap, title: "Sofort einsatzbereit", text: "Keine Installation, kein Setup – direkt im Browser, überall verfügbar." },
+  { Icon: Shield, title: "Skalierbar ohne Mehraufwand", text: "Lernende trainieren selbstständig – ohne zusätzliche Betreuungszeit für jede Übung." },
 ];
 
 function ForBanks({ onBankContact }: { onBankContact: () => void }) {
@@ -1590,7 +1590,7 @@ function FinalCTA({ onStart }: { onStart: () => void }) {
             Bereit für BankAcademy?
           </h2>
           <p style={{ margin: "0 0 36px", fontSize: 18, color: WD, lineHeight: 1.6 }}>
-            Dein erster Arbeitstag in der Bank kommt schneller als du denkst.
+            Trainiere reale Banksituationen und gewinne Sicherheit für deinen Banking-Alltag.
           </p>
           <button
             onClick={onStart}
