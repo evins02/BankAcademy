@@ -609,6 +609,138 @@ function Hero({ onStart }: { onStart: () => void }) {
   );
 }
 
+/* ─── Section: Case Experience ────────────────────────────────────────────── */
+
+function CaseExperience() {
+  return (
+    <section
+      style={{
+        background: N,
+        padding: "96px 24px 104px",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: "10%",
+          right: "10%",
+          height: 1,
+          background: BR,
+        }}
+      />
+
+      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        <FadeIn style={{ textAlign: "center", marginBottom: 64 }}>
+          <p
+            style={{
+              margin: "0 0 18px",
+              fontSize: 12,
+              fontWeight: 700,
+              color: CY,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+            }}
+          >
+            Die Case-Experience
+          </p>
+          <h2
+            style={{
+              margin: "0 0 20px",
+              fontSize: "clamp(30px, 4vw, 48px)",
+              fontWeight: 800,
+              letterSpacing: "-0.5px",
+              color: WH,
+              lineHeight: 1.1,
+            }}
+          >
+            Das ist kein Quiz.
+          </h2>
+          <p
+            style={{
+              margin: "0 auto",
+              maxWidth: 460,
+              fontSize: 17,
+              lineHeight: 1.65,
+              color: WD,
+            }}
+          >
+            Jeder Fall folgt dem gleichen Ablauf wie im echten Bankalltag – mit echten Konsequenzen statt richtig/falsch.
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.15}>
+          <div style={{ position: "relative" }}>
+            <div
+              className="case-exp-line"
+              style={{
+                position: "absolute",
+                top: 19,
+                left: "13%",
+                right: "13%",
+                height: 1,
+                background: BR,
+                zIndex: 0,
+              }}
+            />
+            <div className="case-exp-grid">
+
+              {/* Step 1 – Kontext */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <div style={{ width: 40, height: 40, borderRadius: "50%", background: N, border: `1.5px solid ${CY}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, zIndex: 1, flexShrink: 0 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: CY }}>1</span>
+                </div>
+                <p style={{ margin: "0 0 14px", fontSize: 10, fontWeight: 700, color: CY, letterSpacing: "0.12em", textTransform: "uppercase" }}>Kontext</p>
+                <div style={{ width: "100%", background: "#131C31", border: "1px solid #243049", borderRadius: 10, padding: "20px 18px" }}>
+                  <p style={{ margin: "0 0 4px", fontSize: 12, color: WM }}>Montag, 08:42</p>
+                  <p style={{ margin: "0 0 6px", fontSize: 15, fontWeight: 700, color: WH }}>Meier Maschinenbau AG</p>
+                  <p style={{ margin: 0, fontSize: 13, color: WD }}>Betriebskredit CHF 250&apos;000</p>
+                </div>
+              </div>
+
+              {/* Step 2 – Entscheidung */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <div style={{ width: 40, height: 40, borderRadius: "50%", background: N, border: `1.5px solid ${CY}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, zIndex: 1, flexShrink: 0 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: CY }}>2</span>
+                </div>
+                <p style={{ margin: "0 0 14px", fontSize: 10, fontWeight: 700, color: CY, letterSpacing: "0.12em", textTransform: "uppercase" }}>Entscheidung</p>
+                <div style={{ width: "100%", background: "#131C31", border: "1px solid #243049", borderRadius: 10, padding: "20px 18px" }}>
+                  <p style={{ margin: 0, fontSize: 13, color: WD, lineHeight: 1.6 }}>Du prüfst Jahresabschluss, KYC und Sicherheiten – und entscheidest, was ans Credit Office geht.</p>
+                </div>
+              </div>
+
+              {/* Step 3 – Konsequenz */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <div style={{ width: 40, height: 40, borderRadius: "50%", background: N, border: `1.5px solid ${CY}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, zIndex: 1, flexShrink: 0 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: CY }}>3</span>
+                </div>
+                <p style={{ margin: "0 0 14px", fontSize: 10, fontWeight: 700, color: CY, letterSpacing: "0.12em", textTransform: "uppercase" }}>Konsequenz</p>
+                <div style={{ width: "100%", background: "#131C31", border: "1px solid #243049", borderRadius: 10, padding: "20px 18px" }}>
+                  <p style={{ margin: 0, fontSize: 13, color: WD, lineHeight: 1.6, fontStyle: "italic", borderLeft: "3px solid #A78BFA", paddingLeft: 12 }}>Wirtschaftlich Berechtigte nicht vollständig dokumentiert. Bitte ergänzen.</p>
+                </div>
+              </div>
+
+              {/* Step 4 – Auswertung */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <div style={{ width: 40, height: 40, borderRadius: "50%", background: N, border: `1.5px solid ${CY}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, zIndex: 1, flexShrink: 0 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: CY }}>4</span>
+                </div>
+                <p style={{ margin: "0 0 14px", fontSize: 10, fontWeight: 700, color: CY, letterSpacing: "0.12em", textTransform: "uppercase" }}>Auswertung</p>
+                <div style={{ width: "100%", background: "#131C31", border: "1px solid #243049", borderRadius: 10, padding: "20px 18px" }}>
+                  <p style={{ margin: 0, fontSize: 13, color: WD, lineHeight: 1.6 }}>Warum das Formular K hier zwingend war – und was du dir für den nächsten Fall merkst.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
 /* ─── Section: Demo Video ─────────────────────────────────────────────────── */
 
 function DemoVideo() {
@@ -2054,6 +2186,11 @@ export default function LandingPage() {
           .hero-flow { flex-direction: column; align-items: flex-start; gap: 8px; }
           .hero-flow-sep { display: none; }
         }
+        .case-exp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; position: relative; z-index: 1; }
+        @media (max-width: 700px) {
+          .case-exp-grid { grid-template-columns: 1fr; gap: 28px; }
+          .case-exp-line { display: none !important; }
+        }
       `}</style>
 
       {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
@@ -2076,6 +2213,7 @@ export default function LandingPage() {
           onStart={() => { setMobileOpen(false); setAccessOpen(true); }}
         />
         <Hero onStart={() => setAccessOpen(true)} />
+        <CaseExperience />
         <DemoVideo />
         <FounderStory />
         <WarumBankAcademy />
