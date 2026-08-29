@@ -988,7 +988,7 @@ const HOW_STEPS: { num: string; Icon: LucideIcon; title: string; text: string }[
   {
     num: "03",
     Icon: Lightbulb,
-    title: "Praxis verstehen",
+    title: "Den Profi-Blick entwickeln",
     text: "Sofortiges Feedback: Was war falsch? Warum? Und wie würde es ein Profi lösen?",
   },
 ];
@@ -1228,7 +1228,7 @@ function WarumBankAcademy() {
 /* ─── Section: Features ───────────────────────────────────────────────────── */
 
 const FEATURE_CARDS: { Icon: LucideIcon; title: string; text: string }[] = [
-  { Icon: Target, title: "Praxisnahe Szenarien", text: "150+ Praxisfälle aus dem echten Banking-Alltag – nicht aus dem Lehrbuch" },
+  { Icon: Target, title: "Praxisnahe Szenarien", text: "150+ Fälle aus dem echten Banking-Alltag – nicht aus dem Lehrbuch" },
   { Icon: AlertTriangle, title: "Typische Fehler", text: "Lerne die häufigsten Fehler kennen bevor du sie in der Praxis machst" },
   { Icon: Scale, title: "Operative Denkweise", text: "Verstehe wie erfahrene Banker denken – nicht nur was sie tun" },
   { Icon: BarChart2, title: "Kompetenzen im Blick", text: "Sieh, welche Banking-Kompetenzen du bereits beherrschst – und wo du noch unsicher bist." },
@@ -1445,7 +1445,7 @@ function ForBanks({ onBankContact }: { onBankContact: () => void }) {
               für Ihre Lernenden.
             </h2>
             <p style={{ margin: "0 0 28px", fontSize: 16, color: WD, lineHeight: 1.65 }}>
-              BankAcademy ergänzt bestehende Ausbildungsangebote mit praxisnahem digitalem Training – abgestimmt auf Schweizer Bankstandards.
+              BankAcademy ergänzt Ihr Ausbildungsangebot – mit echten Szenarien, die Lernende direkt auf den Banking-Alltag vorbereiten.
             </p>
             <button
               onClick={onBankContact}
