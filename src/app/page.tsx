@@ -198,9 +198,12 @@ function Navbar({
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
         >
-          <span style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
-            Bank<span style={{ color: CY }}>Academy</span>
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo.png"
+            alt="BankAcademy"
+            style={{ height: 36, width: "auto", display: "block" }}
+          />
         </button>
 
         {/* Desktop nav */}
@@ -2165,9 +2168,12 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
         <div style={{ display: "grid", gap: 40 }} className="sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <p style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
-              Bank<span style={{ color: CY }}>Academy</span>
-            </p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.png"
+              alt="BankAcademy"
+              style={{ height: 40, width: "auto", display: "block", marginBottom: 8 }}
+            />
             <p style={{ margin: "0 0 4px", fontSize: 13, color: WD, lineHeight: 1.5 }}>
               Der digitale Praxisausbildner
               <br />
