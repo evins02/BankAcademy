@@ -492,9 +492,9 @@ function Hero({ onStart }: { onStart: () => void }) {
             color: WH,
           }}
         >
-          Lern faul.{" "}
+          Wie sicher bist du{" "}
           <br />
-          <span style={{ color: CY }}>Üb smart.</span>
+          <span style={{ color: CY }}>wirklich im Banking?</span>
         </h1>
 
         {/* Subtitle */}
@@ -507,13 +507,13 @@ function Hero({ onStart }: { onStart: () => void }) {
             color: WD,
           }}
         >
-          Echte Bankszenarien, echtes Feedback, echter Praxistransfer – statt Theorie aus dem Lehrbuch.
+          Trainiere reale Szenarien. Im Zug. In der Pause. Überall – und komm vorbereitet in die Bank.
         </p>
 
         {/* Buttons */}
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12, marginBottom: 48 }}>
-          <button
-            onClick={onStart}
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12, marginBottom: 16 }}>
+          <Link
+            href="/demo"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -524,8 +524,7 @@ function Hero({ onStart }: { onStart: () => void }) {
               fontWeight: 700,
               background: CY,
               color: N,
-              border: "none",
-              cursor: "pointer",
+              textDecoration: "none",
               boxShadow: `0 0 40px ${CY}55`,
               transition: "transform 0.15s, box-shadow 0.15s",
             }}
@@ -538,10 +537,10 @@ function Hero({ onStart }: { onStart: () => void }) {
               e.currentTarget.style.boxShadow = `0 0 40px ${CY}55`;
             }}
           >
-            Vollversion <ChevronRight size={17} />
-          </button>
-          <Link
-            href="/demo"
+            Banking-Skills testen <ChevronRight size={17} />
+          </Link>
+          <button
+            onClick={onStart}
             style={{
               padding: "15px 32px",
               borderRadius: 100,
@@ -550,19 +549,24 @@ function Hero({ onStart }: { onStart: () => void }) {
               background: "transparent",
               border: `1px solid rgba(255,255,255,0.2)`,
               color: WH,
-              textDecoration: "none",
+              cursor: "pointer",
               transition: "background 0.15s",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.07)";
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.07)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+              (e.currentTarget as HTMLButtonElement).style.background = "transparent";
             }}
           >
-            Jetzt gratis loslegen
-          </Link>
+            Vollversion öffnen
+          </button>
         </div>
+
+        {/* Microcopy */}
+        <p style={{ margin: "0 0 32px", fontSize: 13, color: WM }}>
+          Kostenlos testen · Direkt im Browser · Kein Setup
+        </p>
 
         {/* Signature-Case card */}
         <div
@@ -578,9 +582,9 @@ function Hero({ onStart }: { onStart: () => void }) {
           }}
         >
           <p style={{ margin: "0 0 10px", fontSize: 12, color: WM, letterSpacing: "0.04em" }}>Montag, 08:42</p>
-          <p style={{ margin: "0 0 12px", fontSize: 11, fontWeight: 700, color: CY, letterSpacing: "0.1em", textTransform: "uppercase" }}>Neuer Auftrag</p>
+          <p style={{ margin: "0 0 12px", fontSize: 11, fontWeight: 700, color: CY, letterSpacing: "0.1em", textTransform: "uppercase" }}>Deine nächste Aufgabe</p>
           <p style={{ margin: "0 0 6px", fontSize: 26, fontWeight: 600, color: WH, lineHeight: 1.3 }}>Meier Maschinenbau AG</p>
-          <p style={{ margin: "0 0 28px", fontSize: 15, color: WD }}>Betriebskredit CHF 250&apos;000 · Credit Office erwartet dein Dossier</p>
+          <p style={{ margin: "0 0 28px", fontSize: 15, color: WD }}>Betriebskredit CHF 250&apos;000 · Wie gehst du vor?</p>
           <div className="hero-flow">
             <span style={{ fontSize: 13, color: WH, fontWeight: 600 }}>Kontext</span>
             <span className="hero-flow-sep">→</span>
@@ -667,7 +671,7 @@ function CaseExperience() {
               color: WD,
             }}
           >
-            Jeder Fall folgt dem gleichen Ablauf wie im echten Bankalltag – mit echten Konsequenzen statt richtig/falsch.
+            Kein Multiple Choice. Kein Lehrbuch. Jeder Fall ist so aufgebaut wie dein Bankalltag – und du musst entscheiden.
           </p>
         </FadeIn>
 
@@ -736,6 +740,93 @@ function CaseExperience() {
             </div>
           </div>
         </FadeIn>
+
+        <FadeIn delay={0.3} style={{ textAlign: "center", marginTop: 48 }}>
+          <Link
+            href="/demo"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "13px 28px",
+              borderRadius: 100,
+              fontSize: 14,
+              fontWeight: 700,
+              background: CY,
+              color: N,
+              textDecoration: "none",
+              transition: "transform 0.15s",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+          >
+            Situation ausprobieren <ChevronRight size={14} />
+          </Link>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Section: Lifestyle ──────────────────────────────────────────────────── */
+
+const LIFESTYLE_SCENES = [
+  { icon: "🚆", place: "Im Zug", text: "10 Minuten bis zur Bank. Einen Fall lösen." },
+  { icon: "💪", place: "Im Gym", text: "Warten auf das nächste Set. Schnell ein Szenario." },
+  { icon: "☕", place: "In der Pause", text: "Kaffeepause. Ein Fall. Zurück mit mehr Sicherheit." },
+  { icon: "🏠", place: "Zu Hause", text: "Abends auf dem Sofa. Vorbereitung für morgen." },
+];
+
+function Lifestyle() {
+  return (
+    <section style={{ background: NM, padding: "96px 24px" }}>
+      <div style={{ maxWidth: 960, margin: "0 auto" }}>
+        <FadeIn style={{ textAlign: "center", marginBottom: 56 }}>
+          <h2
+            style={{
+              margin: "0 0 16px",
+              fontSize: "clamp(26px, 4vw, 42px)",
+              fontWeight: 800,
+              letterSpacing: "-0.5px",
+              color: WH,
+              lineHeight: 1.15,
+            }}
+          >
+            Deine Ausbildung soll in<br />dein Leben passen.
+          </h2>
+          <p style={{ margin: "0 auto", maxWidth: 440, fontSize: 17, color: WD, lineHeight: 1.6 }}>
+            5 Minuten reichen. Jederzeit. Überall.
+          </p>
+        </FadeIn>
+
+        <div style={{ display: "grid", gap: 16 }} className="sm:grid-cols-2 lg:grid-cols-4">
+          {LIFESTYLE_SCENES.map((s, i) => (
+            <FadeIn key={s.place} delay={i * 0.08}>
+              <div
+                style={{
+                  background: CB,
+                  border: `1px solid ${BR}`,
+                  borderRadius: 18,
+                  padding: "28px 24px",
+                  height: "100%",
+                  transition: "border-color 0.2s, background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = `${CY}33`;
+                  (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.07)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = BR;
+                  (e.currentTarget as HTMLDivElement).style.background = CB;
+                }}
+              >
+                <div style={{ fontSize: 32, marginBottom: 14 }}>{s.icon}</div>
+                <p style={{ margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: CY }}>{s.place}</p>
+                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: WD }}>{s.text}</p>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -778,10 +869,10 @@ function DemoVideo() {
               lineHeight: 1.15,
             }}
           >
-            Sieh wie BankAcademy funktioniert
+            Sieh BankAcademy in 60 Sekunden
           </h2>
           <p style={{ margin: 0, fontSize: 17, color: WD, lineHeight: 1.6 }}>
-            In 60 Sekunden verstehst du was BankAcademy macht
+            Vom Fall bis zum Feedback.
           </p>
         </FadeIn>
 
@@ -841,7 +932,7 @@ function DemoVideo() {
               e.currentTarget.style.boxShadow = `0 4px 20px ${CY}44`;
             }}
           >
-            Jetzt selbst ausprobieren <ChevronRight size={15} />
+            Jetzt selbst testen <ChevronRight size={15} />
           </Link>
         </FadeIn>
       </div>
@@ -1098,13 +1189,16 @@ function FounderStory() {
               Weil ich das Tool vermisst habe,<br />das ich selbst gebraucht hätte.
             </h2>
             <p style={{ margin: "0 0 32px", fontSize: "clamp(20px, 2.4vw, 28px)", lineHeight: 1.55, color: WD, fontWeight: 400 }}>
-              In meiner Ausbildung war vieles verständlich – bis es in die Praxis ging.
+              In meiner Banklehre war Theorie kein Problem. Das Problem war der erste echte Kunde.
+            </p>
+            <p style={{ margin: "0 0 32px", fontSize: "clamp(20px, 2.4vw, 28px)", lineHeight: 1.55, color: WD, fontWeight: 400 }}>
+              Kein Tool, kein Trainer, keine Antwort auf die Frage: Was tue ich jetzt wirklich?
             </p>
             <p style={{ margin: "0 0 44px", fontSize: "clamp(20px, 2.4vw, 28px)", lineHeight: 1.55, color: CY, fontWeight: 700 }}>
-              Also habe ich das gebaut, was genau dort gefehlt hat.
+              Also habe ich das gebaut, was mir damals gefehlt hat.
             </p>
             <Link
-              href="/kontakt"
+              href="/demo"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -1121,7 +1215,7 @@ function FounderStory() {
               onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
             >
-              Kontakt aufnehmen <ChevronRight size={15} />
+              Ausprobieren, was mir damals gefehlt hat <ChevronRight size={15} />
             </Link>
           </div>
         </FadeIn>
@@ -1147,8 +1241,8 @@ function WarumBankAcademy() {
           <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
             Warum BankAcademy
           </p>
-          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
-            Einzigartig. Weil es sein muss.
+          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH, lineHeight: 1.2 }}>
+            Gebaut für den Moment,<br />in dem Theorie nicht mehr reicht.
           </h2>
         </FadeIn>
 
@@ -1217,7 +1311,7 @@ function WarumBankAcademy() {
             onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
           >
-            Demo ausprobieren <ChevronRight size={15} />
+            Banking-Skills testen <ChevronRight size={15} />
           </button>
         </FadeIn>
       </div>
@@ -1344,9 +1438,12 @@ function Modules({ onStart: _onStart }: { onStart: () => void }) {
           <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
             Inhalte
           </p>
-          <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
+          <h2 style={{ margin: "0 0 12px", fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
             Deine Banking-Welt.
           </h2>
+          <p style={{ margin: "0 auto", maxWidth: 500, fontSize: 16, color: WD, lineHeight: 1.6 }}>
+            Alle Module sind so aufgebaut wie dein Bankalltag – mit echten Fällen, die dich weiterbringen.
+          </p>
         </FadeIn>
 
         <div style={{ display: "grid", gap: 40 }} className="sm:grid-cols-2">
@@ -1440,12 +1537,12 @@ function ForBanks({ onBankContact }: { onBankContact: () => void }) {
               Für Banken & Ausbildner
             </span>
             <h2 style={{ margin: "0 0 16px", fontSize: "clamp(26px,4vw,36px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH, lineHeight: 1.15 }}>
-              Praxisnahe Ausbildung
+              Mehr Praxistransfer.
               <br />
-              für Ihre Lernenden.
+              Ohne mehr Betreuungsaufwand.
             </h2>
             <p style={{ margin: "0 0 28px", fontSize: 16, color: WD, lineHeight: 1.65 }}>
-              BankAcademy ergänzt Ihr Ausbildungsangebot – mit echten Szenarien, die Lernende direkt auf den Banking-Alltag vorbereiten.
+              BankAcademy trainiert Ihre Lernenden selbstständig – mit realen Szenarien, messbarem Fortschritt und ohne zusätzliche Ressourcen von Ihrer Seite.
             </p>
             <button
               onClick={onBankContact}
@@ -1467,7 +1564,7 @@ function ForBanks({ onBankContact }: { onBankContact: () => void }) {
               onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
             >
-              Kontakt aufnehmen <ChevronRight size={15} />
+              Pilot besprechen <ChevronRight size={15} />
             </button>
           </FadeIn>
 
@@ -1587,13 +1684,13 @@ function FinalCTA({ onStart }: { onStart: () => void }) {
               lineHeight: 1.1,
             }}
           >
-            Bereit für BankAcademy?
+            Wie sicher bist du wirklich?
           </h2>
           <p style={{ margin: "0 0 36px", fontSize: 18, color: WD, lineHeight: 1.6 }}>
-            Trainiere reale Banksituationen und gewinne Sicherheit für deinen Banking-Alltag.
+            Probier es aus.
           </p>
-          <button
-            onClick={onStart}
+          <Link
+            href="/demo"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -1604,8 +1701,7 @@ function FinalCTA({ onStart }: { onStart: () => void }) {
               fontWeight: 800,
               background: CY,
               color: N,
-              border: "none",
-              cursor: "pointer",
+              textDecoration: "none",
               boxShadow: `0 8px 40px ${CY}55`,
               transition: "transform 0.15s, box-shadow 0.15s",
             }}
@@ -1618,8 +1714,8 @@ function FinalCTA({ onStart }: { onStart: () => void }) {
               e.currentTarget.style.boxShadow = `0 8px 40px ${CY}55`;
             }}
           >
-            Jetzt starten <ChevronRight size={18} />
-          </button>
+            Banking-Skills testen <ChevronRight size={18} />
+          </Link>
         </div>
       </FadeIn>
     </section>
@@ -2211,10 +2307,12 @@ export default function LandingPage() {
         />
         <Hero onStart={() => setAccessOpen(true)} />
         <CaseExperience />
+        <Lifestyle />
         <DemoVideo />
+        <StatsBar />
         <FounderStory />
-        <WarumBankAcademy />
         <Modules onStart={() => setAccessOpen(true)} />
+        <WarumBankAcademy />
         <ForBanks onBankContact={() => { setContactTab("bank"); scrollTo("kontakt"); }} />
         <ContactSection initialTab={contactTab} />
         <FinalCTA onStart={() => setAccessOpen(true)} />
