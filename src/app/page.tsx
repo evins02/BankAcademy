@@ -507,7 +507,7 @@ function Hero({ onStart }: { onStart: () => void }) {
             color: WD,
           }}
         >
-          Trainiere reale Szenarien. Im Zug. In der Pause. Überall – und komm vorbereitet in die Bank.
+          Trainiere reale Szenarien. Im Zug. In der Pause. Überall – und tritt sicher auf, wenn es darauf ankommt.
         </p>
 
         {/* Buttons */}
