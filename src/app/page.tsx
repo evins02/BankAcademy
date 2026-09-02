@@ -671,7 +671,7 @@ function CaseExperience() {
               color: WD,
             }}
           >
-            Kein Multiple Choice. Kein Lehrbuch. Jeder Fall ist so aufgebaut wie dein Bankalltag – und du musst entscheiden.
+            Nicht nur Multiple Choice. Du trainierst echte Banksituationen, triffst Entscheidungen und bekommst direkt Feedback.
           </p>
         </FadeIn>
 
@@ -771,10 +771,10 @@ function CaseExperience() {
 /* ─── Section: Lifestyle ──────────────────────────────────────────────────── */
 
 const LIFESTYLE_SCENES = [
-  { icon: "🚆", place: "Im Zug", text: "10 Minuten bis zur Bank. Einen Fall lösen." },
-  { icon: "💪", place: "Im Gym", text: "Warten auf das nächste Set. Schnell ein Szenario." },
-  { icon: "☕", place: "In der Pause", text: "Kaffeepause. Ein Fall. Zurück mit mehr Sicherheit." },
-  { icon: "🏠", place: "Zu Hause", text: "Abends auf dem Sofa. Vorbereitung für morgen." },
+  { place: "Zug", text: "7 Minuten bis Zürich." },
+  { place: "Gym", text: "Noch kurz ein Case vor dem nächsten Set." },
+  { place: "Café", text: "Kaffee holen. Fall lösen. Weiter." },
+  { place: "Zuhause", text: "Noch 5 Minuten? Noch ein Case." },
 ];
 
 function Lifestyle() {
@@ -820,9 +820,8 @@ function Lifestyle() {
                   (e.currentTarget as HTMLDivElement).style.background = CB;
                 }}
               >
-                <div style={{ fontSize: 32, marginBottom: 14 }}>{s.icon}</div>
-                <p style={{ margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: CY }}>{s.place}</p>
-                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: WD }}>{s.text}</p>
+                <p style={{ margin: "0 0 12px", fontSize: 11, fontWeight: 700, color: CY, letterSpacing: "0.14em", textTransform: "uppercase" }}>{s.place}</p>
+                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: WD }}>{s.text}</p>
               </div>
             </FadeIn>
           ))}
