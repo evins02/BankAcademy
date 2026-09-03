@@ -24,6 +24,7 @@ const LEHRJAHR_OPTIONS = [
   { id: "lj2", label: "2. Lehrjahr", emoji: "📚", desc: "Wissen vertiefen" },
   { id: "lj3", label: "3. Lehrjahr", emoji: "🎓", desc: "Abschluss vorbereiten" },
   { id: "quereinsteiger", label: "Quereinsteiger / Praktikant", emoji: "🔄", desc: "Neu in der Branche" },
+  { id: "mitarbeiter", label: "Angestellt (nach Lehre)", emoji: "💼", desc: "Vollzeit im Banking tätig" },
 ];
 
 const ZIEL_OPTIONS = [
@@ -134,9 +135,14 @@ export default function OnboardingPage() {
     if (finalZiel === "challenge") diff = "challenge";
     else if (lehrjahr === "lj1") diff = "einsteiger";
 
+    const role =
+      lehrjahr === "mitarbeiter" ? "Mitarbeiter"
+      : lehrjahr === "quereinsteiger" ? "Quereinsteiger"
+      : "Lernende";
+
     const profileData = {
       name: name.trim(),
-      role: "Lernende",
+      role,
       abteilung,
       lehrjahr,
       ziel: finalZiel,
@@ -282,10 +288,10 @@ export default function OnboardingPage() {
           {step === "lehrjahr" && (
             <div>
               <h1 className="text-xl font-bold text-gray-900">
-                In welchem Lehrjahr bist du?
+                Wie bist du aktuell tätig?
               </h1>
               <p className="mt-1.5 text-sm text-gray-500">
-                Bestimmt deinen Startschwierigkeitsgrad.
+                Wir passen dein Lernprofil entsprechend an.
               </p>
 
               <div className="mt-5 grid grid-cols-2 gap-2.5">
