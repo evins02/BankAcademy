@@ -143,6 +143,14 @@ export function Sidebar() {
     });
   }
 
+  const APPRENTICE_LEHRJAHRE = new Set(["lj1", "lj2", "lj3"]);
+  const visibleGroups = NAV_GROUPS.filter((group) => {
+    if (!group.requiredRoles) return true;
+    if (!isLoaded || !user) return false;
+    const lj = profile.lehrjahr;
+    return !lj || !APPRENTICE_LEHRJAHRE.has(lj);
+  });
+
   const [openItems, setOpenItems] = useState<Set<string>>(() => {
     const open = new Set<string>();
     for (const group of NAV_GROUPS) {
@@ -154,7 +162,7 @@ export function Sidebar() {
   });
 
   useEffect(() => {
-    for (const group of NAV_GROUPS) {
+    for (const group of visibleGroups) {
       for (const item of group.items) {
         if (item.sections && isChildActive(item, pathname)) {
           setOpenItems((prev) => {
@@ -266,7 +274,7 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-2 py-3">
-        {NAV_GROUPS.map((group) => (
+        {visibleGroups.map((group) => (
           <div key={group.label} className="mb-4">
             {!effectiveCollapsed && (
               <p className="mb-1 px-2 text-[10px] font-bold uppercase tracking-widest text-text-secondary">

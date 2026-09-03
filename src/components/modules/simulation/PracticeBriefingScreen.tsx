@@ -6,38 +6,36 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Difficulty } from "./sim-types";
 
-interface PracticeBriefingScreenProps {
-  onStart: (difficulty: Difficulty) => void;
+export interface BriefingCustomer {
+  initials: string;
+  name: string;
+  statusLabel: string;
+  fields: { label: string; value: string }[];
+  mood: {
+    label: string;
+    colorClass: string;
+    dotClass: string;
+  };
+  alertText: string;
+  appointmentLabel: string;
 }
 
-const DIFFICULTIES: {
+export interface DifficultyOption {
   key: Difficulty;
   dot: string;
   label: string;
   description: string;
-}[] = [
-  {
-    key: "einsteiger",
-    dot: "bg-green-500",
-    label: "Einsteiger",
-    description: "Markus ist enttäuscht aber offen für Erklärungen.",
-  },
-  {
-    key: "fortgeschritten",
-    dot: "bg-yellow-400",
-    label: "Fortgeschritten",
-    description: "Markus ist kritisch und erwartet klare Antworten.",
-  },
-  {
-    key: "challenge",
-    dot: "bg-red-500",
-    label: "Challenge-Niveau",
-    description: "Markus vergleicht mit Konkurrenz und erwägt Portfolio-Abzug.",
-  },
-];
+}
 
-export function PracticeBriefingScreen({ onStart }: PracticeBriefingScreenProps) {
-  const [difficulty, setDifficulty] = useState<Difficulty>("fortgeschritten");
+interface PracticeBriefingScreenProps {
+  onStart: (difficulty: Difficulty) => void;
+  customer: BriefingCustomer;
+  difficulties: DifficultyOption[];
+}
+
+export function PracticeBriefingScreen({ onStart, customer, difficulties }: PracticeBriefingScreenProps) {
+  const defaultDiff = difficulties.find((d) => d.key === "fortgeschritten")?.key ?? difficulties[0].key;
+  const [difficulty, setDifficulty] = useState<Difficulty>(defaultDiff);
 
   return (
     <div className="flex flex-1 items-center justify-center p-6">
@@ -45,7 +43,7 @@ export function PracticeBriefingScreen({ onStart }: PracticeBriefingScreenProps)
         <div className="flex items-center gap-2 text-text-secondary">
           <Clock size={14} />
           <span className="text-xs font-semibold uppercase tracking-wider">
-            Jahresgespräch · 10:00 Uhr
+            {customer.appointmentLabel}
           </span>
         </div>
 
@@ -53,26 +51,17 @@ export function PracticeBriefingScreen({ onStart }: PracticeBriefingScreenProps)
           <div className="border-b border-border bg-background px-5 py-3">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-bold text-gray-600">
-                MS
+                {customer.initials}
               </div>
               <div>
-                <p className="font-semibold text-text-primary">Markus Steiner</p>
-                <p className="text-xs text-text-secondary">Bestandeskunde · 12 Jahre</p>
+                <p className="font-semibold text-text-primary">{customer.name}</p>
+                <p className="text-xs text-text-secondary">{customer.statusLabel}</p>
               </div>
             </div>
           </div>
 
           <div className="divide-y divide-border">
-            {[
-              { label: "Alter", value: "45 Jahre" },
-              { label: "Beruf", value: "Techniker / Angestellter" },
-              { label: "Wohnort", value: "Winterthur" },
-              { label: "Portfolio", value: "CHF 280\'000" },
-              { label: "Allokation", value: "60% Aktien · 30% Obl. · 10% Cash" },
-              { label: "Rendite Ziel", value: "4–5% p.a." },
-              { label: "Rendite IST", value: "–2% (letztes Jahr)" },
-              { label: "Anliegen", value: "Jahresgespräch / Performance-Review" },
-            ].map(({ label, value }) => (
+            {customer.fields.map(({ label, value }) => (
               <div key={label} className="flex items-center justify-between px-5 py-2.5 text-sm">
                 <span className="text-text-secondary">{label}</span>
                 <span className="font-medium text-text-primary">{value}</span>
@@ -80,9 +69,9 @@ export function PracticeBriefingScreen({ onStart }: PracticeBriefingScreenProps)
             ))}
             <div className="flex items-center justify-between px-5 py-2.5 text-sm">
               <span className="text-text-secondary">Stimmung</span>
-              <span className="flex items-center gap-1.5 font-semibold text-amber-600">
-                <span className="h-2 w-2 rounded-full bg-amber-500" />
-                Angespannt
+              <span className={cn("flex items-center gap-1.5 font-semibold", customer.mood.colorClass)}>
+                <span className={cn("h-2 w-2 rounded-full", customer.mood.dotClass)} />
+                {customer.mood.label}
               </span>
             </div>
           </div>
@@ -90,9 +79,7 @@ export function PracticeBriefingScreen({ onStart }: PracticeBriefingScreenProps)
           <div className="border-t border-border bg-amber-50 px-5 py-3">
             <div className="flex items-start gap-2">
               <AlertCircle size={14} className="mt-0.5 shrink-0 text-amber-600" />
-              <p className="text-xs text-amber-800">
-                Langjähriger Kunde ist enttäuscht über die Performance. Erwähnte in der Terminnotiz, dass er Vergleiche mit anderen Banken angestellt hat.
-              </p>
+              <p className="text-xs text-amber-800">{customer.alertText}</p>
             </div>
           </div>
         </div>
@@ -102,7 +89,7 @@ export function PracticeBriefingScreen({ onStart }: PracticeBriefingScreenProps)
             Schwierigkeitsstufe
           </p>
           <div className="flex flex-col gap-2">
-            {DIFFICULTIES.map((d) => (
+            {difficulties.map((d) => (
               <button
                 key={d.key}
                 onClick={() => setDifficulty(d.key)}

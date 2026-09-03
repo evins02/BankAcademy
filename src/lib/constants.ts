@@ -160,15 +160,32 @@ export const NAV_GROUPS: NavGroup[] = [
   },
   {
     label: "Practice",
+    requiredRoles: ["mitarbeiter"],
     items: [
       {
         label: "Privatkundenberater",
         icon: "Briefcase",
         sections: [
           {
-            label: "",
+            label: "Anlageberatung",
             items: [
-              { label: "Schwieriges Gespräch", href: "/practice/privatkunde/schwieriges-gespraech" },
+              { label: "Jahresgespräch", href: "/practice/privatkunde/schwieriges-gespraech" },
+              { label: "Neues Anlegerprofil", href: "/practice/privatkunde/anlage/anlegerprofil" },
+              { label: "ESG-Anfrage", href: "/practice/privatkunde/anlage/esg" },
+            ],
+          },
+          {
+            label: "Hypotheken",
+            items: [
+              { label: "Ablösung Fremdbank", href: "/practice/privatkunde/hypothek/abloesung" },
+              { label: "Erstfinanzierung", href: "/practice/privatkunde/hypothek/erstfinanzierung" },
+            ],
+          },
+          {
+            label: "Konten & Vorsorge",
+            items: [
+              { label: "Kontoeröffnung", href: "/privatkunde/basis/simulation-kontoeröffnung" },
+              { label: "3a Beratung", href: "/practice/privatkunde/vorsorge/3a" },
             ],
           },
         ],
