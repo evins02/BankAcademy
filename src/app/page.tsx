@@ -495,9 +495,9 @@ function Hero({ onStart }: { onStart: () => void }) {
             color: WH,
           }}
         >
-          Wie sicher bist du{" "}
+          Lern nicht für die Prüfung.{" "}
           <br />
-          <span style={{ color: CY }}>wirklich im Banking?</span>
+          <span style={{ color: CY }}>Lern für die Praxis.</span>
         </h1>
 
         {/* Subtitle */}
