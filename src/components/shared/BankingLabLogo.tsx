@@ -1,10 +1,9 @@
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 const SIZE_MAP = {
-  sm: { width: 105, height: 30 },
-  md: { width: 140, height: 40 },
-  lg: { width: 175, height: 50 },
+  sm: 32,
+  md: 44,
+  lg: 56,
 } as const;
 
 interface BankingLabLogoProps {
@@ -13,30 +12,25 @@ interface BankingLabLogoProps {
 }
 
 export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) {
-  const { width, height } = SIZE_MAP[size];
-
+  const px = SIZE_MAP[size];
   return (
     <>
-      {/* Shown in light mode */}
-      <Image
+      {/* Light mode */}
+      <img
         src="/logo-light.webp"
         alt="BankAcademy"
-        width={width}
-        height={height}
-        quality={100}
-        priority
-        style={{ objectFit: "contain" }}
+        width={px}
+        height={px}
+        style={{ width: px, height: px, display: "block", background: "transparent" }}
         className={cn("dark:hidden", className)}
       />
-      {/* Shown in dark mode */}
-      <Image
+      {/* Dark mode */}
+      <img
         src="/logo-dark.webp"
         alt="BankAcademy"
-        width={width}
-        height={height}
-        quality={100}
-        priority
-        style={{ objectFit: "contain" }}
+        width={px}
+        height={px}
+        style={{ width: px, height: px, display: "block", background: "transparent" }}
         className={cn("hidden dark:block", className)}
       />
     </>

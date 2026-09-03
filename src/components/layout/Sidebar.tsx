@@ -199,13 +199,14 @@ export function Sidebar() {
       {/* Logo + collapse toggle */}
       <div className="flex h-16 items-center border-b border-border px-3 gap-2">
         {!effectiveCollapsed && (
-          <Link href="/dashboard" className="flex-1 min-w-0">
+          <Link href="/dashboard" className="flex items-center gap-2.5 flex-1 min-w-0">
             <BankingLabLogo size="md" />
+            <span className="text-sm font-bold text-text-primary truncate">BankAcademy</span>
           </Link>
         )}
         {effectiveCollapsed && (
-          <Link href="/dashboard" className="flex h-8 w-8 items-center justify-center rounded-lg flex-shrink-0 mx-auto" style={{ background: "#0D1B4B" }}>
-            <span className="text-[10px] font-black text-white">BA</span>
+          <Link href="/dashboard" className="flex items-center justify-center w-full">
+            <BankingLabLogo size="sm" />
           </Link>
         )}
         {!effectiveCollapsed && (
