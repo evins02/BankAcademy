@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { Sidebar } from "./Sidebar";
 import { GlossarProvider } from "@/context/GlossarContext";
@@ -12,13 +13,36 @@ import { ThemeApplier } from "@/components/shared/ThemeApplier";
 import { loadProgressFromDB, scheduleSync } from "@/lib/progressSync";
 
 function ProfileLoader() {
-  const { isLoaded, isSignedIn } = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // 1. Detect user ID change → wipe stale localStorage, then sync fresh data
   useEffect(() => {
-    if (!isLoaded || !isSignedIn) return;
-    // Sync XP/streak/progress from DB on login
+    if (!isLoaded || !isSignedIn || !user) return;
+    try {
+      const storedUid = localStorage.getItem("ba-uid");
+      if (storedUid && storedUid !== user.id) {
+        // A different Clerk user than last time → clear everything
+        localStorage.clear();
+      }
+      localStorage.setItem("ba-uid", user.id);
+    } catch {}
     loadProgressFromDB();
     scheduleSync();
-  }, [isLoaded, isSignedIn]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, isSignedIn, user?.id]);
+
+  // 2. Force new accounts to complete onboarding before using the app
+  useEffect(() => {
+    if (!isLoaded || !isSignedIn || !user) return;
+    if (pathname.startsWith("/onboarding")) return;
+    const hasProfile = !!(user.unsafeMetadata as Record<string, unknown>)?.profile;
+    if (!hasProfile) {
+      router.replace("/onboarding");
+    }
+  }, [isLoaded, isSignedIn, user, pathname, router]);
+
   return null;
 }
 
