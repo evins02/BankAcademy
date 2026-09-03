@@ -200,7 +200,7 @@ function Navbar({
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logo.png"
+            src="/logo-dark.png"
             alt="BankAcademy"
             style={{ height: 36, width: "auto", display: "block" }}
           />
@@ -2170,7 +2170,7 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/logo.png"
+              src="/logo-dark.png"
               alt="BankAcademy"
               style={{ height: 40, width: "auto", display: "block", marginBottom: 8 }}
             />
