@@ -1686,10 +1686,10 @@ function FinalCTA({ onStart }: { onStart: () => void }) {
               lineHeight: 1.1,
             }}
           >
-            Wie sicher bist du wirklich?
+            Dein nächster Kunde wartet. Bist du bereit?
           </h2>
           <p style={{ margin: "0 0 36px", fontSize: 18, color: WD, lineHeight: 1.6 }}>
-            Probier es aus.
+            Starte jetzt und trainiere reale Banking-Situationen.
           </p>
           <Link
             href="/demo"
