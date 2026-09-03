@@ -27,6 +27,7 @@ import {
   GraduationCap,
   Map,
   ClipboardList,
+  Briefcase,
   PanelLeftClose,
   PanelLeftOpen,
   type LucideIcon,
@@ -57,6 +58,7 @@ const ICONS: Record<string, LucideIcon> = {
   GraduationCap,
   Map,
   ClipboardList,
+  Briefcase,
 };
 
 interface UserProfile {

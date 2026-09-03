@@ -158,6 +158,59 @@ export const NAV_GROUPS: NavGroup[] = [
       },
     ],
   },
+  {
+    label: "Practice",
+    items: [
+      {
+        label: "Privatkundenberater",
+        icon: "Briefcase",
+        sections: [
+          {
+            label: "",
+            items: [
+              { label: "Schwieriges Gespräch", href: "/practice/privatkunde/schwieriges-gespraech" },
+            ],
+          },
+        ],
+      },
+      {
+        label: "Firmenkundenberater",
+        icon: "Building2",
+        sections: [
+          {
+            label: "",
+            items: [
+              { label: "Bald verfügbar", href: "/practice/firmenkunde" },
+            ],
+          },
+        ],
+      },
+      {
+        label: "Operations",
+        icon: "Settings2",
+        sections: [
+          {
+            label: "",
+            items: [
+              { label: "Bald verfügbar", href: "/practice/operations" },
+            ],
+          },
+        ],
+      },
+      {
+        label: "Certify",
+        icon: "Award",
+        sections: [
+          {
+            label: "",
+            items: [
+              { label: "Bald verfügbar", href: "/practice/certify" },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export const SAMPLE_SCENARIOS: Scenario[] = [
