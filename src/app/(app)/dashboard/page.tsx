@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Sparkles, type LucideIcon } from "lucide-react";
 import { User, Building2, TrendingUp, Settings2, Landmark, Flame, Target, CheckCircle2, AlertTriangle, ClipboardCheck } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 import { Header } from "@/components/layout/Header";
 import { HeroBanner } from "@/components/shared/HeroBanner";
 import { ModuleCard } from "@/components/modules/ModuleCard";
@@ -141,6 +142,7 @@ const FRONT_OFFICE_MODULES = [
     icon: User,
     moduleId: "privatkunde",
     totalScenarios: 10,
+    abteilungen: ["privatkunde", "anlagekunde"],
   },
   {
     title: "Firmenkunde",
@@ -149,6 +151,7 @@ const FRONT_OFFICE_MODULES = [
     icon: Building2,
     moduleId: "firmenkunde",
     totalScenarios: 7,
+    abteilungen: ["firmenkunde"],
   },
   {
     title: "Anlagekunde",
@@ -157,6 +160,7 @@ const FRONT_OFFICE_MODULES = [
     icon: TrendingUp,
     moduleId: "anlagekunde",
     totalScenarios: 32,
+    abteilungen: ["anlagekunde"],
   },
 ];
 
@@ -168,6 +172,7 @@ const BACK_OFFICE_MODULES = [
     icon: Landmark,
     moduleId: "banking-operations",
     totalScenarios: 10,
+    abteilungen: ["backoffice"],
   },
   {
     title: "Credit Operations",
@@ -176,6 +181,7 @@ const BACK_OFFICE_MODULES = [
     icon: Settings2,
     moduleId: "credit-operations",
     totalScenarios: 15,
+    abteilungen: ["kreditgeschaeft"],
   },
   {
     title: "Credit Office",
@@ -184,8 +190,14 @@ const BACK_OFFICE_MODULES = [
     icon: ClipboardCheck,
     moduleId: "credit-office",
     totalScenarios: 4,
+    abteilungen: ["credit-office"],
   },
 ];
+
+function filterByAbt<T extends { abteilungen: string[] }>(mods: T[], abt: string | undefined): T[] {
+  if (!abt || abt === "keine") return mods;
+  return mods.filter((m) => m.abteilungen.includes(abt));
+}
 
 function statusFromProgress(p: ModuleProgress | undefined, total: number) {
   if (!p || p.completed === 0) return "idle" as const;
@@ -194,8 +206,8 @@ function statusFromProgress(p: ModuleProgress | undefined, total: number) {
 }
 
 
-function WeakModulesSection({ progress }: { progress: Record<string, ModuleProgress> }) {
-  const weakModules = [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES].filter((m) => {
+function WeakModulesSection({ progress, modules }: { progress: Record<string, ModuleProgress>; modules: typeof FRONT_OFFICE_MODULES }) {
+  const weakModules = modules.filter((m) => {
     const p = progress[m.moduleId];
     return p && p.accuracy < 70 && p.completed > 0;
   });
@@ -358,6 +370,7 @@ function WeakScenariosBanner() {
 }
 
 export default function DashboardPage() {
+  const { user, isLoaded: clerkLoaded } = useUser();
   const [profile, setProfile] = useState<UserProfile>({});
   const [progress, setProgress] = useState<Record<string, ModuleProgress>>({});
   const [streak, setStreak] = useState<StreakData>({ current: 0, longest: 0, lastActivity: "" });
@@ -373,15 +386,15 @@ export default function DashboardPage() {
     return () => clearTimeout(t);
   }, [showInactivity]);
 
+  // Load profile from Clerk metadata (source of truth)
+  useEffect(() => {
+    if (!clerkLoaded || !user) return;
+    const p = user.unsafeMetadata?.profile as UserProfile | undefined;
+    if (p) setProfile(p);
+  }, [clerkLoaded, user]);
+
   useEffect(() => {
     seedMockDataIfEmpty();
-    try {
-      const raw = localStorage.getItem("user-profile");
-      if (raw) {
-        const p = JSON.parse(raw);
-        setProfile(p);
-      }
-    } catch {}
     const prog = getProgress();
     setProgress(prog);
     const str = getStreak();
@@ -401,7 +414,11 @@ export default function DashboardPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const allModules = [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES];
+  const abt = profile.abteilung;
+  const visibleFrontModules = filterByAbt(FRONT_OFFICE_MODULES, abt);
+  const visibleBackModules = filterByAbt(BACK_OFFICE_MODULES, abt);
+  const allModules = [...visibleFrontModules, ...visibleBackModules];
+
   const totalCompleted = allModules.reduce((s, m) => s + (progress[m.moduleId]?.completed ?? 0), 0);
   const totalScenarios = allModules.reduce((s, m) => s + m.totalScenarios, 0);
   const avgAccuracy = (() => {
@@ -413,21 +430,21 @@ export default function DashboardPage() {
   })();
 
   const frontModules = sortByPriority(
-    FRONT_OFFICE_MODULES.map((m) => ({
+    visibleFrontModules.map((m) => ({
       ...m,
       status: statusFromProgress(progress[m.moduleId], m.totalScenarios),
       completedScenarios: progress[m.moduleId]?.completed ?? 0,
     })),
-    FRONT_SORT[profile.abteilung ?? ""]
+    FRONT_SORT[abt ?? ""]
   );
 
   const backModules = sortByPriority(
-    BACK_OFFICE_MODULES.map((m) => ({
+    visibleBackModules.map((m) => ({
       ...m,
       status: statusFromProgress(progress[m.moduleId], m.totalScenarios),
       completedScenarios: progress[m.moduleId]?.completed ?? 0,
     })),
-    BACK_SORT[profile.abteilung ?? ""]
+    BACK_SORT[abt ?? ""]
   );
 
   const countStreak = useCountUp(loaded ? streak.current : 0);
@@ -442,7 +459,7 @@ export default function DashboardPage() {
     [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES].find((m) => m.moduleId === primaryModuleId) ??
     FRONT_OFFICE_MODULES[0];
 
-  const allModulesList = [...FRONT_OFFICE_MODULES, ...BACK_OFFICE_MODULES];
+  const allModulesList = allModules;
   const completedModulesList = allModulesList.filter((m) => {
     const p = progress[m.moduleId];
     return p && p.completed >= m.totalScenarios;
@@ -580,7 +597,7 @@ export default function DashboardPage() {
           />
         )}
 
-        <WeakModulesSection progress={progress} />
+        <WeakModulesSection progress={progress} modules={allModules} />
 
         {loaded && <WeakConceptsBanner />}
 
@@ -590,53 +607,67 @@ export default function DashboardPage() {
 
         {loaded && <RecommendedLernpfad profile={profile} module={recommendedModule} />}
 
-        {BACK_FIRST.has(profile.abteilung ?? "") ? (
+        {BACK_FIRST.has(abt ?? "") ? (
           <>
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-              Back Office
-            </h2>
-            <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {!loaded
-                ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
-                : backModules.map((m) => (
-                    <ModuleCard key={m.title} {...m} recommended={m.moduleId === primaryModuleId} />
-                  ))}
-            </div>
-
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-              Front Office
-            </h2>
-            <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {!loaded
-                ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
-                : frontModules.map((m) => (
-                    <ModuleCard key={m.title} {...m} recommended={m.moduleId === primaryModuleId} />
-                  ))}
-            </div>
+            {visibleBackModules.length > 0 && (
+              <>
+                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
+                  Back Office
+                </h2>
+                <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {!loaded
+                    ? Array.from({ length: visibleBackModules.length }).map((_, i) => <SkeletonModuleCard key={i} />)
+                    : backModules.map((m) => (
+                        <ModuleCard key={m.title} {...m} recommended={m.moduleId === primaryModuleId} />
+                      ))}
+                </div>
+              </>
+            )}
+            {visibleFrontModules.length > 0 && (
+              <>
+                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
+                  Front Office
+                </h2>
+                <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {!loaded
+                    ? Array.from({ length: visibleFrontModules.length }).map((_, i) => <SkeletonModuleCard key={i} />)
+                    : frontModules.map((m) => (
+                        <ModuleCard key={m.title} {...m} recommended={m.moduleId === primaryModuleId} />
+                      ))}
+                </div>
+              </>
+            )}
           </>
         ) : (
           <>
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-              Front Office
-            </h2>
-            <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {!loaded
-                ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
-                : frontModules.map((m) => (
-                    <ModuleCard key={m.title} {...m} recommended={m.moduleId === primaryModuleId} />
-                  ))}
-            </div>
-
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-              Back Office
-            </h2>
-            <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {!loaded
-                ? Array.from({ length: 3 }).map((_, i) => <SkeletonModuleCard key={i} />)
-                : backModules.map((m) => (
-                    <ModuleCard key={m.title} {...m} recommended={m.moduleId === primaryModuleId} />
-                  ))}
-            </div>
+            {visibleFrontModules.length > 0 && (
+              <>
+                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
+                  Front Office
+                </h2>
+                <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {!loaded
+                    ? Array.from({ length: visibleFrontModules.length }).map((_, i) => <SkeletonModuleCard key={i} />)
+                    : frontModules.map((m) => (
+                        <ModuleCard key={m.title} {...m} recommended={m.moduleId === primaryModuleId} />
+                      ))}
+                </div>
+              </>
+            )}
+            {visibleBackModules.length > 0 && (
+              <>
+                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
+                  Back Office
+                </h2>
+                <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {!loaded
+                    ? Array.from({ length: visibleBackModules.length }).map((_, i) => <SkeletonModuleCard key={i} />)
+                    : backModules.map((m) => (
+                        <ModuleCard key={m.title} {...m} recommended={m.moduleId === primaryModuleId} />
+                      ))}
+                </div>
+              </>
+            )}
           </>
         )}
 
