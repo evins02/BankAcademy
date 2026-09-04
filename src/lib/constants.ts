@@ -24,6 +24,7 @@ export const NAV_GROUPS: NavGroup[] = [
 
   {
     label: "Front Office",
+    apprenticeOnly: true,
     items: [
       {
         label: "Privatkunde",
@@ -108,6 +109,7 @@ export const NAV_GROUPS: NavGroup[] = [
   },
   {
     label: "Back Office",
+    apprenticeOnly: true,
     items: [
       {
         label: "Banking Operations",

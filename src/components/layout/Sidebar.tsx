@@ -145,10 +145,17 @@ export function Sidebar() {
 
   const APPRENTICE_LEHRJAHRE = new Set(["lj1", "lj2", "lj3"]);
   const visibleGroups = NAV_GROUPS.filter((group) => {
-    if (!group.requiredRoles) return true;
-    if (!isLoaded || !user) return false;
+    if (!isLoaded || !user) return !group.requiredRoles;
     const lj = profile.lehrjahr;
-    return !lj || !APPRENTICE_LEHRJAHRE.has(lj);
+    // Practice group: only for non-apprentices (mitarbeiter / quereinsteiger / unset)
+    if (group.requiredRoles?.includes("mitarbeiter")) {
+      return !lj || !APPRENTICE_LEHRJAHRE.has(lj);
+    }
+    // Front Office / Back Office: hide for Mitarbeiter
+    if (group.apprenticeOnly) {
+      return lj !== "mitarbeiter";
+    }
+    return true;
   });
 
   const [openItems, setOpenItems] = useState<Set<string>>(() => {

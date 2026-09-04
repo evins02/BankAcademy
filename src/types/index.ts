@@ -51,4 +51,5 @@ export interface NavGroup {
   label: string;
   items: NavItem[];
   requiredRoles?: string[];
+  apprenticeOnly?: boolean;
 }

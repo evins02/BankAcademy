@@ -14,25 +14,13 @@ interface BankingLabLogoProps {
 export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) {
   const px = SIZE_MAP[size];
   return (
-    <>
-      {/* Light mode */}
-      <img
-        src="/logo-light.webp"
-        alt="BankAcademy"
-        width={px}
-        height={px}
-        style={{ width: px, height: px, display: "block", background: "transparent" }}
-        className={cn("dark:hidden", className)}
-      />
-      {/* Dark mode */}
-      <img
-        src="/logo-dark.webp"
-        alt="BankAcademy"
-        width={px}
-        height={px}
-        style={{ width: px, height: px, display: "block", background: "transparent" }}
-        className={cn("hidden dark:block", className)}
-      />
-    </>
+    <img
+      src="/logo-light.webp"
+      alt="BankAcademy"
+      width={px}
+      height={px}
+      style={{ width: px, height: px, display: "block", background: "transparent" }}
+      className={cn(className)}
+    />
   );
 }

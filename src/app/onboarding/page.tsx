@@ -34,6 +34,13 @@ const ZIEL_OPTIONS = [
   { id: "challenge", label: "Challenge", emoji: "⚡", desc: "Alles auf höchstem Level" },
 ];
 
+const ZIEL_MITARBEITER_OPTIONS = [
+  { id: "auffrischung", label: "Auffrischung", emoji: "🔁", desc: "Wissen festigen" },
+  { id: "vertiefung", label: "Vertiefung", emoji: "📖", desc: "Themen vertiefen" },
+  { id: "neue-rolle", label: "Neue Aufgabe", emoji: "🚀", desc: "Neues Gebiet erschliessen" },
+  { id: "challenge", label: "Challenge", emoji: "⚡", desc: "Alles auf höchstem Level" },
+];
+
 type Step = "name" | "abteilung" | "lehrjahr" | "ziel" | "done";
 
 const STEP_INDEX: Record<Step, number> = {
@@ -327,13 +334,15 @@ export default function OnboardingPage() {
           {/* ── Step: Ziel ──────────────────────────────────────────────────────────── */}
           {step === "ziel" && (
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Was ist dein Ziel?</h1>
+              <h1 className="text-xl font-bold text-gray-900">
+                {lehrjahr === "mitarbeiter" ? "Woran möchtest du arbeiten?" : "Was ist dein Ziel?"}
+              </h1>
               <p className="mt-1.5 text-sm text-gray-500">
                 Wir passen Empfehlungen und Fokus für dich an.
               </p>
 
               <div className="mt-5 grid grid-cols-2 gap-2.5">
-                {ZIEL_OPTIONS.map((o) => (
+                {(lehrjahr === "mitarbeiter" ? ZIEL_MITARBEITER_OPTIONS : ZIEL_OPTIONS).map((o) => (
                   <OptionCard
                     key={o.id}
                     option={o}

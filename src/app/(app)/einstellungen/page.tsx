@@ -275,7 +275,7 @@ export default function EinstellungenPage() {
                   <option value="lj2">2. Lehrjahr</option>
                   <option value="lj3">3. Lehrjahr</option>
                   <option value="quereinsteiger">Quereinsteiger / Praktikant</option>
-                  <option value="mitarbeiter">Mitarbeiter / Vollzeit</option>
+                  <option value="mitarbeiter">Angestellt (nach Lehre)</option>
                 </select>
               </div>
               <div>
