@@ -53,20 +53,16 @@ export function Header({ title, subtitle }: HeaderProps) {
   const [xp, setXp] = useState(0);
   const [xpProgress, setXpProgress] = useState(0);
   const [xpLevelTitle, setXpLevelTitle] = useState("");
-  const [avatarColor] = useState("#0D1B4B");
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
 
-  // Initials from Clerk user, fallback to localStorage profile
-  const initials = (() => {
-    if (user?.firstName || user?.lastName) {
-      return ((user.firstName?.[0] ?? "") + (user.lastName?.[0] ?? "")).toUpperCase() || "?";
-    }
-    if (user?.primaryEmailAddress?.emailAddress) {
-      return user.primaryEmailAddress.emailAddress[0].toUpperCase();
-    }
-    return "?";
-  })();
+  // Name and color from unsafeMetadata profile (source of truth)
+  const clerkProfile = user?.unsafeMetadata?.profile as { name?: string; avatarColor?: string } | undefined;
+  const profileName = clerkProfile?.name?.trim();
+  const initials = profileName
+    ? profileName[0].toUpperCase()
+    : (user?.firstName?.[0] ?? user?.primaryEmailAddress?.emailAddress?.[0] ?? "?").toUpperCase();
+  const avatarColor = clerkProfile?.avatarColor ?? "#0D1B4B";
 
   useEffect(() => {
     try {

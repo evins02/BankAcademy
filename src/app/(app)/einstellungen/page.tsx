@@ -501,10 +501,10 @@ export default function EinstellungenPage() {
               <div className="flex items-center justify-between">
                 <span>Feedback senden</span>
                 <a
-                  href="mailto:feedback@bankacademy.ch"
+                  href="mailto:evins@bankacademy.ch"
                   className="text-xs font-medium text-primary hover:underline"
                 >
-                  feedback@bankacademy.ch
+                  evins@bankacademy.ch
                 </a>
               </div>
               <div className="flex items-center gap-4 pt-2">
