@@ -144,19 +144,29 @@ export function Sidebar() {
   }
 
   const APPRENTICE_LEHRJAHRE = new Set(["lj1", "lj2", "lj3"]);
-  const visibleGroups = NAV_GROUPS.filter((group) => {
-    if (!isLoaded || !user) return !group.requiredRoles;
-    const lj = profile.lehrjahr;
-    // Practice group: only for non-apprentices (mitarbeiter / quereinsteiger / unset)
-    if (group.requiredRoles?.includes("mitarbeiter")) {
-      return !lj || !APPRENTICE_LEHRJAHRE.has(lj);
-    }
-    // Front Office / Back Office: hide for Mitarbeiter
-    if (group.apprenticeOnly) {
-      return lj !== "mitarbeiter";
-    }
-    return true;
-  });
+  const visibleGroups = NAV_GROUPS
+    .filter((group) => {
+      if (!isLoaded || !user) return !group.requiredRoles;
+      const lj = profile.lehrjahr;
+      if (group.requiredRoles?.includes("mitarbeiter")) {
+        return !lj || !APPRENTICE_LEHRJAHRE.has(lj);
+      }
+      if (group.apprenticeOnly) {
+        return lj !== "mitarbeiter";
+      }
+      return true;
+    })
+    .map((group) => {
+      const abt = profile.abteilung;
+      const noFilter = !abt || abt === "keine";
+      return {
+        ...group,
+        items: group.items.filter((item) =>
+          noFilter || !item.abteilungen?.length || item.abteilungen.includes(abt)
+        ),
+      };
+    })
+    .filter((group) => group.items.length > 0);
 
   const [openItems, setOpenItems] = useState<Set<string>>(() => {
     const open = new Set<string>();

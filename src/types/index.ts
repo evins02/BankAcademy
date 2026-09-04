@@ -45,6 +45,7 @@ export interface NavItem {
   href?: string;
   badge?: number;
   sections?: NavSection[];
+  abteilungen?: string[];
 }
 
 export interface NavGroup {

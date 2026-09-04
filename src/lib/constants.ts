@@ -29,6 +29,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: "Privatkunde",
         icon: "User",
+        abteilungen: ["privatkunde", "anlagekunde"],
         sections: [
           {
             label: "Basis",
@@ -57,6 +58,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: "Firmenkunde",
         icon: "Building2",
+        abteilungen: ["firmenkunde"],
         sections: [
           {
             label: "",
@@ -80,6 +82,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: "Anlagekunde",
         icon: "TrendingUp",
+        abteilungen: ["anlagekunde"],
         sections: [
           {
             label: "Anlageberatung",
@@ -114,6 +117,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: "Banking Operations",
         icon: "Landmark",
+        abteilungen: ["backoffice"],
         sections: [
           {
             label: "",
@@ -128,6 +132,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: "Credit Operations",
         icon: "Settings2",
+        abteilungen: ["kreditgeschaeft"],
         sections: [
           {
             label: "",
@@ -146,6 +151,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: "Credit Office",
         icon: "Scale",
+        abteilungen: ["credit-office"],
         sections: [
           {
             label: "",
@@ -167,6 +173,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: "Privatkundenberater",
         icon: "Briefcase",
+        abteilungen: ["privatkunde", "anlagekunde"],
         sections: [
           {
             label: "Anlageberatung",
@@ -195,6 +202,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: "Firmenkundenberater",
         icon: "Building2",
+        abteilungen: ["firmenkunde"],
         sections: [
           {
             label: "",
@@ -207,6 +215,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         label: "Operations",
         icon: "Settings2",
+        abteilungen: ["backoffice", "kreditgeschaeft", "credit-office"],
         sections: [
           {
             label: "",
