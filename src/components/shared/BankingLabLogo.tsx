@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 const SIZE_MAP = {
@@ -14,12 +15,13 @@ interface BankingLabLogoProps {
 export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) {
   const px = SIZE_MAP[size];
   return (
-    <img
+    <Image
       src="/logo-light.png"
       alt="BankAcademy"
-      width={px * 2}
-      height={px * 2}
-      style={{ width: px, height: px, display: "block", background: "transparent", imageRendering: "auto" }}
+      width={px}
+      height={px}
+      quality={100}
+      style={{ display: "block" }}
       className={cn(className)}
     />
   );
