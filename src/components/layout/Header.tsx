@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 import { NotificationBell } from "@/components/layout/NotificationBell";
 import { NAV_GROUPS } from "@/lib/constants";
 import { getStreak } from "@/lib/progressData";
@@ -152,7 +151,6 @@ export function Header({ title, subtitle }: HeaderProps) {
         >
           <Menu size={20} />
         </button>
-        <BankingLabLogo size="sm" />
         <div>
           <h1 className="text-lg font-semibold text-text-primary">{title}</h1>
           {subtitle && <p className="text-xs text-text-secondary">{subtitle}</p>}
@@ -247,7 +245,7 @@ export function Header({ title, subtitle }: HeaderProps) {
           </button>
 
           {profileOpen && (
-            <div className="absolute right-0 top-10 z-50 w-52 overflow-hidden rounded-xl border border-border bg-surface shadow-xl">
+            <div className="absolute right-0 top-10 z-50 w-60 overflow-hidden rounded-xl border border-border bg-surface shadow-xl">
               <div className="px-4 py-3 border-b border-border">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white mb-2" style={{ background: avatarColor }}>
                   {initials}
@@ -275,9 +273,9 @@ export function Header({ title, subtitle }: HeaderProps) {
                 </Link>
                 <button
                   onClick={resetProgress}
-                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-text-primary hover:bg-gray-50"
+                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-text-primary hover:bg-gray-50 whitespace-nowrap"
                 >
-                  <RotateCcw size={14} className="text-text-secondary" />
+                  <RotateCcw size={14} className="shrink-0 text-text-secondary" />
                   Fortschritt zurücksetzen
                 </button>
               </div>

@@ -15,11 +15,11 @@ export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) 
   const px = SIZE_MAP[size];
   return (
     <img
-      src="/logo-light.webp"
+      src="/logo-light.png"
       alt="BankAcademy"
-      width={px}
-      height={px}
-      style={{ width: px, height: px, display: "block", background: "transparent" }}
+      width={px * 2}
+      height={px * 2}
+      style={{ width: px, height: px, display: "block", background: "transparent", imageRendering: "auto" }}
       className={cn(className)}
     />
   );

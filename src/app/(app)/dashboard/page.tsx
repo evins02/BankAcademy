@@ -481,8 +481,7 @@ export default function DashboardPage() {
                 <h1 className="text-xl font-bold text-white">Willkommen bei BankAcademy!</h1>
               </div>
               <p className="text-sm text-white/80 leading-relaxed">
-                Starte dein erstes Szenario und baue dein Banking-Wissen auf.<br />
-                Wähle ein Modul aus und leg los – kostenlos und ohne Anmeldung.
+                Starte dein erstes Szenario und baue dein Banking-Wissen Schritt für Schritt auf.
               </p>
             </div>
 
