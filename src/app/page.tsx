@@ -2253,8 +2253,6 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
 export default function LandingPage() {
   const scrolled = useScrolled();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [accessOpen, setAccessOpen] = useState(false);
   const [contactTab, setContactTab] = useState<"lernender" | "bank">("lernender");
 
   function scrollTo(id: string) {
@@ -2285,36 +2283,26 @@ export default function LandingPage() {
         }
       `}</style>
 
-      {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
-      {accessOpen && <AccessCodeModal onClose={() => setAccessOpen(false)} />}
-
       <div style={{ minHeight: "100vh", background: N }}>
         <Navbar
           scrolled={scrolled}
           mobileOpen={mobileOpen}
           onToggle={() => setMobileOpen((v) => !v)}
           onNav={scrollTo}
-          onLoginOpen={() => {
-            setMobileOpen(false);
-            if (typeof window !== "undefined" && localStorage.getItem("fullAccess") === "true") {
-              window.location.href = "/dashboard";
-            } else {
-              setAccessOpen(true);
-            }
-          }}
-          onStart={() => { setMobileOpen(false); setAccessOpen(true); }}
+          onLoginOpen={() => { setMobileOpen(false); window.location.href = "/sign-in"; }}
+          onStart={() => { setMobileOpen(false); window.location.href = "/sign-up"; }}
         />
-        <Hero onStart={() => setAccessOpen(true)} />
+        <Hero onStart={() => { window.location.href = "/sign-up"; }} />
         <CaseExperience />
         <Lifestyle />
         <DemoVideo />
         <StatsBar />
         <FounderStory />
-        <Modules onStart={() => setAccessOpen(true)} />
+        <Modules onStart={() => { window.location.href = "/sign-up"; }} />
         <WarumBankAcademy />
         <ForBanks onBankContact={() => { setContactTab("bank"); scrollTo("kontakt"); }} />
         <ContactSection initialTab={contactTab} />
-        <FinalCTA onStart={() => setAccessOpen(true)} />
+        <FinalCTA onStart={() => { window.location.href = "/sign-up"; }} />
         <Footer onNav={scrollTo} />
       </div>
     </>
