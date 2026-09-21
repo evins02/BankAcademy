@@ -3,26 +3,10 @@
 import { useState } from "react";
 import { MessageSquare, HelpCircle, BookOpen, Users, CheckCircle2 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
-
-const PREVIEW_CARDS = [
-  {
-    icon: HelpCircle,
-    title: "Fragen stellen",
-    desc: "Stell deine Banking-Fragen direkt an andere Lernende",
-  },
-  {
-    icon: BookOpen,
-    title: "Erfahrungen teilen",
-    desc: "Was hast du im Berufsalltag gelernt, was nicht im Lehrbuch steht?",
-  },
-  {
-    icon: Users,
-    title: "Peer Learning",
-    desc: "Lern von Lernenden, die schon weiter sind als du",
-  },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function CommunityPage() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "loading" | "done" | "error">("idle");
 
@@ -42,9 +26,15 @@ export default function CommunityPage() {
     }
   }
 
+  const PREVIEW_CARDS = [
+    { icon: HelpCircle, title: t.community.card1Title, desc: t.community.card1Desc },
+    { icon: BookOpen, title: t.community.card2Title, desc: t.community.card2Desc },
+    { icon: Users, title: t.community.card3Title, desc: t.community.card3Desc },
+  ];
+
   return (
     <>
-      <Header title="Community" subtitle="Austausch mit anderen Lernenden" />
+      <Header title={t.community.title} subtitle={t.community.subtitle} />
       <div className="flex-1 overflow-y-auto p-6">
         <div className="mx-auto max-w-2xl">
 
@@ -53,10 +43,9 @@ export default function CommunityPage() {
             <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-light">
               <MessageSquare size={30} className="text-primary" />
             </div>
-            <h1 className="text-2xl font-bold text-text-primary">Community – Coming Soon</h1>
+            <h1 className="text-2xl font-bold text-text-primary">{t.community.heroTitle}</h1>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-text-secondary">
-              Stell Fragen, teile Erfahrungen und lern von anderen Banklernenden aus der ganzen Schweiz.
-              Der Community-Bereich kommt mit dem offiziellen Launch.
+              {t.community.heroDesc}
             </p>
           </div>
 
@@ -79,13 +68,13 @@ export default function CommunityPage() {
           {/* Waitlist */}
           <div className="rounded-2xl border border-border bg-surface p-6">
             <p className="mb-4 text-sm font-semibold text-text-primary">
-              Möchtest du informiert werden, wenn die Community live geht?
+              {t.community.waitlistTitle}
             </p>
             {state === "done" ? (
               <div className="flex items-center gap-2.5 rounded-xl border border-green-200 bg-green-50 px-4 py-3">
                 <CheckCircle2 size={16} className="shrink-0 text-green-600" />
                 <p className="text-sm font-medium text-green-700">
-                  Eingetragen! Wir melden uns wenn es losgeht.
+                  {t.community.successMsg}
                 </p>
               </div>
             ) : (
@@ -94,7 +83,7 @@ export default function CommunityPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="deine@email.ch"
+                  placeholder={t.community.emailPlaceholder}
                   required
                   className="flex-1 rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
                 />
@@ -104,12 +93,12 @@ export default function CommunityPage() {
                   className="rounded-xl px-5 py-2.5 text-sm font-bold text-white transition-all disabled:opacity-50"
                   style={{ background: "#0D1B4B" }}
                 >
-                  {state === "loading" ? "…" : "Benachrichtigen"}
+                  {state === "loading" ? t.community.loadingBtn : t.community.notifyBtn}
                 </button>
               </form>
             )}
             {state === "error" && (
-              <p className="mt-2 text-xs text-red-500">Fehler beim Speichern – bitte versuche es erneut.</p>
+              <p className="mt-2 text-xs text-red-500">{t.community.errorMsg}</p>
             )}
           </div>
 
