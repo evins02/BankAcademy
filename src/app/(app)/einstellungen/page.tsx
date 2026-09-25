@@ -11,6 +11,8 @@ import { getProgress, getStreak, computeBadges } from "@/lib/progressData";
 import { getXP, getXPLevel } from "@/lib/xpData";
 import { getAverageRating } from "@/lib/ratingsData";
 import { Check, RotateCcw, Printer, Trash2 } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import type { Lang } from "@/lib/i18n";
 
 const AVATAR_COLORS = [
   { hex: "#0D1B4B", label: "Navy" },
@@ -68,6 +70,8 @@ function SettingsRow({
 
 export default function EinstellungenPage() {
   const { user } = useUser();
+  const { t, lang, setLang } = useLanguage();
+  const s = t.settings;
   const [settings, setSettings] = useState<AppSettings>(getSettings());
   const [profile, setProfile] = useState({ name: "", role: "", focus: "", avatarColor: "#0D1B4B", abteilung: "", lehrjahr: "", ziel: "" });
   const [saved, setSaved] = useState(false);
@@ -77,14 +81,12 @@ export default function EinstellungenPage() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteResult, setDeleteResult] = useState<"success" | "error" | null>(null);
 
-  // Stats
   const [xp, setXp] = useState(0);
   const [earnedBadges, setEarnedBadges] = useState(0);
   const [totalCompleted, setTotalCompleted] = useState(0);
   const [streakRecord, setStreakRecord] = useState(0);
   const [avgRating, setAvgRating] = useState(0);
 
-  // Load profile from Clerk metadata
   useEffect(() => {
     if (!user) return;
     const p = user.unsafeMetadata?.profile as typeof profile | undefined;
@@ -108,7 +110,7 @@ export default function EinstellungenPage() {
       if (demoEmail) setDeleteEmail(demoEmail);
     } catch {}
     const prog = getProgress();
-    setTotalCompleted(Object.values(prog).reduce((s, m) => s + m.completed, 0));
+    setTotalCompleted(Object.values(prog).reduce((sum, m) => sum + m.completed, 0));
     const str = getStreak();
     setStreakRecord(str.longest);
     const badges = computeBadges();
@@ -178,11 +180,11 @@ export default function EinstellungenPage() {
 
   return (
     <>
-      <Header title="Einstellungen" />
+      <Header title={s.title} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Einstellungen" },
+          { label: s.breadcrumbDashboard, href: "/dashboard" },
+          { label: s.title },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">
@@ -190,7 +192,7 @@ export default function EinstellungenPage() {
 
           {/* 1. Profil */}
           <section className="rounded-2xl border border-border bg-surface p-6">
-            <SectionHeader>Profil</SectionHeader>
+            <SectionHeader>{s.profileSection}</SectionHeader>
 
             {/* Avatar */}
             <div className="mb-6 flex items-center gap-4">
@@ -219,8 +221,8 @@ export default function EinstellungenPage() {
 
             <div className="space-y-4">
               {[
-                { key: "name", label: "Name", placeholder: "Vorname Nachname" },
-                { key: "focus", label: "Fokus", placeholder: "z.B. Hypotheken, KMU" },
+                { key: "name", label: s.nameLabel, placeholder: s.namePlaceholder },
+                { key: "focus", label: s.focusLabel, placeholder: s.focusPlaceholder },
               ].map(({ key, label, placeholder }) => (
                 <div key={key}>
                   <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
@@ -237,131 +239,132 @@ export default function EinstellungenPage() {
               ))}
             </div>
 
-            {/* Onboarding-Angaben */}
             <div className="mt-6 space-y-4">
               <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                Lernprofil
+                {s.learningProfile}
               </p>
               <div>
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                  Abteilung
+                  {s.departmentLabel}
                 </label>
                 <select
                   value={profile.abteilung}
                   onChange={(e) => setProfile((p) => ({ ...p, abteilung: e.target.value }))}
                   className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">– nicht gesetzt –</option>
-                  <option value="privatkunde">Privatkunde</option>
-                  <option value="firmenkunde">Firmenkunde</option>
-                  <option value="anlagekunde">Anlagekunde</option>
-                  <option value="backoffice">Backoffice &amp; Zahlungsverkehr</option>
-                  <option value="kreditgeschaeft">Credit Operations</option>
-                  <option value="credit-office">Credit Office</option>
-                  <option value="keine">Noch nicht zugewiesen</option>
+                  {Object.entries(s.abteilungen).map(([val, label]) => (
+                    <option key={val} value={val}>{label}</option>
+                  ))}
                 </select>
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                  Lehrjahr
+                  {s.lehrjahrLabel}
                 </label>
                 <select
                   value={profile.lehrjahr}
                   onChange={(e) => setProfile((p) => ({ ...p, lehrjahr: e.target.value }))}
                   className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">– nicht gesetzt –</option>
-                  <option value="lj1">1. Lehrjahr</option>
-                  <option value="lj2">2. Lehrjahr</option>
-                  <option value="lj3">3. Lehrjahr</option>
-                  <option value="quereinsteiger">Quereinsteiger / Praktikant</option>
-                  <option value="mitarbeiter">Angestellt (nach Lehre)</option>
+                  {Object.entries(s.lehrjahre).map(([val, label]) => (
+                    <option key={val} value={val}>{label}</option>
+                  ))}
                 </select>
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                  Ziel
+                  {s.goalLabel}
                 </label>
                 <select
                   value={profile.ziel}
                   onChange={(e) => setProfile((p) => ({ ...p, ziel: e.target.value }))}
                   className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">– nicht gesetzt –</option>
-                  <option value="neueinstieg">Neueinstieg – Grundlagen aufbauen</option>
-                  <option value="auffrischung">Auffrischung – Wissen festigen</option>
-                  <option value="pruefung">Prüfungsvorbereitung – gezielt üben</option>
-                  <option value="challenge">Challenge – alles auf höchstem Level</option>
+                  {Object.entries(s.ziele).map(([val, label]) => (
+                    <option key={val} value={val}>{label}</option>
+                  ))}
                 </select>
               </div>
             </div>
 
             <div className="mt-4 flex items-center gap-3">
               <Button onClick={saveProfile} className="gap-2">
-                {saved ? <><Check size={14} /> Gespeichert!</> : "Speichern"}
+                {saved ? <><Check size={14} /> {s.savedBtn}</> : s.saveBtn}
               </Button>
             </div>
           </section>
 
           {/* 2. Lerneinstellungen */}
           <section className="rounded-2xl border border-border bg-surface p-6">
-            <SectionHeader>Lerneinstellungen</SectionHeader>
-            <SettingsRow label="Auto-Advance" description="Nächster Fall startet automatisch nach 5 Sekunden">
+            <SectionHeader>{s.learningSection}</SectionHeader>
+            <SettingsRow label={s.autoAdvanceLabel} description={s.autoAdvanceDesc}>
               <Toggle checked={settings.autoAdvance} onChange={(v) => patch("autoAdvance", v)} />
             </SettingsRow>
-            <SettingsRow label="Tastaturkürzel" description="1–4 zum Auswählen, ↵ zum Bestätigen">
+            <SettingsRow label={s.keyboardLabel} description={s.keyboardDesc}>
               <Toggle checked={settings.keyboardShortcuts} onChange={(v) => patch("keyboardShortcuts", v)} />
             </SettingsRow>
-            <SettingsRow label="Schwierigkeitspräferenz" description="Filtert Szenarien nach deinem Level">
+            <SettingsRow label={s.difficultyLabel} description={s.difficultyDesc}>
               <select
                 value={settings.difficultyPreference}
                 onChange={(e) => patch("difficultyPreference", e.target.value as AppSettings["difficultyPreference"])}
                 className="rounded-lg border border-border bg-background px-3 py-1.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                <option value="einsteiger">Einsteiger</option>
-                <option value="alle">Alle Level</option>
-                <option value="challenge">Challenge-Niveau</option>
+                <option value="einsteiger">{s.diffEinsteiger}</option>
+                <option value="alle">{s.diffAlle}</option>
+                <option value="challenge">{s.diffChallenge}</option>
               </select>
             </SettingsRow>
           </section>
 
           {/* 3. Erscheinungsbild */}
           <section className="rounded-2xl border border-border bg-surface p-6">
-            <SectionHeader>Erscheinungsbild</SectionHeader>
-            <SettingsRow label="Farbschema" description="Helles oder dunkles Design">
+            <SectionHeader>{s.appearanceSection}</SectionHeader>
+            <SettingsRow label={s.colorSchemeLabel} description={s.colorSchemeDesc}>
               <div className="flex gap-2">
-                {(["light", "dark", "system"] as const).map((t) => (
+                {(["light", "dark", "system"] as const).map((theme) => (
                   <button
-                    key={t}
-                    onClick={() => patch("theme", t)}
+                    key={theme}
+                    onClick={() => patch("theme", theme)}
                     className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
-                      settings.theme === t
+                      settings.theme === theme
                         ? "border-primary bg-primary-light text-primary"
                         : "border-border text-text-secondary hover:border-primary/50"
                     }`}
                   >
-                    {t === "light" ? "☀️ Hell" : t === "dark" ? "🌙 Dunkel" : "💻 System"}
+                    {theme === "light" ? s.themeLight : theme === "dark" ? s.themeDark : s.themeSystem}
                   </button>
                 ))}
               </div>
             </SettingsRow>
-            <SettingsRow label="Sprache" description="Weitere Sprachen folgen">
-              <span className="rounded-lg border border-border px-3 py-1.5 text-xs text-text-secondary">
-                🇞🇪 Deutsch
-              </span>
+            <SettingsRow label={s.languageLabel} description={s.languageDesc}>
+              <div className="flex gap-2">
+                {(["de", "fr", "it"] as Lang[]).map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => setLang(l)}
+                    className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      lang === l
+                        ? "border-primary bg-primary-light text-primary"
+                        : "border-border text-text-secondary hover:border-primary/50"
+                    }`}
+                  >
+                    {l === "de" ? s.langDe : l === "fr" ? s.langFr : s.langIt}
+                  </button>
+                ))}
+              </div>
             </SettingsRow>
           </section>
 
           {/* 4. Fortschritt */}
           <section className="rounded-2xl border border-border bg-surface p-6">
-            <SectionHeader>Fortschritt</SectionHeader>
+            <SectionHeader>{s.progressSection}</SectionHeader>
             <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
               {[
-                { label: "Gesamt-XP", value: xp, sub: xpLevel.title },
-                { label: "Badges", value: earnedBadges },
-                { label: "Szenarien", value: totalCompleted },
-                { label: "Streak-Rekord", value: `${streakRecord}🔥` },
-                { label: "Ø Bewertung", value: avgRating > 0 ? `${avgRating}⭐` : "–" },
+                { label: s.totalXP, value: xp, sub: xpLevel.title },
+                { label: s.badgesLabel, value: earnedBadges },
+                { label: s.scenariosLabel, value: totalCompleted },
+                { label: s.streakLabel, value: `${streakRecord}🔥` },
+                { label: s.avgRatingLabel, value: avgRating > 0 ? `${avgRating}⭐` : "–" },
               ].map((stat) => (
                 <div key={stat.label} className="rounded-xl bg-background p-4 text-center">
                   <p className="text-2xl font-bold text-text-primary">{stat.value}</p>
@@ -371,10 +374,8 @@ export default function EinstellungenPage() {
               ))}
             </div>
             <div className="rounded-xl border border-red-200 bg-red-50 p-4">
-              <p className="text-sm font-semibold text-red-800">Fortschritt zurücksetzen</p>
-              <p className="mt-1 text-xs text-red-700">
-                Löscht alle Lernfortschritte, XP, Badges und Notizen. Nicht rükgängig zu machen.
-              </p>
+              <p className="text-sm font-semibold text-red-800">{s.resetTitle}</p>
+              <p className="mt-1 text-xs text-red-700">{s.resetDesc}</p>
               <button
                 onClick={handleReset}
                 className={`mt-3 flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-colors ${
@@ -384,24 +385,22 @@ export default function EinstellungenPage() {
                 }`}
               >
                 <RotateCcw size={12} />
-                {confirmReset ? "Wirklich zurücksetzen?" : "Zurücksetzen"}
+                {confirmReset ? s.resetConfirmBtn : s.resetBtn}
               </button>
             </div>
           </section>
 
           {/* 5. Export */}
           <section className="rounded-2xl border border-border bg-surface p-6">
-            <SectionHeader>Export &amp; Druck</SectionHeader>
-            <SettingsRow label="Lernbericht exportieren" description="Erstellt einen druckbaren Lernbericht mit deinem Fortschritt, Badges und XP">
+            <SectionHeader>{s.exportSection}</SectionHeader>
+            <SettingsRow label={s.exportLabel} description={s.exportDesc}>
               <button
                 onClick={() => {
                   const prog = getProgress();
                   const badges = computeBadges();
                   const earned = badges.filter((b) => b.earnedAt);
                   const modules = Object.entries(prog).map(([id, m]) => ({
-                    id,
-                    completed: m.completed,
-                    accuracy: m.accuracy,
+                    id, completed: m.completed, accuracy: m.accuracy,
                   }));
                   const date = new Date().toLocaleDateString("de-CH", { year: "numeric", month: "long", day: "numeric" });
                   const win = window.open("", "_blank");
@@ -424,7 +423,6 @@ export default function EinstellungenPage() {
                     <div class="section">
                       <p class="section-title">Lernender</p>
                       <div class="row"><span>Name</span><strong>${profile.name || "–"}</strong></div>
-
                       ${profile.focus ? `<div class="row"><span>Fokus</span><strong>${profile.focus}</strong></div>` : ""}
                     </div>
                     <div class="section">
@@ -445,32 +443,30 @@ export default function EinstellungenPage() {
                 className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-text-primary hover:bg-gray-50"
               >
                 <Printer size={13} />
-                Lernbericht erstellen
+                {s.exportBtn}
               </button>
             </SettingsRow>
           </section>
 
-          {/* 6. Datenschutz & DSGVO */}
+          {/* 6. Datenschutz */}
           <section className="rounded-2xl border border-border bg-surface p-6">
-            <SectionHeader>Datenschutz &amp; DSGVO</SectionHeader>
+            <SectionHeader>{s.privacySection}</SectionHeader>
             <div className="rounded-xl border border-red-200 bg-red-50 p-4">
-              <p className="text-sm font-semibold text-red-800">Meine Daten löschen (Art. 17 DSGVO)</p>
-              <p className="mt-1 text-xs text-red-700">
-                Löscht alle gespeicherten Daten zu dieser E-Mail-Adresse aus unserer Datenbank. Nicht rükgängig zu machen.
-              </p>
+              <p className="text-sm font-semibold text-red-800">{s.deleteTitle}</p>
+              <p className="mt-1 text-xs text-red-700">{s.deleteDesc}</p>
               <div className="mt-3 flex flex-col gap-2">
                 <input
                   type="email"
                   value={deleteEmail}
                   onChange={(e) => { setDeleteEmail(e.target.value); setDeleteResult(null); setDeleteConfirm(false); }}
-                  placeholder="E-Mail-Adresse bestätigen"
+                  placeholder={s.emailPlaceholder}
                   className="rounded-lg border border-red-300 bg-white px-3 py-2 text-xs text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-red-400"
                 />
                 {deleteResult === "success" && (
-                  <p className="text-xs text-green-700">Daten erfolgreich gelöscht. Du wirst abgemeldet…</p>
+                  <p className="text-xs text-green-700">{s.deleteSuccess}</p>
                 )}
                 {deleteResult === "error" && (
-                  <p className="text-xs text-red-700">Fehler beim Löschen. Bitte erneut versuchen.</p>
+                  <p className="text-xs text-red-700">{s.deleteError}</p>
                 )}
                 <button
                   onClick={handleDeleteData}
@@ -482,7 +478,7 @@ export default function EinstellungenPage() {
                   }`}
                 >
                   <Trash2 size={12} />
-                  {deleteLoading ? "Wird gelöscht…" : deleteConfirm ? "Wirklich löschen?" : "Daten löschen"}
+                  {deleteLoading ? s.deletingBtn : deleteConfirm ? s.deleteConfirmBtn : s.deleteBtn}
                 </button>
               </div>
             </div>
@@ -490,29 +486,26 @@ export default function EinstellungenPage() {
 
           {/* 7. Über BankAcademy */}
           <section className="rounded-2xl border border-border bg-surface p-6">
-            <SectionHeader>Über BankAcademy</SectionHeader>
+            <SectionHeader>{s.aboutSection}</SectionHeader>
             <div className="space-y-3 text-sm text-text-secondary">
               <div className="flex items-center justify-between">
-                <span>Version</span>
+                <span>{s.versionLabel}</span>
                 <span className="rounded-full bg-primary-light px-2.5 py-0.5 text-xs font-semibold text-primary">
                   Beta v0.1
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span>Feedback senden</span>
-                <a
-                  href="mailto:evins@bankacademy.ch"
-                  className="text-xs font-medium text-primary hover:underline"
-                >
+                <span>{s.feedbackLabel}</span>
+                <a href="mailto:evins@bankacademy.ch" className="text-xs font-medium text-primary hover:underline">
                   evins@bankacademy.ch
                 </a>
               </div>
               <div className="flex items-center gap-4 pt-2">
                 <a href="/impressum" className="text-xs hover:text-text-primary hover:underline">
-                  Impressum
+                  {s.impressumLink}
                 </a>
                 <a href="/datenschutz" className="text-xs hover:text-text-primary hover:underline">
-                  Datenschutz
+                  {s.datenschutzLink}
                 </a>
               </div>
             </div>

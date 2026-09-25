@@ -14,6 +14,7 @@ import { lsRemove } from "@/lib/storage";
 import { syncNow } from "@/lib/progressSync";
 import { useFocusMode } from "@/context/FocusModeContext";
 import { useMobileMenu } from "@/context/MobileMenuContext";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface HeaderProps {
   title: string;
@@ -45,6 +46,7 @@ export function Header({ title, subtitle }: HeaderProps) {
   const { signOut } = useClerk();
   const { focusMode, toggleFocusMode } = useFocusMode();
   const { toggleMobile } = useMobileMenu();
+  const { t } = useLanguage();
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -117,7 +119,7 @@ export function Header({ title, subtitle }: HeaderProps) {
   }
 
   function resetProgress() {
-    if (!confirm("Möchtest du deinen Fortschritt wirklich zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.")) return;
+    if (!confirm(t.header.resetConfirm)) return;
     localStorage.clear();
     const _sid = Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 10);
     localStorage.setItem("ba-sid", _sid);
@@ -143,7 +145,7 @@ export function Header({ title, subtitle }: HeaderProps) {
         <button
           className="md:hidden rounded-lg p-1.5 text-text-secondary hover:bg-gray-100 transition-colors"
           onClick={toggleMobile}
-          aria-label="Menü öffnen"
+          aria-label={t.header.menuOpen}
         >
           <Menu size={20} />
         </button>
@@ -192,15 +194,15 @@ export function Header({ title, subtitle }: HeaderProps) {
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Seite suchen… (⌘K)"
+                placeholder={t.header.searchPlaceholder}
                 className="w-full rounded-t-xl border-b border-border bg-transparent px-4 py-3 text-sm text-text-primary placeholder:text-text-secondary focus:outline-none"
               />
               <div className="max-h-60 overflow-y-auto">
                 {results.length === 0 && query.trim() && (
-                  <p className="px-4 py-4 text-center text-sm text-text-secondary">Keine Ergebnisse</p>
+                  <p className="px-4 py-4 text-center text-sm text-text-secondary">{t.header.noResults}</p>
                 )}
                 {results.length === 0 && !query.trim() && (
-                  <p className="px-4 py-4 text-center text-xs text-text-secondary">Suchbegriff eingeben</p>
+                  <p className="px-4 py-4 text-center text-xs text-text-secondary">{t.header.searchPrompt}</p>
                 )}
                 {results.slice(0, 8).map((r) => (
                   <button
@@ -220,9 +222,9 @@ export function Header({ title, subtitle }: HeaderProps) {
         <Button
           variant="ghost"
           size="icon"
-          aria-label={focusMode ? "Fokus-Modus beenden" : "Fokus-Modus"}
+          aria-label={focusMode ? t.header.focusModeEnd : t.header.focusMode}
           onClick={toggleFocusMode}
-          title={focusMode ? "Fokus-Modus beenden (ESC)" : "Fokus-Modus"}
+          title={focusMode ? t.header.focusModeEnd : t.header.focusMode}
         >
           {focusMode ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
         </Button>
@@ -247,7 +249,7 @@ export function Header({ title, subtitle }: HeaderProps) {
                   {initials}
                 </div>
                 <p className="text-xs font-semibold text-text-primary truncate max-w-[160px]">
-                  {user?.primaryEmailAddress?.emailAddress ?? "Mein Konto"}
+                  {user?.primaryEmailAddress?.emailAddress ?? t.header.myAccount}
                 </p>
               </div>
               <div className="py-1">
@@ -257,7 +259,7 @@ export function Header({ title, subtitle }: HeaderProps) {
                   className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-text-primary hover:bg-gray-50"
                 >
                   <User size={14} className="text-text-secondary" />
-                  Mein Profil
+                  {t.header.myProfile}
                 </Link>
                 <Link
                   href="/einstellungen"
@@ -265,14 +267,14 @@ export function Header({ title, subtitle }: HeaderProps) {
                   className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-text-primary hover:bg-gray-50"
                 >
                   <Settings size={14} className="text-text-secondary" />
-                  Einstellungen
+                  {t.header.settings}
                 </Link>
                 <button
                   onClick={resetProgress}
                   className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-text-primary hover:bg-gray-50 whitespace-nowrap"
                 >
                   <RotateCcw size={14} className="shrink-0 text-text-secondary" />
-                  Fortschritt zurücksetzen
+                  {t.header.resetProgress}
                 </button>
               </div>
               <div className="border-t border-border py-1">
@@ -281,7 +283,7 @@ export function Header({ title, subtitle }: HeaderProps) {
                   className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50"
                 >
                   <LogOut size={14} />
-                  Abmelden
+                  {t.header.signOut}
                 </button>
               </div>
             </div>

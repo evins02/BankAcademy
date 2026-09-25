@@ -6,6 +6,7 @@ import { Sparkles, type LucideIcon } from "lucide-react";
 import { User, Building2, TrendingUp, Settings2, Landmark, Flame, Target, CheckCircle2, AlertTriangle, ClipboardCheck } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { Header } from "@/components/layout/Header";
+import { useLanguage } from "@/context/LanguageContext";
 import { HeroBanner } from "@/components/shared/HeroBanner";
 import { ModuleCard } from "@/components/modules/ModuleCard";
 import { Card, CardContent } from "@/components/ui/card";
@@ -38,30 +39,8 @@ interface UserProfile {
 
 // ── Personalisierung ────────────────────────────────────────────
 
-const ABTEILUNG_LABELS: Record<string, string> = {
-  privatkunde: "Privatkunde",
-  firmenkunde: "Firmenkunde",
-  anlagekunde: "Anlagekunde",
-  backoffice: "Backoffice & ZV",
-  kreditgeschaeft: "Credit Operations",
-  "credit-office": "Credit Office",
-};
-
-const LEHRJAHR_LABELS: Record<string, string> = {
-  lj1: "1. Lehrjahr",
-  lj2: "2. Lehrjahr",
-  lj3: "3. Lehrjahr",
-  quereinsteiger: "Quereinsteiger",
-};
-
 const LEHRJAHR_LEVEL: Record<string, 1 | 2 | 3> = {
   lj1: 1, lj2: 2, lj3: 3, quereinsteiger: 2,
-};
-
-const LEVEL_LABEL: Record<1 | 2 | 3, string> = {
-  1: "Level 1 – Einsteiger",
-  2: "Level 2 – Fortgeschritten",
-  3: "Level 3 – Challenge",
 };
 
 // Primary recommended module per abteilung
@@ -207,6 +186,8 @@ function statusFromProgress(p: ModuleProgress | undefined, total: number) {
 
 
 function WeakModulesSection({ progress, modules }: { progress: Record<string, ModuleProgress>; modules: typeof FRONT_OFFICE_MODULES }) {
+  const { t } = useLanguage();
+  const d = t.dashboard;
   const weakModules = modules.filter((m) => {
     const p = progress[m.moduleId];
     return p && p.accuracy < 70 && p.completed > 0;
@@ -219,7 +200,7 @@ function WeakModulesSection({ progress, modules }: { progress: Record<string, Mo
       <div className="mb-4 flex items-center gap-2">
         <AlertTriangle size={16} className="text-accent" />
         <h2 className="text-sm font-semibold uppercase tracking-wider text-text-secondary">
-          Üben empfohlen
+          {d.recommendPractice}
         </h2>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -235,7 +216,7 @@ function WeakModulesSection({ progress, modules }: { progress: Record<string, Mo
                   <p className="text-sm font-semibold text-text-primary">{m.title}</p>
                   <div className="mt-1.5">
                     <ProgressBar value={p.accuracy} max={100} />
-                    <p className="mt-1 text-xs text-text-secondary">{p.accuracy}% Genauigkeit</p>
+                    <p className="mt-1 text-xs text-text-secondary">{p.accuracy}% {d.accuracyLabel}</p>
                   </div>
                 </div>
               </div>
@@ -254,26 +235,27 @@ function RecommendedLernpfad({
   profile: UserProfile;
   module: { title: string; href: string; icon: LucideIcon; moduleId: string };
 }) {
+  const { t } = useLanguage();
+  const d = t.dashboard;
   if (!profile.abteilung || profile.abteilung === "keine") return null;
   const level = LEHRJAHR_LEVEL[profile.lehrjahr ?? ""] ?? 2;
-  const levelLabel = LEVEL_LABEL[level];
+  const levelLabel = d.levels[String(level)];
   const deepHref = MODULE_LEVEL_HREFS[module.moduleId]?.[level] ?? module.href;
-  const abteilungLabel = ABTEILUNG_LABELS[profile.abteilung] ?? profile.abteilung;
-  const lehrjahrLabel = LEHRJAHR_LABELS[profile.lehrjahr ?? ""];
+  const abteilungLabel = d.abteilungen[profile.abteilung] ?? profile.abteilung;
+  const lehrjahrLabel = d.lehrjahre[profile.lehrjahr ?? ""];
   const RecommendedIcon = module.icon;
 
   return (
     <div className="mb-6 rounded-2xl border border-primary/20 bg-primary-light p-5">
       <div className="flex items-center gap-1.5 mb-2">
         <Sparkles size={13} className="text-primary" />
-        <p className="text-xs font-bold uppercase tracking-wider text-primary">Empfohlener Lernpfad</p>
+        <p className="text-xs font-bold uppercase tracking-wider text-primary">{d.recommendedPathTitle}</p>
       </div>
       <p className="text-sm text-text-secondary mb-3 leading-relaxed">
-        Starte mit{" "}
         <span className="font-semibold text-text-primary">
           {module.title} · {levelLabel}
-        </span>{" "}
-        – das passt zu{lehrjahrLabel ? ` deinem ${lehrjahrLabel}` : ""} und deiner Abteilung ({abteilungLabel}).
+        </span>
+        {lehrjahrLabel ? ` – ${lehrjahrLabel}` : ""}{abteilungLabel ? ` · ${abteilungLabel}` : ""}
       </p>
       <Link href={deepHref}>
         <div className="flex items-center gap-3 rounded-xl border border-primary/20 bg-white/70 px-4 py-3 transition-all hover:bg-white hover:shadow-sm">
@@ -284,10 +266,10 @@ function RecommendedLernpfad({
             <div className="flex items-center gap-2 flex-wrap">
               <p className="text-sm font-semibold text-text-primary">{module.title}</p>
               <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-bold text-green-700">
-                Für dich · {levelLabel}
+                {d.forYouBadge} {levelLabel}
               </span>
             </div>
-            <p className="text-xs text-text-secondary mt-0.5">Direkt zu deinem empfohlenen Level →</p>
+            <p className="text-xs text-text-secondary mt-0.5">{d.directToLevel}</p>
           </div>
         </div>
       </Link>
@@ -296,6 +278,8 @@ function RecommendedLernpfad({
 }
 
 function WeakConceptsBanner() {
+  const { t } = useLanguage();
+  const d = t.dashboard;
   const [concepts, setConcepts] = useState<{ concept: string; count: number }[]>([]);
   useEffect(() => {
     const top = getAllWeakConcepts().slice(0, 5);
@@ -307,7 +291,7 @@ function WeakConceptsBanner() {
       <div className="mb-3 flex items-center gap-2">
         <AlertTriangle size={15} className="text-accent" />
         <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">
-          Deine Schwachstellen — diese Themen kommen öfter dran
+          {d.weakConceptsTitle}
         </span>
       </div>
       <div className="flex flex-wrap gap-2">
@@ -324,13 +308,15 @@ function WeakConceptsBanner() {
         ))}
       </div>
       <p className="mt-3 text-[11px] text-text-secondary">
-        Szenarien zu diesen Themen werden beim nächsten Modulstart bevorzugt angezeigt.
+        {d.conceptsHint}
       </p>
     </div>
   );
 }
 
 function WeakScenariosBanner() {
+  const { t } = useLanguage();
+  const d = t.dashboard;
   const [scenarios, setScenarios] = useState<WeakScenario[]>([]);
   useEffect(() => {
     setScenarios(getWeakScenarios(3));
@@ -341,10 +327,10 @@ function WeakScenariosBanner() {
       <div className="mb-3 flex items-center gap-2">
         <AlertTriangle size={15} className="text-red-500" />
         <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">
-          Top Schwachstellen
+          {d.topWeaknessesTitle}
         </span>
         <Link href="/fehler-uebersicht" className="ml-auto text-xs text-text-secondary hover:text-text-primary transition-colors">
-          Alle anzeigen →
+          {d.showAll}
         </Link>
       </div>
       <div className="space-y-2">
@@ -357,9 +343,9 @@ function WeakScenariosBanner() {
               </div>
               <div className="flex shrink-0 items-center gap-2">
                 <span className="rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-600">
-                  {s.errorCount}× falsch
+                  {s.errorCount}{d.wrongTimes}
                 </span>
-                <span className="text-xs font-semibold" style={{ color: "#0D1B4B" }}>Üben →</span>
+                <span className="text-xs font-semibold" style={{ color: "#0D1B4B" }}>{d.practiceAction}</span>
               </div>
             </div>
           </Link>
@@ -371,6 +357,8 @@ function WeakScenariosBanner() {
 
 export default function DashboardPage() {
   const { user, isLoaded: clerkLoaded } = useUser();
+  const { t } = useLanguage();
+  const d = t.dashboard;
   const [profile, setProfile] = useState<UserProfile>({});
   const [progress, setProgress] = useState<Record<string, ModuleProgress>>({});
   const [streak, setStreak] = useState<StreakData>({ current: 0, longest: 0, lastActivity: "" });
@@ -467,7 +455,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      <Header title="Dashboard" />
+      <Header title={d.title} />
       {showWeeklyReport && <WeeklyReportModal onClose={() => setShowWeeklyReport(false)} />}
       {pendingBadge && <BadgeEarnAnimation badge={pendingBadge} onClose={dismissBadge} />}
       <div className="flex-1 overflow-y-auto p-6">
@@ -478,17 +466,17 @@ export default function DashboardPage() {
             <div className="mb-6 overflow-hidden rounded-2xl p-6" style={{ background: "linear-gradient(135deg, #0D1B4B 0%, #00C9B1 100%)" }}>
               <div className="flex items-center gap-3 mb-3">
                 <span className="text-3xl">🎉</span>
-                <h1 className="text-xl font-bold text-white">Willkommen bei BankAcademy!</h1>
+                <h1 className="text-xl font-bold text-white">{d.emptyWelcomeTitle}</h1>
               </div>
               <p className="text-sm text-white/80 leading-relaxed">
-                Starte dein erstes Szenario und baue dein Banking-Wissen Schritt für Schritt auf.
+                {d.emptyWelcomeDesc}
               </p>
             </div>
 
             <div className="mb-6 rounded-2xl border border-primary/20 bg-primary-light p-5">
               <div className="flex items-center gap-1.5 mb-3">
                 <Sparkles size={14} className="text-primary" />
-                <p className="text-xs font-bold uppercase tracking-wider text-primary">Empfohlen für dich</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-primary">{d.emptyRecommended}</p>
               </div>
               <Link href={recommendedModule.href}>
                 <div className="flex items-center gap-4 rounded-xl border border-primary/20 bg-white/60 p-4 transition-all hover:bg-white hover:shadow-sm">
@@ -497,10 +485,10 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex-1">
                     <p className="font-bold text-text-primary">{recommendedModule.title}</p>
-                    <p className="text-sm text-text-secondary">Jetzt starten und erstes Szenario absolvieren</p>
+                    <p className="text-sm text-text-secondary">{d.emptyStartNow}</p>
                   </div>
                   <div className="rounded-full px-4 py-2 text-sm font-bold text-white" style={{ background: "#0D1B4B" }}>
-                    Starten →
+                    {d.emptyStartAction}
                   </div>
                 </div>
               </Link>
@@ -515,8 +503,8 @@ export default function DashboardPage() {
               <div className="mb-4 flex items-center gap-2.5 rounded-xl border border-border bg-gray-50 px-4 py-2.5">
                 <span className="text-base">👋</span>
                 <p className="flex-1 text-xs text-text-secondary">
-                  <span className="font-semibold text-text-primary">Willkommen zurück!</span>{" "}
-                  Starte jetzt und lerne weiter.
+                  <span className="font-semibold text-text-primary">{d.welcomeBack}</span>{" "}
+                  {d.continueNow}
                 </p>
                 <button
                   onClick={() => setShowInactivity(false)}
@@ -546,9 +534,9 @@ export default function DashboardPage() {
                     <Flame size={22} style={{ color: "#0D1B4B" }} />
                   </div>
                   <p className="mt-3 text-3xl font-bold text-text-primary">{countStreak}</p>
-                  <p className="mt-0.5 text-sm text-text-secondary">Tage Streak</p>
+                  <p className="mt-0.5 text-sm text-text-secondary">{d.streakDays}</p>
                   {streak.longest > streak.current && (
-                    <p className="mt-1 text-xs text-accent">Rekord: {streak.longest} Tage</p>
+                    <p className="mt-1 text-xs text-accent">{d.streakRecord}: {streak.longest} {d.streakDaysUnit}</p>
                   )}
                 </CardContent>
               </Card>
@@ -559,7 +547,7 @@ export default function DashboardPage() {
                     <CheckCircle2 size={22} style={{ color: "#0D1B4B" }} />
                   </div>
                   <p className="mt-3 text-3xl font-bold text-text-primary">{countCompleted}</p>
-                  <p className="mt-0.5 text-sm text-text-secondary">Abgeschlossen</p>
+                  <p className="mt-0.5 text-sm text-text-secondary">{d.completedLabel}</p>
                 </CardContent>
               </Card>
 
@@ -569,7 +557,7 @@ export default function DashboardPage() {
                     <Target size={22} style={{ color: "#0D1B4B" }} />
                   </div>
                   <p className="mt-3 text-3xl font-bold text-text-primary">{countAccuracy}%</p>
-                  <p className="mt-0.5 text-sm text-text-secondary">Genauigkeit</p>
+                  <p className="mt-0.5 text-sm text-text-secondary">{d.accuracyLabel}</p>
                 </CardContent>
               </Card>
 
@@ -581,7 +569,7 @@ export default function DashboardPage() {
                   <p className="mt-3 text-3xl font-bold text-text-primary">
                     {totalCompleted}/{totalScenarios}
                   </p>
-                  <p className="mt-0.5 text-sm text-text-secondary">Szenarien total</p>
+                  <p className="mt-0.5 text-sm text-text-secondary">{d.scenariosTotal}</p>
                 </CardContent>
               </Card>
             </>
@@ -611,7 +599,7 @@ export default function DashboardPage() {
             {visibleBackModules.length > 0 && (
               <>
                 <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-                  Back Office
+                  {d.backOfficeSection}
                 </h2>
                 <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {!loaded
@@ -625,7 +613,7 @@ export default function DashboardPage() {
             {visibleFrontModules.length > 0 && (
               <>
                 <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-                  Front Office
+                  {d.frontOfficeSection}
                 </h2>
                 <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {!loaded
@@ -642,7 +630,7 @@ export default function DashboardPage() {
             {visibleFrontModules.length > 0 && (
               <>
                 <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-                  Front Office
+                  {d.frontOfficeSection}
                 </h2>
                 <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {!loaded
@@ -656,7 +644,7 @@ export default function DashboardPage() {
             {visibleBackModules.length > 0 && (
               <>
                 <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-                  Back Office
+                  {d.backOfficeSection}
                 </h2>
                 <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {!loaded
@@ -674,7 +662,7 @@ export default function DashboardPage() {
         {loaded && completedModulesList.length > 0 && (
           <div className="mb-6">
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-              Zertifikate
+              {d.certificates}
             </h2>
             <div className="flex flex-wrap gap-3">
               {completedModulesList.map((m) => (
@@ -689,16 +677,16 @@ export default function DashboardPage() {
         {/* Quick links */}
         <div className="flex flex-wrap gap-3">
           <Button asChild variant="secondary" size="sm">
-            <Link href="/badges">🏆 Meine Badges</Link>
+            <Link href="/badges">🏆 {d.myBadges}</Link>
           </Button>
           <Button asChild variant="secondary" size="sm">
-            <Link href="/fehler-uebersicht">❌ Fehler Übersicht</Link>
+            <Link href="/fehler-uebersicht">❌ {d.errorOverview}</Link>
           </Button>
           <Button asChild variant="secondary" size="sm">
-            <Link href="/lernpfad">🗺️ Lernpfad</Link>
+            <Link href="/lernpfad">🗺️ {d.learningPathLink}</Link>
           </Button>
           <Button asChild variant="secondary" size="sm">
-            <Link href="/community/cases">📋 Praxisfälle</Link>
+            <Link href="/community/cases">📋 {d.practicalCasesLink}</Link>
           </Button>
         </div>
       </div>

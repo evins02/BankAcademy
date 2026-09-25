@@ -6,40 +6,7 @@ import { ChevronRight, Check } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { saveSettings } from "@/lib/settingsData";
 import { syncNow } from "@/lib/progressSync";
-
-// ─── Data ────────────────────────────────────────────────────────────────────────────
-
-const ABTEILUNG_OPTIONS = [
-  { id: "privatkunde", label: "Privatkunde", emoji: "👤", desc: "Beratung von Privatkunden" },
-  { id: "firmenkunde", label: "Firmenkunde", emoji: "🏢", desc: "Firmenkundensegment" },
-  { id: "anlagekunde", label: "Anlagekunde", emoji: "📈", desc: "Anlageberatung & Depot" },
-  { id: "backoffice", label: "Backoffice & ZV", emoji: "⚙️", desc: "Operativer Betrieb" },
-  { id: "kreditgeschaeft", label: "Credit Operations", emoji: "💳", desc: "Kreditbearbeitung & Sicherheiten" },
-  { id: "credit-office", label: "Credit Office", emoji: "⚖️", desc: "Kreditprüfung & Bewilligung" },
-  { id: "keine", label: "Noch nicht zugewiesen", emoji: "🎯", desc: "Noch kein fixer Einsatz" },
-];
-
-const LEHRJAHR_OPTIONS = [
-  { id: "lj1", label: "1. Lehrjahr", emoji: "🌱", desc: "Grundlagen aufbauen" },
-  { id: "lj2", label: "2. Lehrjahr", emoji: "📚", desc: "Wissen vertiefen" },
-  { id: "lj3", label: "3. Lehrjahr", emoji: "🎓", desc: "Abschluss vorbereiten" },
-  { id: "quereinsteiger", label: "Quereinsteiger / Praktikant", emoji: "🔄", desc: "Neu in der Branche" },
-  { id: "mitarbeiter", label: "Angestellt (nach Lehre)", emoji: "💼", desc: "Vollzeit im Banking tätig" },
-];
-
-const ZIEL_OPTIONS = [
-  { id: "neueinstieg", label: "Neueinstieg", emoji: "🏗️", desc: "Grundlagen aufbauen" },
-  { id: "auffrischung", label: "Auffrischung", emoji: "🔁", desc: "Wissen festigen" },
-  { id: "pruefung", label: "Prüfungsvorbereitung", emoji: "🏆", desc: "Gezielt üben" },
-  { id: "challenge", label: "Challenge", emoji: "⚡", desc: "Alles auf höchstem Level" },
-];
-
-const ZIEL_MITARBEITER_OPTIONS = [
-  { id: "auffrischung", label: "Auffrischung", emoji: "🔁", desc: "Wissen festigen" },
-  { id: "vertiefung", label: "Vertiefung", emoji: "📖", desc: "Themen vertiefen" },
-  { id: "neue-rolle", label: "Neue Aufgabe", emoji: "🚀", desc: "Neues Gebiet erschliessen" },
-  { id: "challenge", label: "Challenge", emoji: "⚡", desc: "Alles auf höchstem Level" },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 type Step = "name" | "abteilung" | "lehrjahr" | "ziel" | "done";
 
@@ -51,15 +18,13 @@ const STEP_INDEX: Record<Step, number> = {
   done: 4,
 };
 
-// ─── Option card ───────────────────────────────────────────────────────────────────────
-
 function OptionCard({
   option,
   selected,
   onSelect,
   wide,
 }: {
-  option: { id: string; label: string; emoji: string; desc: string };
+  option: { id: string; label: string; emoji?: string; desc: string };
   selected: boolean;
   onSelect: () => void;
   wide?: boolean;
@@ -74,21 +39,19 @@ function OptionCard({
           : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
       }`}
     >
-      <span className="text-xl">{option.emoji}</span>
+      {option.emoji && <span className="text-xl">{option.emoji}</span>}
       <p className="mt-1.5 text-xs font-bold text-gray-800 leading-tight">{option.label}</p>
       <p className="text-[10px] text-gray-400 mt-0.5">{option.desc}</p>
     </button>
   );
 }
 
-// ─── Progress bar ───────────────────────────────────────────────────────────────────
-
-function StepProgress({ current, total }: { current: number; total: number }) {
+function StepProgress({ current, total, stepLabel, ofLabel }: { current: number; total: number; stepLabel: string; ofLabel: string }) {
   return (
     <div className="mb-6">
       <div className="mb-2 flex items-center justify-between">
         <span className="text-xs font-semibold text-gray-400">
-          Schritt {current} von {total}
+          {stepLabel} {current} {ofLabel} {total}
         </span>
         <div className="flex gap-1.5">
           {Array.from({ length: total }).map((_, i) => (
@@ -104,11 +67,10 @@ function StepProgress({ current, total }: { current: number; total: number }) {
   );
 }
 
-// ─── Page ──────────────────────────────────────────────────────────────────────────────
-
 export default function OnboardingPage() {
   const router = useRouter();
   const { user, isLoaded } = useUser();
+  const { t } = useLanguage();
   const [step, setStep] = useState<Step>("name");
   const [name, setName] = useState("");
   const [abteilung, setAbteilung] = useState("");
@@ -116,7 +78,6 @@ export default function OnboardingPage() {
   const [ziel, setZiel] = useState("");
   const [barWidth, setBarWidth] = useState(0);
 
-  // Skip if already completed (check Clerk metadata)
   useEffect(() => {
     if (!isLoaded) return;
     if (user?.unsafeMetadata?.profile) {
@@ -124,7 +85,6 @@ export default function OnboardingPage() {
     }
   }, [isLoaded, user, router]);
 
-  // Auto-redirect from done step
   useEffect(() => {
     if (step !== "done") return;
     const bar = setTimeout(() => setBarWidth(100), 60);
@@ -156,13 +116,13 @@ export default function OnboardingPage() {
       avatarColor: "#0D1B4B",
     };
     saveSettings({ difficultyPreference: diff });
-    // Store profile in Clerk — survives logout/login on any device
     user?.update({ unsafeMetadata: { profile: profileData } }).catch(() => {});
     syncNow();
     setStep("done");
   }
 
   const stepIndex = STEP_INDEX[step];
+  const on = t.onboarding;
 
   return (
     <div
@@ -190,94 +150,65 @@ export default function OnboardingPage() {
       <div className="relative w-full max-w-lg">
         {/* Logo */}
         <div className="mb-8 text-center">
-          <span
-            style={{
-              fontSize: 22,
-              fontWeight: 800,
-              letterSpacing: "-0.5px",
-              color: "#F8FAFC",
-            }}
-          >
+          <span style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px", color: "#F8FAFC" }}>
             Bank<span style={{ color: "#00D4B8" }}>Academy</span>
           </span>
         </div>
 
         {/* Card */}
-        <div
-          className="rounded-2xl bg-white p-8 shadow-2xl"
-          style={{ border: "1px solid rgba(255,255,255,0.1)" }}
-        >
-          {/* Step progress (question steps only) */}
+        <div className="rounded-2xl bg-white p-8 shadow-2xl" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
           {stepIndex >= 1 && stepIndex <= 3 && (
-            <StepProgress current={stepIndex} total={3} />
+            <StepProgress current={stepIndex} total={3} stepLabel={on.step} ofLabel={on.of} />
           )}
 
-          {/* ── Step: Name ────────────────────────────────────────────── */}
+          {/* ── Name ── */}
           {step === "name" && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (name.trim()) setStep("abteilung");
-              }}
-            >
-              <h1 className="text-2xl font-bold text-gray-900">Willkommen 👋</h1>
-              <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-                Wir richten dein persönliches Lernprofil ein. Das dauert nur eine Minute.
-              </p>
-
+            <form onSubmit={(e) => { e.preventDefault(); if (name.trim()) setStep("abteilung"); }}>
+              <h1 className="text-2xl font-bold text-gray-900">{on.welcomeTitle}</h1>
+              <p className="mt-2 text-sm text-gray-500 leading-relaxed">{on.welcomeDesc}</p>
               <div className="mt-6">
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  Dein Vorname
+                  {on.yourName}
                 </label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="z.B. Mia"
+                  placeholder={on.namePlaceholder}
                   autoFocus
                   className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-[#0D1B4B] focus:bg-white"
                 />
               </div>
-
               <button
                 type="submit"
                 disabled={!name.trim()}
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 style={{ background: "#0D1B4B" }}
               >
-                Los geht&apos;s <ChevronRight size={15} />
+                {on.letsGo} <ChevronRight size={15} />
               </button>
             </form>
           )}
 
-          {/* ── Step: Abteilung ──────────────────────────────────────────── */}
+          {/* ── Abteilung ── */}
           {step === "abteilung" && (
             <div>
-              <h1 className="text-xl font-bold text-gray-900">
-                In welcher Abteilung bist du?
-              </h1>
-              <p className="mt-1.5 text-sm text-gray-500">
-                Wähle dein aktuelles Einsatzgebiet.
-              </p>
-
+              <h1 className="text-xl font-bold text-gray-900">{on.abteilungTitle}</h1>
+              <p className="mt-1.5 text-sm text-gray-500">{on.abteilungDesc}</p>
               <div className="mt-5 grid grid-cols-2 gap-2.5">
-                {ABTEILUNG_OPTIONS.map((o, i) => (
+                {on.abteilungen.map((o, i) => (
                   <OptionCard
                     key={o.id}
                     option={o}
                     selected={abteilung === o.id}
                     onSelect={() => setAbteilung(o.id)}
-                    wide={i === ABTEILUNG_OPTIONS.length - 1 && ABTEILUNG_OPTIONS.length % 2 === 1}
+                    wide={i === on.abteilungen.length - 1 && on.abteilungen.length % 2 === 1}
                   />
                 ))}
               </div>
-
               <div className="mt-5 flex items-center justify-between">
-                <button
-                  onClick={() => setStep("name")}
-                  className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  ← Zurück
+                <button onClick={() => setStep("name")} className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+                  {on.back}
                 </button>
                 <button
                   onClick={() => { if (abteilung) setStep("lehrjahr"); }}
@@ -285,24 +216,19 @@ export default function OnboardingPage() {
                   className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   style={{ background: "#0D1B4B" }}
                 >
-                  Weiter <ChevronRight size={14} />
+                  {on.next} <ChevronRight size={14} />
                 </button>
               </div>
             </div>
           )}
 
-          {/* ── Step: Lehrjahr ───────────────────────────────────────────── */}
+          {/* ── Lehrjahr ── */}
           {step === "lehrjahr" && (
             <div>
-              <h1 className="text-xl font-bold text-gray-900">
-                Wie bist du aktuell tätig?
-              </h1>
-              <p className="mt-1.5 text-sm text-gray-500">
-                Wir passen dein Lernprofil entsprechend an.
-              </p>
-
+              <h1 className="text-xl font-bold text-gray-900">{on.lehrjahrTitle}</h1>
+              <p className="mt-1.5 text-sm text-gray-500">{on.lehrjahrDesc}</p>
               <div className="mt-5 grid grid-cols-2 gap-2.5">
-                {LEHRJAHR_OPTIONS.map((o) => (
+                {on.lehrjahre.map((o) => (
                   <OptionCard
                     key={o.id}
                     option={o}
@@ -311,13 +237,9 @@ export default function OnboardingPage() {
                   />
                 ))}
               </div>
-
               <div className="mt-5 flex items-center justify-between">
-                <button
-                  onClick={() => setStep("abteilung")}
-                  className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  ← Zurück
+                <button onClick={() => setStep("abteilung")} className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+                  {on.back}
                 </button>
                 <button
                   onClick={() => { if (lehrjahr) setStep("ziel"); }}
@@ -325,24 +247,21 @@ export default function OnboardingPage() {
                   className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   style={{ background: "#0D1B4B" }}
                 >
-                  Weiter <ChevronRight size={14} />
+                  {on.next} <ChevronRight size={14} />
                 </button>
               </div>
             </div>
           )}
 
-          {/* ── Step: Ziel ──────────────────────────────────────────────────────────── */}
+          {/* ── Ziel ── */}
           {step === "ziel" && (
             <div>
               <h1 className="text-xl font-bold text-gray-900">
-                {lehrjahr === "mitarbeiter" ? "Woran möchtest du arbeiten?" : "Was ist dein Ziel?"}
+                {lehrjahr === "mitarbeiter" ? on.zielTitleMitarbeiter : on.zielTitle}
               </h1>
-              <p className="mt-1.5 text-sm text-gray-500">
-                Wir passen Empfehlungen und Fokus für dich an.
-              </p>
-
+              <p className="mt-1.5 text-sm text-gray-500">{on.zielDesc}</p>
               <div className="mt-5 grid grid-cols-2 gap-2.5">
-                {(lehrjahr === "mitarbeiter" ? ZIEL_MITARBEITER_OPTIONS : ZIEL_OPTIONS).map((o) => (
+                {(lehrjahr === "mitarbeiter" ? on.zieleMitarbeiter : on.ziele).map((o) => (
                   <OptionCard
                     key={o.id}
                     option={o}
@@ -351,13 +270,9 @@ export default function OnboardingPage() {
                   />
                 ))}
               </div>
-
               <div className="mt-5 flex items-center justify-between">
-                <button
-                  onClick={() => setStep("lehrjahr")}
-                  className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  ← Zurück
+                <button onClick={() => setStep("lehrjahr")} className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+                  {on.back}
                 </button>
                 <button
                   onClick={() => { if (ziel) complete(); }}
@@ -365,35 +280,28 @@ export default function OnboardingPage() {
                   className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   style={{ background: "#0D1B4B" }}
                 >
-                  Profil einrichten 🚀
+                  {on.setupProfile}
                 </button>
               </div>
             </div>
           )}
 
-          {/* ── Step: Done ──────────────────────────────────────────────────────────── */}
+          {/* ── Done ── */}
           {step === "done" && (
             <div className="flex flex-col items-center py-6 text-center">
-              <div
-                className="mb-5 flex h-16 w-16 items-center justify-center rounded-full"
-                style={{ background: "#0D1B4B" }}
-              >
+              <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full" style={{ background: "#0D1B4B" }}>
                 <Check size={30} className="text-white" strokeWidth={3} />
               </div>
-              <h1 className="text-xl font-bold text-gray-900">Alles klar!</h1>
+              <h1 className="text-xl font-bold text-gray-900">{on.doneTitle}</h1>
               <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-                Wir haben dein Profil eingerichtet.
+                {on.doneDesc}
                 <br />
-                Du wirst gleich weitergeleitet…
+                {on.doneRedirect}
               </p>
               <div className="mt-8 h-1 w-full overflow-hidden rounded-full bg-gray-100">
                 <div
                   className="h-full rounded-full"
-                  style={{
-                    width: `${barWidth}%`,
-                    background: "#00D4B8",
-                    transition: "width 2.5s linear",
-                  }}
+                  style={{ width: `${barWidth}%`, background: "#00D4B8", transition: "width 2.5s linear" }}
                 />
               </div>
             </div>

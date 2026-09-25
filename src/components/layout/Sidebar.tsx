@@ -38,6 +38,7 @@ import { NAV_GROUPS } from "@/lib/constants";
 import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 import { useGlossar } from "@/context/GlossarContext";
 import { useMobileMenu } from "@/context/MobileMenuContext";
+import { useLanguage } from "@/context/LanguageContext";
 import type { NavItem } from "@/types";
 
 const ICONS: Record<string, LucideIcon> = {
@@ -104,6 +105,7 @@ export function Sidebar() {
   const { open: openGlossar } = useGlossar();
   const { closeMobile } = useMobileMenu();
   const { user, isLoaded } = useUser();
+  const { t } = useLanguage();
   const [profile, setProfile] = useState<UserProfile>({});
   const [search, setSearch] = useState("");
   const [collapsed, setCollapsed] = useState(false);
@@ -230,7 +232,7 @@ export function Sidebar() {
           <button
             onClick={toggleCollapse}
             className="shrink-0 rounded-lg p-1.5 text-text-secondary hover:bg-gray-100 hover:text-text-primary transition-colors"
-            title="Sidebar einklappen"
+            title={t.sidebar.collapse}
           >
             <PanelLeftClose size={15} />
           </button>
@@ -242,7 +244,7 @@ export function Sidebar() {
         <button
           onClick={toggleCollapse}
           className="flex items-center justify-center py-2 text-text-secondary hover:text-text-primary transition-colors border-b border-border"
-          title="Sidebar ausklappen"
+          title={t.sidebar.expand}
         >
           <PanelLeftOpen size={15} />
         </button>
@@ -256,7 +258,7 @@ export function Sidebar() {
             ref={searchRef}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Suchen…"
+            placeholder={t.sidebar.search}
             className="w-full rounded-pill border border-border bg-background py-1.5 pl-7 pr-7 text-xs text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
           />
           {search && (
@@ -287,7 +289,7 @@ export function Sidebar() {
         </div>
       )}
       {!effectiveCollapsed && search.trim().length > 0 && searchResults.length === 0 && (
-        <p className="px-5 py-2 text-xs text-text-secondary">Keine Ergebnisse</p>
+        <p className="px-5 py-2 text-xs text-text-secondary">{t.sidebar.noResults}</p>
       )}
 
       {/* Navigation */}
@@ -296,7 +298,7 @@ export function Sidebar() {
           <div key={group.label} className="mb-4">
             {!effectiveCollapsed && (
               <p className="mb-1 px-2 text-[10px] font-bold uppercase tracking-widest text-text-secondary">
-                {group.label}
+                {t.navGroups[group.label] ?? group.label}
               </p>
             )}
             <ul className="flex flex-col gap-0.5">
@@ -304,14 +306,14 @@ export function Sidebar() {
                 <li>
                   <button
                     onClick={openGlossar}
-                    title="Glossar"
+                    title={t.sidebar.glossar}
                     className={cn(
                       "flex w-full items-center gap-3 rounded-pill px-2 py-2 text-sm font-semibold text-text-primary transition-colors hover:bg-gray-100",
                       effectiveCollapsed && "justify-center px-0"
                     )}
                   >
                     <BookOpen size={18} className="shrink-0" />
-                    {!effectiveCollapsed && <span className="flex-1 text-left">Glossar</span>}
+                    {!effectiveCollapsed && <span className="flex-1 text-left">{t.sidebar.glossar}</span>}
                   </button>
                 </li>
               )}
@@ -340,7 +342,7 @@ export function Sidebar() {
                         {Icon && <Icon size={18} className="shrink-0" />}
                         {!effectiveCollapsed && (
                           <>
-                            <span className="flex-1 text-left">{item.label}</span>
+                            <span className="flex-1 text-left">{t.navItems[item.label] ?? item.label}</span>
                             {isOpen ? (
                               <ChevronDown size={13} className="shrink-0 opacity-70" />
                             ) : (
@@ -356,7 +358,7 @@ export function Sidebar() {
                             <div key={section.label || "_"} className="mb-1 mt-1">
                               {section.label && (
                                 <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
-                                  {section.label}
+                                  {t.navSections[section.label] ?? section.label}
                                 </p>
                               )}
                               {section.items.map((sub) => {
@@ -373,7 +375,7 @@ export function Sidebar() {
                                         : "text-text-secondary hover:bg-gray-50 hover:text-text-primary"
                                     )}
                                   >
-                                    {sub.label}
+                                    {t.navItems[sub.label] ?? sub.label}
                                   </Link>
                                 );
                               })}
@@ -399,7 +401,7 @@ export function Sidebar() {
                       )}
                     >
                       {Icon && <Icon size={18} className="shrink-0" />}
-                      {!effectiveCollapsed && <span className="flex-1">{item.label}</span>}
+                      {!effectiveCollapsed && <span className="flex-1">{t.navItems[item.label] ?? item.label}</span>}
                     </Link>
                   </li>
                 );
@@ -417,13 +419,13 @@ export function Sidebar() {
             className="flex items-center gap-3 rounded-pill px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-gray-100 hover:text-text-primary"
           >
             <Settings size={18} className="shrink-0" />
-            Einstellungen
+            {t.sidebar.settings}
           </Link>
         )}
 
         <Link
           href="/einstellungen"
-          title={profile.name || "Gast"}
+          title={profile.name || t.sidebar.guest}
           className={cn(
             "mt-1 flex items-center gap-3 rounded-pill px-2 py-2 transition-colors hover:bg-gray-100",
             effectiveCollapsed && "justify-center"
@@ -435,12 +437,12 @@ export function Sidebar() {
           {!effectiveCollapsed && (
             <div className="min-w-0">
               <p className="truncate text-xs font-medium text-text-primary">
-                {profile.name || "Gast"}
+                {profile.name || t.sidebar.guest}
               </p>
               <p className="truncate text-[11px] text-text-secondary">
                 {profile.name
-                  ? (({ lj1: "1. Lehrjahr", lj2: "2. Lehrjahr", lj3: "3. Lehrjahr", quereinsteiger: "Quereinsteiger" } as Record<string, string>)[profile.lehrjahr ?? ""] ?? "Lernende")
-                  : "Profil einrichten"}
+                  ? (t.lehrjahre[profile.lehrjahr ?? ""] ?? t.lehrjahre.default)
+                  : t.sidebar.setupProfile}
               </p>
             </div>
           )}
@@ -449,19 +451,19 @@ export function Sidebar() {
         {!effectiveCollapsed && (
           <div className="mt-2 flex flex-wrap gap-3 px-3 pb-0.5">
             <Link href="/impressum" className="text-[10px] text-text-secondary transition-colors hover:text-text-primary">
-              Impressum
+              {t.sidebar.impressum}
             </Link>
             <span className="text-[10px] text-text-secondary opacity-40">·</span>
             <Link href="/datenschutz" className="text-[10px] text-text-secondary transition-colors hover:text-text-primary">
-              Datenschutz
+              {t.sidebar.datenschutz}
             </Link>
             <span className="text-[10px] text-text-secondary opacity-40">·</span>
             <Link href="/nutzungsbedingungen" className="text-[10px] text-text-secondary transition-colors hover:text-text-primary">
-              AGB
+              {t.sidebar.agb}
             </Link>
             <span className="text-[10px] text-text-secondary opacity-40">·</span>
             <Link href="/kontakt" className="text-[10px] text-text-secondary transition-colors hover:text-text-primary">
-              Kontakt
+              {t.sidebar.contact}
             </Link>
           </div>
         )}
