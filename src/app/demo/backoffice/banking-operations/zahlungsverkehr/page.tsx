@@ -1,20 +1,5 @@
-import { Header } from "@/components/layout/Header";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { ZahlungsverkehrRunner } from "@/components/modules/zahlungsverkehr/ZahlungsverkehrRunner";
+import { redirect } from "next/navigation";
 
 export default function DemoBkoZahlungsverkehrPage() {
-  return (
-    <>
-      <Header title="Zahlungsverkehr" subtitle="Back Office – Banking Operations" />
-      <Breadcrumb
-        items={[
-          { label: "Demo", href: "/demo" },
-          { label: "Back Office" },
-          { label: "Banking Operations" },
-          { label: "Zahlungsverkehr" },
-        ]}
-      />
-      <ZahlungsverkehrRunner />
-    </>
-  );
+  redirect("/demo");
 }

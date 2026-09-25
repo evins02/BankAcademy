@@ -1,19 +1,5 @@
-import { Header } from "@/components/layout/Header";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { AnlagekundeRunner } from "@/components/modules/anlagekunde/AnlagekundeRunner";
+import { redirect } from "next/navigation";
 
 export default function DemoAnlageprofilPage() {
-  return (
-    <>
-      <Header title="Anlegerprofil" subtitle="Anlagekunde – Anlageberatung" />
-      <Breadcrumb
-        items={[
-          { label: "Demo", href: "/demo" },
-          { label: "Anlagekunde" },
-          { label: "Anlegerprofil" },
-        ]}
-      />
-      <AnlagekundeRunner />
-    </>
-  );
+  redirect("/demo");
 }

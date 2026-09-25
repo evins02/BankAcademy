@@ -38,13 +38,9 @@ const ICONS: Record<string, LucideIcon> = {
 };
 
 const DEMO_UNLOCKED = new Set([
-  "/privatkunde/basis/kontoeröffnung",
   "/privatkunde/basis/sparen-konto",
   "/privatkunde/basis/zahlungsverkehr",
   "/privatkunde/basis/fonds",
-  "/backoffice/banking-operations/kyc",
-  "/backoffice/banking-operations/zahlungsverkehr",
-  "/backoffice/credit-operations/schuldbrief",
   "/demo",
 ]);
 
