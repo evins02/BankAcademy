@@ -40,6 +40,9 @@ const DEMO_UNLOCKED = new Set([
   "/privatkunde/basis/sparen-konto",
   "/privatkunde/basis/zahlungsverkehr",
   "/privatkunde/basis/fonds",
+  "/anlagekunde/aktien",
+  "/anlagekunde/fonds",
+  "/anlagekunde/steuern",
   "/demo",
 ]);
 

@@ -33,6 +33,33 @@ const UNLOCKED_MODULES = [
     xp: "+45 XP",
     color: "#8b5cf6",
   },
+  {
+    title: "Aktien & Kennzahlen",
+    description:
+      "KGV, Dividendenrendite berechnen und Aktien mit Obligationen vergleichen – Grundlagen Anlagekunde.",
+    href: "/demo/anlagekunde/aktien",
+    tag: "Anlagekunde · Basis",
+    xp: "+40 XP",
+    color: "#10b981",
+  },
+  {
+    title: "Anlagefonds & ETF",
+    description:
+      "TER vergleichen, ausschüttend vs. thesaurierend und aktiv vs. passiv richtig einordnen.",
+    href: "/demo/anlagekunde/fonds",
+    tag: "Anlagekunde · Basis",
+    xp: "+40 XP",
+    color: "#0ea5e9",
+  },
+  {
+    title: "Steuerliche Aspekte",
+    description:
+      "Verrechnungssteuer 35%, Stempelabgabe und steuerfreie Kapitalgewinne – öffentliches Schweizer Steuerrecht.",
+    href: "/demo/anlagekunde/steuern",
+    tag: "Anlagekunde · Basis",
+    xp: "+50 XP",
+    color: "#f43f5e",
+  },
 ];
 
 const LOCKED_MODULES = [
@@ -75,7 +102,7 @@ export default function DemoPage() {
                 marginBottom: 20,
               }}
             >
-              Demo Modus · 3 Module freigeschaltet
+              Demo Modus · 6 Module freigeschaltet
             </div>
             <h1
               style={{
@@ -88,7 +115,7 @@ export default function DemoPage() {
               Willkommen bei BankAcademy
             </h1>
             <p style={{ margin: "0 0 28px", fontSize: 15, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>
-              Teste drei Grundlagen-Module kostenlos. Für alle Module, 150+ Szenarien und den Challenge-Modus kannst du Vollzugang anfragen.
+              Teste sechs Grundlagen-Module aus Privat- und Anlagekunde kostenlos. Für alle Module, 150+ Szenarien und den Challenge-Modus kannst du Vollzugang anfragen.
             </p>
             <Link
               href="/kontakt"
