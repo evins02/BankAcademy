@@ -23,7 +23,6 @@ import {
   ClipboardList,
   ChevronDown,
   ChevronRight,
-  Lock,
   type LucideIcon,
 } from "lucide-react";
 import { NAV_GROUPS } from "@/lib/constants";
@@ -123,19 +122,7 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
                   const anyUnlocked = hasUnlockedChild(item);
 
                   if (!anyUnlocked) {
-                    return (
-                      <li key={item.label}>
-                        <button
-                          onClick={onLock}
-                          className="flex w-full items-center gap-3 rounded-pill px-2 py-2 text-sm font-semibold transition-colors"
-                          style={{ color: "#9ca3af", cursor: "pointer" }}
-                        >
-                          {Icon && <Icon size={18} className="shrink-0" style={{ color: "#9ca3af" }} />}
-                          <span className="flex-1 text-left">{item.label}</span>
-                          <Lock size={13} style={{ color: "#d1d5db", flexShrink: 0 }} />
-                        </button>
-                      </li>
-                    );
+                    return null;
                   }
 
                   return (
@@ -155,7 +142,10 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
 
                       {isOpen && (
                         <div className="ml-3 mt-0.5 border-l-2 border-border pl-3">
-                          {item.sections.map((section) => (
+                          {item.sections.map((section) => {
+                            const visibleSubs = section.items.filter((sub) => isUnlocked(sub.href));
+                            if (visibleSubs.length === 0) return null;
+                            return (
                             <div key={section.label || "_"} className="mb-1 mt-1">
                               {section.label && (
                                 <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
@@ -168,36 +158,25 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
                                 const subActive =
                                   pathname === demoSubHref ||
                                   pathname.startsWith(demoSubHref + "/");
-                                if (unlocked) {
-                                  return (
-                                    <Link
-                                      key={sub.href}
-                                      href={demoSubHref}
-                                      className={cn(
-                                        "flex items-center gap-2 rounded-pill px-2 py-1.5 text-xs transition-colors",
-                                        subActive
-                                          ? "bg-gray-100 font-medium text-text-primary"
-                                          : "text-text-secondary hover:bg-gray-50 hover:text-text-primary"
-                                      )}
-                                    >
-                                      {sub.label}
-                                    </Link>
-                                  );
-                                }
+                                if (!unlocked) return null;
                                 return (
-                                  <button
+                                  <Link
                                     key={sub.href}
-                                    onClick={onLock}
-                                    className="flex w-full items-center gap-2 rounded-pill px-2 py-1.5 text-xs transition-colors"
-                                    style={{ color: "#9ca3af", cursor: "pointer" }}
+                                    href={demoSubHref}
+                                    className={cn(
+                                      "flex items-center gap-2 rounded-pill px-2 py-1.5 text-xs transition-colors",
+                                      subActive
+                                        ? "bg-gray-100 font-medium text-text-primary"
+                                        : "text-text-secondary hover:bg-gray-50 hover:text-text-primary"
+                                    )}
                                   >
-                                    <span className="flex-1 text-left">{sub.label}</span>
-                                    <Lock size={11} style={{ color: "#d1d5db", flexShrink: 0 }} />
-                                  </button>
+                                    {sub.label}
+                                  </Link>
                                 );
                               })}
                             </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       )}
                     </li>
@@ -211,19 +190,7 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
                   pathname === demoHref || pathname.startsWith(demoHref + "/");
 
                 if (!unlocked && !isDemo) {
-                  return (
-                    <li key={item.label}>
-                      <button
-                        onClick={onLock}
-                        className="flex w-full items-center gap-3 rounded-pill px-2 py-2 text-sm font-semibold transition-colors"
-                        style={{ color: "#9ca3af", cursor: "pointer" }}
-                      >
-                        {Icon && <Icon size={18} className="shrink-0" style={{ color: "#9ca3af" }} />}
-                        <span className="flex-1 text-left">{item.label}</span>
-                        <Lock size={13} style={{ color: "#d1d5db", flexShrink: 0 }} />
-                      </button>
-                    </li>
-                  );
+                  return null;
                 }
 
                 return (
