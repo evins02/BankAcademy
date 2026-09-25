@@ -1,24 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Lock, ChevronRight } from "lucide-react";
+import { Lock, ChevronRight, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { LockedModuleOverlay } from "@/components/demo/LockedModuleOverlay";
 
 const UNLOCKED_MODULES = [
   {
-    title: "Kontoeröffnung",
-    description:
-      "Lerne alle Schritte der Kontoeröffnung für Privatkunden – KYC, Legitimation und Dokumentation.",
-    href: "/demo/privatkunde/basis/kontoeröffnung",
-    tag: "Privatkunde · Basis",
-    xp: "+50 XP",
-    color: "#00C9B1",
-  },
-  {
     title: "Sparen & Konto",
     description:
-      "Kontenarten, Zinsen, Sparpläne und Sparstrategien im Überblick.",
+      "Kontenarten, Zinsen, Sparpläne und Sparstrategien für Privatkunden kennen und erklären.",
     href: "/demo/privatkunde/basis/sparen-konto",
     tag: "Privatkunde · Basis",
     xp: "+40 XP",
@@ -27,54 +18,27 @@ const UNLOCKED_MODULES = [
   {
     title: "Zahlungsverkehr",
     description:
-      "IBAN, Zahlungsaufträge, SEPA und SWIFT – Produkte kennen und Kunden richtig beraten.",
+      "Dauerauftrag, LSV, E-Banking und TWINT – Zahlungsprodukte kennen und Kunden richtig beraten.",
     href: "/demo/privatkunde/basis/zahlungsverkehr",
     tag: "Privatkunde · Basis",
     xp: "+35 XP",
     color: "#f59e0b",
   },
   {
-    title: "Fonds",
+    title: "Fonds & Anlageprodukte",
     description:
-      "Anlagefonds, ETF und Anlagestrategien – Risikoprofil bestimmen und Produkte empfehlen.",
+      "Anlagefonds, ETF und Anlagestrategien – Grundlagen für die Beratung von Privatkunden.",
     href: "/demo/privatkunde/basis/fonds",
     tag: "Privatkunde · Basis",
     xp: "+45 XP",
     color: "#8b5cf6",
   },
-  {
-    title: "KYC / Compliance",
-    description:
-      "Know Your Customer – Sorgfaltspflichten, GwG und Beneficial Owner in der Praxis.",
-    href: "/demo/backoffice/banking-operations/kyc",
-    tag: "Back Office · Banking Operations",
-    xp: "+80 XP",
-    color: "#10b981",
-  },
-  {
-    title: "Zahlungsverkehr Back Office",
-    description:
-      "Zahlungsaufträge prüfen, Fehler erkennen und Buchungen korrekt verarbeiten.",
-    href: "/demo/backoffice/banking-operations/zahlungsverkehr",
-    tag: "Back Office · Banking Operations",
-    xp: "+55 XP",
-    color: "#3b82f6",
-  },
-  {
-    title: "Schuldbriefverwaltung",
-    description:
-      "Papier- vs. Registerschuldbrief, Eingang prüfen, Freigabe und Übertragung bei Eigentümerwechsel.",
-    href: "/demo/backoffice/credit-operations/schuldbrief",
-    tag: "Back Office · Credit Operations",
-    xp: "+70 XP",
-    color: "#6366f1",
-  },
 ];
 
 const LOCKED_MODULES = [
-  { title: "Firmenkunde", description: "Kontoeröffnung, Tragbarkeit und Firmenkredit." },
-  { title: "Credit Office", description: "Hypotheken, Blankokredit und periodische Prüfung." },
-  { title: "Individual-Hypothek", description: "Hypothekarantrag prüfen und Tragbarkeit berechnen." },
+  { title: "Firmenkunde", description: "Kontoeröffnung Firmen, Tragbarkeit und Kreditengagements." },
+  { title: "Anlagekunde – Individual", description: "Anlegerprofil, strukturierte Produkte und Lombardkredit." },
+  { title: "Credit Office", description: "Hypotheken, Blankokredit und periodische Kreditprüfung." },
   { title: "Challenge-Modus", description: "Prüfungssimulation mit realistischen Falldossiers." },
   { title: "Community & Forum", description: "Fragen stellen, Erfahrungen teilen, Praxisfälle diskutieren." },
 ];
@@ -111,7 +75,7 @@ export default function DemoPage() {
                 marginBottom: 20,
               }}
             >
-              Demo Modus · 7 Module freigeschaltet
+              Demo Modus · 3 Module freigeschaltet
             </div>
             <h1
               style={{
@@ -124,7 +88,7 @@ export default function DemoPage() {
               Willkommen bei BankAcademy
             </h1>
             <p style={{ margin: "0 0 28px", fontSize: 15, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>
-              Starte mit den 7 freigeschalteten Modulen. Für alle Module, 150+ Szenarien und den Challenge-Modus kannst du Vollzugang anfragen.
+              Teste drei Grundlagen-Module kostenlos. Für alle Module, 150+ Szenarien und den Challenge-Modus kannst du Vollzugang anfragen.
             </p>
             <Link
               href="/kontakt"
@@ -252,6 +216,7 @@ export default function DemoPage() {
               justifyContent: "space-between",
               gap: 20,
               color: "#fff",
+              marginBottom: 24,
             }}
           >
             <div>
@@ -280,6 +245,27 @@ export default function DemoPage() {
             >
               Vollzugang anfragen <ChevronRight size={14} />
             </Link>
+          </div>
+
+          {/* Compliance notice */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 12,
+              background: "#f8f9fd",
+              border: "1px solid #e5e7eb",
+              borderRadius: 12,
+              padding: "14px 18px",
+            }}
+          >
+            <ShieldCheck size={16} style={{ color: "#6b7280", marginTop: 2, flexShrink: 0 }} />
+            <p style={{ margin: 0, fontSize: 11, color: "#6b7280", lineHeight: 1.6 }}>
+              <strong style={{ color: "#374151" }}>Hinweis zum Demo-Inhalt:</strong>{" "}
+              Diese Demo enthält ausschliesslich allgemein zugängliches Finanzwissen (Grundlagen zu Bankprodukten).
+              Interne Bankprozesse, regulatorische Prüfabläufe und compliance-relevante Verfahren sind nicht
+              Teil dieser Demo und werden nur im passwortgeschützten Vollzugang für Lernende angezeigt.
+            </p>
           </div>
         </div>
       </div>
