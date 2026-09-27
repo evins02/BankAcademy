@@ -32,6 +32,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { ContactForms } from "@/components/shared/ContactForms";
+import { useLanguage } from "@/context/LanguageContext";
+import type { Lang } from "@/lib/i18n";
 
 /* ─── Design tokens ───────────────────────────────────────────────────────── */
 
@@ -142,6 +144,55 @@ function FadeIn({
       }}
     >
       {children}
+    </div>
+  );
+}
+
+/* ─── Language switcher ───────────────────────────────────────────────────── */
+
+const LANGS: { key: Lang; label: string }[] = [
+  { key: "de", label: "D" },
+  { key: "fr", label: "F" },
+  { key: "it", label: "I" },
+];
+
+function LangButtons({ compact = false }: { compact?: boolean }) {
+  const { lang, setLang } = useLanguage();
+  return (
+    <div style={{ display: "flex", gap: 3 }}>
+      {LANGS.map(({ key, label }) => (
+        <button
+          key={key}
+          onClick={() => setLang(key)}
+          style={{
+            background: lang === key ? CY : "transparent",
+            border: `1px solid ${lang === key ? CY : "rgba(255,255,255,0.15)"}`,
+            color: lang === key ? N : WM,
+            borderRadius: 6,
+            padding: compact ? "5px 10px" : "4px 9px",
+            fontSize: 11,
+            fontWeight: 700,
+            cursor: "pointer",
+            letterSpacing: "0.05em",
+            transition: "all 0.15s",
+            lineHeight: 1,
+          }}
+          onMouseEnter={(e) => {
+            if (lang !== key) {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.35)";
+              (e.currentTarget as HTMLButtonElement).style.color = WH;
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (lang !== key) {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.15)";
+              (e.currentTarget as HTMLButtonElement).style.color = WM;
+            }
+          }}
+        >
+          {label}
+        </button>
+      ))}
     </div>
   );
 }
@@ -261,6 +312,8 @@ function Navbar({
 
         {/* Desktop CTA */}
         <div style={{ display: "flex", gap: 12, alignItems: "center" }} className="hidden md:flex">
+          <LangButtons />
+          <div style={{ width: 1, height: 18, background: BR }} />
           <button
             onClick={onLoginOpen}
             style={{
@@ -378,6 +431,9 @@ function Navbar({
               )
             )}
             <div style={{ marginTop: 12, borderTop: `1px solid ${BR}`, paddingTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+              <div style={{ display: "flex", justifyContent: "center", paddingBottom: 4 }}>
+                <LangButtons compact />
+              </div>
               <button
                 onClick={onLoginOpen}
                 style={{
