@@ -199,13 +199,6 @@ function LangButtons({ compact = false }: { compact?: boolean }) {
 
 /* ─── Navbar ──────────────────────────────────────────────────────────────── */
 
-const NAV_ITEMS: { label: string; id?: string; href?: string }[] = [
-  { label: "Features", id: "features" },
-  { label: "Module", id: "module" },
-  { label: "Für Banken", id: "fuer-banken" },
-  { label: "Kontakt", id: "kontakt" },
-];
-
 function Navbar({
   scrolled,
   mobileOpen,
@@ -221,6 +214,13 @@ function Navbar({
   onLoginOpen: () => void;
   onStart: () => void;
 }) {
+  const { t } = useLanguage();
+  const NAV_ITEMS = [
+    { label: t.landing.navFeatures, id: "features" },
+    { label: t.landing.navModule, id: "module" },
+    { label: t.landing.navFuerBanken, id: "fuer-banken" },
+    { label: t.landing.navKontakt, id: "kontakt" },
+  ];
   return (
     <header
       style={{
@@ -256,58 +256,32 @@ function Navbar({
 
         {/* Desktop nav */}
         <nav style={{ display: "flex", gap: 4, alignItems: "center" }} className="hidden md:flex">
-          {NAV_ITEMS.map((item) =>
-            item.href ? (
-              <Link
-                key={item.label}
-                href={item.href}
-                style={{
-                  display: "inline-block",
-                  padding: "8px 16px",
-                  borderRadius: 8,
-                  fontSize: 14,
-                  color: WD,
-                  textDecoration: "none",
-                  transition: "all 0.15s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = WH;
-                  e.currentTarget.style.background = "rgba(255,255,255,0.06)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = WD;
-                  e.currentTarget.style.background = "transparent";
-                }}
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <button
-                key={item.id}
-                onClick={() => onNav(item.id!)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: "8px 16px",
-                  borderRadius: 8,
-                  fontSize: 14,
-                  color: WD,
-                  transition: "all 0.15s",
-                }}
-                onMouseEnter={(e) => {
-                  (e.target as HTMLButtonElement).style.color = WH;
-                  (e.target as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.target as HTMLButtonElement).style.color = WD;
-                  (e.target as HTMLButtonElement).style.background = "transparent";
-                }}
-              >
-                {item.label}
-              </button>
-            )
-          )}
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => onNav(item.id)}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: "8px 16px",
+                borderRadius: 8,
+                fontSize: 14,
+                color: WD,
+                transition: "all 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                (e.target as HTMLButtonElement).style.color = WH;
+                (e.target as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)";
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLButtonElement).style.color = WD;
+                (e.target as HTMLButtonElement).style.background = "transparent";
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
         </nav>
 
         {/* Desktop CTA */}
@@ -336,7 +310,7 @@ function Navbar({
               (e.currentTarget as HTMLButtonElement).style.borderColor = BR;
             }}
           >
-            Einloggen
+            {t.landing.navLogin}
           </button>
           <button
             onClick={onStart}
@@ -363,7 +337,7 @@ function Navbar({
               (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
             }}
           >
-            Jetzt starten <ChevronRight size={14} />
+            {t.landing.navStart} <ChevronRight size={14} />
           </button>
         </div>
 
@@ -395,41 +369,24 @@ function Navbar({
           }}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            {NAV_ITEMS.map((item) =>
-              item.href ? (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  style={{
-                    display: "block",
-                    padding: "12px 16px",
-                    borderRadius: 10,
-                    fontSize: 15,
-                    color: WD,
-                    textDecoration: "none",
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <button
-                  key={item.id}
-                  onClick={() => onNav(item.id!)}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: "12px 16px",
-                    borderRadius: 10,
-                    fontSize: 15,
-                    color: WD,
-                    textAlign: "left",
-                  }}
-                >
-                  {item.label}
-                </button>
-              )
-            )}
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => onNav(item.id)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "12px 16px",
+                  borderRadius: 10,
+                  fontSize: 15,
+                  color: WD,
+                  textAlign: "left",
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
             <div style={{ marginTop: 12, borderTop: `1px solid ${BR}`, paddingTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
               <div style={{ display: "flex", justifyContent: "center", paddingBottom: 4 }}>
                 <LangButtons compact />
@@ -450,7 +407,7 @@ function Navbar({
                   cursor: "pointer",
                 }}
               >
-                Einloggen
+                {t.landing.navLogin}
               </button>
               <button
                 onClick={onStart}
@@ -468,7 +425,7 @@ function Navbar({
                   cursor: "pointer",
                 }}
               >
-                Jetzt starten →
+                {t.landing.navStartArrow}
               </button>
             </div>
           </div>
@@ -482,6 +439,7 @@ function Navbar({
 /* ─── Section: Hero ───────────────────────────────────────────────────────── */
 
 function Hero({ onStart }: { onStart: () => void }) {
+  const { t } = useLanguage();
   return (
     <section
       style={{
@@ -534,7 +492,7 @@ function Hero({ onStart }: { onStart: () => void }) {
             textTransform: "uppercase",
           }}
         >
-          Der digitale Praxisausbildner
+          {t.landing.heroEyebrow}
         </p>
 
         {/* Headline */}
@@ -548,9 +506,9 @@ function Hero({ onStart }: { onStart: () => void }) {
             color: WH,
           }}
         >
-          Lern nicht für die Prüfung.{" "}
+          {t.landing.heroH1a}{" "}
           <br />
-          <span style={{ color: CY }}>Lern für die Praxis.</span>
+          <span style={{ color: CY }}>{t.landing.heroH1b}</span>
         </h1>
 
         {/* Subtitle */}
@@ -563,7 +521,7 @@ function Hero({ onStart }: { onStart: () => void }) {
             color: WD,
           }}
         >
-          Trainiere reale Szenarien. Im Zug. In der Pause. Überall – und tritt sicher auf, wenn es darauf ankommt.
+          {t.landing.heroSubtitle}
         </p>
 
         {/* Buttons */}
@@ -593,7 +551,7 @@ function Hero({ onStart }: { onStart: () => void }) {
               e.currentTarget.style.boxShadow = `0 0 40px ${CY}55`;
             }}
           >
-            Banking-Skills testen <ChevronRight size={17} />
+            {t.landing.heroCta1} <ChevronRight size={17} />
           </Link>
           <button
             onClick={onStart}
@@ -615,13 +573,13 @@ function Hero({ onStart }: { onStart: () => void }) {
               (e.currentTarget as HTMLButtonElement).style.background = "transparent";
             }}
           >
-            Vollversion öffnen
+            {t.landing.heroCta2}
           </button>
         </div>
 
         {/* Microcopy */}
         <p style={{ margin: "0 0 32px", fontSize: 13, color: WM }}>
-          Kostenlos testen · Direkt im Browser · Kein Setup
+          {t.landing.heroMicro}
         </p>
 
         {/* Signature-Case card */}
@@ -637,18 +595,18 @@ function Hero({ onStart }: { onStart: () => void }) {
             textAlign: "left",
           }}
         >
-          <p style={{ margin: "0 0 10px", fontSize: 12, color: WM, letterSpacing: "0.04em" }}>Montag, 08:42</p>
-          <p style={{ margin: "0 0 12px", fontSize: 11, fontWeight: 700, color: CY, letterSpacing: "0.1em", textTransform: "uppercase" }}>Deine nächste Aufgabe</p>
-          <p style={{ margin: "0 0 6px", fontSize: 26, fontWeight: 600, color: WH, lineHeight: 1.3 }}>Meier Maschinenbau AG</p>
-          <p style={{ margin: "0 0 28px", fontSize: 15, color: WD }}>Betriebskredit CHF 250&apos;000 · Wie gehst du vor?</p>
+          <p style={{ margin: "0 0 10px", fontSize: 12, color: WM, letterSpacing: "0.04em" }}>{t.landing.heroCardTime}</p>
+          <p style={{ margin: "0 0 12px", fontSize: 11, fontWeight: 700, color: CY, letterSpacing: "0.1em", textTransform: "uppercase" }}>{t.landing.heroCardBadge}</p>
+          <p style={{ margin: "0 0 6px", fontSize: 26, fontWeight: 600, color: WH, lineHeight: 1.3 }}>{t.landing.heroCardTitle}</p>
+          <p style={{ margin: "0 0 28px", fontSize: 15, color: WD }}>{t.landing.heroCardDesc}</p>
           <div className="hero-flow">
-            <span style={{ fontSize: 13, color: WH, fontWeight: 600 }}>Kontext</span>
+            <span style={{ fontSize: 13, color: WH, fontWeight: 600 }}>{t.landing.heroFlowKontext}</span>
             <span className="hero-flow-sep">→</span>
-            <span style={{ fontSize: 13, color: WM }}>Entscheidung</span>
+            <span style={{ fontSize: 13, color: WM }}>{t.landing.heroFlowEntscheidung}</span>
             <span className="hero-flow-sep">→</span>
-            <span style={{ fontSize: 13, color: WM }}>Konsequenz</span>
+            <span style={{ fontSize: 13, color: WM }}>{t.landing.heroFlowKonsequenz}</span>
             <span className="hero-flow-sep">→</span>
-            <span style={{ fontSize: 13, color: WM }}>Auswertung</span>
+            <span style={{ fontSize: 13, color: WM }}>{t.landing.heroFlowAuswertung}</span>
           </div>
         </div>
       </div>
@@ -672,6 +630,7 @@ function Hero({ onStart }: { onStart: () => void }) {
 /* ─── Section: Case Experience ────────────────────────────────────────────── */
 
 function CaseExperience() {
+  const { t } = useLanguage();
   return (
     <section
       style={{
@@ -704,7 +663,7 @@ function CaseExperience() {
               textTransform: "uppercase",
             }}
           >
-            Die Case-Experience
+            {t.landing.caseEyebrow}
           </p>
           <h2
             style={{
@@ -716,7 +675,7 @@ function CaseExperience() {
               lineHeight: 1.1,
             }}
           >
-            Das ist kein Quiz.
+            {t.landing.caseH2}
           </h2>
           <p
             style={{
@@ -727,7 +686,7 @@ function CaseExperience() {
               color: WD,
             }}
           >
-            Nicht nur Multiple Choice. Du trainierst echte Banksituationen, triffst Entscheidungen und bekommst direkt Feedback.
+            {t.landing.caseSubtitle}
           </p>
         </FadeIn>
 
@@ -752,44 +711,44 @@ function CaseExperience() {
                 <div style={{ width: 40, height: 40, borderRadius: "50%", background: N, border: `1.5px solid ${CY}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, zIndex: 1, flexShrink: 0 }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: CY }}>1</span>
                 </div>
-                <p style={{ margin: "0 0 14px", fontSize: 10, fontWeight: 700, color: CY, letterSpacing: "0.12em", textTransform: "uppercase" }}>Kontext</p>
+                <p style={{ margin: "0 0 14px", fontSize: 10, fontWeight: 700, color: CY, letterSpacing: "0.12em", textTransform: "uppercase" }}>{t.landing.caseStep1Label}</p>
                 <div style={{ width: "100%", background: "#131C31", border: "1px solid #243049", borderRadius: 10, padding: "20px 18px" }}>
-                  <p style={{ margin: "0 0 4px", fontSize: 12, color: WM }}>Montag, 08:42</p>
-                  <p style={{ margin: "0 0 6px", fontSize: 15, fontWeight: 700, color: WH }}>Meier Maschinenbau AG</p>
-                  <p style={{ margin: 0, fontSize: 13, color: WD }}>Betriebskredit CHF 250&apos;000</p>
+                  <p style={{ margin: "0 0 4px", fontSize: 12, color: WM }}>{t.landing.caseCardTime}</p>
+                  <p style={{ margin: "0 0 6px", fontSize: 15, fontWeight: 700, color: WH }}>{t.landing.caseCardTitle}</p>
+                  <p style={{ margin: 0, fontSize: 13, color: WD }}>{t.landing.caseCardDesc}</p>
                 </div>
               </div>
 
-              {/* Step 2 – Entscheidung */}
+              {/* Step 2 */}
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <div style={{ width: 40, height: 40, borderRadius: "50%", background: N, border: `1.5px solid ${CY}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, zIndex: 1, flexShrink: 0 }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: CY }}>2</span>
                 </div>
-                <p style={{ margin: "0 0 14px", fontSize: 10, fontWeight: 700, color: CY, letterSpacing: "0.12em", textTransform: "uppercase" }}>Entscheidung</p>
+                <p style={{ margin: "0 0 14px", fontSize: 10, fontWeight: 700, color: CY, letterSpacing: "0.12em", textTransform: "uppercase" }}>{t.landing.caseStep2Label}</p>
                 <div style={{ width: "100%", background: "#131C31", border: "1px solid #243049", borderRadius: 10, padding: "20px 18px" }}>
-                  <p style={{ margin: 0, fontSize: 13, color: WD, lineHeight: 1.6 }}>Du prüfst Jahresabschluss, KYC und Sicherheiten – und entscheidest, was ans Credit Office geht.</p>
+                  <p style={{ margin: 0, fontSize: 13, color: WD, lineHeight: 1.6 }}>{t.landing.caseEntschText}</p>
                 </div>
               </div>
 
-              {/* Step 3 – Konsequenz */}
+              {/* Step 3 */}
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <div style={{ width: 40, height: 40, borderRadius: "50%", background: N, border: `1.5px solid ${CY}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, zIndex: 1, flexShrink: 0 }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: CY }}>3</span>
                 </div>
-                <p style={{ margin: "0 0 14px", fontSize: 10, fontWeight: 700, color: CY, letterSpacing: "0.12em", textTransform: "uppercase" }}>Konsequenz</p>
+                <p style={{ margin: "0 0 14px", fontSize: 10, fontWeight: 700, color: CY, letterSpacing: "0.12em", textTransform: "uppercase" }}>{t.landing.caseStep3Label}</p>
                 <div style={{ width: "100%", background: "#131C31", border: "1px solid #243049", borderRadius: 10, padding: "20px 18px" }}>
-                  <p style={{ margin: 0, fontSize: 13, color: WD, lineHeight: 1.6, fontStyle: "italic", borderLeft: "3px solid #A78BFA", paddingLeft: 12 }}>Wirtschaftlich Berechtigte nicht vollständig dokumentiert. Bitte ergänzen.</p>
+                  <p style={{ margin: 0, fontSize: 13, color: WD, lineHeight: 1.6, fontStyle: "italic", borderLeft: "3px solid #A78BFA", paddingLeft: 12 }}>{t.landing.caseKonsqText}</p>
                 </div>
               </div>
 
-              {/* Step 4 – Auswertung */}
+              {/* Step 4 */}
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <div style={{ width: 40, height: 40, borderRadius: "50%", background: N, border: `1.5px solid ${CY}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, zIndex: 1, flexShrink: 0 }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: CY }}>4</span>
                 </div>
-                <p style={{ margin: "0 0 14px", fontSize: 10, fontWeight: 700, color: CY, letterSpacing: "0.12em", textTransform: "uppercase" }}>Auswertung</p>
+                <p style={{ margin: "0 0 14px", fontSize: 10, fontWeight: 700, color: CY, letterSpacing: "0.12em", textTransform: "uppercase" }}>{t.landing.caseStep4Label}</p>
                 <div style={{ width: "100%", background: "#131C31", border: "1px solid #243049", borderRadius: 10, padding: "20px 18px" }}>
-                  <p style={{ margin: 0, fontSize: 13, color: WD, lineHeight: 1.6 }}>Warum das Formular K hier zwingend war – und was du dir für den nächsten Fall merkst.</p>
+                  <p style={{ margin: 0, fontSize: 13, color: WD, lineHeight: 1.6 }}>{t.landing.caseAuswText}</p>
                 </div>
               </div>
 
@@ -816,7 +775,7 @@ function CaseExperience() {
             onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
           >
-            Situation ausprobieren <ChevronRight size={14} />
+            {t.landing.caseCta} <ChevronRight size={14} />
           </Link>
         </FadeIn>
       </div>
@@ -826,14 +785,9 @@ function CaseExperience() {
 
 /* ─── Section: Lifestyle ──────────────────────────────────────────────────── */
 
-const LIFESTYLE_SCENES = [
-  { place: "Zug", text: "7 Minuten bis Zürich." },
-  { place: "Gym", text: "Noch kurz ein Case vor dem nächsten Set." },
-  { place: "Café", text: "Kaffee holen. Fall lösen. Weiter." },
-  { place: "Zuhause", text: "Noch 5 Minuten? Noch ein Case." },
-];
-
 function Lifestyle() {
+  const { t } = useLanguage();
+  const lifestyleScenes = t.landing.lifestyleScenes;
   return (
     <section style={{ background: NM, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
@@ -848,15 +802,15 @@ function Lifestyle() {
               lineHeight: 1.15,
             }}
           >
-            Deine Ausbildung soll in<br />dein Leben passen.
+            {t.landing.lifestyleH2a}<br />{t.landing.lifestyleH2b}
           </h2>
           <p style={{ margin: "0 auto", maxWidth: 440, fontSize: 17, color: WD, lineHeight: 1.6 }}>
-            5 Minuten reichen. Jederzeit. Überall.
+            {t.landing.lifestyleSubtitle}
           </p>
         </FadeIn>
 
         <div style={{ display: "grid", gap: 16 }} className="sm:grid-cols-2 lg:grid-cols-4">
-          {LIFESTYLE_SCENES.map((s, i) => (
+          {lifestyleScenes.map((s, i) => (
             <FadeIn key={s.place} delay={i * 0.08}>
               <div
                 style={{
@@ -891,6 +845,7 @@ function Lifestyle() {
 
 function DemoVideo() {
   const { ref: zoomRef, scale } = useScrollZoom(0.86);
+  const { t } = useLanguage();
 
   return (
     <section
@@ -924,10 +879,10 @@ function DemoVideo() {
               lineHeight: 1.15,
             }}
           >
-            Sieh BankAcademy in 60 Sekunden
+            {t.landing.demoH2}
           </h2>
           <p style={{ margin: 0, fontSize: 17, color: WD, lineHeight: 1.6 }}>
-            Vom Fall bis zum Feedback.
+            {t.landing.demoSubtitle}
           </p>
         </FadeIn>
 
@@ -987,7 +942,7 @@ function DemoVideo() {
               e.currentTarget.style.boxShadow = `0 4px 20px ${CY}44`;
             }}
           >
-            Jetzt selbst testen <ChevronRight size={15} />
+            {t.landing.demoCta} <ChevronRight size={15} />
           </Link>
         </FadeIn>
       </div>
@@ -999,14 +954,15 @@ function DemoVideo() {
 
 function StatsBar() {
   const { ref, visible } = useInView();
+  const { t } = useLanguage();
   const c1 = useCountUp(150, visible);
   const c2 = useCountUp(6, visible);
   const c3 = useCountUp(3, visible);
 
   const STATS = [
-    { value: `${c1}+`, label: "Szenarien" },
-    { value: String(c2), label: "Module" },
-    { value: String(c3), label: "Schwierigkeitsstufen" },
+    { value: `${c1}+`, label: t.landing.statScenarios },
+    { value: String(c2), label: t.landing.statModules },
+    { value: String(c3), label: t.landing.statLevels },
   ];
 
   return (
@@ -1045,32 +1001,19 @@ function StatsBar() {
 
 /* ─── Section: Problem / Solution ────────────────────────────────────────── */
 
-const PROBLEMS = [
-  "Du sitzt im Unterricht und weisst nicht, was in der Bank wirklich läuft",
-  "Üben an echten Kunden? Keine Option.",
-  "Dein Schulbuch kennt keinen KYC-Prozess.",
-  "Fehler merkst du erst, wenn der Kunde schon draussen ist",
-  "Niemand zeigt dir wo die Fallen sind – bis du reinfällst",
-];
-
-const SOLUTIONS = [
-  "Echte Fälle. Kein Lehrbuch-Blabla.",
-  "Lern die Fallen kennen – bevor du reinfällst",
-  "Denken wie ein erfahrener Banker – ab Tag 1",
-  "Sofort sehen wo du falsch lagst – und warum",
-  "Passend zu deinem Lehrjahr und Schwerpunkt",
-];
-
 function ProblemSolution() {
+  const { t } = useLanguage();
+  const problems = t.landing.problems;
+  const solutions = t.landing.solutions;
   return (
     <section style={{ background: N, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <FadeIn className="text-center" style={{ marginBottom: 56 }}>
           <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
-            Warum BankAcademy
+            {t.landing.probEyebrow}
           </p>
           <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
-            Stop Theorie. Start Praxis.
+            {t.landing.probH2}
           </h2>
         </FadeIn>
 
@@ -1078,13 +1021,13 @@ function ProblemSolution() {
           <FadeIn delay={0.1}>
             <div style={{ borderRadius: 20, border: "1px solid rgba(239,68,68,0.25)", background: "rgba(239,68,68,0.05)", padding: 36, height: "100%" }}>
               <span style={{ display: "inline-block", background: "rgba(239,68,68,0.15)", color: "#f87171", borderRadius: 100, padding: "4px 14px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20 }}>
-                Das Problem
+                {t.landing.probBadge}
               </span>
               <h3 style={{ margin: "0 0 24px", fontSize: 20, fontWeight: 700, color: WH }}>
-                Schule erklärt. Die Bank erwartet.
+                {t.landing.probH3}
               </h3>
               <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
-                {PROBLEMS.map((p) => (
+                {problems.map((p) => (
                   <li key={p} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, color: WD, lineHeight: 1.5 }}>
                     <XCircle size={15} style={{ flexShrink: 0, marginTop: 1, color: "#f87171" }} /> {p}
                   </li>
@@ -1096,13 +1039,13 @@ function ProblemSolution() {
           <FadeIn delay={0.2}>
             <div style={{ borderRadius: 20, border: `1px solid ${CY}33`, background: `${CY}08`, padding: 36, height: "100%" }}>
               <span style={{ display: "inline-block", background: `${CY}20`, color: CY, borderRadius: 100, padding: "4px 14px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20 }}>
-                Die Lösung
+                {t.landing.solBadge}
               </span>
               <h3 style={{ margin: "0 0 24px", fontSize: 20, fontWeight: 700, color: WH }}>
-                Praxis von Tag 1.
+                {t.landing.solH3}
               </h3>
               <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
-                {SOLUTIONS.map((s) => (
+                {solutions.map((s) => (
                   <li key={s} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, color: WD, lineHeight: 1.5 }}>
                     <CheckCircle2 size={15} style={{ flexShrink: 0, marginTop: 1, color: CY }} /> {s}
                   </li>
@@ -1118,37 +1061,22 @@ function ProblemSolution() {
 
 /* ─── Section: How it works ───────────────────────────────────────────────── */
 
-const HOW_STEPS: { num: string; Icon: LucideIcon; title: string; text: string }[] = [
-  {
-    num: "01",
-    Icon: ClipboardList,
-    title: "Szenario erhalten",
-    text: "Ein realistischer Fall landet auf deinem Tisch – KYC, Kredit, Zahlungsverkehr. Wie in der echten Bank.",
-  },
-  {
-    num: "02",
-    Icon: Scale,
-    title: "Entscheidung treffen",
-    text: "Du entscheidest wie ein echter Banker – aber ohne Konsequenzen wenn's mal schiefläuft.",
-  },
-  {
-    num: "03",
-    Icon: Lightbulb,
-    title: "Den Profi-Blick entwickeln",
-    text: "Sofortiges Feedback: Was war falsch? Warum? Und wie würde es ein Profi lösen?",
-  },
-];
-
 function HowItWorks() {
+  const { t } = useLanguage();
+  const HOW_STEPS = [
+    { num: "01", Icon: ClipboardList, title: t.landing.howSteps[0].title, text: t.landing.howSteps[0].text },
+    { num: "02", Icon: Scale, title: t.landing.howSteps[1].title, text: t.landing.howSteps[1].text },
+    { num: "03", Icon: Lightbulb, title: t.landing.howSteps[2].title, text: t.landing.howSteps[2].text },
+  ];
   return (
     <section id="how-it-works" style={{ background: NM, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <FadeIn style={{ textAlign: "center", marginBottom: 60 }}>
           <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
-            So funktioniert es
+            {t.landing.howEyebrow}
           </p>
           <h2 style={{ margin: "0 0 10px", fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
-            So läuft&apos;s ab.
+            {t.landing.howH2}
           </h2>
         </FadeIn>
 
@@ -1232,25 +1160,26 @@ function HowItWorks() {
 /* ─── Section: Founder Story ──────────────────────────────────────────────── */
 
 function FounderStory() {
+  const { t } = useLanguage();
   return (
     <section style={{ background: N, padding: "148px 24px" }}>
       <div style={{ maxWidth: 680, margin: "0 auto" }}>
         <FadeIn>
           <div style={{ borderLeft: `3px solid ${CY}66`, paddingLeft: 28 }}>
             <p style={{ margin: "0 0 12px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
-              Warum ich BankAcademy gebaut habe
+              {t.landing.founderEyebrow}
             </p>
             <h2 style={{ margin: "0 0 32px", fontSize: "clamp(24px,3.5vw,36px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH, lineHeight: 1.25 }}>
-              Weil ich das Tool vermisst habe,<br />das ich selbst gebraucht hätte.
+              {t.landing.founderH2a}<br />{t.landing.founderH2b}
             </h2>
             <p style={{ margin: "0 0 32px", fontSize: "clamp(20px, 2.4vw, 28px)", lineHeight: 1.55, color: WD, fontWeight: 400 }}>
-              In meiner Banklehre war Theorie kein Problem. Das Problem war der erste echte Kunde.
+              {t.landing.founderP1}
             </p>
             <p style={{ margin: "0 0 32px", fontSize: "clamp(20px, 2.4vw, 28px)", lineHeight: 1.55, color: WD, fontWeight: 400 }}>
-              Kein Tool, kein Trainer, keine Antwort auf die Frage: Was tue ich jetzt wirklich?
+              {t.landing.founderP2}
             </p>
             <p style={{ margin: "0 0 44px", fontSize: "clamp(20px, 2.4vw, 28px)", lineHeight: 1.55, color: CY, fontWeight: 700 }}>
-              Also habe ich das gebaut, was mir damals gefehlt hat.
+              {t.landing.founderP3}
             </p>
             <Link
               href="/demo"
@@ -1270,7 +1199,7 @@ function FounderStory() {
               onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
             >
-              Ausprobieren, was mir damals gefehlt hat <ChevronRight size={15} />
+              {t.landing.founderCta} <ChevronRight size={15} />
             </Link>
           </div>
         </FadeIn>
@@ -1281,23 +1210,23 @@ function FounderStory() {
 
 /* ─── Section: Warum BankAcademy ──────────────────────────────────────────── */
 
-const WARUM_ITEMS: { Icon: LucideIcon; title: string; desc: string }[] = [
-  { Icon: Landmark, title: "Aus der Praxis heraus", desc: "Entwickelt von jemandem, der die Banklehre selbst gemacht hat – keine Theorie aus dem Lehrbuch, sondern reale Erfahrung." },
-  { Icon: Shield, title: "Schweizer Bankpraxis", desc: "Ausgerichtet auf die Praxis des Schweizer Bankings und relevante regulatorische Grundlagen." },
-  { Icon: Zap, title: "Feedback, das mitdenkt", desc: "Sofortiges, personalisiertes Feedback nach jedem Szenario – wie ein persönlicher Ausbildner, der immer verfügbar ist." },
-  { Icon: TrendingUp, title: "Wächst mit deinem Level", desc: "Der Schwierigkeitsgrad passt sich deinem Level an – von Einsteiger bis Challenge-Niveau für die Abschlussprüfung." },
-];
-
 function WarumBankAcademy() {
+  const { t } = useLanguage();
+  const WARUM_ITEMS = [
+    { Icon: Landmark, title: t.landing.warumItems[0].title, desc: t.landing.warumItems[0].desc },
+    { Icon: Shield, title: t.landing.warumItems[1].title, desc: t.landing.warumItems[1].desc },
+    { Icon: Zap, title: t.landing.warumItems[2].title, desc: t.landing.warumItems[2].desc },
+    { Icon: TrendingUp, title: t.landing.warumItems[3].title, desc: t.landing.warumItems[3].desc },
+  ];
   return (
     <section style={{ background: NM, padding: "96px 24px" }}>
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
         <FadeIn style={{ textAlign: "center", marginBottom: 56 }}>
           <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
-            Warum BankAcademy
+            {t.landing.warumEyebrow}
           </p>
           <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH, lineHeight: 1.2 }}>
-            Gebaut für den Moment,<br />in dem Theorie nicht mehr reicht.
+            {t.landing.warumH2a}<br />{t.landing.warumH2b}
           </h2>
         </FadeIn>
 
@@ -1366,7 +1295,7 @@ function WarumBankAcademy() {
             onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
           >
-            Banking-Skills testen <ChevronRight size={15} />
+            {t.landing.warumCta} <ChevronRight size={15} />
           </button>
         </FadeIn>
       </div>
@@ -1376,25 +1305,25 @@ function WarumBankAcademy() {
 
 /* ─── Section: Features ───────────────────────────────────────────────────── */
 
-const FEATURE_CARDS: { Icon: LucideIcon; title: string; text: string }[] = [
-  { Icon: Target, title: "Praxisnahe Szenarien", text: "150+ Fälle aus dem echten Banking-Alltag – nicht aus dem Lehrbuch" },
-  { Icon: AlertTriangle, title: "Typische Fehler", text: "Lerne die häufigsten Fehler kennen bevor du sie in der Praxis machst" },
-  { Icon: Scale, title: "Operative Denkweise", text: "Verstehe wie erfahrene Banker denken – nicht nur was sie tun" },
-  { Icon: BarChart2, title: "Kompetenzen im Blick", text: "Sieh, welche Banking-Kompetenzen du bereits beherrschst – und wo du noch unsicher bist." },
-  { Icon: GraduationCap, title: "Challenge-Vorbereitung", text: "Spezifische Level-3 Szenarien für die Abschlussprüfung" },
-  { Icon: MessageSquare, title: "Community", text: "Tausch dich mit anderen Lernenden aus und lerne voneinander" },
-];
-
 function Features() {
+  const { t } = useLanguage();
+  const FEATURE_CARDS = [
+    { Icon: Target, title: t.landing.featureCards[0].title, text: t.landing.featureCards[0].text },
+    { Icon: AlertTriangle, title: t.landing.featureCards[1].title, text: t.landing.featureCards[1].text },
+    { Icon: Scale, title: t.landing.featureCards[2].title, text: t.landing.featureCards[2].text },
+    { Icon: BarChart2, title: t.landing.featureCards[3].title, text: t.landing.featureCards[3].text },
+    { Icon: GraduationCap, title: t.landing.featureCards[4].title, text: t.landing.featureCards[4].text },
+    { Icon: MessageSquare, title: t.landing.featureCards[5].title, text: t.landing.featureCards[5].text },
+  ];
   return (
     <section id="features" style={{ background: N, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <FadeIn style={{ textAlign: "center", marginBottom: 56 }}>
           <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
-            Features
+            {t.landing.featEyebrow}
           </p>
           <h2 style={{ margin: 0, fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
-            Warum&apos;s funktioniert.
+            {t.landing.featH2}
           </h2>
         </FadeIn>
 
@@ -1486,60 +1415,61 @@ function ModuleItem({ Icon, title, desc }: { Icon: LucideIcon; title: string; de
 }
 
 function Modules({ onStart: _onStart }: { onStart: () => void }) {
+  const { t } = useLanguage();
   return (
     <section id="module" style={{ background: NM, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <FadeIn style={{ textAlign: "center", marginBottom: 56 }}>
           <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
-            Inhalte
+            {t.landing.modEyebrow}
           </p>
           <h2 style={{ margin: "0 0 12px", fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
-            Deine Banking-Welt.
+            {t.landing.modH2}
           </h2>
           <p style={{ margin: "0 auto", maxWidth: 500, fontSize: 16, color: WD, lineHeight: 1.6 }}>
-            Alle Module sind so aufgebaut wie dein Bankalltag – mit echten Fällen, die dich weiterbringen.
+            {t.landing.modSubtitle}
           </p>
         </FadeIn>
 
         <div style={{ display: "grid", gap: 40 }} className="sm:grid-cols-2">
           <FadeIn delay={0.1}>
             <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: WM }}>
-              Front Office
+              {t.landing.modFrontOffice}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <ModuleItem Icon={User} title="Privatkunde" desc="Kontoeröffnung, Sparen & Konto, Zahlungsverkehr, 3a, Hypotheken" />
-              <ModuleItem Icon={Building2} title="Firmenkunde" desc="Jahresabschluss, Tragbarkeit, Hypothek Verlängerung" />
-              <ModuleItem Icon={TrendingUp} title="Anlagekunde" desc="Anlegerprofil, Obligationen, Aktien, Fonds & ETFs" />
+              <ModuleItem Icon={User} title={t.landing.modPKTitle} desc={t.landing.modPKDesc} />
+              <ModuleItem Icon={Building2} title={t.landing.modFKTitle} desc={t.landing.modFKDesc} />
+              <ModuleItem Icon={TrendingUp} title={t.landing.modAKTitle} desc={t.landing.modAKDesc} />
             </div>
           </FadeIn>
 
           <FadeIn delay={0.2}>
             <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: WM }}>
-              Back Office
+              {t.landing.modBackOffice}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <ModuleItem Icon={Landmark} title="Banking Operations" desc="KYC / Compliance, Zahlungsverkehr, Mahnwesen" />
-              <ModuleItem Icon={CreditCard} title="Credit Operations" desc="Vertragserstellung, Auszahlung, Verlängerung, Kündigung" />
+              <ModuleItem Icon={Landmark} title={t.landing.modBOTitle} desc={t.landing.modBODesc} />
+              <ModuleItem Icon={CreditCard} title={t.landing.modCOTitle} desc={t.landing.modCODesc} />
             </div>
           </FadeIn>
 
           <FadeIn delay={0.25}>
             <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: WM }}>
-              Challenge-Vorbereitung
+              {t.landing.modChallengeSect}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <ModuleItem Icon={GraduationCap} title="Challenge-Modus" desc="Prüfungsrelevante Level-3 Szenarien aller Module" />
-              <ModuleItem Icon={Map} title="Lernpfad" desc="Strukturierter Pfad von Grundlagen bis zur Abschlussprüfung" />
+              <ModuleItem Icon={GraduationCap} title={t.landing.modCMTitle} desc={t.landing.modCMDesc} />
+              <ModuleItem Icon={Map} title={t.landing.modLPTitle} desc={t.landing.modLPDesc} />
             </div>
           </FadeIn>
 
           <FadeIn delay={0.3}>
             <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: WM }}>
-              Simulationen
+              {t.landing.modSimSect}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <ModuleItem Icon={Users} title="Anlageberatung" desc="Vollständiges Beratungsgespräch mit VideoCall-Simulation" />
-              <ModuleItem Icon={Home} title="Hypothek & Kontoeröffnung" desc="Interaktive Simulationen mit Kundendialogen" />
+              <ModuleItem Icon={Users} title={t.landing.modAnlTitle} desc={t.landing.modAnlDesc} />
+              <ModuleItem Icon={Home} title={t.landing.modHypTitle} desc={t.landing.modHypDesc} />
             </div>
           </FadeIn>
         </div>
@@ -1564,7 +1494,7 @@ function Modules({ onStart: _onStart }: { onStart: () => void }) {
             onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
           >
-            Alle Fälle entdecken <ChevronRight size={15} />
+            {t.landing.modCta} <ChevronRight size={15} />
           </button>
         </FadeIn>
       </div>
@@ -1574,14 +1504,14 @@ function Modules({ onStart: _onStart }: { onStart: () => void }) {
 
 /* ─── Section: For Banks ──────────────────────────────────────────────────── */
 
-const B2B_CARDS: { Icon: LucideIcon; title: string; text: string }[] = [
-  { Icon: BarChart2, title: "Lernlücken erkennen", text: "Sehen Sie, wo Lernende noch unsicher sind – und fördern Sie gezielt, bevor es zählt." },
-  { Icon: Target, title: "Praxistransfer nachweisen", text: "Zeigen Sie, wie Lernende Wissen in realen Banksituationen anwenden." },
-  { Icon: Zap, title: "Sofort einsatzbereit", text: "Keine Installation, kein Setup – direkt im Browser, überall verfügbar." },
-  { Icon: Shield, title: "Skalierbar ohne Mehraufwand", text: "Lernende trainieren selbstständig – ohne zusätzliche Betreuungszeit für jede Übung." },
-];
-
 function ForBanks({ onBankContact }: { onBankContact: () => void }) {
+  const { t } = useLanguage();
+  const B2B_CARDS = [
+    { Icon: BarChart2, title: t.landing.b2bCards[0].title, text: t.landing.b2bCards[0].text },
+    { Icon: Target, title: t.landing.b2bCards[1].title, text: t.landing.b2bCards[1].text },
+    { Icon: Zap, title: t.landing.b2bCards[2].title, text: t.landing.b2bCards[2].text },
+    { Icon: Shield, title: t.landing.b2bCards[3].title, text: t.landing.b2bCards[3].text },
+  ];
   return (
     <section id="fuer-banken" style={{ background: N, padding: "96px 24px" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
@@ -1589,15 +1519,15 @@ function ForBanks({ onBankContact }: { onBankContact: () => void }) {
           {/* Text side */}
           <FadeIn delay={0.1}>
             <span style={{ display: "inline-block", background: `${PU}20`, color: PU, borderRadius: 100, padding: "4px 14px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>
-              Für Banken & Ausbildner
+              {t.landing.bankBadge}
             </span>
             <h2 style={{ margin: "0 0 16px", fontSize: "clamp(26px,4vw,36px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH, lineHeight: 1.15 }}>
-              Mehr Praxistransfer.
+              {t.landing.bankH2a}
               <br />
-              Ohne mehr Betreuungsaufwand.
+              {t.landing.bankH2b}
             </h2>
             <p style={{ margin: "0 0 28px", fontSize: 16, color: WD, lineHeight: 1.65 }}>
-              BankAcademy trainiert Ihre Lernenden selbstständig – mit realen Szenarien, messbarem Fortschritt und ohne zusätzliche Ressourcen von Ihrer Seite.
+              {t.landing.bankText}
             </p>
             <button
               onClick={onBankContact}
@@ -1619,7 +1549,7 @@ function ForBanks({ onBankContact }: { onBankContact: () => void }) {
               onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.04)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
             >
-              Pilot besprechen <ChevronRight size={15} />
+              {t.landing.bankCta} <ChevronRight size={15} />
             </button>
           </FadeIn>
 
@@ -1663,18 +1593,19 @@ function ForBanks({ onBankContact }: { onBankContact: () => void }) {
 /* ─── Section: Contact ────────────────────────────────────────────────────── */
 
 function ContactSection({ initialTab }: { initialTab?: "lernender" | "bank" }) {
+  const { t } = useLanguage();
   return (
     <section id="kontakt" style={{ background: NM, padding: "96px 24px" }}>
       <div style={{ maxWidth: 640, margin: "0 auto" }}>
         <FadeIn style={{ textAlign: "center", marginBottom: 40 }}>
           <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: CY }}>
-            Kontakt
+            {t.landing.contactEyebrow}
           </p>
           <h2 style={{ margin: "0 0 10px", fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
-            Schreib uns.
+            {t.landing.contactH2}
           </h2>
           <p style={{ margin: 0, fontSize: 16, color: WD, lineHeight: 1.6 }}>
-            Egal ob Lernende/r oder Bank – wir freuen uns von dir zu hören.
+            {t.landing.contactSubtitle}
           </p>
         </FadeIn>
 
@@ -1696,6 +1627,7 @@ function ContactSection({ initialTab }: { initialTab?: "lernender" | "bank" }) {
 /* ─── Section: Final CTA ──────────────────────────────────────────────────── */
 
 function FinalCTA({ onStart }: { onStart: () => void }) {
+  const { t } = useLanguage();
   return (
     <section
       id="preise"
@@ -1739,10 +1671,10 @@ function FinalCTA({ onStart }: { onStart: () => void }) {
               lineHeight: 1.1,
             }}
           >
-            Dein nächster Kunde wartet. Bist du bereit?
+            {t.landing.ctaH2}
           </h2>
           <p style={{ margin: "0 0 36px", fontSize: 18, color: WD, lineHeight: 1.6 }}>
-            Starte jetzt und trainiere reale Banking-Situationen.
+            {t.landing.ctaSubtitle}
           </p>
           <Link
             href="/demo"
@@ -1769,7 +1701,7 @@ function FinalCTA({ onStart }: { onStart: () => void }) {
               e.currentTarget.style.boxShadow = `0 8px 40px ${CY}55`;
             }}
           >
-            Banking-Skills testen <ChevronRight size={18} />
+            {t.landing.ctaBtn} <ChevronRight size={18} />
           </Link>
         </div>
       </FadeIn>
@@ -1779,6 +1711,7 @@ function FinalCTA({ onStart }: { onStart: () => void }) {
 
 /* ─── Access Code Modal ──────────────────────────────────────────────────── */
 function AccessCodeModal({ onClose }: { onClose: () => void }) {
+  const { t } = useLanguage();
   const [code, setCode] = useState("");
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -1874,10 +1807,10 @@ function AccessCodeModal({ onClose }: { onClose: () => void }) {
             Bank<span style={{ color: "#00C9B1" }}>Academy</span>
           </p>
           <h2 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 700, color: "#111827", letterSpacing: "-0.3px" }}>
-            Zugangscode eingeben
+            {t.landing.accessTitle}
           </h2>
           <p style={{ margin: 0, fontSize: 14, color: "#6b7280", lineHeight: 1.5 }}>
-            Gib deinen Code ein, um alle Module freizuschalten.
+            {t.landing.accessSubtitle}
           </p>
         </div>
 
@@ -1907,7 +1840,7 @@ function AccessCodeModal({ onClose }: { onClose: () => void }) {
             onBlur={(e) => { if (!error) e.currentTarget.style.borderColor = "#e5e7eb"; }}
           />
           {error && (
-            <p style={{ margin: 0, fontSize: 13, color: "#ef4444" }}>Code ungültig</p>
+            <p style={{ margin: 0, fontSize: 13, color: "#ef4444" }}>{t.landing.accessError}</p>
           )}
           <button
             type="submit"
@@ -1926,14 +1859,14 @@ function AccessCodeModal({ onClose }: { onClose: () => void }) {
               marginTop: 4,
             }}
           >
-            {loading ? "Prüfen…" : "Freischalten →"}
+            {loading ? t.landing.accessLoading : t.landing.accessSubmit}
           </button>
         </form>
 
         <p style={{ margin: "20px 0 0", fontSize: 12, color: "#9ca3af", textAlign: "center" }}>
-          Noch keinen Code?{" "}
+          {t.landing.accessNoCode}{" "}
           <a href="/kontakt" style={{ color: "#6b7280", textDecoration: "underline" }}>
-            Vollzugang anfragen →
+            {t.landing.accessRequest}
           </a>
         </p>
       </div>
@@ -1943,6 +1876,7 @@ function AccessCodeModal({ onClose }: { onClose: () => void }) {
 
 /* ─── Login Modal ────────────────────────────────────────────────────────── */
 function LoginModal({ onClose }: { onClose: () => void }) {
+  const { t } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
   const [showForgotMsg, setShowForgotMsg] = useState(false);
 
@@ -2019,10 +1953,10 @@ function LoginModal({ onClose }: { onClose: () => void }) {
             Bank<span style={{ color: "#00C9B1" }}>Academy</span>
           </p>
           <h2 style={{ margin: "0 0 8px", fontSize: 21, fontWeight: 700, color: "#111827", letterSpacing: "-0.3px" }}>
-            Willkommen zurück
+            {t.landing.loginTitle}
           </h2>
           <p style={{ margin: 0, fontSize: 14, color: "#6b7280", lineHeight: 1.5 }}>
-            Melde dich mit deinen Zugangsdaten an
+            {t.landing.loginSubtitle}
           </p>
         </div>
 
@@ -2031,7 +1965,7 @@ function LoginModal({ onClose }: { onClose: () => void }) {
           {/* Email */}
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: "block", marginBottom: 6, fontSize: 13, fontWeight: 600, color: "#374151" }}>
-              E-Mail Adresse
+              {t.landing.loginEmail}
             </label>
             <input
               type="email"
@@ -2057,7 +1991,7 @@ function LoginModal({ onClose }: { onClose: () => void }) {
           {/* Password */}
           <div style={{ marginBottom: showForgotMsg ? 8 : 20 }}>
             <label style={{ display: "block", marginBottom: 6, fontSize: 13, fontWeight: 600, color: "#374151" }}>
-              Passwort
+              {t.landing.loginPassword}
             </label>
             <div style={{ position: "relative" }}>
               <input
@@ -2121,12 +2055,12 @@ function LoginModal({ onClose }: { onClose: () => void }) {
                   textUnderlineOffset: 3,
                 }}
               >
-                Passwort vergessen?
+                {t.landing.loginForgot}
               </button>
             </div>
             {showForgotMsg && (
               <div style={{ marginTop: 10, padding: "10px 14px", background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 10, fontSize: 13, color: "#374151" }}>
-                Bitte kontaktiere deinen Ausbildner.
+                {t.landing.loginForgotMsg}
               </div>
             )}
           </div>
@@ -2150,14 +2084,14 @@ function LoginModal({ onClose }: { onClose: () => void }) {
             onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#0a1438"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#0D1B4B"; }}
           >
-            Anmelden →
+            {t.landing.loginSubmit}
           </button>
         </form>
 
         {/* Divider */}
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
           <div style={{ flex: 1, height: 1, background: "#e5e7eb" }} />
-          <span style={{ fontSize: 13, color: "#9ca3af" }}>oder</span>
+          <span style={{ fontSize: 13, color: "#9ca3af" }}>{t.landing.loginOr}</span>
           <div style={{ flex: 1, height: 1, background: "#e5e7eb" }} />
         </div>
 
@@ -2180,12 +2114,12 @@ function LoginModal({ onClose }: { onClose: () => void }) {
           onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#f0f2fa"; }}
           onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
         >
-          Kostenlos registrieren →
+          {t.landing.loginRegister}
         </button>
 
         {/* Footer note */}
         <p style={{ margin: 0, fontSize: 12, color: "#9ca3af", textAlign: "center", lineHeight: 1.5 }}>
-          Noch kein Konto? Dein Ausbildner richtet deinen Zugang ein.
+          {t.landing.loginFooter}
         </p>
       </div>
     </div>
@@ -2195,25 +2129,35 @@ function LoginModal({ onClose }: { onClose: () => void }) {
 /* ─── Footer ──────────────────────────────────────────────────────────────── */
 
 function Footer({ onNav }: { onNav: (id: string) => void }) {
-  const COLS: Record<string, { label: string; action: () => void }[]> = {
-    Produkt: [
-      { label: "Features", action: () => onNav("features") },
-      { label: "Module", action: () => onNav("module") },
-      { label: "Für Banken", action: () => onNav("fuer-banken") },
-      { label: "Demo", action: () => document.getElementById("demo-video")?.scrollIntoView({ behavior: "smooth" }) },
-    ],
-    Ressourcen: [
-      { label: "Glossar", action: () => { window.location.href = "/glossar"; } },
-      { label: "Community", action: () => { window.location.href = "/community"; } },
-      { label: "Challenge-Modus", action: () => { window.location.href = "/challenge-modus"; } },
-    ],
-    Legal: [
-      { label: "Impressum", action: () => { window.location.href = "/impressum"; } },
-      { label: "Datenschutz", action: () => { window.location.href = "/datenschutz"; } },
-      { label: "Nutzungsbedingungen", action: () => { window.location.href = "/nutzungsbedingungen"; } },
-      { label: "Kontakt", action: () => { window.location.href = "/kontakt"; } },
-    ],
-  };
+  const { t } = useLanguage();
+  const COLS = [
+    {
+      cat: t.landing.footerColProduct,
+      links: [
+        { label: t.landing.footerFeatures, action: () => onNav("features") },
+        { label: t.landing.footerModule, action: () => onNav("module") },
+        { label: t.landing.footerFuerBanken, action: () => onNav("fuer-banken") },
+        { label: t.landing.footerDemo, action: () => document.getElementById("demo-video")?.scrollIntoView({ behavior: "smooth" }) },
+      ],
+    },
+    {
+      cat: t.landing.footerColResources,
+      links: [
+        { label: t.landing.footerGlossar, action: () => { window.location.href = "/glossar"; } },
+        { label: t.landing.footerCommunity, action: () => { window.location.href = "/community"; } },
+        { label: t.landing.footerChallenge, action: () => { window.location.href = "/challenge-modus"; } },
+      ],
+    },
+    {
+      cat: "Legal",
+      links: [
+        { label: t.landing.footerImpressum, action: () => { window.location.href = "/impressum"; } },
+        { label: t.landing.footerDatenschutz, action: () => { window.location.href = "/datenschutz"; } },
+        { label: t.landing.footerNutzung, action: () => { window.location.href = "/nutzungsbedingungen"; } },
+        { label: t.landing.footerKontakt, action: () => { window.location.href = "/kontakt"; } },
+      ],
+    },
+  ];
 
   return (
     <footer style={{ background: N, borderTop: `1px solid ${BR}` }}>
@@ -2224,16 +2168,14 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
             <p style={{ margin: "0 0 12px", fontSize: 20, fontWeight: 800, letterSpacing: "-0.5px", color: WH }}>
               Bank<span style={{ color: CY }}>Academy</span>
             </p>
-            <p style={{ margin: "0 0 4px", fontSize: 13, color: WD, lineHeight: 1.5 }}>
-              Der digitale Praxisausbildner
-              <br />
-              für die Banklehre
+            <p style={{ margin: "0 0 4px", fontSize: 13, color: WD, lineHeight: 1.5, whiteSpace: "pre-line" }}>
+              {t.landing.footerTagline}
             </p>
-            <p style={{ margin: "8px 0 0", fontSize: 12, color: WM }}>© 2026 BankAcademy</p>
+            <p style={{ margin: "8px 0 0", fontSize: 12, color: WM }}>{t.landing.footerCopyrightShort}</p>
           </div>
 
           {/* Link columns */}
-          {Object.entries(COLS).map(([cat, links]) => (
+          {COLS.map(({ cat, links }) => (
             <div key={cat}>
               <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.09em", color: WM }}>
                 {cat}
@@ -2278,14 +2220,14 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
           }}
         >
           <p style={{ margin: 0, fontSize: 12, color: WM }}>
-            © 2026 BankAcademy. Alle Rechte vorbehalten.
+            {t.landing.footerCopyrightFull}
           </p>
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "center" }}>
             {[
-              { label: "Impressum", href: "/impressum" },
-              { label: "Datenschutz", href: "/datenschutz" },
-              { label: "Nutzungsbedingungen", href: "/nutzungsbedingungen" },
-              { label: "Kontakt", href: "/kontakt" },
+              { label: t.landing.footerImpressum, href: "/impressum" },
+              { label: t.landing.footerDatenschutz, href: "/datenschutz" },
+              { label: t.landing.footerNutzung, href: "/nutzungsbedingungen" },
+              { label: t.landing.footerKontakt, href: "/kontakt" },
             ].map(({ label, href }) => (
               <a
                 key={href}
@@ -2308,8 +2250,18 @@ function Footer({ onNav }: { onNav: (id: string) => void }) {
 
 export default function LandingPage() {
   const scrolled = useScrolled();
+  const { setLang } = useLanguage();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [contactTab, setContactTab] = useState<"lernender" | "bank">("lernender");
+
+  useEffect(() => {
+    try {
+      if (localStorage.getItem("ba-lang")) return;
+      const bl = navigator.language.toLowerCase();
+      if (bl.startsWith("fr")) setLang("fr");
+      else if (bl.startsWith("it")) setLang("it");
+    } catch { /* ignore */ }
+  }, [setLang]);
 
   function scrollTo(id: string) {
     setMobileOpen(false);
