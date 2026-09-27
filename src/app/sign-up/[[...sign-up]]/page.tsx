@@ -28,7 +28,7 @@ export default function SignUpPage() {
         Bank<span style={{ color: "#00D4B8" }}>Academy</span>
       </a>
 
-      <SignUp />
+      <SignUp fallbackRedirectUrl="/onboarding" />
 
       <p
         style={{

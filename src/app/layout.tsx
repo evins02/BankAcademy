@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider afterSignInUrl="/dashboard" afterSignUpUrl="/onboarding">
       <LanguageProvider>
       <html lang="de">
         <body
