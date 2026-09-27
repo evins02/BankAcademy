@@ -5,6 +5,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Mein Lernen",
     items: [
       { label: "Dashboard", icon: "LayoutDashboard", href: "/dashboard" },
+      { label: "Modulübersicht", icon: "Layers", href: "/modul-uebersicht" },
       { label: "Statistiken", icon: "BarChart2", href: "/statistiken" },
       { label: "Badges", icon: "Award", href: "/badges" },
       { label: "Fehler Übersicht", icon: "AlertCircle", href: "/fehler-uebersicht" },

@@ -28,6 +28,7 @@ import {
   Map,
   ClipboardList,
   Briefcase,
+  Layers,
   PanelLeftClose,
   PanelLeftOpen,
   type LucideIcon,
@@ -60,6 +61,7 @@ const ICONS: Record<string, LucideIcon> = {
   Map,
   ClipboardList,
   Briefcase,
+  Layers,
 };
 
 interface UserProfile {
