@@ -104,6 +104,7 @@ export const NAV_GROUPS: NavGroup[] = [
               { label: "Währungsrisiken", href: "/anlagekunde/waehrungsrisiken" },
               { label: "Depotauszug lesen", href: "/anlagekunde/depotauszug" },
               { label: "Steuerliche Aspekte", href: "/anlagekunde/steuern" },
+              { label: "Investmentbanking", href: "/anlagekunde/investmentbanking" },
             ],
           },
         ],
