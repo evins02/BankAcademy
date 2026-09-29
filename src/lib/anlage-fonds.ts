@@ -3,6 +3,72 @@ export type { LevelNum, OptionKey, SubmoduleCase, SubmoduleLevel } from "./anlag
 
 const L1_CASES: SubmoduleCase[] = [
   {
+    id: "1.2",
+    level: 1,
+    title: "Was ist ein Anlagefonds?",
+    situation:
+      "Neukunde Ben, 26 Jahre, hat zum ersten Mal von Anlagefonds gehört. Er fragt: «Wie funktioniert das genau – ich zahle Geld ein und dann?»",
+    question: "Was beschreibt das Grundprinzip eines Anlagefonds korrekt?",
+    options: [
+      {
+        key: "A",
+        text: "Ein Fonds ist ein Sparkonto mit garantierter Rendite, verwaltet von der Bank",
+      },
+      {
+        key: "B",
+        text: "Viele Anleger legen Geld zusammen, ein Fondsmanager investiert es breit gestreut – jeder Anleger hält Fondsanteile proportional zu seiner Einlage",
+      },
+      {
+        key: "C",
+        text: "Fonds sind nur für institutionelle Anleger mit mindestens CHF 100'000 zugänglich",
+      },
+      {
+        key: "D",
+        text: "Ein Fonds kauft nur Schweizer Aktien und schüttet den Gewinn jährlich aus",
+      },
+    ],
+    correct: "B",
+    feedback:
+      "Anlagefonds = kollektive Kapitalanlage. Prinzip: Tausende Anleger bündeln ihr Kapital. Ein professioneller Fondsmanager investiert es in ein diversifiziertes Portfolio (Aktien, Obligationen, Immobilien etc.). Jeder Anleger hält Fondsanteile – wächst der Fonds, steigt der Anteilswert. Rechtlich: Sondervermögen, getrennt von der Bank – bei Bankpleite geschützt.",
+    warum:
+      "Sondervermögen-Schutz ist ein wesentlicher Vorteil: Das Fondsvermögen gehört den Anlegern, nicht der Fondsgesellschaft oder Depotbank. Bei deren Insolvenz ist das Fondsvermögen geschützt. Dies unterscheidet Fonds von strukturierten Produkten (z.B. Zertifikaten), wo Emittentenrisiko besteht.",
+    merksatz: "Fonds = kollektive Anlage. Sondervermögen = bei Bankpleite geschützt.",
+    rechtsgrundlage: "KAG Art. 25 (Sondervermögen), Art. 26 (Schutz der Anleger)",
+  },
+  {
+    id: "1.3",
+    level: 1,
+    title: "SRRI Risikoklassen lesen",
+    situation:
+      "Elena schaut sich im KID (Key Information Document) eines Fonds die Risikoklasse an. Dort steht: SRRI 6 (auf einer Skala von 1 bis 7). Elena ist 30 Jahre alt, Risikotyp «ausgewogen», Anlagehorizont 5 Jahre.",
+    question: "Was bedeutet SRRI 6 und passt dieser Fonds zu Elena?",
+    options: [
+      {
+        key: "A",
+        text: "SRRI 6 ist risikoreich – hohe Volatilität. Für Elenas ausgewogenes Profil ist das zu riskant",
+      },
+      {
+        key: "B",
+        text: "SRRI 6 ist konservativ – der Fonds investiert hauptsächlich in sichere Obligationen",
+      },
+      {
+        key: "C",
+        text: "SRRI ist nur ein Marketingbegriff ohne regulatorische Bedeutung",
+      },
+      {
+        key: "D",
+        text: "SRRI 6 passt gut zu Elena – ein ausgewogener Anleger kann immer alle Risikoklassen wählen",
+      },
+    ],
+    correct: "A",
+    feedback:
+      "SRRI (Synthetic Risk and Reward Indicator) misst die historische Volatilität: Skala 1 (sehr gering) bis 7 (sehr hoch). SRRI 6 = hohe Volatilität, wahrscheinlich Aktien-/Emerging-Market-Fonds. Für Elena («ausgewogen») passt SRRI 3–5 besser. Empfehlung eines SRRI-6-Fonds für einen ausgewogenen Anleger wäre eine FIDLEG-Eignungsverletzung.",
+    warum:
+      "SRRI muss im KID auf Seite 1 ausgewiesen werden (PRIIP-Verordnung). Für die Eignungsprüfung nach FIDLEG müssen Risikoprofil und Risikoklasse des Produkts übereinstimmen. In der Schweiz: gleiche Logik wie in der EU, da FIDLEG eng an MiFID II angelehnt.",
+    merksatz: "SRRI 1–7: je höher, desto risikoreicher. Immer mit Risikoprofil des Kunden abgleichen.",
+    rechtsgrundlage: "FIDLEG Art. 12 (Eignungsprüfung), KAG Art. 76 ff. (KID-Pflicht)",
+  },
+  {
     id: "1.1",
     level: 1,
     title: "TER und Kostenwirkung",
@@ -45,6 +111,87 @@ const L1_CASES: SubmoduleCase[] = [
 
 const L2_CASES: SubmoduleCase[] = [
   {
+    id: "2.2",
+    level: 2,
+    title: "Ausgabeaufschlag und Rücknahmegebühr",
+    situation:
+      "Herr Leuthold investiert CHF 20'000 in Fonds X. Ausgabeaufschlag: 3%. Nach 2 Jahren steigt der Fonds um 8% und er will verkaufen. Rücknahmegebühr: 1%.",
+    calculator: [
+      {
+        heading: "Gesamtkosteneffekt beim Kauf und Verkauf",
+        rows: [
+          { label: "Investition brutto", value: "CHF 20'000" },
+          { label: "Ausgabeaufschlag (3%)", value: "− CHF 600" },
+          { label: "Tatsächlich investiert", value: "CHF 19'400" },
+          { label: "Fondswachstum +8% (auf CHF 19'400)", value: "+ CHF 1'552" },
+          { label: "Wert vor Rücknahme", value: "CHF 20'952" },
+          { label: "Rücknahmegebühr (1%)", value: "− CHF 210" },
+          { label: "Auszahlung netto", value: "CHF 20'742", type: "total" },
+          { label: "Nettorendite auf CHF 20'000", value: "+3.7% (statt 8%)", type: "total" },
+        ],
+      },
+    ],
+    question: "Wie reduzieren Ausgabeaufschlag und Rücknahmegebühr die Rendite von Herrn Leuthold?",
+    options: [
+      {
+        key: "A",
+        text: "Gar nicht – Gebühren sind im TER bereits enthalten",
+      },
+      {
+        key: "B",
+        text: "Sie halbieren seine Rendite – von 8% auf ca. 4%",
+      },
+      {
+        key: "C",
+        text: "Durch Ausgabeaufschlag und Rücknahmegebühr erzielt er nur 3.7% statt 8% – die Transaktionskosten fressen mehr als die Hälfte der Rendite",
+      },
+      {
+        key: "D",
+        text: "Gebühren sind nur bei kurzer Haltedauer relevant – über 2 Jahre spielen sie keine Rolle",
+      },
+    ],
+    correct: "C",
+    feedback:
+      "Ausgabeaufschlag (3%) und Rücknahmegebühr (1%) sind Transaktionskosten, zusätzlich zur TER. Sie kommen einmalig beim Kauf/Verkauf. Bei kurzer Haltedauer (2 Jahre) können sie die Rendite stark belasten. Ergebnis: Herr Leuthold erzielt nur 3.7% auf sein eingesetztes Kapital, obwohl der Fonds 8% gewachsen ist.",
+    warum:
+      "Transaktionskosten müssen separat im KID ausgewiesen werden. In der Schweiz: FIDLEG Transparenzpflicht. Alternative: Fonds ohne Ausgabeaufschlag (No-Load-Fonds) direkt bei der Fondsgesellschaft oder über ETFs. Im Kundengespräch immer Gesamtkosten (TER + Transaktionskosten) kommunizieren.",
+    merksatz: "TER = laufende Kosten. Ausgabeaufschlag / Rücknahme = einmalige Transaktionskosten. Beide mindern die Rendite.",
+    rechtsgrundlage: "FIDLEG Art. 60 (Kostentransparenz), KAG Art. 68 (Prospektpflicht)",
+  },
+  {
+    id: "2.3",
+    level: 2,
+    title: "UCITS Fonds — Anlegerschutz",
+    situation:
+      "Ein Berater empfiehlt Frau Albrecht zwei Fonds: Fonds A ist UCITS-konform (domiziliert in Luxemburg), Fonds B ist ein nicht-regulierter Offshore-Fonds von den Kaimaninseln mit ähnlicher Strategie aber höherer Rendite.",
+    question: "Was ist der entscheidende Unterschied zwischen einem UCITS-Fonds und dem Offshore-Fonds?",
+    options: [
+      {
+        key: "A",
+        text: "UCITS-Fonds haben immer eine höhere Rendite – deshalb sind sie besser",
+      },
+      {
+        key: "B",
+        text: "Kein wesentlicher Unterschied – beide sind von Regulatoren überprüft",
+      },
+      {
+        key: "C",
+        text: "UCITS-Fonds unterliegen strengen EU/EWR-Vorschriften: Diversifikation, Liquidität, Transparenz, tägliche Rücknahme. Offshore-Fonds fehlt dieser Schutzrahmen",
+      },
+      {
+        key: "D",
+        text: "Offshore-Fonds sind illegal – Frau Albrecht darf keinen solchen Fonds kaufen",
+      },
+    ],
+    correct: "C",
+    feedback:
+      "UCITS (Undertakings for Collective Investment in Transferable Securities) = EU-Regulierungsrahmen. Pflichten: max. 10% in einem Emittenten, tägliche Rücknahme zu NAV, halbjährliche Berichte, KIID. Nicht-regulierte Offshore-Fonds haben keinen solchen Schutz: Einschränkungen bei Rücknahme möglich, weniger Transparenz, andere Steuerregeln. In der Schweiz: FINMA prüft ausländische Fonds vor Vertrieb.",
+    warum:
+      "FIDLEG Art. 120: Nur bewilligte ausländische Fonds dürfen in der Schweiz öffentlich angeboten werden. UCITS-Fonds sind automatisch anerkennungsfähig. Offshore-Fonds oft nicht. Ein Verkauf eines nicht-bewilligten ausländischen Fonds kann strafbar sein.",
+    merksatz: "UCITS = Schutzrahmen für Anleger. Offshore = weniger Regulierung, mehr Risiko.",
+    rechtsgrundlage: "KAG Art. 119 ff. (ausländische KKA), FIDLEG Art. 120",
+  },
+  {
     id: "2.1",
     level: 2,
     title: "Ausschüttend vs. thesaurierend",
@@ -83,6 +230,79 @@ const L2_CASES: SubmoduleCase[] = [
 ];
 
 const L3_CASES: SubmoduleCase[] = [
+  {
+    id: "3.2",
+    level: 3,
+    title: "Tracking Error und Indexreplikation",
+    situation:
+      "Analystin Vera vergleicht zwei ETFs auf den SMI: ETF Alpha (physische Replikation, TER 0.10%, Tracking Error 0.05%) und ETF Beta (synthetische Replikation via Swap, TER 0.07%, Tracking Error 0.30%). Vera erklärt ihrem Kunden den Unterschied.",
+    question: "Was bedeutet der höhere Tracking Error von ETF Beta und was ist das Zusatzrisiko?",
+    options: [
+      {
+        key: "A",
+        text: "Höherer Tracking Error = höhere Rendite. ETF Beta ist deswegen besser",
+      },
+      {
+        key: "B",
+        text: "Tracking Error misst die Abweichung vom Index. ETF Beta weicht stärker vom SMI ab. Synthetisch = Swap-Kontrahenten-Risiko (bei Ausfall des Swap-Partners fehlt Deckung)",
+      },
+      {
+        key: "C",
+        text: "Tracking Error ist nur bei aktiven Fonds relevant – bei ETFs immer 0%",
+      },
+      {
+        key: "D",
+        text: "ETF Beta ist günstiger (TER 0.07%) und damit immer die bessere Wahl",
+      },
+    ],
+    correct: "B",
+    feedback:
+      "Tracking Error = Standardabweichung der Rendite-Differenz zwischen ETF und Index. Hoher TE bedeutet: der ETF bildet den Index ungenau ab. Synthetische ETFs verwenden Swaps – sie halten nicht die Indexaktien, sondern Derivate. Risiko: Kontrahenten-Ausfall (Swap-Partner wird insolvent). Für konservative Anleger: physische Replikation transparenter und sicherer.",
+    warum:
+      "UCITS erlaubt synthetische ETFs, aber begrenzt Kontrahentenrisiko auf 10% des Fondsvermögens. In der Praxis: Grosse Index-ETFs (iShares, Vanguard, UBS) physisch → tiefes Kontrahentenrisiko. Im Kundengespräch: TER allein reicht nicht – auch Tracking Error und Replikationsmethode erklären.",
+    merksatz: "Tracking Error = Indexabweichung. Synthetisch = Kontrahentenrisiko. Physisch = direktes Eigentum.",
+    rechtsgrundlage: "KAG Art. 55 (Derivate), FINMA-RS 2013/8 (Derivateeinsatz KKA)",
+  },
+  {
+    id: "3.3",
+    level: 3,
+    title: "Portfolio-Rebalancing",
+    situation:
+      "Herr Zimmermann hat ein Portfolio: Ziel-Allokation 60% Aktien / 40% Obligationen. Aktuell nach einem starken Aktienjahr: 75% Aktien / 25% Obligationen (Gesamtwert CHF 200'000).",
+    inputData: [
+      { label: "Ziel-Allokation", value: "60% Aktien / 40% Obligationen" },
+      { label: "Aktuelle Allokation", value: "75% Aktien / 25% Obligationen" },
+      { label: "Gesamtportfolio", value: "CHF 200'000" },
+      { label: "Aktuell Aktien (75%)", value: "CHF 150'000" },
+      { label: "Soll Aktien (60%)", value: "CHF 120'000" },
+    ],
+    question: "Was ist Rebalancing und was muss Herr Zimmermann konkret tun?",
+    options: [
+      {
+        key: "A",
+        text: "Rebalancing ist unnötig – wenn Aktien gestiegen sind, soll er die Quote laufen lassen",
+      },
+      {
+        key: "B",
+        text: "Er soll CHF 30'000 Aktien verkaufen und in Obligationen investieren – zurück zur Ziel-Allokation 60/40",
+      },
+      {
+        key: "C",
+        text: "Er soll CHF 30'000 neue Obligationen kaufen, ohne Aktien zu verkaufen",
+      },
+      {
+        key: "D",
+        text: "Rebalancing bedeutet, alle Positionen zu verkaufen und neu zu kaufen",
+      },
+    ],
+    correct: "B",
+    feedback:
+      "Rebalancing = Rückführung auf die Ziel-Allokation. Herr Zimmermann hält 75% Aktien (CHF 150'000) statt 60% (CHF 120'000). Differenz: CHF 30'000. Diese Aktien verkaufen und für CHF 30'000 Obligationen kaufen → wieder 60/40. Ohne Rebalancing läuft das Portfolio immer weiter in Richtung höheres Risiko.",
+    warum:
+      "Regelmässiges Rebalancing (jährlich oder bei Abweichung >5%) diszipliniert: Es zwingt dazu, «teuer zu verkaufen» (gut gelaufene Aktien) und «günstig zu kaufen» (zurückgebliebene Obligationen). Psychologisch schwierig – gegen den Trend handeln. In der Schweiz: Kapitalgewinne steuerfrei (Privatanleger) → Rebalancing verursacht keine Steuerbelastung.",
+    merksatz: "Rebalancing = Ziel-Allokation wiederherstellen. Gut Gelaufenes verkaufen, Zurückgebliebenes kaufen.",
+    rechtsgrundlage: "FIDLEG Art. 12: Portfolioverwaltungsauftrag – laufende Überwachung und Anpassung",
+  },
   {
     id: "3.1",
     level: 3,
