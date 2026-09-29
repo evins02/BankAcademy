@@ -906,7 +906,9 @@ function DemoVideo() {
           >
             <video
               controls
+              autoPlay
               muted
+              loop
               playsInline
               style={{ width: "100%", display: "block", borderRadius: 0 }}
             >

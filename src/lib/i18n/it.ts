@@ -362,7 +362,7 @@ export const it: typeof de = {
       { place: "Caffè", text: "Prendere un caffè. Risolvere un caso. Avanti." },
       { place: "Casa", text: "Ancora 5 minuti ? Ancora un caso." },
     ],
-    demoH2: "Guarda BankAcademy in 60 secondi", demoSubtitle: "Dal caso al feedback.", demoCta: "Provare subito",
+    demoH2: "Guarda BankAcademy in 40 secondi", demoSubtitle: "Dal caso al feedback.", demoCta: "Provare subito",
     statScenarios: "Scenari", statModules: "Moduli", statLevels: "Livelli di difficoltà",
     probEyebrow: "Perché BankAcademy", probH2: "Basta teoria. Inizia la pratica.",
     probBadge: "Il problema", probH3: "La scuola spiega. La banca si aspetta.",

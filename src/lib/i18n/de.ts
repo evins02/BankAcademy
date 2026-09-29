@@ -360,7 +360,7 @@ export const de = {
       { place: "Café", text: "Kaffee holen. Fall lösen. Weiter." },
       { place: "Zuhause", text: "Noch 5 Minuten? Noch ein Case." },
     ],
-    demoH2: "Sieh BankAcademy in 60 Sekunden", demoSubtitle: "Vom Fall bis zum Feedback.", demoCta: "Jetzt selbst testen",
+    demoH2: "Sieh BankAcademy in 40 Sekunden", demoSubtitle: "Vom Fall bis zum Feedback.", demoCta: "Jetzt selbst testen",
     statScenarios: "Szenarien", statModules: "Module", statLevels: "Schwierigkeitsstufen",
     probEyebrow: "Warum BankAcademy", probH2: "Stop Theorie. Start Praxis.",
     probBadge: "Das Problem", probH3: "Schule erklärt. Die Bank erwartet.",
