@@ -843,6 +843,82 @@ function Lifestyle() {
 
 
 
+/* ─── Section: Demo Video ─────────────────────────────────────────────────── */
+
+function DemoVideo() {
+  const { ref: zoomRef, scale } = useScrollZoom(0.86);
+  const { t } = useLanguage();
+
+  return (
+    <section
+      id="demo-video"
+      style={{
+        background: N,
+        padding: "96px 24px 104px",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `radial-gradient(ellipse 70% 60% at 50% 50%, ${CY}0d 0%, transparent 65%)`,
+          pointerEvents: "none",
+        }}
+      />
+
+      <div style={{ position: "relative", maxWidth: 960, margin: "0 auto" }}>
+        <FadeIn style={{ textAlign: "center", marginBottom: 48 }}>
+          <h2
+            style={{
+              margin: "0 0 12px",
+              fontSize: "clamp(26px,4vw,42px)",
+              fontWeight: 800,
+              letterSpacing: "-0.5px",
+              color: WH,
+              lineHeight: 1.15,
+            }}
+          >
+            {t.landing.demoH2}
+          </h2>
+          <p style={{ margin: 0, fontSize: 17, color: WD, lineHeight: 1.6 }}>
+            {t.landing.demoSubtitle}
+          </p>
+        </FadeIn>
+
+        <div
+          ref={zoomRef}
+          style={{
+            maxWidth: 900,
+            margin: "0 auto",
+            transform: `scale(${scale})`,
+            transformOrigin: "center center",
+            willChange: "transform",
+          }}
+        >
+          <div
+            style={{
+              borderRadius: 18,
+              overflow: "hidden",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.35), 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.07)",
+            }}
+          >
+            <video
+              controls
+              muted
+              playsInline
+              style={{ width: "100%", display: "block", borderRadius: 0 }}
+            >
+              <source src="/demo-video.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ─── Section: Stats bar ──────────────────────────────────────────────────── */
 
 function StatsBar() {
@@ -2196,6 +2272,7 @@ export default function LandingPage() {
         <Hero onStart={() => { window.location.href = "/sign-up"; }} />
         <CaseExperience />
         <Lifestyle />
+        <DemoVideo />
         <StatsBar />
         <FounderStory />
         <Modules onStart={() => { window.location.href = "/sign-up"; }} />
