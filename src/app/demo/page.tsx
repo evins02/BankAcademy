@@ -60,6 +60,24 @@ const UNLOCKED_MODULES = [
     xp: "+50 XP",
     color: "#f43f5e",
   },
+  {
+    title: "Zahlungsverkehr Back Office",
+    description:
+      "Zahlungsaufträge verarbeiten, Retouren klären, Daueraufträge und Zahlungsmittel im Back-Office-Alltag.",
+    href: "/demo/backoffice/banking-operations/zahlungsverkehr",
+    tag: "Back Office · Banking Operations",
+    xp: "+45 XP",
+    color: "#64748b",
+  },
+  {
+    title: "Mahnwesen",
+    description:
+      "Zahlungserinnerung, Mahnungen und Betreibung – den Mahn- und Inkassoprozess sicher beherrschen.",
+    href: "/demo/backoffice/banking-operations/mahnwesen",
+    tag: "Back Office · Banking Operations",
+    xp: "+40 XP",
+    color: "#78716c",
+  },
 ];
 
 const LOCKED_MODULES = [
@@ -102,7 +120,7 @@ export default function DemoPage() {
                 marginBottom: 20,
               }}
             >
-              Demo Modus · 6 Module freigeschaltet
+              Demo Modus · 8 Module freigeschaltet
             </div>
             <h1
               style={{
@@ -115,7 +133,7 @@ export default function DemoPage() {
               Willkommen bei BankAcademy
             </h1>
             <p style={{ margin: "0 0 28px", fontSize: 15, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>
-              Teste sechs Grundlagen-Module aus Privat- und Anlagekunde kostenlos. Für alle Module, 150+ Szenarien und den Challenge-Modus kannst du Vollzugang anfragen.
+              Teste acht Module aus Privat-, Anlage- und Back-Office-Bereich kostenlos. Für alle Module, 150+ Szenarien und den Challenge-Modus kannst du Vollzugang anfragen.
             </p>
             <Link
               href="/kontakt"

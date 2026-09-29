@@ -43,6 +43,8 @@ const DEMO_UNLOCKED = new Set([
   "/anlagekunde/aktien",
   "/anlagekunde/fonds",
   "/anlagekunde/steuern",
+  "/backoffice/banking-operations/zahlungsverkehr",
+  "/backoffice/banking-operations/mahnwesen",
   "/demo",
 ]);
 
