@@ -94,6 +94,40 @@ const L1_CASES: VorsorgeCase[] = [
       "Säule 3a ist ideal für Steueroptimierung und Altersvorsorge. Einzahlungen sind vollständig vom steuerbaren Einkommen abziehbar. Maximum 2026: CHF 7'258 pro Jahr. Das Geld ist bis 5 Jahre vor Pensionierung gebunden – Ausnahmen (z.B. Eigenheim, Auswanderung) sind möglich.",
   },
   {
+    id: "1.4",
+    level: 1,
+    title: "AHV-Beitragslücken und Rentenkürzung",
+    situation:
+      "Kundin Fatima, 32 Jahre, war 3 Jahre im Ausland. Sie fragt: «Ich habe während dieser Zeit keine AHV-Beiträge bezahlt. Was passiert mit meiner Rente?»",
+    question: "Was erklärst du Fatima?",
+    options: [
+      { key: "A", text: "«Keine Auswirkung – AHV-Renten werden nur nach dem letzten Lohn berechnet, nicht nach der Beitragsdauer»" },
+      { key: "B", text: "«Jedes fehlende Beitragsjahr kürzt die AHV-Rente um ca. 1/44 – 3 Lücken entsprechen ca. 6.8% Rentenkürzung. Lücken können bis 5 Jahre vor AHV-Alter freiwillig nachgezahlt werden»" },
+      { key: "C", text: "«AHV-Lücken führen automatisch zum Verlust aller Ansprüche – Fatima sollte sobald wie möglich eine neue AHV-Mitgliedschaft beantragen»" },
+      { key: "D", text: "«Im Ausland zahlt man häufig in das dortige Rentensystem ein – das wird mit der Schweizer AHV verrechnet, ohne Kürzung»" },
+    ],
+    correct: "B",
+    feedback:
+      "Volle AHV-Rente setzt 44 Beitragsjahre voraus (Männer und Frauen). Jedes fehlende Jahr kürzt die Rente um 1/44 ≈ 2.27%. 3 Fehlerjahre = ca. 6.8% weniger Rente. Lücken können freiwillig nachgezahlt werden – aber nur bis 5 Jahre rückwirkend und nur wenn noch AHV-pflichtig. Empfehlung: AHV-Auszug anfordern und Lücken identifizieren.",
+  },
+  {
+    id: "1.5",
+    level: 1,
+    title: "Wann beginnt die AHV-Beitragspflicht?",
+    situation:
+      "Lernender Tim, 16 Jahre, hat einen Sommerjob und verdient CHF 1'800 in 2 Monaten. Er fragt: «Muss ich schon AHV zahlen?»",
+    question: "Was erklärst du Tim?",
+    options: [
+      { key: "A", text: "«Nein, AHV-Pflicht beginnt erst ab 18 Jahren»" },
+      { key: "B", text: "«Ja ab 17 Jahren – aber nur auf Einkommen über CHF 2'000»" },
+      { key: "C", text: "«Ja ab 1. Januar nach dem 17. Geburtstag, und für Nichterwerbstätige ab 20 Jahren. Bei Erwerbstätigkeit gilt ein Freibetrag von CHF 2'300 pro Jahr und Arbeitgeber»" },
+      { key: "D", text: "«Nein, Lehrlinge und Ferienjobbende sind immer beitragsfrei bis zum Lehrabschluss»" },
+    ],
+    correct: "C",
+    feedback:
+      "AHV-Beitragspflicht bei Erwerbstätigkeit: ab 1. Januar nach dem 17. Geburtstag. Freibetrag für Jugendliche (bis Ende des Jahres, in dem sie 25 werden): CHF 2'300 pro Arbeitgeber und Jahr. Tim verdient CHF 1'800 – unter dem Freibetrag, also keine AHV-Pflicht. Nichterwerbstätige (Studenten, Hausfrauen/-männer) ab 1. Januar nach 20. Geburtstag.",
+  },
+  {
     id: "1.3",
     level: 1,
     title: "3a vs. 3b",
@@ -163,6 +197,40 @@ const L2_CASES: VorsorgeCase[] = [
     correct: "B",
     feedback:
       "3a-Vorbezug ist möglich, aber nur für spezifische Zwecke: WEF (Wohneigentumsförderung – Kauf oder wertvermehrende Renovation des Eigenheims), Aufnahme Selbständigkeit, Auswanderung, Invalidität oder Tod. Renovation einer Mietwohnung ist nicht anrechenbar.",
+  },
+  {
+    id: "2.4",
+    level: 2,
+    title: "PK-Einkauf und Steuervorteil",
+    situation:
+      "Herr Roth, 50 Jahre, Grenzsteuersatz 35%, hat laut PK-Ausweis ein Einkaufspotenzial von CHF 80'000. Er fragt: «Lohnt sich ein freiwilliger Einkauf in die Pensionskasse?»",
+    question: "Was erklärst du Herrn Roth?",
+    options: [
+      { key: "A", text: "«Nein – PK-Einkäufe lohnen sich nur wenn man kurz vor der Pensionierung steht. Mit 50 sind 15 Jahre zu lang bis zur Auszahlung»" },
+      { key: "B", text: "«Ja – CHF 80'000 Einkauf spart bei 35% Grenzsteuersatz ca. CHF 28'000 Steuern sofort. Plus höhere PK-Rente. Wichtig: 3 Jahre Sperrfrist vor Kapitalbezug beachten»" },
+      { key: "C", text: "«Nur wenn er das Geld auf den Kapitalbezug statt auf Rente stellt – sonst lohnt sich der Einkauf steuerlich nicht»" },
+      { key: "D", text: "«Einkäufe in die PK sind steuerlich nicht abzugsfähig – nur 3a-Einzahlungen können vom steuerbaren Einkommen abgezogen werden»" },
+    ],
+    correct: "B",
+    feedback:
+      "PK-Einkauf = doppelter Vorteil: 1) Sofortige Steuereinsparung in Höhe des Einkaufs × Grenzsteuersatz (CHF 80'000 × 35% = CHF 28'000). 2) Höhere Rente oder höheres Kapital bei Pensionierung. Wichtig: 3-Jahres-Sperrfrist – wer kurz danach Kapital bezieht, muss den Steuervorteil zurückzahlen. Bei 50 Jahren ist das absolut kein Problem.",
+  },
+  {
+    id: "2.5",
+    level: 2,
+    title: "Überbrückungsrente bis AHV-Alter",
+    situation:
+      "Frau Schneider, 62 Jahre, möchte frühpensioniert werden (reguläres AHV-Alter 65). Ihr PK-Reglement erlaubt Pensionierung ab 60. Sie fragt: «Was passiert mit der AHV in der Lücke bis 65?»",
+    question: "Was erklärst du Frau Schneider?",
+    options: [
+      { key: "A", text: "«Keine Lücke – AHV-Rente kann ab 62 beantragt werden, einfach mit Kürzung»" },
+      { key: "B", text: "«Viele PKs zahlen bis zum AHV-Alter eine Überbrückungsrente, die die fehlende AHV kompensiert. Diese wird nach Alter 65 automatisch reduziert, wenn die echte AHV einsetzt»" },
+      { key: "C", text: "«AHV läuft automatisch mit – sie muss nur die Pensionskasse informieren»" },
+      { key: "D", text: "«Ab Frühpensionierung entfällt die AHV-Pflicht – keine Beiträge, keine Lücken»" },
+    ],
+    correct: "B",
+    feedback:
+      "Frühpensionierung schafft eine AHV-Lücke: zwischen Pensionierungsalter und AHV-Alter erhält man noch keine AHV. Lösung vieler PKs: Überbrückungsrente in Höhe der erwarteten AHV-Rente (ca. CHF 2'450/Monat max.) bis zum AHV-Alter. Danach sinkt die PK-Rente und die AHV setzt ein. Wichtig: Nicht-Erwerbstätige müssen AHV-Beiträge als Nichterwerbstätige weiterzahlen!",
   },
   {
     id: "2.3",
@@ -252,6 +320,40 @@ const L3_CASES: (VorsorgeCase | LückentextCase)[] = [
     correct: "A",
     feedback:
       "Neue Regelung ab 2026: Beitragslücken ab dem Jahr 2025 können nachgeholt werden. Bedingung: Der aktuelle Maximalbetrag (CHF 7'258) muss im laufenden Jahr zuerst vollständig ausgeschöpft sein. Lücken vor 2025 sind nicht nachholbar. Nachzahlungen sind ebenfalls steuerlich abzugsfähig!",
+  },
+  {
+    id: "3.4",
+    level: 3,
+    title: "WEF-Vorbezug Rückwirkung auf PK-Rente",
+    situation:
+      "Herr Müller, 45 Jahre, hat vor 10 Jahren CHF 50'000 aus der PK für den Ersterwerb von Wohneigentum bezogen (WEF-Vorbezug). Jetzt fragt er: «Was passiert mit meiner PK-Rente wenn ich den Betrag nicht zurückzahle?»",
+    question: "Was erklärst du Herrn Müller?",
+    options: [
+      { key: "A", text: "«Nichts – der Vorbezug vor über 5 Jahren ist vollständig vergessen, er hat keine Wirkung mehr auf die Rente»" },
+      { key: "B", text: "«Deine künftige PK-Rente ist dauerhaft reduziert, weil das entnommene Kapital keine Rendite mehr erwirtschaftet hat. Die genaue Kürzung zeigt dein PK-Ausweis unter 'projizierte Rente'»" },
+      { key: "C", text: "«Der Vorbezug wird bei Pensionierung als Schuld verbucht – die PK zieht CHF 50'000 vom Kapital ab, plus Zinsen»" },
+      { key: "D", text: "«Nur wenn er die Liegenschaft verkauft muss er zurückzahlen – sonst hat der Vorbezug keinen Effekt»" },
+    ],
+    correct: "B",
+    feedback:
+      "WEF-Vorbezug = dauerhafte Rentenkürzung, weil das entnommene Kapital keine Verzinsung und keine Rendite mehr generiert. Beispiel: CHF 50'000 bei durchschnittlich 2% Zins über 20 Jahre ≈ CHF 74'000 Verlust am Kapital bei Pensionierung. Der PK-Ausweis zeigt die «projizierte Altersrente mit und ohne Vorbezug» nicht separat — er zeigt nur den aktuellen Stand. Wichtig: Rückzahlung ist freiwillig, bis 3 Jahre vor dem regulären Pensionierungsalter möglich.",
+  },
+  {
+    id: "3.5",
+    level: 3,
+    title: "Güterrecht und 3a bei Scheidung",
+    situation:
+      "Kundenpaar steht vor Scheidung. Frau hat ein 3a-Konto mit CHF 85'000. Mann hat kein 3a-Konto. Sie fragt: «Muss ich mein 3a-Guthaben teilen?»",
+    question: "Was erklärst du ihr?",
+    options: [
+      { key: "A", text: "«Nein – 3a-Guthaben sind persönliche Ersparnisse und werden nie aufgeteilt, auch nicht bei Scheidung»" },
+      { key: "B", text: "«Ja – grundsätzlich werden während der Ehe einbezahlte 3a-Guthaben hälftig geteilt. Einzahlen vor Heirat bleibt ihr. Dies regelt ZGB Art. 122 ff (Vorsorgeausgleich)»" },
+      { key: "C", text: "«Nur wenn sie das Geld vor der Heirat gespart hat – nach der Heirat angesparte Guthaben sind Errungenschaft und gehören zum Gemeineigentum»" },
+      { key: "D", text: "«Das Guthaben wird nur geteilt wenn beide im ordentlichen Güterstand (Errungenschaftsbeteiligung) verheiratet waren – sonst nicht»" },
+    ],
+    correct: "B",
+    feedback:
+      "Vorsorgeausgleich bei Scheidung (ZGB Art. 122 ff): Während der Ehe einbezahlte 3a- und PK-Guthaben gehören zur «ehelichen Vorsorge» und werden hälftig geteilt — unabhängig vom Güterstand (Errungenschaftsbeteiligung oder Gütergemeinschaft). Einzahlungen vor der Heirat sind davon ausgenommen. Wichtig: 3a-Konten werden nicht direkt übertragen — der Betrag wird auf das Freizügigkeitskonto des anderen übertragen.",
   },
   {
     type: "lückentext",
