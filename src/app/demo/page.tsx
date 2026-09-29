@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Lock, ChevronRight, ShieldCheck } from "lucide-react";
+import { Lock, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { LockedModuleOverlay } from "@/components/demo/LockedModuleOverlay";
 import { useLanguage } from "@/context/LanguageContext";
@@ -236,24 +236,6 @@ export default function DemoPage() {
             </Link>
           </div>
 
-          {/* Compliance notice */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: 12,
-              background: "#f8f9fd",
-              border: "1px solid #e5e7eb",
-              borderRadius: 12,
-              padding: "14px 18px",
-            }}
-          >
-            <ShieldCheck size={16} style={{ color: "#6b7280", marginTop: 2, flexShrink: 0 }} />
-            <p style={{ margin: 0, fontSize: 11, color: "#6b7280", lineHeight: 1.6 }}>
-              <strong style={{ color: "#374151" }}>{d.complianceTitle}</strong>{" "}
-              {d.complianceText}
-            </p>
-          </div>
         </div>
       </div>
     </>
