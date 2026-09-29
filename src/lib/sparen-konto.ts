@@ -79,6 +79,38 @@ export const SK_LEVELS: SkLevelConfig[] = [
         feedback:
           "Zins und Rückzugsbedingungen hängen direkt zusammen. Sparkonto = höherer Zins, engere Limiten. Privatkonto = tiefer Zins, hohe Verfügbarkeit.",
       },
+      {
+        id: "1.4",
+        level: 1,
+        situation:
+          "Frau Weber, 35 Jahre, möchte für ihre Tochter Lena, 8 Jahre, ein Konto eröffnen. Sie fragt: «Welches Konto ist für Kinder am sinnvollsten?»",
+        question: "Was empfiehlst du?",
+        options: [
+          { key: "A", text: "Privatkonto auf Namen der Mutter – so behält sie die volle Kontrolle" },
+          { key: "B", text: "Jugendsparkonto auf Namen von Lena – höherer Zins, Eltern sind bis 18 verfügungsberechtigt" },
+          { key: "C", text: "Sparkonto auf Namen der Mutter, Lena als Begünstigte eingetragen" },
+          { key: "D", text: "Fondssparplan, weil Zinsen für Kinder zu niedrig sind" },
+        ],
+        correct: "B",
+        feedback:
+          "Jugendsparkonto auf Namen des Kindes: Viele Banken bieten Kinder/Jugend-Konten mit bevorzugtem Zinssatz. Das Konto gehört dem Kind, Eltern sind bis zur Volljährigkeit gesetzliche Vertreter. Ab 18 Jahren übernimmt das Kind die Verfügungsberechtigung automatisch.",
+      },
+      {
+        id: "1.5",
+        level: 1,
+        situation:
+          "Kunde Lars möchte wissen: «Was passiert mit meinen Ersparnissen, wenn die Bank pleitegeht?»",
+        question: "Was erklärst du ihm?",
+        options: [
+          { key: "A", text: "«Bankguthaben sind nicht versichert – das Risiko trägt der Kunde vollständig»" },
+          { key: "B", text: "«Die Nationalbank garantiert alle Spareinlagen unbegrenzt»" },
+          { key: "C", text: "«Die Einlagensicherung (esisuisse) schützt CHF 100'000 pro Kunde und Bank – darüber hinaus besteht Verlustrisiko»" },
+          { key: "D", text: "«Nur Sparkonten sind geschützt, Privatkonten nicht»" },
+        ],
+        correct: "C",
+        feedback:
+          "Einlagensicherung esisuisse: bis CHF 100'000 pro Kunde und Bank sind privilegiert. Bei Liquidation werden diese zuerst bedient. Beträge über CHF 100'000 sind ungesichert. Empfehlung: Über CHF 100'000 auf mehrere Banken aufteilen.",
+      },
     ],
   },
   {
@@ -137,6 +169,38 @@ export const SK_LEVELS: SkLevelConfig[] = [
         feedback:
           "PK-Guthaben → Freizügigkeitskonto → neue Pensionskasse. Konto ist gesperrt. Vorbezug nur unter Sonderbedingungen (Eigenheim, Auswanderung, Selbständigkeit).",
       },
+      {
+        id: "2.4",
+        level: 2,
+        situation:
+          "Herr Keller, 72 Jahre, möchte seiner Tochter (48) eine Vollmacht für sein Sparkonto geben. Er fragt: «Was kann sie dann mit dem Konto machen?»",
+        question: "Was erklärst du Herrn Keller?",
+        options: [
+          { key: "A", text: "«Mit Vollmacht kann die Tochter Geld abheben, Überweisungen tätigen und Kontoauszüge abfragen – aber keine neuen Konten eröffnen oder das Konto auflösen»" },
+          { key: "B", text: "«Eine Vollmacht gibt der Tochter dieselben Rechte wie dem Kontoinhaber – sie kann alles tun, auch das Konto auflösen»" },
+          { key: "C", text: "«Vollmachten für Privatkonten sind möglich, für Sparkonten gesetzlich nicht erlaubt»" },
+          { key: "D", text: "«Die Vollmacht erlischt automatisch, wenn Herr Keller krank wird oder stirbt»" },
+        ],
+        correct: "A",
+        feedback:
+          "Kontovollmacht: Die Bevollmächtigte kann im Rahmen der erteilten Rechte verfügen (Bezüge, Überweisungen, Auskünfte). Kontoauflösung, Kontoeröffnung und Änderung des Kontoinhabers bleiben dem Inhaber vorbehalten. Die Vollmacht erlischt beim Tod (dann erben die Erben). Bei Urteilsunfähigkeit bleibt sie grundsätzlich gültig – ausser das Konto wird unter Beistandschaft gestellt.",
+      },
+      {
+        id: "2.5",
+        level: 2,
+        situation:
+          "Junge Kundin Mia, 21 Jahre, hat ihr Privatkonto um CHF 230 überzogen. Die Bank hat CHF 12 Überziehungszinsen belastet. Mia ist überrascht: «Ich dachte, ich kann kurz ins Minus?»",
+        question: "Was erklärst du Mia?",
+        options: [
+          { key: "A", text: "«Kontoüberziehungen sind bei uns immer gratis – die CHF 12 sind ein Fehler, wir korrigieren das»" },
+          { key: "B", text: "«Privatkonten dürfen nicht überzogen werden – wir sperren das Konto sofort»" },
+          { key: "C", text: "«Kurze Überziehungen werden toleriert, aber mit hohem Überziehungszins belastet – das ist teurer Kredit. Dauerhafter Bedarf → besser Kontokorrentlimite beantragen»" },
+          { key: "D", text: "«Nur bei Jugendkonten werden Überziehungszinsen verrechnet – bei Erwachsenenkonten nicht»" },
+        ],
+        correct: "C",
+        feedback:
+          "Kontoüberziehung = ungeplanter Kredit zu hohem Zins (oft 10–15% p.a.). CHF 12 auf CHF 230 klingt klein, aber das entspricht über 5% für wenige Tage. Wer regelmässig knapp ist: Kontokorrentlimite ist günstiger. Noch besser: Pufferreserve auf Sparkonto anlegen.",
+      },
     ],
   },
   {
@@ -190,6 +254,35 @@ export const SK_LEVELS: SkLevelConfig[] = [
         tolerance: 1,
         feedback:
           "Einlagensicherung schützt CHF 100'000 pro Kunde und Bank. CHF 80'000 sind ungeschützt. Empfehlung: Beträge über CHF 100'000 auf mehrere Banken aufteilen.",
+      },
+      {
+        id: "3.4",
+        level: 3,
+        situation:
+          "Kundin Petra, 58 Jahre, hat CHF 420'000 auf einem Sparkonto bei der Kantonalbank. Sie fragt: «Wie viel ist bei Ihrer Bank eigentlich geschützt? Und was soll ich mit dem Rest tun?»",
+        question: "Was empfiehlst du Petra konkret?",
+        options: [
+          { key: "A", text: "«Alles ist geschützt – Kantonalbanken haben Staatsgarantie, unbegrenzt»" },
+          { key: "B", text: "«CHF 100'000 sind durch esisuisse gesichert. Die restlichen CHF 320'000 sind im Konkursfall ungesichert. Empfehlung: Beträge auf 2–3 verschiedene Banken verteilen»" },
+          { key: "C", text: "«Nichts ist gesichert – Bankeinlagen sind Forderungen ohne Priorität»" },
+          { key: "D", text: "«CHF 100'000 sind gesichert. Den Rest sofort in Obligationen umschichten – die sind vom Bankkonkurs nicht betroffen»" },
+        ],
+        correct: "B",
+        feedback:
+          "Kantonalbanken: Die meisten (nicht alle) haben Staatsgarantie – dann sind Einlagen tatsächlich über CHF 100'000 geschützt. Aber: nicht jede Kantonalbank hat Staatsgarantie (z.B. Berner Kantonalbank, Genfer Kantonalbank nicht mehr). Im Zweifelsfall aufteilen ist sicherer. Wichtig: esisuisse gilt für alle Banken, Staatsgarantie nur für bestimmte Kantonalbanken.",
+      },
+      {
+        type: "lückentext",
+        id: "3.5",
+        level: 3,
+        briefing:
+          "Kundin Silvia, 45 Jahre, erhält als Reaktion auf einen Stellenwechsel CHF 85'000 Freizügigkeitsleistung von ihrer alten PK. Sie fragt dich: «Was passiert, wenn ich das Geld nicht rechtzeitig auf ein Freizügigkeitskonto überweise?»",
+        question:
+          "Wird die Freizügigkeitsleistung nicht selbst gemeldet, überweist die PK das Geld an die ___.",
+        answer: "Auffangeinrichtung",
+        unit: "",
+        feedback:
+          "Meldet man der alten PK nicht wohin das Geld soll, überweist sie es an die Auffangeinrichtung BVG (nationale Sammelstiftung). Das Geld ist nicht verloren, aber die Verwaltungsgebühren sind höher und die Zinsen tiefer. Empfehlung: Freizügigkeitskonto bei einer Bank eröffnen und Nummer der PK mitteilen – vor Austritt.",
       },
     ],
   },
