@@ -29,6 +29,7 @@ import { NAV_GROUPS } from "@/lib/constants";
 import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "@/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 const ICONS: Record<string, LucideIcon> = {
   User, Building2, TrendingUp, Settings2, Landmark, Scale,
@@ -59,6 +60,7 @@ function hasUnlockedChild(item: NavItem): boolean {
 
 export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?: () => void }) {
   const pathname = usePathname();
+  const { t } = useLanguage();
   const [openItems, setOpenItems] = useState<Set<string>>(() => {
     const open = new Set<string>();
     for (const group of NAV_GROUPS) {
@@ -236,10 +238,10 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
             textDecoration: "none",
           }}
         >
-          Vollzugang anfragen →
+          {t.demo.sidebarCta}
         </Link>
         <p className="mt-2 text-center text-[10px] text-text-secondary">
-          Alle Module · 150+ Szenarien · Challenge-Modus
+          {t.demo.sidebarSub}
         </p>
       </div>
     </aside>

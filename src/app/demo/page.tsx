@@ -4,92 +4,36 @@ import Link from "next/link";
 import { Lock, ChevronRight, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { LockedModuleOverlay } from "@/components/demo/LockedModuleOverlay";
+import { useLanguage } from "@/context/LanguageContext";
 
-const UNLOCKED_MODULES = [
-  {
-    title: "Sparen & Konto",
-    description:
-      "Kontenarten, Zinsen, Sparpläne und Sparstrategien für Privatkunden kennen und erklären.",
-    href: "/demo/privatkunde/basis/sparen-konto",
-    tag: "Privatkunde · Basis",
-    xp: "+40 XP",
-    color: "#6C63FF",
-  },
-  {
-    title: "Zahlungsverkehr",
-    description:
-      "Dauerauftrag, LSV, E-Banking und TWINT – Zahlungsprodukte kennen und Kunden richtig beraten.",
-    href: "/demo/privatkunde/basis/zahlungsverkehr",
-    tag: "Privatkunde · Basis",
-    xp: "+35 XP",
-    color: "#f59e0b",
-  },
-  {
-    title: "Fonds & Anlageprodukte",
-    description:
-      "Anlagefonds, ETF und Anlagestrategien – Grundlagen für die Beratung von Privatkunden.",
-    href: "/demo/privatkunde/basis/fonds",
-    tag: "Privatkunde · Basis",
-    xp: "+45 XP",
-    color: "#8b5cf6",
-  },
-  {
-    title: "Aktien & Kennzahlen",
-    description:
-      "KGV, Dividendenrendite berechnen und Aktien mit Obligationen vergleichen – Grundlagen Anlagekunde.",
-    href: "/demo/anlagekunde/aktien",
-    tag: "Anlagekunde · Basis",
-    xp: "+40 XP",
-    color: "#10b981",
-  },
-  {
-    title: "Anlagefonds & ETF",
-    description:
-      "TER vergleichen, ausschüttend vs. thesaurierend und aktiv vs. passiv richtig einordnen.",
-    href: "/demo/anlagekunde/fonds",
-    tag: "Anlagekunde · Basis",
-    xp: "+40 XP",
-    color: "#0ea5e9",
-  },
-  {
-    title: "Steuerliche Aspekte",
-    description:
-      "Verrechnungssteuer 35%, Stempelabgabe und steuerfreie Kapitalgewinne – öffentliches Schweizer Steuerrecht.",
-    href: "/demo/anlagekunde/steuern",
-    tag: "Anlagekunde · Basis",
-    xp: "+50 XP",
-    color: "#f43f5e",
-  },
-  {
-    title: "Zahlungsverkehr Back Office",
-    description:
-      "Zahlungsaufträge verarbeiten, Retouren klären, Daueraufträge und Zahlungsmittel im Back-Office-Alltag.",
-    href: "/demo/backoffice/banking-operations/zahlungsverkehr",
-    tag: "Back Office · Banking Operations",
-    xp: "+45 XP",
-    color: "#64748b",
-  },
-  {
-    title: "Mahnwesen",
-    description:
-      "Zahlungserinnerung, Mahnungen und Betreibung – den Mahn- und Inkassoprozess sicher beherrschen.",
-    href: "/demo/backoffice/banking-operations/mahnwesen",
-    tag: "Back Office · Banking Operations",
-    xp: "+40 XP",
-    color: "#78716c",
-  },
+const MODULE_HREFS = [
+  "/demo/privatkunde/basis/sparen-konto",
+  "/demo/privatkunde/basis/zahlungsverkehr",
+  "/demo/privatkunde/basis/fonds",
+  "/demo/anlagekunde/aktien",
+  "/demo/anlagekunde/fonds",
+  "/demo/anlagekunde/steuern",
+  "/demo/backoffice/banking-operations/zahlungsverkehr",
+  "/demo/backoffice/banking-operations/mahnwesen",
 ];
 
-const LOCKED_MODULES = [
-  { title: "Firmenkunde", description: "Kontoeröffnung Firmen, Tragbarkeit und Kreditengagements." },
-  { title: "Anlagekunde – Individual", description: "Anlegerprofil, strukturierte Produkte und Lombardkredit." },
-  { title: "Credit Office", description: "Hypotheken, Blankokredit und periodische Kreditprüfung." },
-  { title: "Challenge-Modus", description: "Prüfungssimulation mit realistischen Falldossiers." },
-  { title: "Community & Forum", description: "Fragen stellen, Erfahrungen teilen, Praxisfälle diskutieren." },
+const MODULE_COLORS = [
+  "#6C63FF",
+  "#f59e0b",
+  "#8b5cf6",
+  "#10b981",
+  "#0ea5e9",
+  "#f43f5e",
+  "#64748b",
+  "#78716c",
 ];
+
+const MODULE_XP = ["+40 XP", "+35 XP", "+45 XP", "+40 XP", "+40 XP", "+50 XP", "+45 XP", "+40 XP"];
 
 export default function DemoPage() {
   const [showLocked, setShowLocked] = useState(false);
+  const { t } = useLanguage();
+  const d = t.demo;
 
   return (
     <>
@@ -120,7 +64,7 @@ export default function DemoPage() {
                 marginBottom: 20,
               }}
             >
-              Demo Modus · 8 Module freigeschaltet
+              {d.badge}
             </div>
             <h1
               style={{
@@ -130,10 +74,10 @@ export default function DemoPage() {
                 letterSpacing: "-0.5px",
               }}
             >
-              Willkommen bei BankAcademy
+              {d.heroH1}
             </h1>
             <p style={{ margin: "0 0 28px", fontSize: 15, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>
-              Teste acht Module aus Privat-, Anlage- und Back-Office-Bereich kostenlos. Für alle Module, 150+ Szenarien und den Challenge-Modus kannst du Vollzugang anfragen.
+              {d.heroSubtitle}
             </p>
             <Link
               href="/kontakt"
@@ -150,7 +94,7 @@ export default function DemoPage() {
                 textDecoration: "none",
               }}
             >
-              Vollzugang anfragen <ChevronRight size={14} />
+              {d.ctaFull} <ChevronRight size={14} />
             </Link>
           </div>
         </div>
@@ -158,7 +102,7 @@ export default function DemoPage() {
         <div style={{ maxWidth: 860, margin: "0 auto", padding: "32px 24px" }}>
           {/* Unlocked modules */}
           <h2 className="text-sm font-bold text-text-secondary uppercase tracking-widest mb-4">
-            Freigeschaltete Module
+            {d.sectionUnlocked}
           </h2>
           <div
             style={{
@@ -168,15 +112,15 @@ export default function DemoPage() {
               marginBottom: 40,
             }}
           >
-            {UNLOCKED_MODULES.map((m) => (
+            {d.unlockedModules.map((m, i) => (
               <Link
-                key={m.href}
-                href={m.href}
+                key={MODULE_HREFS[i]}
+                href={MODULE_HREFS[i]}
                 style={{ textDecoration: "none" }}
               >
                 <div
                   className="rounded-DEFAULT bg-surface shadow-card p-5 flex flex-col gap-3 h-full transition-shadow hover:shadow-md"
-                  style={{ borderTop: `3px solid ${m.color}` }}
+                  style={{ borderTop: `3px solid ${MODULE_COLORS[i]}` }}
                 >
                   <div>
                     <p
@@ -186,7 +130,7 @@ export default function DemoPage() {
                         fontWeight: 700,
                         textTransform: "uppercase",
                         letterSpacing: "0.07em",
-                        color: m.color,
+                        color: MODULE_COLORS[i],
                       }}
                     >
                       {m.tag}
@@ -203,16 +147,16 @@ export default function DemoPage() {
                       style={{
                         fontSize: 11,
                         fontWeight: 700,
-                        color: m.color,
-                        background: `${m.color}18`,
+                        color: MODULE_COLORS[i],
+                        background: `${MODULE_COLORS[i]}18`,
                         padding: "2px 8px",
                         borderRadius: 100,
                       }}
                     >
-                      {m.xp}
+                      {MODULE_XP[i]}
                     </span>
                     <span className="text-xs font-semibold text-text-secondary flex items-center gap-1">
-                      Öffnen <ChevronRight size={13} />
+                      {d.open} <ChevronRight size={13} />
                     </span>
                   </div>
                 </div>
@@ -222,7 +166,7 @@ export default function DemoPage() {
 
           {/* Locked modules */}
           <h2 className="text-sm font-bold text-text-secondary uppercase tracking-widest mb-4">
-            Im Demo gesperrt
+            {d.sectionLocked}
           </h2>
           <div
             style={{
@@ -232,7 +176,7 @@ export default function DemoPage() {
               marginBottom: 40,
             }}
           >
-            {LOCKED_MODULES.map((m) => (
+            {d.lockedModules.map((m) => (
               <button
                 key={m.title}
                 onClick={() => setShowLocked(true)}
@@ -266,10 +210,10 @@ export default function DemoPage() {
           >
             <div>
               <h3 style={{ margin: "0 0 6px", fontSize: 18, fontWeight: 800 }}>
-                Bereit für den Vollzugang?
+                {d.ctaBannerH3}
               </h3>
               <p style={{ margin: 0, fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
-                Alle Module · 150+ Szenarien · Challenge-Modus · Community
+                {d.ctaBannerSub}
               </p>
             </div>
             <Link
@@ -288,7 +232,7 @@ export default function DemoPage() {
                 whiteSpace: "nowrap",
               }}
             >
-              Vollzugang anfragen <ChevronRight size={14} />
+              {d.ctaFull} <ChevronRight size={14} />
             </Link>
           </div>
 
@@ -306,10 +250,8 @@ export default function DemoPage() {
           >
             <ShieldCheck size={16} style={{ color: "#6b7280", marginTop: 2, flexShrink: 0 }} />
             <p style={{ margin: 0, fontSize: 11, color: "#6b7280", lineHeight: 1.6 }}>
-              <strong style={{ color: "#374151" }}>Hinweis zum Demo-Inhalt:</strong>{" "}
-              Diese Demo enthält ausschliesslich allgemein zugängliches Finanzwissen (Grundlagen zu Bankprodukten).
-              Interne Bankprozesse, regulatorische Prüfabläufe und compliance-relevante Verfahren sind nicht
-              Teil dieser Demo und werden nur im passwortgeschützten Vollzugang für Lernende angezeigt.
+              <strong style={{ color: "#374151" }}>{d.complianceTitle}</strong>{" "}
+              {d.complianceText}
             </p>
           </div>
         </div>
