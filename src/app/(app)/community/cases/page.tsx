@@ -286,7 +286,7 @@ export default function CommunityPage() {
 
             {submitted ? (
               <div className="flex items-center gap-2 rounded-xl bg-accent-light px-4 py-3 text-sm font-semibold text-accent">
-                ✓ Danke! Dein Fall wird geprüft.
+                ✓ Gespeichert! Dein Fall ist jetzt lokal in deinem Browser sichtbar.
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">

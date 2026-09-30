@@ -173,12 +173,19 @@ export default function DatenschutzPage() {
                     </td>
                     <td className="px-3 py-2 text-gray-600">USA</td>
                   </tr>
-                  <tr>
+                  <tr className="border-b border-gray-50">
                     <td className="px-3 py-2 font-medium text-gray-800">Resend</td>
                     <td className="px-3 py-2 text-gray-600">
                       Weiterleitung von Kontaktformular-Inhalten per E-Mail an uns
                     </td>
                     <td className="px-3 py-2 text-gray-600">USA</td>
+                  </tr>
+                  <tr>
+                    <td className="px-3 py-2 font-medium text-gray-800">Vercel</td>
+                    <td className="px-3 py-2 text-gray-600">
+                      Hosting, Serverless Functions und Edge-Netzwerk (Zugriffslogs)
+                    </td>
+                    <td className="px-3 py-2 text-gray-600">USA / Global Edge</td>
                   </tr>
                 </tbody>
               </table>
