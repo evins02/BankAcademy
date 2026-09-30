@@ -18,24 +18,28 @@ export async function POST(req: NextRequest) {
   const cleanEmail = email.trim().toLowerCase();
 
   try {
-    // 1. Delete all SQL data for this user
-    await Promise.all([
-      sql`DELETE FROM user_progress WHERE email = ${cleanEmail}`.catch(() => {}),
-      sql`DELETE FROM pilot_users WHERE email = ${cleanEmail}`.catch(() => {}),
-      sql`DELETE FROM pilot_feedback WHERE email = ${cleanEmail}`.catch(() => {}),
-      sql`DELETE FROM registrations WHERE LOWER(email) = ${cleanEmail}`.catch(() => {}),
-    ]);
-
-    // 2. Delete the Clerk user (removes profile + unsafeMetadata permanently)
+    // 1. Look up Clerk user first to get clerk_user_id for user_progress deletion
+    let clerkUserId: string | null = null;
     try {
       const client = await clerkClient();
       const result = await client.users.getUserList({ emailAddress: [cleanEmail], limit: 1 });
       if (result.data.length > 0) {
-        await client.users.deleteUser(result.data[0].id);
+        clerkUserId = result.data[0].id;
+        await client.users.deleteUser(clerkUserId);
       }
     } catch {
-      // Non-fatal: Clerk deletion failed (e.g. user already deleted), SQL data is gone
+      // Non-fatal: Clerk deletion failed (e.g. user already deleted)
     }
+
+    // 2. Delete all SQL data — user_progress keyed by clerk_user_id, rest by email
+    await Promise.all([
+      clerkUserId
+        ? sql`DELETE FROM user_progress WHERE clerk_user_id = ${clerkUserId}`.catch(() => {})
+        : Promise.resolve(),
+      sql`DELETE FROM pilot_users WHERE email = ${cleanEmail}`.catch(() => {}),
+      sql`DELETE FROM pilot_feedback WHERE email = ${cleanEmail}`.catch(() => {}),
+      sql`DELETE FROM registrations WHERE LOWER(email) = ${cleanEmail}`.catch(() => {}),
+    ]);
 
     return NextResponse.json({ success: true });
   } catch {

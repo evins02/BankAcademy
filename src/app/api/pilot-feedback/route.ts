@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
+import { rateLimit, getIp } from "@/lib/rateLimit";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -29,6 +30,10 @@ async function ensureTable() {
 }
 
 export async function POST(req: NextRequest) {
+  if (!rateLimit(getIp(req) + ":pilot-feedback", 5, 60 * 60 * 1000)) {
+    return NextResponse.json({ error: "Zu viele Anfragen." }, { status: 429 });
+  }
+
   try {
     const body = await req.json();
     await ensureTable();

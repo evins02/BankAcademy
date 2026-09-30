@@ -95,6 +95,19 @@ export async function POST(req: Request) {
     );
   }
 
+  if (!Array.isArray(messages) || messages.length > 30) {
+    return new Response(
+      `data: ${JSON.stringify({ error: "Too many messages" })}\n\n`,
+      { status: 400, headers: { "Content-Type": "text/event-stream" } }
+    );
+  }
+  if (messages.some((m) => typeof m.content === "string" && m.content.length > 3000)) {
+    return new Response(
+      `data: ${JSON.stringify({ error: "Message too long" })}\n\n`,
+      { status: 400, headers: { "Content-Type": "text/event-stream" } }
+    );
+  }
+
   const systemPrompt = BASE_PROMPT + (DIFFICULTY_SUFFIX[difficulty] ?? "");
   const mapped = messages
     .filter((m) => m.content && m.content.toString().trim() !== "")

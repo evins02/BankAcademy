@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
+import { rateLimit, getIp } from "@/lib/rateLimit";
 
 async function ensureTable() {
   await sql`
@@ -30,6 +31,10 @@ function esc(s: string): string {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: NextRequest) {
+  if (!rateLimit(getIp(req) + ":contact", 5, 60 * 60 * 1000)) {
+    return NextResponse.json({ error: "Zu viele Anfragen. Bitte versuche es später erneut." }, { status: 429 });
+  }
+
   const body = await req.json();
   const { type, vorname, nachname, email, institution, funktion, anzahlLernende, nachricht } = body;
 

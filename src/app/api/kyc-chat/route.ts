@@ -1,7 +1,15 @@
-export const runtime = 'edge'
+import { NextRequest } from "next/server";
+import { rateLimit, getIp } from "@/lib/rateLimit";
+
 export const dynamic = 'force-dynamic'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  if (!rateLimit(getIp(req) + ":kyc-chat", 15, 5 * 60 * 1000)) {
+    return new Response(JSON.stringify({ error: "Zu viele Anfragen. Bitte warte kurz." }), {
+      status: 429,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
   try {
     const { messages } = await req.json()
 
