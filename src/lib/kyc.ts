@@ -82,6 +82,38 @@ export const KYC_LEVELS: KycLevelConfig[] = [
         feedback:
           "Das Bankkundengeheimnis gilt auch ausserhalb der Arbeitszeit und im Privatleben. Du darfst weder bestätigen noch verneinen, ob jemand Kunde bei eurer Bank ist. Auch gegenüber Freunden und Familie gilt absolute Verschwiegenheit.",
       },
+      {
+        id: "1.4",
+        level: 1,
+        situation:
+          "Eine junge Kundin, 22 Jahre, möchte ihr erstes Konto eröffnen. Sie fragt dich: «Was brauche ich überhaupt alles, um ein Konto zu eröffnen?»",
+        question: "Was erklärst du ihr?",
+        options: [
+          { key: "A", text: "«Nur Ihre Adresse und Telefonnummer – den Rest erledigen wir intern.»" },
+          { key: "B", text: "«Amtlichen Ausweis (Pass oder ID) und Wohnsitznachweis. Bei US-Verbindungen noch eine FATCA-Erklärung. Alles andere füllen wir gemeinsam aus.»" },
+          { key: "C", text: "«Pass, Lohnausweis der letzten 3 Monate, Betreibungsregisterauszug und Aufenthaltsbewilligung – wir müssen die Zahlungsfähigkeit prüfen bevor wir ein Konto eröffnen.»" },
+          { key: "D", text: "«Nur einen amtlichen Ausweis – alles andere ist optional. Der Wohnsitz wird von uns direkt beim Einwohnerregister abgefragt.»" },
+        ],
+        correct: "B",
+        feedback:
+          "Pflichtunterlagen bei Kontoeröffnung: 1) Amtlicher Lichtbildausweis (Pass oder Identitätskarte) – Pflicht gemäss VSB zur Identifikation. 2) Wohnsitznachweis (Wohnsitz in der Schweiz bestätigen). 3) FATCA-Eigenerklärung falls US-Verbindungen möglich. Kein Lohnausweis oder Betreibungsauszug nötig – das wäre für Kreditanträge, nicht Kontoeröffnung.",
+      },
+      {
+        id: "1.5",
+        level: 1,
+        situation:
+          "Ein Kunde fragt: «Was genau bedeutet eigentlich KYC? Ich höre das überall.»",
+        question: "Was erklärst du?",
+        options: [
+          { key: "A", text: "«KYC steht für 'Keep Your Cash' – eine interne Regel der Bank, dass Bargeldtransaktionen begrenzt werden.»" },
+          { key: "B", text: "«KYC – 'Know Your Customer' – bedeutet, dass die Bank ihre Kunden kennen muss: Wer sind sie, woher kommt ihr Geld, und ist das Geschäftsmodell plausibel? Das verhindert Geldwäscherei und Terrorismusfinanzierung.»" },
+          { key: "C", text: "«KYC ist eine EU-Vorschrift für Grossbanken – kleinere Banken und Privatkunden sind davon nicht betroffen.»" },
+          { key: "D", text: "«KYC ist nur beim ersten Kontakt relevant – danach wird der Kundenstatus nie mehr überprüft, solange keine strafrechtlichen Vorwürfe bestehen.»" },
+        ],
+        correct: "B",
+        feedback:
+          "KYC (Know Your Customer) ist die gesetzliche Pflicht der Bank, ihre Kunden zu kennen: Identität, wirtschaftliche Berechtigung, Herkunft der Mittel und Zweck der Geschäftsbeziehung. Rechtsgrundlagen: GwG (Geldwäschereigesetz) und VSB (Vereinbarung über die Standesregeln). KYC ist kein einmaliges Ereignis – das Kundenprofil muss laufend aktuell gehalten werden.",
+      },
     ],
   },
   {
@@ -137,6 +169,38 @@ export const KYC_LEVELS: KycLevelConfig[] = [
         tolerance: 1,
         feedback:
           "Gemäss VSB müssen bei Handelsgeschäften und Einzahlungen über CHF 25'000 die Identität geprüft und die Herkunft der Mittel dokumentiert werden. Der Kunde muss die Herkunft glaubhaft belegen können, z.B. mit einem Kaufvertrag für das Auto.",
+      },
+      {
+        id: "2.4",
+        level: 2,
+        situation:
+          "Du hast zwei Kunden: Kunde A ist ein Schweizer Arzt mit Inlandeinkommen. Kunde B ist ein ausländischer Unternehmer, der CHF 2 Mio. einlegen möchte – Quelle unklar, Sitz der Firma in einer Offshore-Jurisdiktion.",
+        question: "Welche Sorgfaltsstufe gilt für wen?",
+        options: [
+          { key: "A", text: "Beide erhalten Standard-CDD (Customer Due Diligence) – der Betrag allein rechtfertigt noch keine erhöhte Prüfung solange keine Strafregistereinträge vorliegen." },
+          { key: "B", text: "Beide erhalten EDD (Enhanced Due Diligence) – jeder Neukunde mit ausländischer Verbindung gilt als Hochrisiko." },
+          { key: "C", text: "Kunde A: Standard-CDD ausreichend. Kunde B: EDD zwingend – unklare Mittelherkunft, Offshore-Jurisdiktion und Volumen sind Hochrisikofaktoren gemäss GwG Art. 6." },
+          { key: "D", text: "Kunde A: kein KYC nötig (Inlandkunde). Kunde B: Standard-CDD mit zusätzlicher Unterschrift." },
+        ],
+        correct: "C",
+        feedback:
+          "CDD (Standard-Sorgfaltspflicht) gilt für normale Geschäftsbeziehungen mit niedrigem Risiko. EDD (Enhanced Due Diligence / erhöhte Sorgfaltspflicht) greift bei Hochrisikofaktoren: unklare Mittelherkunft, Offshore-Jurisdiktion, hohe Beträge, PEP-Status oder ungewöhnliche Transaktionen. Hier: Kunde B erfüllt mehrere Hochrisikomerkmale → zwingend EDD plus Genehmigung der Geschäftsleitung (GwG Art. 6).",
+      },
+      {
+        id: "2.5",
+        level: 2,
+        situation:
+          "Im Bankausbildungskurs wirst du gefragt: «Erkläre das Dreiphasenmodell der Geldwäscherei.»",
+        question: "Welche Antwort ist richtig?",
+        options: [
+          { key: "A", text: "Verdienen → Verstecken → Ausgeben: Deliktische Gewinne werden zuerst eingenommen, dann auf anonymen Konten versteckt und schliesslich für legale Einkäufe verwendet." },
+          { key: "B", text: "Placement → Layering → Integration: Inkriminierte Gelder werden eingeschleust, durch viele Transaktionen verschleiert und schliesslich als legale Mittel in den Wirtschaftskreislauf zurückgeführt." },
+          { key: "C", text: "Einlage → Transfer → Auszahlung: Bargeld wird eingezahlt, ins Ausland transferiert und sauber wieder ausgezahlt – jede Phase entspricht einem separaten Bankinstitut." },
+          { key: "D", text: "Konto → Transaktion → Abschluss: Schmutziges Geld durchläuft drei Bankkonten in verschiedenen Ländern und gilt nach dem dritten Transfer als gewaschen." },
+        ],
+        correct: "B",
+        feedback:
+          "Das Dreiphasenmodell: 1) Placement (Einspeisung): Bargeld aus Verbrechen wird ins Finanzsystem eingebracht (z.B. Bareinzahlungen, Scheinfirmen). 2) Layering (Verschleierung): Durch viele Transaktionen, Überweisungen ins Ausland, Immobilienkäufe wird die Spur verwischt. 3) Integration (Integration): Das Geld erscheint als sauberes Vermögen im legalen Wirtschaftskreislauf. Bankmitarbeitende müssen insbesondere Phase 1 erkennen und melden.",
       },
     ],
   },
@@ -201,6 +265,38 @@ export const KYC_LEVELS: KycLevelConfig[] = [
         correct: "A",
         feedback:
           "Das Need-to-know-Prinzip gilt absolut. Jeder Mitarbeiter darf nur auf Kundendaten zugreifen, für die er eine klare Berechtigung hat. Unbefugter Zugriff verletzt das Bankkundengeheimnis und den Datenschutz – unabhängig davon ob der Kollege vertrauenswürdig ist oder der Kunde einverstanden war. Dies kann strafrechtliche Konsequenzen haben.",
+      },
+      {
+        id: "3.4",
+        level: 3,
+        situation:
+          "Du hast soeben eine Geldwäscherei-Verdachtsmeldung an die MROS abgeschickt. Dein Kunde ruft kurz danach an und fragt dich direkt: «Haben Sie irgendetwas gegen mich gemeldet?»",
+        question: "Was machst du?",
+        options: [
+          { key: "A", text: "Dem Kunden ehrlich antworten – Transparenz ist ein Grundwert der Bank. Eine Meldung darf er als Betroffener kennen." },
+          { key: "B", text: "Ausweichend antworten: «Es gibt nichts Besonderes»  – eine direkte Lüge ist verboten, aber du kannst die Wahrheit umgehen ohne rechtlich zu verstossen." },
+          { key: "C", text: "Den Kunden nicht informieren und die Frage ausweichen – das Informationsverbot (Tipping-off-Verbot) nach GwG Art. 10a verbietet jede Offenlegung der Meldung oder laufenden Abklärung." },
+          { key: "D", text: "Compliance sofort benachrichtigen und das Gespräch beenden – der Anruf könnte ein Versuch sein, die Untersuchung zu beeinflussen. Bis zur Rückmeldung der MROS alle Kundenkontakte verweigern." },
+        ],
+        correct: "C",
+        feedback:
+          "Art. 10a GwG: absolutes Informationsverbot ('Tipping-off-Verbot'). Nach einer MROS-Meldung darf dem Kunden weder die Meldung noch die laufende Untersuchung offenbart werden. Weder direkt noch indirekt, weder mündlich noch schriftlich. Zweck: verhindert Flucht des Verdächtigen oder Vernichtung von Beweisen. Bei Verstoss drohen strafrechtliche Konsequenzen für den Bankmitarbeitenden.",
+      },
+      {
+        id: "3.5",
+        level: 3,
+        situation:
+          "Eine Gesellschaft mit Sitz auf den Cayman Islands möchte ein Konto eröffnen. Der bevollmächtigte Vertreter (Anwalt aus Zürich) erklärt, die tatsächlichen Eigentümer seien zwei Privatpersonen, deren Namen er nicht ohne Weiteres nennen kann.",
+        question: "Was musst du tun?",
+        options: [
+          { key: "A", text: "Konto eröffnen mit dem Anwalt als Vertragspartner – er trägt als bevollmächtigter Vertreter die volle rechtliche Verantwortung für die Gesellschaft. Die Hintermänner müssen nicht identifiziert werden." },
+          { key: "B", text: "Formular K (Domizilgesellschaft) und Formular A (wirtschaftlich Berechtigte) sind zwingend auszufüllen. Die effektiven wirtschaftlich Berechtigten müssen namentlich identifiziert werden – ohne diese Angaben ist eine Kontoeröffnung nicht möglich." },
+          { key: "C", text: "Konto provisorisch eröffnen und dem Anwalt 30 Tage Zeit geben, die Eigentümer zu benennen. Bis dahin sind nur Einzahlungen, keine Auszahlungen zugelassen." },
+          { key: "D", text: "Compliance informieren und das Konto ohne Formular A eröffnen – der Anwalt untersteht dem Anwaltsgeheimnis, das ihn von der Offenlegung seiner Mandanten befreit." },
+        ],
+        correct: "B",
+        feedback:
+          "Domizilgesellschaft (Briefkastenfirma ohne operative Tätigkeit am Sitz): Formular K ist zwingend. Dazu kommt Formular A, um die wirtschaftlich Berechtigten namentlich zu erfassen. Ohne vollständige Identifikation der Hintermänner darf das Konto nicht eröffnet werden – unabhängig davon, ob der Vertreter ein Anwalt ist. Das Anwaltsgeheimnis schützt Mandanteninformationen im Rechtsverhältnis, befreit aber nicht von GwG-Pflichten der Bank.",
       },
     ],
   },
