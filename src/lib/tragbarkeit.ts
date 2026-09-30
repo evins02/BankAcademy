@@ -120,6 +120,30 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
         feedback:
           "Ein Resultat von null bedeutet die Liegenschaft trägt sich knapp selbst. In der Praxis wird bei Nullergebnis trotzdem das Gesamtengagement geprüft um Puffer sicherzustellen.",
       },
+      {
+        id: "1.4",
+        briefing: "Du prüfst ein Renditeobjekt mit 30% Leerstand:",
+        calcRows: [
+          { type: "row", label: "Mieteinnahmen (brutto)", value: "CHF 200'000" },
+          { type: "row", label: "− Leerstand (30%)", value: "− CHF 60'000" },
+          { type: "row", label: "Mieteinnahmen (netto)", value: "CHF 140'000" },
+          { type: "row", label: "− Zinsendienst", value: "− CHF 80'000" },
+          { type: "row", label: "− Amortisation", value: "− CHF 30'000" },
+          { type: "row", label: "− Nebenkosten", value: "− CHF 18'000" },
+          { type: "divider" },
+          { type: "total-error", label: "Resultat", value: "= − CHF 28'000" },
+        ],
+        question: "Was fällt dir ausserdem auf und wie gehst du vor?",
+        options: [
+          { key: "A", text: "Prüfung abbrechen – ein Leerstand von 30% macht jede weitere Kreditprüfung hinfällig. Die Bank finanziert grundsätzlich keine Objekte mit mehr als 15% Leerstand." },
+          { key: "B", text: "Nettoaufwand CHF 28'000, Leerstand 30% ist ein klares Warnsignal. Prüfung auf Gesamtengagementsebene nötig, aber Leerstand muss explizit dokumentiert und als Risikofaktor bewertet werden." },
+          { key: "C", text: "Nettoaufwand ignorieren – der Leerstand ist temporär. In 12 Monaten bei voller Vermietung ergibt sich ein Nettoertrag von CHF 32'000. Die zukünftige Tragbarkeit ist entscheidend." },
+          { key: "D", text: "Direkt auf Gesamtengagementsebene prüfen – da das Objekt mit CHF 200'000 Bruttomiete ohnehin profitabel wäre, ist der aktuelle Leerstand irrelevant für die Entscheidung." },
+        ],
+        correct: "B",
+        feedback:
+          "Nettoaufwand → Prüfung auf Gesamtengagementsebene. Zusätzlich: 30% Leerstand ist ein erhebliches Risikosignal und muss im Kreditantrag explizit dokumentiert werden. Ist der Leerstand strukturell (schlechte Lage, falscher Nutzungstyp)? Oder temporär? Das beeinflusst die Kreditentscheidung massgeblich. Hoher Leerstand kann die ETP-Begründung oder die Kreditablehnung stützen.",
+      },
     ],
   },
   {
@@ -221,6 +245,36 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
         feedback:
           "Deckungsgrad 1.34 > 1.2 = Tragbarkeit knapp aber klar gegeben. Immer genau rechnen – Grenzfälle entscheiden sich in den Dezimalstellen.",
       },
+      {
+        id: "2.4",
+        briefing: "Du prüfst das Gesamtengagement. Der Cashflow schwankt stark:",
+        deckungsgradData: {
+          inputs: [
+            { label: "Cashflow Jahr 1", value: "CHF 310'000" },
+            { label: "Cashflow Jahr 2", value: "CHF 155'000" },
+            { label: "Cashflow Jahr 3", value: "CHF 195'000" },
+            { label: "Nettoaufwand Objekt", value: "CHF 70'000" },
+            { label: "Langfristige Verbindlichkeiten", value: "CHF 4'000'000" },
+          ],
+          calcLines: [
+            "Ø Cashflow = (310'000 + 155'000 + 195'000) / 3 = 220'000",
+            "Nenner = 70'000 + (0.015 × 4'000'000)",
+            "       = 70'000 + 60'000 = 130'000",
+          ],
+          resultLine: "Deckungsgrad = 220'000 / 130'000 = 1.69",
+          isOk: true,
+        },
+        question: "Deckungsgrad 1.69 – was beachtest du noch?",
+        options: [
+          { key: "A", text: "Direkt bewilligen – Deckungsgrad 1.69 gibt ausreichend Spielraum. Keine weiteren Abklärungen nötig." },
+          { key: "B", text: "Ablehnen – starke Cashflow-Schwankungen (CHF 155'000 bis CHF 310'000) sind ein K.O.-Kriterium, unabhängig vom Deckungsgrad." },
+          { key: "C", text: "Bewilligen, aber Cashflow-Schwankungen dokumentieren. Jahr 2 mit CHF 155'000 allein würde Deckungsgrad von 1.19 ergeben – knapp unter Minimum. Das Risiko muss transparent im Kreditantrag vermerkt sein." },
+          { key: "D", text: "ETP beantragen – Schwankungen über 30% zwischen Jahren erfordern immer eine Ausnahmebewilligung." },
+        ],
+        correct: "C",
+        feedback:
+          "Deckungsgrad auf Durchschnittsbasis 1.69 ist gut. Aber: Im schlechtesten Jahr (CHF 155'000) wäre der Deckungsgrad 155'000 / 130'000 = 1.19 – knapp unter der Mindestgrenze. Das muss dokumentiert und bewertet werden. Woher kommen die Schwankungen? Branchenzyklen? Einmalereignisse? Ein stabiler Durchschnitt mit starken Ausreissern ist riskanter als ein stabiler mittlerer Wert.",
+      },
     ],
   },
   {
@@ -281,6 +335,21 @@ export const TRAGBARKEIT_SECTIONS: TragbarkeitSectionConfig[] = [
         correct: "D",
         feedback:
           "ETP ist kein Freifahrtschein. Bei Deckungsgrad 0.7 und ohne positive Faktoren ist eine ETP-Begründung nicht haltbar. Hier muss abgelehnt werden.",
+      },
+      {
+        id: "3.4",
+        briefing:
+          "ETP-Antrag liegt vor. Deckungsgrad = 1.1. Begründung des Beraters: «Grosskunde, CHF 8 Mio. Gesamtengagement, sehr wichtig für die Bank – wir können ihn nicht verlieren.»",
+        question: "Ist diese ETP-Begründung ausreichend?",
+        options: [
+          { key: "A", text: "Ja – Grosskunden haben strategische Bedeutung. Wenn das Gesamtengagement über CHF 5 Mio. liegt, ist die strategische Wichtigkeit ein anerkannter Begründungsgrund gemäss interner Kreditpolitik." },
+          { key: "B", text: "Nein – strategische Wichtigkeit und Umsatzgrösse sind keine sachlichen Begründungen für einen ETP. Ein ETP braucht eine wirtschaftliche Begründung: warum ist die Unterschreitung temporär, und wie erholt sich der Deckungsgrad?" },
+          { key: "C", text: "Nur wenn ein Vorstandsmitglied den ETP mitunterzeichnet – bei Engagements über CHF 5 Mio. reicht die Unterschrift des direkten Vorgesetzten nicht aus." },
+          { key: "D", text: "Ja – die Begründung ist ausreichend. Der ETP-Prozess dient dazu, wichtige Kundenbeziehungen zu erhalten. Der Berater trägt die Verantwortung und hat sie mit seiner Unterschrift dokumentiert." },
+        ],
+        correct: "B",
+        feedback:
+          "Ein ETP muss wirtschaftlich begründet sein. «Wir wollen den Kunden nicht verlieren» ist kein sachlicher Grund. Korrekte ETP-Begründung: 1) Warum liegt der Deckungsgrad aktuell unter 1.2? (z.B. Investitionsphase, temporäre Umsatzdelle). 2) Wie und wann erholt sich der Deckungsgrad? 3) Welche Wiedervorlage wird gesetzt? Emotionale oder strategische Argumente allein reichen nicht aus.",
       },
     ],
   },
