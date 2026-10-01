@@ -108,6 +108,91 @@ export const KMU_LEVELS: BlankokreditLevelConfig[] = [
           "EK-Quote Richtwert für gesunde KMU: 20–30%. Bei 9% ist das Eigenkapitalpolster sehr dünn. Kreditbewilligung möglich, aber nur mit kompensierenden Faktoren: starke Sicherheiten, guter Cashflow-Nachweis, persönliche Bürgschaft des Inhabers oder Bürgschaftsgenossenschaft.",
         concepts: ["ek-quote", "bilanzanalyse"],
       },
+      {
+        id: "kmu-1.6",
+        level: 1,
+        briefing:
+          "Elektro Brunner GmbH möchte einen Lieferwagen (CHF 58'000) finanzieren. Der Kundenberater stellt drei Optionen vor: Bankkredit, Leasing oder Kauf aus eigenen Mitteln.",
+        question: "Was ist der Kernunterschied zwischen Bankkredit und Leasing bei Investitionen?",
+        options: [
+          { key: "A", text: "Leasing ist immer günstiger als ein Bankkredit." },
+          { key: "B", text: "Bankkredit: Fahrzeug gehört der Firma, erscheint in der Bilanz, Zins auf sinkendes Restkapital. Leasing: Fahrzeug bleibt Eigentum des Leasinggebers, keine Bilanzeintragung, monatliche Rate konstant – aber keine Eigentumsbildung." },
+          { key: "C", text: "Kein Unterschied – beide Instrumente sind rechtlich identisch." },
+          { key: "D", text: "Leasing ist nur für Privatkunden, Bankkredit nur für Unternehmen zulässig." },
+        ],
+        correct: "B",
+        feedback:
+          "Bankkredit: Eigentum geht sofort auf die Firma über, das Fahrzeug erscheint als Aktivum in der Bilanz, der Zins läuft auf das sinkende Restkapital. Leasing: Das Fahrzeug bleibt wirtschaftlich und rechtlich beim Leasinggeber, die Firma nutzt es nur. Keine Bilanzeintragung, konstante Rate. Nachteil: keine Eigentumsbildung, bei Kündigung keine Restwertzahlung. KMU wählen Leasing oft für Flotten und Maschinen, da es die Bilanz entlastet.",
+        concepts: ["leasing", "investitionskredit", "bilanz"],
+      },
+      {
+        id: "kmu-1.7",
+        level: 1,
+        briefing:
+          "Zimmerei Keller AG plant einen Neubau ihrer Werkstatt für CHF 950'000. Der Bauunternehmer beginnt in 3 Monaten. Das Geld wird nicht auf einmal, sondern in mehreren Tranchen während der Bauphase benötigt.",
+        question: "Welches Kreditprodukt ist für eine Baufinanzierung geeignet und wie funktioniert es?",
+        options: [
+          { key: "A", text: "Investitionskredit CHF 950'000 direkt auszahlen – einfacher zu verwalten." },
+          { key: "B", text: "Baukredit: Die Bank stellt eine Kreditlimite bereit, die tranchenweise je nach Baufortschritt abgerufen wird. Zinsen laufen nur auf dem abgerufenen Betrag. Nach Bauvollendung wird in Hypothek umgewandelt." },
+          { key: "C", text: "Kontokorrentkredit – kann jederzeit für Bauausgaben verwendet werden." },
+          { key: "D", text: "Keine Banklösung – Baufinanzierungen müssen vollständig aus EK finanziert werden." },
+        ],
+        correct: "B",
+        feedback:
+          "Baukredit = Spezialprodukt für Bauprojekte. Die Bank stellt eine Gesamtlimite bereit, die in Abhängigkeit vom dokumentierten Baufortschritt abgerufen wird. Zinsen laufen nur auf dem tatsächlich bezogenen Betrag – das spart Zinsen in der Anfangsphase. Nach Bauvollendung und Abnahme wird der Baukredit in eine langfristige Hypothek umgewandelt. Zwischenzinsen während der Bauphase sind steuerlich abziehbar.",
+        concepts: ["baukredit", "kreditarten", "hypothek"],
+      },
+      {
+        id: "kmu-1.8",
+        level: 1,
+        briefing:
+          "Spengler Huber AG nimmt einen Investitionskredit CHF 480'000 über 8 Jahre auf. Der Kundenberater erklärt die Amortisationsform.",
+        question: "Was ist der Unterschied zwischen direkter und indirekter Amortisation?",
+        options: [
+          { key: "A", text: "Kein Unterschied – die Gesamtkosten sind immer identisch." },
+          { key: "B", text: "Direkte Amortisation: Kredit wird laufend zurückgezahlt, Schuld sinkt, Zinsbelastung nimmt ab. Indirekte Amortisation: Kreditschuld bleibt konstant, Sparbetrag geht in Vorsorge (3a/Lebensversicherung), die am Ende zur Tilgung eingesetzt wird." },
+          { key: "C", text: "Indirekte Amortisation bedeutet, der Kredit wird in zwei Hälften aufgeteilt und separat zurückgezahlt." },
+          { key: "D", text: "Direkte Amortisation ist verboten bei Unternehmenskrediten." },
+        ],
+        correct: "B",
+        feedback:
+          "Direkte Amortisation: Regelmässige Rückzahlungen reduzieren die Schuld. Zinsbelastung sinkt laufend. Indirekte Amortisation: Schuld bleibt konstant, Gegenwert wird in ein Vehikel (Lebensversicherung, Säule 3a) angespart, das am Ende des Kreditvertrags zur Tilgung verwendet wird. Indirekte Amortisation ist im KMU-Bereich seltener als bei Hypotheken – dort ist sie steueroptimierend, weil die volle Hypothekarzinsbelastung absetzbar bleibt.",
+        concepts: ["amortisation", "investitionskredit", "tilgung"],
+      },
+      {
+        id: "kmu-1.9",
+        level: 1,
+        briefing:
+          "Kundin Sandra Wyss (Inhaberin einer Physiotherapiepraxis) fragt: «Was genau ist ein Schuldbrief und warum braucht die Bank diesen bei einer Hypothek?»",
+        question: "Was erklärt der Kundenberater?",
+        options: [
+          { key: "A", text: "Ein Schuldbrief ist ein Kreditvertrag – er ersetzt den Hypothekarvertrag." },
+          { key: "B", text: "Ein Schuldbrief ist ein grundpfandrechtliches Wertpapier. Er verbrieft eine Grundpfandschuld auf der Liegenschaft und gibt der Bank das Recht, im Verwertungsfall als Grundpfandgläubigerin aufzutreten. Die Liegenschaft dient als Sicherheit für den Kredit." },
+          { key: "C", text: "Ein Schuldbrief ist eine persönliche Bürgschaft des Eigentümers." },
+          { key: "D", text: "Schuldbriefe sind nur bei Privathypotheken nötig, nicht bei Gewerbeliegenschaften." },
+        ],
+        correct: "B",
+        feedback:
+          "Schuldbrief (Art. 842 ff. ZGB): Grundpfandrechtliches Wertpapier, das auf dem Grundbuch einer Liegenschaft eingetragen wird. Er verbrieft eine Schuld und sichert die Bank als Pfandgläubigerin. Bei Zahlungsausfall kann die Bank die Liegenschaft verwerten und aus dem Erlös befriedigt werden. In der Schweiz werden Schuldbriefe heute fast ausschliesslich als Register-Schuldbriefe (elektronisch im Grundbuch) ausgestellt – kein physisches Papier mehr.",
+        concepts: ["schuldbrief", "grundpfand", "hypothek", "sicherheiten"],
+      },
+      {
+        id: "kmu-1.10",
+        level: 1,
+        briefing:
+          "Neukunde Oliver Gross möchte wissen: «Welche Sicherheiten gibt es überhaupt? Was kann ich der Bank anbieten?»",
+        question: "Welche Sicherheitenkategorien gibt es im KMU-Kreditgeschäft?",
+        options: [
+          { key: "A", text: "Nur Grundpfand (Liegenschaft) – das ist die einzige anerkannte Sicherheit." },
+          { key: "B", text: "Grundpfand (Liegenschaften), Bürgschaft (persönlich oder Gesellschaft), Zession (Kundenforderungen), Faustpfand (Maschinen, Fahrzeuge, Wertpapiere), Verpfändung Lebensversicherung." },
+          { key: "C", text: "Nur Bargeld oder Festgeldkonten." },
+          { key: "D", text: "Sicherheiten sind optional – bei guter EK-Quote braucht es keine." },
+        ],
+        correct: "B",
+        feedback:
+          "Sicherheitenkategorien im KMU-Bereich: 1) Grundpfand: Liegenschaften (Schuldbrief), stärkste Sicherheit. 2) Bürgschaft: persönliche Solidarbürgschaft des Inhabers oder Bürgschaftsgenossenschaft. 3) Zession: Abtretung von Kundenforderungen. 4) Faustpfand: Verpfändung von Maschinen, Fahrzeugen oder Wertschriften. 5) Lebensversicherung: Rückkaufswert als Sicherheit. Kombination mehrerer Sicherheiten ist häufig und stärkt das Kreditdossier.",
+        concepts: ["sicherheiten", "grundpfand", "buergschaft", "zession"],
+      },
     ] as BlankokreditCase[],
   },
   {
@@ -245,6 +330,141 @@ export const KMU_LEVELS: BlankokreditLevelConfig[] = [
         feedback:
           "Schwache EK-Quote schliesst einen Kredit nicht automatisch aus, wenn kompensierende Faktoren vorliegen. Richtiges Vorgehen: Bewilligung mit Auflagen – persönliche Bürgschaft des Inhabers, nachweisbarer EK-Aufbauplan, Pflicht zur Einreichung des Jahresabschlusses. Monitoring ist entscheidend.",
         concepts: ["kreditstrukturierung", "auflagen", "buergschaft"],
+      },
+      {
+        id: "kmu-2.6",
+        level: 2,
+        briefing: "Gross GmbH, Grosshandel, zur Beurteilung des Liquiditätsbedarfs.",
+        inputData: [
+          { label: "Forderungen aus Lieferungen", value: "CHF 620'000" },
+          { label: "Vorräte", value: "CHF 380'000" },
+          { label: "Verbindlichkeiten aus Lieferungen", value: "CHF 290'000" },
+        ],
+        calculator: [
+          {
+            heading: "Netto-Umlaufvermögen (Net Working Capital)",
+            rows: [
+              { type: "data", label: "Forderungen", value: "CHF 620'000" },
+              { type: "data", label: "+ Vorräte", value: "CHF 380'000" },
+              { type: "data", label: "− Verbindlichkeiten", value: "CHF 290'000" },
+              { type: "divider" },
+              { type: "total", label: "Net Working Capital", value: "CHF 710'000" },
+            ],
+            verdict: { text: "CHF 710'000 laufend gebundenes Kapital", ok: true },
+          },
+        ],
+        question: "Was sagt das Net Working Capital über den Kreditbedarf aus?",
+        options: [
+          { key: "A", text: "NWC ist irrelevant – nur der Jahresgewinn zählt." },
+          { key: "B", text: "CHF 710'000 sind dauerhaft im Umlaufvermögen gebunden. Das ist der strukturelle Finanzierungsbedarf, den die Bank mit einem Kontokorrent oder Betriebskredit decken muss." },
+          { key: "C", text: "Je höher das NWC, desto schlechter – das Unternehmen hortet zu viel Kapital." },
+          { key: "D", text: "NWC bedeutet, das Unternehmen hat CHF 710'000 frei verfügbar." },
+        ],
+        correct: "B",
+        feedback:
+          "Net Working Capital (NWC) = Forderungen + Vorräte − kurzfristige Verbindlichkeiten. Es zeigt, wie viel Kapital dauerhaft im operativen Umlauf gebunden ist. Ein hohes NWC bedeutet: Die Firma muss diesen Betrag kontinuierlich vorfinanzieren. Das ist der strukturelle Bedarf für einen Kontokorrentkredit oder Betriebskredit. Für die Bank ist das NWC ein wichtiger Anhaltspunkt für die richtige Kreditdimensionierung.",
+        concepts: ["working-capital", "kontokorrent", "liquiditaet"],
+      },
+      {
+        id: "kmu-2.7",
+        level: 2,
+        briefing: "Handel Müller AG, Jahresumsatz CHF 6.4 Mio., durchschnittliche Forderungen CHF 800'000.",
+        inputData: [
+          { label: "Jahresumsatz", value: "CHF 6'400'000" },
+          { label: "Durchschnittliche Debitorenforderungen", value: "CHF 800'000" },
+        ],
+        calculator: [
+          {
+            heading: "Debitorenlaufzeit (DSO – Days Sales Outstanding)",
+            rows: [
+              { type: "data", label: "Forderungen", value: "CHF 800'000" },
+              { type: "data", label: "÷ Jahresumsatz", value: "CHF 6'400'000" },
+              { type: "data", text: "× 365 Tage" },
+              { type: "divider" },
+              { type: "total", label: "DSO", value: "45.6 Tage" },
+            ] as { type: string; label?: string; value?: string; text?: string }[],
+            verdict: { text: "45.6 Tage – übliche Zahlungsziele 30 Tage ⚠️", ok: false, warning: true },
+          },
+        ],
+        question: "Was bedeutet eine DSO von 45.6 Tagen und welche Konsequenz zieht die Bank?",
+        options: [
+          { key: "A", text: "Ausgezeichnet – über 30 Tage ist ein Zeichen für treue Stammkunden." },
+          { key: "B", text: "DSO über 30 Tage zeigt verzögerte Zahlungseingänge. Das erhöht den Liquiditätsdruck und den Kontokorrentbedarf. Bank prüft Debitorenmanagement und Forderungsausfallrisiko." },
+          { key: "C", text: "DSO ist nur für Grossunternehmen relevant." },
+          { key: "D", text: "Bei CHF 800'000 Forderungen ist alles automatisch in Ordnung." },
+        ],
+        correct: "B",
+        feedback:
+          "DSO (Days Sales Outstanding) = (Forderungen ÷ Umsatz) × 365. Zeigt, wie viele Tage im Durchschnitt bis zur Zahlung vergehen. Bei 45.6 Tagen gegenüber einem marktüblichen Zahlungsziel von 30 Tagen deutet das auf verzögertes Inkasso oder säumige Kunden hin. Konsequenz für Bank: Höherer struktureller Kontokorrentbedarf, Bonitätsrisiko der Schuldner prüfen, bei Zession die Qualität der Debitoren bewerten.",
+        concepts: ["dso", "debitorenlaufzeit", "liquiditaet", "kontokorrent"],
+      },
+      {
+        id: "kmu-2.8",
+        level: 2,
+        briefing: "Druckerei Schär AG reicht Jahresrechnung ein. Freier Cashflow nicht direkt ausgewiesen.",
+        inputData: [
+          { label: "Jahresgewinn", value: "CHF 85'000" },
+          { label: "Abschreibungen", value: "CHF 140'000" },
+          { label: "Rückstellungen (netto Zunahme)", value: "CHF 15'000" },
+        ],
+        calculator: [
+          {
+            heading: "Vereinfachter operativer Cashflow",
+            rows: [
+              { type: "data", label: "Jahresgewinn", value: "CHF 85'000" },
+              { type: "data", label: "+ Abschreibungen", value: "CHF 140'000" },
+              { type: "data", label: "+ Rückstellungen", value: "CHF 15'000" },
+              { type: "divider" },
+              { type: "total", label: "Operativer Cashflow", value: "CHF 240'000" },
+            ],
+            verdict: { text: "CHF 240'000 – deutlich mehr als Gewinn ✅", ok: true },
+          },
+        ],
+        question: "Warum ist der operative Cashflow CHF 240'000 und nicht nur CHF 85'000?",
+        options: [
+          { key: "A", text: "Der Cashflow ist falsch berechnet – er kann nie höher sein als der Gewinn." },
+          { key: "B", text: "Abschreibungen und Rückstellungen sind buchhalterischer Aufwand ohne direkte Geldabfluss. Sie werden zum Gewinn addiert, um den echten Geldfluss aus der Geschäftstätigkeit zu zeigen." },
+          { key: "C", text: "Abschreibungen bedeuten, das Unternehmen hat diesen Betrag auf dem Konto." },
+          { key: "D", text: "Rückstellungen erhöhen den Cashflow nicht – nur realisierte Zahlungen zählen." },
+        ],
+        correct: "B",
+        feedback:
+          "Cashflow-Schätzung (indirekte Methode): Gewinn + Abschreibungen + Rückstellungszunahme = operativer Cashflow. Abschreibungen sind nicht-liquiditätswirksamer Aufwand: Sie mindern den Gewinn, fliessen aber als Geld nicht ab. Der tatsächlich verfügbare Geldfluss ist daher oft deutlich grösser als der Buchgewinn. Wichtig für Kreditentscheid: Der Cashflow – nicht der Gewinn – ist die Grundlage für die DSCR-Berechnung.",
+        concepts: ["cashflow", "abschreibungen", "dscr"],
+      },
+      {
+        id: "kmu-2.9",
+        level: 2,
+        briefing:
+          "Gipser Ammann AG, Baubranche. Die Bank prüft den Kreditantrag und bewertet neben den Kennzahlen auch das Branchenrisiko. Die Baubranche gilt als zyklisch und konjunkturabhängig.",
+        question: "Wie beeinflusst das Branchenrisiko den Kreditentscheid und das Rating?",
+        options: [
+          { key: "A", text: "Branchenrisiko hat keinen Einfluss – nur die Zahlen des einzelnen Unternehmens zählen." },
+          { key: "B", text: "Branchen mit hohem zyklischen Risiko (Bau, Tourismus, Gastronomie) erhalten im Rating einen Risikomalus. Das kann die Kreditkonditionen (Zinsen, Limits) verschlechtern, auch wenn das einzelne Unternehmen gut dasteht." },
+          { key: "C", text: "Branchen mit hohem Risiko erhalten automatisch günstigere Zinsen als Ausgleich." },
+          { key: "D", text: "Branchenrisiko ist nur bei Auslandskrediten relevant." },
+        ],
+        correct: "B",
+        feedback:
+          "Branchenrisiko ist ein wichtiger Bestandteil jedes KMU-Ratings. Banken klassifizieren Branchen nach ihrer Konjunkturabhängigkeit und historischen Ausfallquoten. Die Baubranche, Tourismus, Gastronomie und Detailhandel gelten als höheres Risiko. Dieser «Industry Factor» fliesst ins interne Rating ein – mit direktem Einfluss auf die risikogewichteten Aktiven, den Zinssatz und die bewilligten Limite. Ein starkes Unternehmen in einer schwachen Branche kann durch diesen Faktor trotzdem einen Malus erhalten.",
+        concepts: ["branchenrisiko", "kreditrating", "kreditentscheid"],
+      },
+      {
+        id: "kmu-2.10",
+        level: 2,
+        briefing:
+          "Maler Schneider GmbH, saisonales Geschäft (Hauptsaison April–Oktober), beantragt Kontokorrent CHF 180'000. Der Kundenberater analysiert, wie hoch der Kontokorrent wirklich sein sollte.",
+        question: "Wie bestimmt die Bank die richtige Kontokorrenthöhe für ein saisonales Geschäft?",
+        options: [
+          { key: "A", text: "Immer ein Pauschalbetrag von CHF 100'000 – das ist Marktstandard." },
+          { key: "B", text: "Analyse des saisonalen Liquiditätsbedarfs: maximale Unterdeckung im Jahresverlauf (tiefster Kassenstand) bestimmt die benötigte Limite. Dazu Sicherheitspuffer von 10–20%." },
+          { key: "C", text: "10% des Jahresumsatzes als Faustregel – unabhängig von Saisonalität." },
+          { key: "D", text: "Kontokorrent sollte immer gleich gross sein wie der Jahresgewinn." },
+        ],
+        correct: "B",
+        feedback:
+          "Korrekte Dimensionierung: Die Bank lässt sich den monatlichen Liquiditätsplan vorlegen. Der tiefste Kassenstand im Jahr (typisch im Winter für Maler) zeigt die maximale Unterdeckung ohne Kontokorrent. Darauf wird ein Puffer von 10–20% addiert. Beispiel: maximale Unterdeckung CHF 150'000 → Kontokorrent CHF 165'000–180'000 ist angemessen. Ein zu grosser Kontokorrent verleitet zur Dauernutzung (struktureller Betriebskredit statt Puffer) – das ist ein Warnsignal.",
+        concepts: ["kontokorrent", "liquiditaet", "saisonalitaet"],
       },
     ] as BlankokreditCase[],
   },

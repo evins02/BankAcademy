@@ -155,7 +155,7 @@ const FIRMENKUNDE: OverviewConfig = {
   title: "Firmenkunde",
   description: "Firmenkonten, Tragbarkeit und Kreditengagements",
   emoji: "🏢",
-  totalScenarios: 34,
+  totalScenarios: 49,
   groups: [
     {
       label: "Dokument prüfen",
@@ -250,10 +250,10 @@ const FIRMENKUNDE: OverviewConfig = {
         {
           id: "firmenkunde-kmu-kredit",
           title: "KMU-Kredit",
-          description: "Kreditarten, Bilanzanalyse, DSCR, Covenants, MBO – 15 Szenarien",
+          description: "Kreditarten, Bilanzanalyse, DSCR, Covenants, MBO – 30 Szenarien",
           href: "/firmenkunde/kmu-kredit",
           emoji: "🏭",
-          totalScenarios: 15,
+          totalScenarios: 30,
         },
       ],
     },
