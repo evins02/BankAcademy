@@ -599,6 +599,146 @@ export const ZV_LEVELS: ZvLevelConfig[] = [
         rechtsgrundlage: "EmbG (Embargogesetz) / SECO-Verordnungen / FINMA-RS 2013/3 (Sanktionen) / GwG Art. 10a (Informationsverbot)",
         concepts: ["Sanktionen", "SECO"],
       },
+      {
+        id: "3.7",
+        level: 3,
+        briefing:
+          "Firmenkunde meldet, seine SWIFT-Zahlung über EUR 80'000 an einen deutschen Lieferanten sei seit 4 Werktagen nicht angekommen. SWIFT GPI zeigt Status «Pending» bei einer Zwischenbank in Frankfurt – ohne weitere Erklärung.",
+        question: "Wie gehst du vor?",
+        options: [
+          { key: "A", text: "Abwarten – SWIFT-Zahlungen dauern manchmal bis zu 10 Werktage" },
+          {
+            key: "B",
+            text: "SWIFT GPI-Tracker konsultieren, Correspondent-Bank in Frankfurt über SWIFT MT199 / gSRP (gpi Stop and Recall) kontaktieren, Kunden informieren und parallel Recall-Prozess einleiten.",
+          },
+          { key: "C", text: "Zahlung sofort zurückbuchen und neu ausführen" },
+          { key: "D", text: "Empfängerbank direkt anrufen" },
+        ],
+        correct: "B",
+        feedback:
+          "SWIFT GPI ermöglicht End-to-End-Tracking in Echtzeit. «Pending» bei einer Zwischenbank deutet auf ein AML-Screening oder Compliance-Hold hin. Standardvorgehen: GPI-Tracker prüfen, SWIFT MT199 (freie Nachricht) oder gSRP an die blockierende Bank, parallel Recall-Antrag erwägen. Direkte Rückbuchung ist ohne Bestätigung der Gegenpartei nicht möglich.",
+        warum:
+          "SWIFT GPI (Global Payments Innovation) garantiert Transparenz und Nachverfolgbarkeit. Jede Bank in der Kette muss den Status aktualisieren. Ein «Pending» über 24h ist ungewöhnlich und muss eskaliert werden. Der gSRP-Prozess (gpi Stop and Recall) ermöglicht es, Zahlungen auch in mehrstufigen Korrespondenz-Ketten zurückzurufen. Eine eigenmächtige Rückbuchung ohne Einigung mit der Empfängerbank würde zu einer Doppelzahlung führen.",
+        inDerPraxis:
+          "Die meisten Schweizer Banken sind SWIFT GPI-Mitglieder. In der Praxis sind 70% der grenzüberschreitenden Zahlungen innerhalb von 30 Minuten abgerechnet. Verzögerungen entstehen durch AML-Screens, mangelhafte Angaben (fehlender BIC, falsche IBAN) oder Zeitzonendifferenzen. Kritisch: Ohne SWIFT GPI muss die Ermittlung über SWIFT-Korrespondenz (MT195/199-Tracer) erfolgen – ein aufwändiger, manueller Prozess.",
+        merksatz:
+          "SWIFT GPI: End-to-End-Tracking. Pending-Status > 24h = Eskalation. Rückruf über gSRP – nie eigenmächtig zurückbuchen.",
+        glossarTerm: "SWIFT GPI",
+        rechtsgrundlage: "SWIFT GPI-Regeln / OR Art. 466 ff. (Auftragsverhältnis) / PSD2 (Transparenz im Zahlungsverkehr, EU-Referenz)",
+        concepts: ["SWIFT", "GPI", "Korrespondenzbank"],
+      },
+      {
+        id: "3.8",
+        level: 3,
+        briefing:
+          "Ein Privatkunde ruft aufgeregt an: «Ich wurde gestern von angeblichen Polizisten angerufen, die sagten, mein Konto sei gehackt. Sie liessen mich CHF 12'500 auf ein «Sicherheitskonto» überweisen. Das war natürlich Betrug – können Sie das Geld zurückholen?»",
+        question: "Was sind deine Handlungsmöglichkeiten und was sagst du dem Kunden?",
+        options: [
+          { key: "A", text: "Betrag sofort rückbuchen – der Kunde hat Anspruch auf Erstattung" },
+          {
+            key: "B",
+            text: "Recall-Anfrage bei Empfängerbank einleiten (kein Anspruch auf Erfolg). Kunden zur Anzeige bei Polizei auffordern. Compliance informieren. Ehrlich kommunizieren: Rückholung nicht garantiert.",
+          },
+          { key: "C", text: "Anwalt empfehlen und Verantwortung ablehnen – der Kunde hat die Zahlung selbst autorisiert" },
+          { key: "D", text: "FINMA informieren und Konto sperren" },
+        ],
+        correct: "B",
+        feedback:
+          "Beim sog. «Vishing» (Voice Phishing) autorisiert der Kunde die Zahlung selbst – technisch liegt kein unbefugter Zugriff vor. Die Bank hat keinen gesetzlichen Rückerstattungsanspruch. Trotzdem: Recall-Anfrage beim Empfängerinstitut stellen (kann fruchten wenn Geld noch nicht abgeflossen ist). Wichtig: Polizeianzeige, damit die Betrüger-IBAN gesperrt werden kann. Compliance wegen möglichem Geldwäscherei-Sachverhalt beim Empfängerkonto.",
+        warum:
+          "Vishing ist eine Form des Social Engineering: Täter geben sich als Behörden oder Bankmitarbeitende aus und bringen Opfer dazu, Gelder selbst zu überweisen. Da der Kunde die Zahlung selbst initiiert hat, trägt er das Risiko (OR Art. 11 – eigene Handlung). Die Bank hat aber eine Sorgfaltspflicht und kann durch schnelles Handeln (Recall) helfen. Häufigkeit nimmt stark zu – jede Bank sollte Kunden präventiv über solche Betrugsmaschen informieren.",
+        inDerPraxis:
+          "In der Schweiz nehmen Vishing-Fälle stark zu. In anderen Ländern (UK, Australien) gibt es gesetzliche Rückerstattungspflichten für Banken bei autorisiertem Betrug (Authorised Push Payment Fraud). In der Schweiz noch nicht, aber politisch diskutiert. Erste Anlaufstelle: Polizei + NCSC (Nationales Zentrum für Cybersicherheit). Banken können die Empfänger-IBAN über das Banknetz zur Sperrung melden, wenn Betrug nachgewiesen ist.",
+        merksatz:
+          "Vishing = selbstautorisierter Betrug. Recall-Anfrage, Polizeianzeige, Compliance. Kein garantierter Rückerstattungsanspruch.",
+        glossarTerm: "Vishing / Social Engineering",
+        rechtsgrundlage: "OR Art. 97 (Haftung) / DSG Art. 5 (Datensicherheit) / FINMA-RS 2008/21 (Operationelle Risiken)",
+        concepts: ["Betrug", "Recall", "Vishing"],
+      },
+      {
+        id: "3.9",
+        level: 3,
+        briefing:
+          "Du prüfst eine SEPA-Lastschrift-Rückgabe (R-Transaction) mit dem Rückgabecode «AC01 – IncorrectAccountNumber». Der ursprüngliche Betrag war EUR 3'800. Der Auftraggeber des LSV ist eine deutsche Versicherung.",
+        question: "Was bedeutet dieser Code und was sind deine nächsten Schritte?",
+        options: [
+          { key: "A", text: "Betrag dem Kunden gutschreiben und warten bis sich die Versicherung meldet" },
+          { key: "B", text: "Betrag sperren bis Klärung mit dem Kunden" },
+          {
+            key: "C",
+            text: "R-Code AC01 = IBAN beim Empfänger nicht bekannt oder gesperrt. Betrag beim Kunden rückbuchen, Versicherung mit korrekter IBAN des Kunden informieren, Vorgang dokumentieren.",
+          },
+          { key: "D", text: "Neue SEPA-Zahlung mit korrigierter IBAN auslösen" },
+        ],
+        correct: "C",
+        feedback:
+          "SEPA R-Codes: AC01 = ungültige/geschlossene IBAN. Das Geld floss nie ab – es kommt als R-Transaction zurück. Korrekte Schritte: Betrag rückbuchen (war nie abgeflossen), Kunden informieren, Ursache klären (falsche IBAN beim Auftraggeber hinterlegt). Keine neue Zahlung von der Bank aus möglich – die Versicherung muss ihre Daten korrigieren.",
+        warum:
+          "SEPA-R-Transactions sind standardisierte Rückmeldungen im europäischen Zahlungsverkehr. AC01 ist einer der häufigsten Codes. Wichtig: Die Bank führt keine eigenmächtigen Korrekturen durch – sie informiert den Kunden und gibt ihm die nötigen Informationen, damit er die korrekte IBAN beim Auftraggeber hinterlegen lassen kann. Andere wichtige R-Codes: MS03 = nicht näher spezifiziert, MD01 = kein Mandat, AM04 = Deckung ungenügend, AG01 = Transaktionsart verboten.",
+        inDerPraxis:
+          "SEPA-R-Codes sind standardisiert und müssen allen Backoffice-Mitarbeitenden bekannt sein. Häufige Codes: AC01 (falsche IBAN), MD01 (kein Mandat, Widerspruch), AM04 (keine Deckung), MS03 (generische Ablehnung). Jeder Code erfordert eine spezifische Reaktion. In der Praxis werden R-Transactions täglich in hoher Stückzahl verarbeitet – Effizienz und Genauigkeit sind entscheidend.",
+        merksatz:
+          "SEPA R-Code AC01 = ungültige IBAN. Betrag rückbuchen, Kunden informieren, Auftraggeber muss Daten korrigieren.",
+        glossarTerm: "SEPA / R-Transaktion",
+        rechtsgrundlage: "SEPA-Regelwerk EPC (European Payments Council) / ZAG Art. 24 / SIC-Reglement",
+        concepts: ["SEPA", "R-Code", "Rückbuchung"],
+      },
+      {
+        id: "3.10",
+        level: 3,
+        briefing:
+          "Euer Compliance-Verantwortlicher meldet: Eine neue Korrespondenzbank aus einem Land auf der FATF-Grauen Liste möchte eine Korrespondenzbanken-Beziehung mit euch aufbauen (Nostro/Vostro). Der Vorstand ist interessiert, da die Bank lukrativ erscheint.",
+        question: "Was sind die zwingenden Due-Diligence-Anforderungen vor Aufnahme einer Korrespondenzbank-Beziehung?",
+        options: [
+          { key: "A", text: "Standard-KYC reicht – bei Banken gelten die gleichen Regeln wie bei Privatkunden" },
+          {
+            key: "B",
+            text: "Erweiterte Due Diligence: Regulatorisches Umfeld des Landes, AML/KYC-Qualität der Bank, Management-Integrität, Transaktionsvolumen, Shell-Bank-Ausschluss. Zusätzlich: schriftliche Genehmigung der Geschäftsleitung.",
+          },
+          { key: "C", text: "FATF-Grauer-Liste-Länder sind für Schweizer Banken grundsätzlich verboten" },
+          { key: "D", text: "Nur Jahresbericht und Handelsregistereintrag der Korrespondenzbank anfordern" },
+        ],
+        correct: "B",
+        feedback:
+          "Korrespondenzbanken-Beziehungen erfordern verstärkte Sorgfalt gemäss GwG Art. 13 und FINMA-RS 2011/2. Prüfelemente: Qualität der AML/KYC-Kontrollen der Partnerbank, regulatorisches Umfeld des Landes, Einschätzung des Landes durch FATF, Management und Eigentümerstruktur, Geschäftsvolumen und Transaktionstypen, zwingender Ausschluss von Shell-Banks. Genehmigung der Geschäftsleitung. FATF-Grau-Liste bedeutet erhöhte Sorgfalt, kein automatisches Verbot.",
+        warum:
+          "Korrespondenzbanken-Beziehungen sind ein Hochrisikobereich: Über Korrespondenzkonten können Transaktionen ohne direkte KYC-Prüfung des Endbegünstigten durchgeflossen werden. Die FATF hat spezifische Empfehlungen (FATF Recommendation 13) für diesen Bereich. Shell-Banks (Banken ohne eigene Betriebsstätte und Regulierung) sind in der Schweiz absolut verboten. Das Wolfsberg-Prinzip 2002 und Basel-Komitee-Richtlinien ergänzen die nationalen Anforderungen.",
+        inDerPraxis:
+          "In der Praxis führen Grossbanken Korrespondenzbank-Due-Diligence über spezialisierte Plattformen durch (SWIFT KYC Registry, Refinitiv World-Check). Der Prozess dauert oft Wochen bis Monate. Eine regelmässige Re-Prüfung (alle 1-2 Jahre) ist Pflicht. Nach der US-DoJ-Verfolgung mehrerer Schweizer Banken wegen Sanktionsverletzungen sind die Anforderungen nochmals verschärft worden.",
+        merksatz:
+          "Korrespondenzbank: AML-Qualität, FATF-Rating, Shell-Bank-Ausschluss, GL-Genehmigung. Kein Standard-KYC.",
+        glossarTerm: "Korrespondenzbank / Nostro-Vostro",
+        rechtsgrundlage: "GwG Art. 13 (Korrespondenzbanken) / FINMA-RS 2011/2 (Beziehungen zu Korrespondenzbanken) / FATF Recommendation 13",
+        concepts: ["Korrespondenzbank", "FATF", "Shell-Bank"],
+      },
+      {
+        id: "3.11",
+        level: 3,
+        briefing:
+          "Du bearbeitest eine Sammelüberweisung (Batch) mit 47 Einzelzahlungen total CHF 210'000. Bei der technischen Verarbeitung stellst du fest: 3 Zahlungen haben einen ungültigen BIC, 2 haben Beträge über dem vereinbarten Tageslimit, und 1 enthält als Empfänger eine auf der internen Blacklist stehende Entität.",
+        question: "Wie gehst du mit diesem Batch um?",
+        options: [
+          { key: "A", text: "Ganzen Batch ablehnen und Kunden bitten, alle 47 Zahlungen neu einzureichen" },
+          { key: "B", text: "Alle 47 Zahlungen ausführen – Fehler klären wir nachher" },
+          {
+            key: "C",
+            text: "Batch aufteilen: 41 korrekte Zahlungen ausführen, 5 Limit/BIC-Fehler zur Korrektur an Kunden retournieren, 1 Blacklist-Treffer an Compliance eskalieren und zwingend gesondert behandeln.",
+          },
+          { key: "D", text: "Nur die Blacklist-Zahlung stoppen, Rest komplett ausführen inklusive BIC-Fehler" },
+        ],
+        correct: "C",
+        feedback:
+          "Best Practice: Batch-Splitting. Korrekte Zahlungen nicht aufhalten, fehlerhafte zurückgeben. Kritisch: Die Blacklist-Zahlung ist zwingend von den anderen zu trennen und gesondert durch Compliance zu bearbeiten (Informationsverbot, Dokumentation). BIC-Fehler und Limit-Überschreitungen sind administrative Fehler – Kunden-Rückmeldung mit klarer Fehlerauflistung. Nie alle Zahlungen blockieren wegen einzelner Fehler.",
+        warum:
+          "Sammelzahlungen (Batch) sind im Unternehmenskundengeschäft Standard. Wichtig: Jede Zahlung im Batch ist technisch eigenständig und muss separat beurteilt werden. Operationelle Effizienz: 41 korrekte Zahlungen dürfen nicht blockiert werden, weil 6 fehlerhafte im Batch enthalten sind. Compliance-Pflicht: Die Blacklist-Zahlung ist ein Sanktionsfall und unterliegt völlig anderen Verfahren als administrative Fehler (BIC, Limit). Alles dokumentieren.",
+        inDerPraxis:
+          "Grossbanken verarbeiten täglich tausende Batch-Zahlungen. Automatisierte Systeme prüfen jeden Eintrag und splitten den Batch automatisch. Beim manuellen Batch-Processing muss der Sachbearbeiter dies strukturiert nachbilden. Wichtig: Kunden erhalten einen klaren Fehlerbericht mit Angabe der fehlerhaften Referenznummern und dem spezifischen Fehler – nicht nur «Fehler im Batch». Für Compliance-Fälle im Batch gilt Informationsverbot: Der Kunde darf nicht erfahren, warum genau diese Zahlung blockiert ist.",
+        merksatz:
+          "Batch: Korrekte ausführen, Fehlerhafte retournieren, Compliance-Fälle gesondert eskalieren. Nie wegen Einzelfehler alles stoppen.",
+        glossarTerm: "Sammelüberweisung / Batch",
+        rechtsgrundlage: "OR Art. 466 ff. (Auftragsverhältnis) / FINMA-RS 2008/21 (Operationelle Risiken) / SIC-Reglement",
+        concepts: ["Batch", "Blacklist", "Sanktionen"],
+      },
     ],
   },
 ];

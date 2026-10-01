@@ -298,6 +298,106 @@ export const KYC_LEVELS: KycLevelConfig[] = [
         feedback:
           "Domizilgesellschaft (Briefkastenfirma ohne operative Tätigkeit am Sitz): Formular K ist zwingend. Dazu kommt Formular A, um die wirtschaftlich Berechtigten namentlich zu erfassen. Ohne vollständige Identifikation der Hintermänner darf das Konto nicht eröffnet werden – unabhängig davon, ob der Vertreter ein Anwalt ist. Das Anwaltsgeheimnis schützt Mandanteninformationen im Rechtsverhältnis, befreit aber nicht von GwG-Pflichten der Bank.",
       },
+      {
+        id: "3.6",
+        level: 3,
+        situation:
+          "Dein Firmenkunde, ein Import-Exporteur von Textilien, überweist monatlich mehrmals EUR-Beträge an Gegenparteien in Ländern mit hohem GwG-Risiko. Die Rechnungsbeträge variieren stark (CHF 8'000–150'000), die gelieferten Mengen und Qualitäten entsprechen laut Branchendaten aber nicht den fakturierten Preisen.",
+        question: "Was beschreibt dieses Muster und was musst du tun?",
+        options: [
+          { key: "A", text: "Nichts – Import-Export-Geschäfte sind per se legitim und Preisschwankungen sind marktüblich" },
+          {
+            key: "B",
+            text: "Trade-Based Money Laundering (TBML): Über- oder Unterfakturierung verschleiert Geldflüsse. Erhöhte Abklärungspflicht, Plausibilisierung der Handelsrechnungen mit Markpreisen, Compliance informieren.",
+          },
+          { key: "C", text: "Nur prüfen wenn ein Betrag über CHF 100'000 liegt – darunter ist keine besondere Abklärung nötig" },
+          { key: "D", text: "Kunden schriftlich auffordern, alle Rechnungen der letzten 2 Jahre nachzuliefern" },
+        ],
+        correct: "B",
+        feedback:
+          "Trade-Based Money Laundering (TBML) ist eine der komplexesten Geldwäschereimethoden: Kriminelle verschleiern Geldflüsse durch Über- oder Unterfakturierung bei Handelstransaktionen. Red Flags: Rechnungspreise weichen stark von Marktpreisen ab, Gegenparteien in Hochrisikoländern, häufige Volumen-/Preisschwankungen ohne erkennbaren Marktgrund. GwG Art. 6 verpflichtet zur besonderen Abklärung – unabhängig vom Schwellenwert. Compliance und ggf. MROS involvieren.",
+        concepts: ["TBML", "GwG", "Handelsfinanzierung"],
+      },
+      {
+        id: "3.7",
+        level: 3,
+        situation:
+          "Ein Privatkunde möchte CHF 80'000 einzahlen. Er erklärt, er habe Bitcoin verkauft. Er legt einen Screenshot seiner Krypto-Börse als Herkunftsnachweis vor, kann aber nicht erklären, woher die ursprünglich erworbenen Bitcoin stammten.",
+        question: "Was gilt bei Virtual Assets und wie gehst du vor?",
+        options: [
+          { key: "A", text: "Einzahlung ablehnen – Krypto ist in der Schweiz nicht als legitime Quelle anerkannt" },
+          { key: "B", text: "Screenshot reicht – die Börse hat bereits KYC gemacht, also ist das Geld sauber" },
+          {
+            key: "C",
+            text: "Erhöhte Sorgfalt: Herkunft der Bitcoin klären (Kauf? Mining? Schenkung?), Transaktionshistorie auf Blockchain prüfen lassen (Compliance/externe Tools), Quelle der ursprünglichen Fiat-Mittel nachweisen. Screenshot allein reicht nicht.",
+          },
+          { key: "D", text: "Maximal CHF 15'000 annehmen – für Beträge darüber gibt es keine rechtliche Grundlage bei Krypto" },
+        ],
+        correct: "C",
+        feedback:
+          "Virtual Assets (VA) unterliegen seit 2020 dem GwG. Ein Screenshot einer Krypto-Börse belegt nur den Verkauf, nicht die Herkunft der Bitcoin. Fragen: Wurden die BTC ursprünglich mit legalem Fiat-Geld gekauft? Wann und wo? Gab es Transaktionen über Darknet-Adressen oder Mixer? Compliance kann Blockchain-Analysetools (Chainalysis, Elliptic) nutzen. FINMA-RS 2016/7 und die FATF Virtual Asset Standards gelten. Bei unklarer Herkunft: EDD, keine Einzahlung ohne vollständige Dokumentation.",
+        concepts: ["Virtual Assets", "Kryptowährungen", "FATF"],
+      },
+      {
+        id: "3.8",
+        level: 3,
+        situation:
+          "Langjähriger Privatkunde Hanspeter Müller (53, Angestellter) wird bei den nächsten Gemeinderatswahlen gewählt und tritt sein Amt in 3 Monaten an. Du erfährst dies durch einen Zeitungsartikel.",
+        question: "Welche KYC-Pflichten entstehen jetzt?",
+        options: [
+          { key: "A", text: "Nichts – der Kunde ist Schweizer, kein ausländischer PEP. Inländische Gemeindepolitiker gelten nicht als PEP gemäss GwG." },
+          { key: "B", text: "Konto sperren bis zur offiziellen Amtsübernahme, dann neu beurteilen" },
+          {
+            key: "C",
+            text: "Statusaktualisierung: Schweizer Gemeinderat ist ein inländischer PEP (iPEP) gemäss revidiertem GwG. Risikoeinstufung überprüfen, bei erhöhtem Vermögen oder Transaktionen: EDD einleiten. Dossier aktualisieren.",
+          },
+          { key: "D", text: "Einen Brief an den Kunden schicken und ihn nach seinen zukünftigen Tätigkeiten fragen" },
+        ],
+        correct: "C",
+        feedback:
+          "Seit der GwG-Revision 2016 (in Kraft 2020) gilt der PEP-Begriff auch für inländische politisch exponierte Personen (iPEP). Gemeindepolitiker ab einer gewissen Bedeutung können darunter fallen. Pflicht: Dossier bei Statusänderung sofort aktualisieren, Risikoeinstufung prüfen, ggf. EDD. Die Bank muss PEP-Änderungen proaktiv überwachen (Medien-Monitoring, periodische Überprüfung). Der Kunde muss über die veränderten KYC-Anforderungen informiert werden.",
+        concepts: ["PEP", "iPEP", "KYC-Aktualisierung"],
+      },
+      {
+        id: "3.9",
+        level: 3,
+        situation:
+          "Über eine Holding AG in der Schweiz (Alleinaktionär: eine BVI-Gesellschaft, deren Eigentümer wiederum eine Stiftung auf den Seychellen ist) sollen CHF 5 Mio. auf ein Schweizer Konto übertragen werden. Kein erkennbarer wirtschaftlicher Zweck der Struktur.",
+        question: "Was ist die grösste Herausforderung und wie gehst du vor?",
+        options: [
+          { key: "A", text: "Konto eröffnen – alle genannten Jurisdiktionen sind legal und die Schweizer Holding ist ordentlich registriert" },
+          { key: "B", text: "Formular K für die Schweizer Holding ausfüllen – das reicht" },
+          {
+            key: "C",
+            text: "Wirtschaftlich Berechtigte der gesamten Struktur bis zur natürlichen Person durchleuchten (Look-Through-Prinzip). Formular A für jede Ebene. Ohne Identifikation der wirtschaftlich Berechtigten Person: kein Konto.",
+          },
+          { key: "D", text: "Compliance fragt die Seychellen-Stiftung direkt – sie ist rechtlich verantwortlich" },
+        ],
+        correct: "C",
+        feedback:
+          "Verschachtelte Gesellschaftsstrukturen sind ein klassisches Mittel zur Verschleierung von Vermögenswerten. Das Look-Through-Prinzip gemäss GwG und VSB verlangt, dass die Bank durch alle Ebenen hindurch bis zur natürlichen Person (wirtschaftlich Berechtigter) gelangt. Formular A ist auf jeder Stufe mit einer identifizierbaren natürlichen Person zu unterzeichnen. BVI- und Seychellen-Strukturen ohne erkennbaren Wirtschaftszweck gelten als Hochrisikostrukturen. Ohne vollständige Durchleuchtung: keine Kontoeröffnung.",
+        concepts: ["Look-Through", "Formular A", "Gesellschaftsstruktur"],
+      },
+      {
+        id: "3.10",
+        level: 3,
+        situation:
+          "Ein junger Mann, 24, Student, eröffnet ein Konto und überweist kurz darauf CHF 500 an 12 verschiedene Empfänger in 3 verschiedenen Ländern. Die Beträge sind klein, aber eines der Zielländer ist auf der FATF-Liste mit erhöhtem Terrorismus-Finanzierungsrisiko. Auf Social Media findet Compliance Hinweise auf extremistische Aussagen.",
+        question: "Wie unterscheidet sich Terrorismusfinanzierung von klassischer Geldwäscherei und was tust du?",
+        options: [
+          { key: "A", text: "Nichts – Beträge unter CHF 1'000 sind für Terrorismusfinanzierung viel zu klein" },
+          { key: "B", text: "Nur MROS-Meldung – wie bei Geldwäscherei auch" },
+          {
+            key: "C",
+            text: "MROS sofort informieren (Terrorismusfinanzierung), Konto sperren. Wichtig: Terrorismusfinanzierung kennt keinen Mindestbetrag – kleine Beträge können grossen Schaden anrichten. Nachrichtendienst des Bundes (NDB) kann ebenfalls informiert werden.",
+          },
+          { key: "D", text: "Social-Media-Recherche ist kein valider KYC-Anhaltspunkt – keine Massnahmen" },
+        ],
+        correct: "C",
+        feedback:
+          "Terrorismusfinanzierung (TF) unterscheidet sich fundamental von Geldwäscherei: Bei GwG geht es um die Herkunft (illegale Gelder reinwaschen). Bei TF geht es um den Zweck (legale oder illegale Mittel für terroristische Zwecke). Kleinbeträge können ausreichen (z.B. Reisekosten, Ausrüstung). GwG Art. 9 gilt für TF gleichermassen wie für Geldwäscherei. Bei konkretem Verdacht: sofortige MROS-Meldung, Sperrpflicht, Informationsverbot. Der NDB (Nachrichtendienst des Bundes) kann zusätzlich involviert werden. Social-Media-Hinweise sind valide Indikatoren.",
+        concepts: ["Terrorismusfinanzierung", "MROS", "GwG"],
+      },
     ],
   },
 ];
