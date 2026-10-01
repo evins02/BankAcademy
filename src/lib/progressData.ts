@@ -125,7 +125,7 @@ export function addNotification(msg: string, type: Notification["type"] = "info"
 
 const MODULE_TOTALS: Record<string, { name: string; total: number }> = {
   privatkunde: { name: "Privatkunde", total: 10 },
-  firmenkunde: { name: "Firmenkunde", total: 19 },
+  firmenkunde: { name: "Firmenkunde", total: 34 },
   anlagekunde: { name: "Anlagekunde", total: 4 },
   "banking-operations": { name: "Banking Operations", total: 4 },
   "credit-operations": { name: "Credit Operations", total: 5 },
