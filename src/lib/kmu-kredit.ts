@@ -382,6 +382,107 @@ export const KMU_LEVELS: BlankokreditLevelConfig[] = [
           "Quick Ratio (Liquidität 2. Grades) = (UV − Vorräte) ÷ kurzfristiges FK. Richtwert: ≥1.0. Bei 0.82 wären nicht alle kurzfristigen Verbindlichkeiten sofort deckbar. Das erhöht das Liquiditätsrisiko. Im Kreditentscheid: Liquiditätsplanung einfordern und Kontokorrentlimite prüfen.",
         concepts: ["liquiditaet", "quick-ratio", "bilanzanalyse"],
       },
+      {
+        id: "kmu-3.6",
+        level: 3,
+        briefing:
+          "Heizungsbau Weber GmbH, technisch überschuldet: EK −CHF 120'000 wegen eines Aktionärsdarlehens CHF 500'000. Ohne das Darlehen wäre EK +CHF 380'000. Bisheriger Kredit der Bank CHF 650'000.",
+        question: "Was ist ein Rangrücktritt (Subordination) und was bewirkt er?",
+        options: [
+          { key: "A", text: "Der Aktionär verliert sein Darlehen definitiv und bekommt es nie zurück." },
+          { key: "B", text: "Der Aktionär erklärt, sein Darlehen erst nach vollständiger Befriedigung der Bankforderungen zurückzuverlangen. Bilanziell wirkt das wie Eigenkapital – die technische Überschuldung wird aufgehoben." },
+          { key: "C", text: "Die Bank übernimmt das Aktionärsdarlehen und wandelt es in Bankkredit um." },
+          { key: "D", text: "Rangrücktritt ist nur bei börsenkotierten Gesellschaften rechtlich möglich." },
+        ],
+        correct: "B",
+        feedback:
+          "Rangrücktritt (Art. 725 OR) = Aktionär oder nahestehende Person erklärt, das Darlehen zurückzutreten – d.h. erst nach allen anderen Gläubigern zu fordern. Bilanziell reduziert das die Überschuldung. Die Bank hält das unterzeichnete Rangrücktrittsdokument zwingend im Kreditdossier. Wichtig: Rangrücktritt darf nicht widerrufen werden, solange der Kredit besteht.",
+        concepts: ["rangruecktritt", "ueberschuldung", "sicherheiten"],
+      },
+      {
+        id: "kmu-3.7",
+        level: 3,
+        briefing:
+          "IT-Dienstleister Kern GmbH, CHF 3.8 Mio. Umsatz, hat CHF 1.2 Mio. offene Debitorenforderungen mit 60–90 Tagen Zahlungsziel. Liquiditätsengpass trotz gutem Auftragsbestand.",
+        question: "Was ist der Kernunterschied zwischen Factoring und Zession?",
+        options: [
+          { key: "A", text: "Kein Unterschied – beide Instrumente funktionieren identisch." },
+          { key: "B", text: "Factoring = sofortiger Verkauf der Forderungen an einen Factor → sofortige Liquidität, Factor trägt Ausfallrisiko. Zession = Forderungen bleiben beim Unternehmen, dienen nur als Sicherheit für die Bank." },
+          { key: "C", text: "Zession gibt sofortige Liquidität; Factoring ist nur eine Sicherheit." },
+          { key: "D", text: "Factoring ist nur für Banken, Zession nur für Versicherungsgesellschaften möglich." },
+        ],
+        correct: "B",
+        feedback:
+          "Factoring = Forderungsverkauf: sofortige Liquidität (80–90% des Forderungswerts), aber Factor-Gebühr 0.5–2%. Zession = Sicherungsabtretung: Forderungen bleiben beim Unternehmen, Bank greift erst im Verwertungsfall zu. Factoring löst den Liquiditätsengpass sofort, ist aber teurer. Für Kern GmbH wäre Factoring die direktere Lösung.",
+        concepts: ["factoring", "zession", "liquiditaet", "sicherheiten"],
+      },
+      {
+        id: "kmu-3.8",
+        level: 3,
+        briefing: "Reto Müller AG, Metallverarbeitung, möchte die eigene Betriebsliegenschaft als Sicherheit einsetzen. Bankschätzung ergibt Marktwert CHF 2.4 Mio.",
+        inputData: [
+          { label: "Marktwert (Bankschätzung)", value: "CHF 2'400'000" },
+          { label: "Belehnungswert (80%)", value: "CHF 1'920'000" },
+          { label: "Max. Belehnung Gewerbe", value: "70% des Belehnungswerts" },
+        ],
+        calculator: [
+          {
+            heading: "Maximale Bankbelehnung",
+            rows: [
+              { type: "data", label: "Belehnungswert", value: "CHF 1'920'000" },
+              { type: "data", label: "× 70% (Gewerbe)", value: "" },
+              { type: "divider" },
+              { type: "total", label: "Max. Hypothek", value: "CHF 1'344'000" },
+            ],
+            verdict: { text: "CHF 1'344'000 maximal belehnbar ✅", ok: true },
+          },
+        ],
+        question: "Warum beträgt die maximale Bankbelehnung CHF 1'344'000 und nicht CHF 1'920'000?",
+        options: [
+          { key: "A", text: "Die Bank belehnt immer 80% des Marktwerts direkt = CHF 1'920'000." },
+          { key: "B", text: "Bei Gewerbeliegenschaften gilt: max. 70% des Belehnungswerts (nicht des Marktwerts). Der Belehnungswert selbst liegt bereits konservativ bei 80% des Marktwerts: 70% × 1'920'000 = CHF 1'344'000." },
+          { key: "C", text: "Die Bank kann 100% des Marktwerts belehnen, wenn die Lage gut ist." },
+          { key: "D", text: "Gewerbeliegenschaften dürfen nur zu 50% belehnt werden." },
+        ],
+        correct: "B",
+        feedback:
+          "Zweistufige Logik: 1) Belehnungswert = ca. 80% des Marktwerts (konservative Schätzung). 2) Max. Belehnung Gewerbe = 70% des Belehnungswerts. Ergebnis: 70% × 1'920'000 = CHF 1'344'000. Bei Wohnliegenschaften gilt max. 80% des Belehnungswerts. Gewerbeliegenschaften werden konservativer bewertet, weil sie schwerer verwertbar sind.",
+        concepts: ["belehnungswert", "gewerbehypothek", "sicherheiten"],
+      },
+      {
+        id: "kmu-3.9",
+        level: 3,
+        briefing:
+          "Zwei Geschäftspartner, Beat Meier und Sandra Huber, haften je als Bürge CHF 200'000 für eine neue GmbH. Die Bank schlägt eine Solidarbürgschaft vor.",
+        question: "Was ist der rechtliche Unterschied zwischen einfacher Bürgschaft und Solidarbürgschaft?",
+        options: [
+          { key: "A", text: "Kein Unterschied – beide haften gleichwertig." },
+          { key: "B", text: "Einfache Bürgschaft (Art. 495 OR): Bank muss zuerst alle Mittel gegen den Hauptschuldner ausschöpfen (Einrede der Vorausklage). Solidarbürgschaft (Art. 496 OR): Bank kann direkt und sofort beide Bürgen belangen, ohne vorher gegen die GmbH vorzugehen." },
+          { key: "C", text: "Solidarbürgschaft bedeutet, dass Beat und Sandra die Haftung je hälftig aufteilen." },
+          { key: "D", text: "Solidarbürgschaft ist teurer, hat aber keine anderen rechtlichen Auswirkungen." },
+        ],
+        correct: "B",
+        feedback:
+          "Solidarbürgschaft (Art. 496 OR) = keine Einrede der Vorausklage. Die Bank kann sofort und direkt auf den Bürgen zugreifen, ohne zuerst alle Betreibungsmassnahmen gegen die GmbH zu erschöpfen. Das macht die Sicherheit für die Bank deutlich wertvoller. In der Praxis verlangt die Bank bei KMU fast immer Solidarbürgschaft der Gesellschafter.",
+        concepts: ["buergschaft", "solidarbuergschaft", "sicherheiten"],
+      },
+      {
+        id: "kmu-3.10",
+        level: 3,
+        briefing:
+          "Familienholding Brunner AG hat Kredite bei drei Banken: CHF 800'000 Kantonalbank, CHF 500'000 Raiffeisen, CHF 300'000 PostFinance. Alle Kreditverträge enthalten eine Cross-Default-Klausel. Die Raiffeisen kündigt wegen Zahlungsverzug.",
+        question: "Was bedeutet die Cross-Default-Klausel für Kantonalbank und PostFinance?",
+        options: [
+          { key: "A", text: "Die anderen Banken sind nicht betroffen – jeder Kredit läuft unabhängig." },
+          { key: "B", text: "Der Verzug bei der Raiffeisen löst bei Kantonalbank und PostFinance automatisch ein Kündigungsrecht aus – auch wenn bei ihnen kein Zahlungsverzug besteht." },
+          { key: "C", text: "Cross-Default schützt den Kreditnehmer – die anderen Banken dürfen nicht kündigen." },
+          { key: "D", text: "Cross-Default gilt nur bei Konzernen mit mehr als 250 Mitarbeitenden." },
+        ],
+        correct: "B",
+        feedback:
+          "Cross-Default-Klausel = Standardklausel in KMU-Kreditverträgen: Ein Kreditausfall bei einem anderen Gläubiger gilt als Default-Ereignis für alle anderen Kreditverträge mit dieser Klausel. Zweck: Keine Bank will die letzte sein, die noch Gelder hat, während andere bereits vollstrecken. In der Praxis: sobald Cross-Default ausgelöst, müssen alle Beteiligten an einen Tisch – oft Beginn einer Sanierungsrunde.",
+        concepts: ["cross-default", "kreditvertrag", "covenants"],
+      },
     ] as BlankokreditCase[],
   },
 ];
