@@ -1,18 +1,10 @@
 import Link from "next/link";
-import { Menu } from "lucide-react";
-import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 
 interface Props {
-  onMenuToggle?: () => void;
   onFeedback?: () => void;
-  onLogout?: () => void;
-  userName?: string;
 }
 
-export function DemoBanner({ onMenuToggle, onFeedback, onLogout, userName }: Props) {
-  const initials = userName
-    ? userName.trim().split(/\s+/).map(w => w[0]?.toUpperCase() ?? "").join("").slice(0, 2)
-    : "";
+export function DemoBanner({ onFeedback }: Props) {
   return (
     <div
       style={{
@@ -28,27 +20,8 @@ export function DemoBanner({ onMenuToggle, onFeedback, onLogout, userName }: Pro
         color: "#92400e",
         flexWrap: "wrap",
         flexShrink: 0,
-        position: "relative",
       }}
     >
-      {/* Mobile: hamburger + logo (sidebar hidden on mobile) */}
-      <div className="md:hidden absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-        {onMenuToggle && (
-          <button
-            onClick={onMenuToggle}
-            className="rounded-lg p-1.5 transition-colors hover:bg-amber-100"
-            aria-label="Menü öffnen"
-            style={{ color: "#92400e" }}
-          >
-            <Menu size={18} />
-          </button>
-        )}
-        <Link href="/demo">
-          <BankingLabLogo size="sm" />
-        </Link>
-      </div>
-
-      {/* Demo badge */}
       <span
         style={{
           background: "#fbbf24",
@@ -91,61 +64,6 @@ export function DemoBanner({ onMenuToggle, onFeedback, onLogout, userName }: Pro
           Feedback →
         </button>
       )}
-
-      {/* Profile + logout — pinned top-right */}
-      <div
-        style={{
-          position: "absolute",
-          right: 16,
-          top: "50%",
-          transform: "translateY(-50%)",
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-        }}
-      >
-        {initials && (
-          <div
-            title={userName}
-            style={{
-              width: 26,
-              height: 26,
-              borderRadius: "50%",
-              background: "#0D1B4B",
-              color: "#fff",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 10,
-              fontWeight: 800,
-              letterSpacing: "0.02em",
-              flexShrink: 0,
-              userSelect: "none",
-            }}
-          >
-            {initials}
-          </div>
-        )}
-        {onLogout && (
-          <button
-            onClick={onLogout}
-            style={{
-              padding: "2px 8px",
-              borderRadius: 50,
-              border: "1px solid #b45309",
-              background: "transparent",
-              color: "#78350f",
-              fontSize: 10,
-              fontWeight: 500,
-              cursor: "pointer",
-              opacity: 0.6,
-              whiteSpace: "nowrap",
-            }}
-          >
-            ← Abmelden
-          </button>
-        )}
-      </div>
     </div>
   );
 }

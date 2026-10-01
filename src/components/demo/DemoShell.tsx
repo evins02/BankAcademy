@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Menu } from "lucide-react";
 import { DemoBanner } from "./DemoBanner";
 import { DemoSidebar } from "./DemoSidebar";
 import { LockedModuleOverlay } from "./LockedModuleOverlay";
 import { DemoOnboardingModal } from "./DemoOnboardingModal";
 import { FeedbackModal } from "./FeedbackModal";
 import { ThemeApplier } from "@/components/shared/ThemeApplier";
+import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 
 export function DemoShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -71,11 +74,44 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
           background: "var(--background, #F8F9FD)",
         }}
       >
+        {/* Mobile-only top nav: white background so logo is visible */}
+        <div className="md:hidden flex items-center justify-between border-b border-border bg-surface px-4 shrink-0" style={{ height: 52 }}>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setMobileOpen((v) => !v)}
+              className="rounded-lg p-1.5 text-text-secondary hover:bg-gray-100 transition-colors"
+              aria-label="Menü öffnen"
+            >
+              <Menu size={20} />
+            </button>
+            <Link href="/demo">
+              <BankingLabLogo size="sm" />
+            </Link>
+          </div>
+          {demoVorname && (
+            <button
+              onClick={handleLogout}
+              title="Abmelden"
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: "50%",
+                background: "#0D1B4B",
+                color: "#fff",
+                border: "none",
+                cursor: "pointer",
+                fontSize: 12,
+                fontWeight: 800,
+                userSelect: "none",
+              }}
+            >
+              {demoVorname[0].toUpperCase()}
+            </button>
+          )}
+        </div>
+
         <DemoBanner
-          onMenuToggle={() => setMobileOpen((v) => !v)}
           onFeedback={() => setFeedbackOpen(true)}
-          onLogout={handleLogout}
-          userName={demoVorname || undefined}
         />
         <div style={{ display: "flex", flex: 1, overflow: "hidden", position: "relative" }}>
           {/* Mobile backdrop */}
