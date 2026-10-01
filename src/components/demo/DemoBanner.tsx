@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Menu } from "lucide-react";
+import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 
 interface Props {
   onMenuToggle?: () => void;
@@ -30,16 +31,22 @@ export function DemoBanner({ onMenuToggle, onFeedback, onLogout, userName }: Pro
         position: "relative",
       }}
     >
-      {onMenuToggle && (
-        <button
-          onClick={onMenuToggle}
-          className="md:hidden absolute left-4 top-1/2 -translate-y-1/2 rounded-lg p-1.5 transition-colors hover:bg-amber-100"
-          aria-label="Menü öffnen"
-          style={{ color: "#92400e" }}
-        >
-          <Menu size={18} />
-        </button>
-      )}
+      {/* Mobile: hamburger + logo (sidebar hidden on mobile) */}
+      <div className="md:hidden absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+        {onMenuToggle && (
+          <button
+            onClick={onMenuToggle}
+            className="rounded-lg p-1.5 transition-colors hover:bg-amber-100"
+            aria-label="Menü öffnen"
+            style={{ color: "#92400e" }}
+          >
+            <Menu size={18} />
+          </button>
+        )}
+        <Link href="/demo">
+          <BankingLabLogo size="sm" />
+        </Link>
+      </div>
 
       {/* Demo badge */}
       <span

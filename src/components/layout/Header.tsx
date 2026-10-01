@@ -61,8 +61,16 @@ export function Header({ title, subtitle }: HeaderProps) {
   // Name and color from unsafeMetadata profile (source of truth)
   const clerkProfile = user?.unsafeMetadata?.profile as { name?: string; avatarColor?: string } | undefined;
   const profileName = clerkProfile?.name?.trim();
+  const [demoName, setDemoName] = useState("");
+  useEffect(() => {
+    if (!user) {
+      try { setDemoName(localStorage.getItem("demo-vorname") ?? ""); } catch {}
+    }
+  }, [user]);
   const initials = profileName
     ? profileName[0].toUpperCase()
+    : demoName
+    ? demoName[0].toUpperCase()
     : (user?.firstName?.[0] ?? user?.primaryEmailAddress?.emailAddress?.[0] ?? "?").toUpperCase();
   const avatarColor = clerkProfile?.avatarColor ?? "#0D1B4B";
 
