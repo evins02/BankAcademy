@@ -627,6 +627,125 @@ function Hero({ onStart }: { onStart: () => void }) {
   );
 }
 
+/* ─── Section: Positioning ───────────────────────────────────────────────── */
+
+function Positioning() {
+  const { t } = useLanguage();
+  const STEPS = [
+    { label: t.landing.posStep1, desc: t.landing.posStep1Desc, muted: true },
+    { label: t.landing.posStep2, desc: t.landing.posStep2Desc, accent: true },
+    { label: t.landing.posStep3, desc: t.landing.posStep3Desc, muted: true },
+  ];
+  return (
+    <section style={{ background: NM, padding: "80px 24px 88px" }}>
+      <div style={{ maxWidth: 760, margin: "0 auto" }}>
+        <FadeIn style={{ textAlign: "center", marginBottom: 40 }}>
+          <h2
+            style={{
+              margin: "0 0 20px",
+              fontSize: "clamp(24px, 3.5vw, 38px)",
+              fontWeight: 800,
+              letterSpacing: "-0.5px",
+              color: WH,
+              lineHeight: 1.15,
+            }}
+          >
+            {t.landing.posH2}
+          </h2>
+          <p
+            style={{
+              margin: "0 auto",
+              maxWidth: 600,
+              fontSize: 16,
+              lineHeight: 1.7,
+              color: WD,
+            }}
+          >
+            {t.landing.posText}
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.15}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "stretch",
+              gap: 0,
+              borderRadius: 18,
+              overflow: "hidden",
+              border: `1px solid ${BR}`,
+            }}
+            className="flex-col sm:flex-row"
+          >
+            {STEPS.map((step, i) => (
+              <div
+                key={step.label}
+                style={{
+                  flex: 1,
+                  padding: "28px 24px",
+                  background: step.accent ? `${CY}14` : CB,
+                  borderRight: i < STEPS.length - 1 ? `1px solid ${BR}` : "none",
+                  borderBottom: "none",
+                  textAlign: "center",
+                  position: "relative",
+                }}
+              >
+                {step.accent && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: 3,
+                      background: CY,
+                    }}
+                  />
+                )}
+                <p
+                  style={{
+                    margin: "0 0 6px",
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: step.accent ? CY : WH,
+                  }}
+                >
+                  {step.label}
+                </p>
+                <p style={{ margin: 0, fontSize: 13, color: step.accent ? WD : WM }}>
+                  {step.desc}
+                </p>
+                {i < STEPS.length - 1 && (
+                  <div
+                    className="hidden sm:block"
+                    style={{
+                      position: "absolute",
+                      right: -10,
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      zIndex: 10,
+                      background: NM,
+                      borderRadius: "50%",
+                      width: 20,
+                      height: 20,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      border: `1px solid ${BR}`,
+                    }}
+                  >
+                    <ChevronRight size={11} color={WM} />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
 /* ─── Section: Case Experience ────────────────────────────────────────────── */
 
 function CaseExperience() {
@@ -2272,6 +2391,7 @@ export default function LandingPage() {
           onStart={() => { setMobileOpen(false); window.location.href = "/sign-up"; }}
         />
         <Hero onStart={() => { window.location.href = "/sign-up"; }} />
+        <Positioning />
         <CaseExperience />
         <Lifestyle />
         <DemoVideo />
