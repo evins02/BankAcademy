@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import type { ReactNode } from "react";
 import type { DocumentConfig, FieldValue } from "@/lib/dokument-pruefen/types";
+import { AiBadge } from "@/components/shared/AiBadge";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -165,6 +166,7 @@ function ClickableRow({
                 <p className="text-xs text-gray-400">KI wertet Erklärung aus…</p>
               ) : feedback ? (
                 <>
+                  <div className="mb-2"><AiBadge /></div>
                   <p className="mb-1 text-xs font-semibold text-emerald-700">
                     {feedback.correct ? "✅ Erklärung korrekt!" : feedback.partial ? "⚠️ Teilweise richtig" : "Feedback:"}
                   </p>

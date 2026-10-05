@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Loader2, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import { AiBadge } from "@/components/shared/AiBadge";
 
 type Verdict = "RICHTIG" | "TEILWEISE" | "FALSCH";
 
@@ -158,6 +159,7 @@ export function ActiveRecallPrompt({ feedback, promptText, caseBriefing, onCompl
             const cfg = VERDICT_CONFIG[aiResult.verdict];
             return (
               <div className={`mt-1 rounded-lg border p-3 ${cfg.border} ${cfg.bg}`}>
+                <div className="mb-2"><AiBadge /></div>
                 <div className={`mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${cfg.color} bg-surface border ${cfg.border}`}>
                   {cfg.icon}
                   {cfg.label}

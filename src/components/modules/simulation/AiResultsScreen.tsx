@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
+import { AiBadge } from "@/components/shared/AiBadge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { ConversationMessage, FinalFeedback, Difficulty } from "./sim-types";
@@ -120,9 +121,12 @@ export function AiResultsScreen({
   return (
     <div className="flex flex-1 items-start justify-center overflow-y-auto p-6">
       <div className="w-full max-w-xl space-y-5 pb-8">
-        <h2 className="text-lg font-bold text-text-primary">
-          Gesprächsauswertung – Thomas Kowalski
-        </h2>
+        <div className="flex items-center gap-3">
+          <h2 className="text-lg font-bold text-text-primary">
+            Gesprächsauswertung – Thomas Kowalski
+          </h2>
+          <AiBadge />
+        </div>
 
         {/* Score circle + category bars */}
         <div className="rounded-DEFAULT bg-surface p-6 shadow-card">
