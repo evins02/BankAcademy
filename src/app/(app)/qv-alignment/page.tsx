@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import {
   Award,
   BookOpen,
   Building2,
   CheckCircle2,
+  ChevronDown,
   CreditCard,
   FileText,
   Home,
@@ -17,6 +19,14 @@ import {
 import { BANK_THEMEN, BT_TOTAL_SCENARIOS, type BankThema } from "@/lib/bankThemen";
 import { HANDLUNGSKOMPETENZEN, BEREICH_LABELS, type HKBereich } from "@/lib/handlungskompetenzenData";
 import { MODULES_WITH_HK } from "@/lib/hkModuleMapping";
+import {
+  HK_LEVEL_MAPPING,
+  MATRIX_HKS,
+  MATRIX_HK_LABELS,
+  ABTEILUNG_LABELS,
+  ABTEILUNG_COLORS,
+  type AbteilungId,
+} from "@/lib/hkLevelMapping";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   CreditCard,
@@ -37,6 +47,20 @@ const BEREICH_COLORS: Record<HKBereich, string> = {
   e: "bg-violet-50 text-violet-700 border-violet-200",
 };
 
+const LEVEL_BADGE: Record<1 | 2 | 3, string> = {
+  1: "bg-blue-50 text-blue-700 border border-blue-200",
+  2: "bg-amber-50 text-amber-700 border border-amber-200",
+  3: "bg-red-50 text-red-700 border border-red-200",
+};
+
+const ABTEILUNG_ORDER: AbteilungId[] = [
+  "privatkunde",
+  "anlage",
+  "firmenkunde",
+  "backoffice",
+  "simulationen",
+];
+
 function getHkCoverageSet(): Set<string> {
   const covered = new Set<string>();
   for (const m of MODULES_WITH_HK) {
@@ -45,6 +69,7 @@ function getHkCoverageSet(): Set<string> {
   return covered;
 }
 
+// ─── ThemaCard ──────────────────────────────────────────────────────────────
 function ThemaCard({ thema }: { thema: BankThema }) {
   const Icon = ICON_MAP[thema.icon] ?? BookOpen;
   const moduleCount = MODULES_WITH_HK.filter(
@@ -71,8 +96,6 @@ function ThemaCard({ thema }: { thema: BankThema }) {
           {thema.totalScenarios}
         </span>
       </div>
-
-      {/* Subthemen */}
       <ul className="space-y-1">
         {thema.subthemen.map((s) => (
           <li key={s} className="flex items-start gap-1.5 text-xs text-text-secondary">
@@ -85,6 +108,178 @@ function ThemaCard({ thema }: { thema: BankThema }) {
   );
 }
 
+// ─── HK Matrix ──────────────────────────────────────────────────────────────
+function HkMatrix() {
+  const [openAbteilungen, setOpenAbteilungen] = useState<Set<AbteilungId>>(
+    new Set(["privatkunde"])
+  );
+
+  const toggle = (a: AbteilungId) => {
+    setOpenAbteilungen((prev) => {
+      const next = new Set(prev);
+      if (next.has(a)) next.delete(a);
+      else next.add(a);
+      return next;
+    });
+  };
+
+  const byAbteilung = new Map<AbteilungId, typeof HK_LEVEL_MAPPING>();
+  for (const abt of ABTEILUNG_ORDER) {
+    byAbteilung.set(
+      abt,
+      HK_LEVEL_MAPPING.filter((m) => m.abteilung === abt)
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      {ABTEILUNG_ORDER.map((abt) => {
+        const modules = byAbteilung.get(abt) ?? [];
+        const isOpen = openAbteilungen.has(abt);
+        const color = ABTEILUNG_COLORS[abt];
+
+        // Count distinct HKs trained in this abteilung
+        const abtHks = new Set(modules.flatMap((m) => m.levels.flatMap((l) => l.hks)));
+
+        return (
+          <div key={abt} className="overflow-hidden rounded-xl border border-border">
+            {/* Abteilung header */}
+            <button
+              className="flex w-full items-center gap-3 bg-surface px-4 py-3 text-left transition-colors hover:bg-surface/80"
+              onClick={() => toggle(abt)}
+            >
+              <span
+                className="h-2.5 w-2.5 shrink-0 rounded-full"
+                style={{ background: color }}
+              />
+              <span className="flex-1 text-sm font-bold text-text-primary">
+                {ABTEILUNG_LABELS[abt]}
+              </span>
+              <span className="text-[11px] text-text-secondary">
+                {modules.length} Module · {abtHks.size} HKs
+              </span>
+              <ChevronDown
+                size={14}
+                className={`text-text-secondary transition-transform ${isOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {/* Matrix table */}
+            {isOpen && (
+              <div className="overflow-x-auto border-t border-border">
+                <table className="w-full min-w-[640px] border-collapse text-xs">
+                  {/* Column headers */}
+                  <thead>
+                    <tr className="border-b border-border bg-background">
+                      <th className="w-44 px-3 py-2 text-left text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
+                        Modul
+                      </th>
+                      <th className="w-8 px-1 py-2 text-center text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
+                        Lvl
+                      </th>
+                      {MATRIX_HKS.map((hk) => (
+                        <th
+                          key={hk}
+                          title={MATRIX_HK_LABELS[hk]}
+                          className="w-8 px-0.5 py-2 text-center font-bold uppercase tracking-wider text-text-secondary"
+                          style={{ fontSize: "10px" }}
+                        >
+                          {hk.toUpperCase()}
+                        </th>
+                      ))}
+                      <th className="px-3 py-2 text-left text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
+                        Fokus
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {modules.map((modul, mi) =>
+                      modul.levels.map((lvl, li) => {
+                        const isFirstRow = li === 0;
+                        const isLastModuleRow = li === modul.levels.length - 1;
+                        return (
+                          <tr
+                            key={`${modul.moduleId}-${lvl.level}`}
+                            className={`${
+                              isLastModuleRow && mi < modules.length - 1
+                                ? "border-b border-border"
+                                : ""
+                            } ${li % 2 === 0 ? "bg-background" : "bg-surface/40"}`}
+                          >
+                            {/* Module name — only on first level row */}
+                            <td className="px-3 py-1.5 align-top">
+                              {isFirstRow && (
+                                <span className="font-semibold text-text-primary">
+                                  {modul.name}
+                                </span>
+                              )}
+                            </td>
+
+                            {/* Level badge */}
+                            <td className="px-1 py-1.5 text-center align-middle">
+                              <span
+                                className={`inline-block rounded px-1 py-0.5 text-[9px] font-bold ${LEVEL_BADGE[lvl.level]}`}
+                              >
+                                L{lvl.level}
+                              </span>
+                            </td>
+
+                            {/* HK cells */}
+                            {MATRIX_HKS.map((hk) => {
+                              const covered = lvl.hks.includes(hk);
+                              return (
+                                <td
+                                  key={hk}
+                                  className="py-1.5 text-center align-middle"
+                                  title={covered ? `${hk.toUpperCase()}: ${MATRIX_HK_LABELS[hk]}` : undefined}
+                                >
+                                  {covered ? (
+                                    <span
+                                      className="inline-block h-3 w-3 rounded-full"
+                                      style={{ background: color }}
+                                    />
+                                  ) : (
+                                    <span className="inline-block h-1 w-1 rounded-full bg-gray-200" />
+                                  )}
+                                </td>
+                              );
+                            })}
+
+                            {/* Fokus */}
+                            <td className="px-3 py-1.5 align-middle text-[11px] text-text-secondary">
+                              {lvl.fokus}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* HK legend */}
+      <div className="rounded-lg border border-border bg-surface px-4 py-3">
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-text-secondary">
+          Legende Handlungskompetenzen
+        </p>
+        <div className="flex flex-wrap gap-x-4 gap-y-1">
+          {MATRIX_HKS.map((hk) => (
+            <span key={hk} className="text-[11px] text-text-secondary">
+              <span className="font-bold text-text-primary">{hk.toUpperCase()}</span>{" "}
+              {MATRIX_HK_LABELS[hk]}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── HKRow (KV21 list) ───────────────────────────────────────────────────────
 function HKRow({
   code,
   titel,
@@ -130,6 +325,7 @@ function HKRow({
   );
 }
 
+// ─── Page ────────────────────────────────────────────────────────────────────
 export default function QvAlignmentPage() {
   const coveredHks = getHkCoverageSet();
   const totalHks = HANDLUNGSKOMPETENZEN.length;
@@ -145,16 +341,14 @@ export default function QvAlignmentPage() {
 
   const totalModules = MODULES_WITH_HK.length;
 
-  const bereichGroups = (
-    ["a", "b", "c", "d", "e"] as HKBereich[]
-  ).map((b) => ({
+  const bereichGroups = (["a", "b", "c", "d", "e"] as HKBereich[]).map((b) => ({
     bereich: b,
     label: BEREICH_LABELS[b],
     hks: HANDLUNGSKOMPETENZEN.filter((hk) => hk.bereich === b),
   }));
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 p-6">
+    <div className="mx-auto max-w-5xl space-y-8 p-6">
       {/* Header */}
       <div>
         <div className="mb-1 flex items-center gap-2">
@@ -197,9 +391,7 @@ export default function QvAlignmentPage() {
       {/* Banking Fachthemen */}
       <section>
         <div className="mb-4">
-          <h2 className="text-base font-bold text-text-primary">
-            Bankfachliche Kompetenzen
-          </h2>
+          <h2 className="text-base font-bold text-text-primary">Bankfachliche Kompetenzen</h2>
           <p className="text-xs text-text-secondary">
             Spezifische Brancheninhalte — direkt abgestimmt auf die Branchenkenntnis-Prüfung von CYP
           </p>
@@ -209,6 +401,20 @@ export default function QvAlignmentPage() {
             <ThemaCard key={thema.id} thema={thema} />
           ))}
         </div>
+      </section>
+
+      {/* HK Matrix — Module + Level Ansicht */}
+      <section>
+        <div className="mb-4">
+          <h2 className="text-base font-bold text-text-primary">
+            Modul- & Level-Matrix
+          </h2>
+          <p className="text-xs text-text-secondary">
+            Welche Handlungskompetenzen werden auf welcher Schwierigkeitsstufe trainiert — geordnet
+            nach Abteilung. L1 = Grundlagen · L2 = Vertiefung · L3 = Experte
+          </p>
+        </div>
+        <HkMatrix />
       </section>
 
       {/* KV21 Handlungskompetenzen */}
@@ -230,7 +436,6 @@ export default function QvAlignmentPage() {
           </div>
         </div>
 
-        {/* Progress bar */}
         <div className="mb-6 h-2.5 w-full overflow-hidden rounded-full bg-gray-100">
           <div
             className="h-full rounded-full bg-primary transition-all duration-700"
