@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
   "/",
@@ -29,8 +30,21 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req)) {
+  if (isPublicRoute(req)) return;
+
+  // Require Clerk login for all protected routes
+  const { userId, sessionClaims } = await auth();
+  if (!userId) {
     await auth.protect();
+    return;
+  }
+
+  // Require access code to have been validated
+  const approved = (sessionClaims as Record<string, unknown> & { publicMetadata?: { approved?: boolean } })
+    ?.publicMetadata?.approved;
+
+  if (!approved) {
+    return NextResponse.redirect(new URL("/code-eingabe", req.url));
   }
 });
 
