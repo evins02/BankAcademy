@@ -13,6 +13,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { label: "Lesezeichen", icon: "Bookmark", href: "/lesezeichen" },
       { label: "Challenge-Modus", icon: "GraduationCap", href: "/challenge-modus" },
       { label: "Lernpfad", icon: "Map", href: "/lernpfad" },
+      { label: "QV-Alignment", icon: "Award", href: "/qv-alignment" },
     ],
   },
   {
