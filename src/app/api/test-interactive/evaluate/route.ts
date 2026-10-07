@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
+import { isMitarbeiter } from "@/lib/getUserRole";
 
 export const dynamic = "force-dynamic";
 
@@ -54,6 +55,11 @@ export async function POST(req: Request) {
 
     const ctx = ERROR_CONTEXT[errorId as FieldId];
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const profi = await isMitarbeiter();
+    const rolle = profi ? "Mitarbeitenden" : "Lernenden";
+    const coachIntro = profi
+      ? "Du bist ein Banking-Fachcoach für erfahrene Schweizer Bankmitarbeitende."
+      : "Du bist ein Lerncoach für Schweizer Bankfachleute (KV-Ausbildung, Niveau Lehrling/Auszubildende).";
 
     const msg = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
@@ -61,7 +67,7 @@ export async function POST(req: Request) {
       messages: [
         {
           role: "user",
-          content: `Du bist ein Lerncoach für Schweizer Bankfachleute (KV-Ausbildung, Niveau Lehrling/Auszubildende).
+          content: `${coachIntro}
 
 Kontext – Hypothekarantrag Familie Müller:
 Feld unter Prüfung: ${ctx.field}
@@ -69,7 +75,7 @@ Was im Dokument steht: ${ctx.shown}
 Fehlertyp: ${ctx.type}
 Vollständig korrekte Antwort: ${ctx.correct}
 
-Antwort des Lernenden: "${correction}"
+Antwort des ${rolle}: "${correction}"
 
 Aufgabe: Bewerte die Antwort des Lernenden auf Deutsch. Sei konstruktiv, präzise und ermutigend.
 - "correct": true wenn die wesentlichen Punkte korrekt erkannt wurden

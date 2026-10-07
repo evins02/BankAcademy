@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
+import { isMitarbeiter } from "@/lib/getUserRole";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -38,6 +39,15 @@ export async function POST(req: NextRequest) {
     return jsonNoStore(FALLBACK);
   }
 
+  const profi = await isMitarbeiter();
+  const rolle = profi ? "Mitarbeitenden" : "Lernenden";
+  const coach = profi
+    ? "Du bist ein Banking-Fachcoach für erfahrene Bankmitarbeitende. Bewerte die Antwort sachlich und direkt auf Deutsch."
+    : "Du bist ein Banklehr-Coach. Bewerte die Antwort des Lernenden sachlich und konstruktiv auf Deutsch.";
+  const hinweis = profi
+    ? "- Wenn die Antwort sehr gut ist: fehlt = \"Vollständig – nichts Wesentliches fehlt.\""
+    : "- Wenn die Antwort sehr gut ist: fehlt = \"Vollständig – nichts Wesentliches fehlt.\"\n- Wenn der Lernende etwas überspringt oder nur oberflächlich antwortet, weise im fehlt-Feld darauf hin, dass das Verständnis der Begründungen im echten Bankalltag und in der Prüfung entscheidend ist";
+
   try {
     const message = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
@@ -45,13 +55,13 @@ export async function POST(req: NextRequest) {
       messages: [
         {
           role: "user",
-          content: `Du bist ein Banklehr-Coach. Bewerte die Antwort des Lernenden sachlich und konstruktiv auf Deutsch.
+          content: `${coach}
 
 Musterlösung: "${feedback}"
-Antwort des Lernenden: "${studentText}"
+Antwort des ${rolle}: "${studentText}"
 
 Antworte ausschliesslich mit einem JSON-Objekt (kein Markdown, keine Codeblöcke, keine Erklärungen darum):
-{"verdict":"RICHTIG"|"TEILWEISE"|"FALSCH","richtig":"Was der Lernende korrekt erfasst hat (1-2 Sätze) – schreibe '–' falls nichts korrekt war","fehlt":"Was fehlt oder ist ungenau (1-2 Sätze)","ideal":"Die ideale Kurz-Antwort (1-2 Sätze)"}
+{"verdict":"RICHTIG"|"TEILWEISE"|"FALSCH","richtig":"Was korrekt erfasst wurde (1-2 Sätze) – schreibe '–' falls nichts korrekt war","fehlt":"Was fehlt oder ist ungenau (1-2 Sätze)","ideal":"Die ideale Kurz-Antwort (1-2 Sätze)"}
 
 Regeln zur Einstufung (verdict) – bewerte grosszügig, nicht pedantisch:
 - RICHTIG: Der wichtigste Kernpunkt (die Hauptaussage) der Musterlösung wurde genannt und ist korrekt – auch wenn kurz, in eigenen Worten, ohne Gesetzesartikel oder ohne jedes Detail/jeden Nebenaspekt. Wenn das Wesentliche stimmt, gilt die Antwort als vollständig richtig (RICHTIG), auch wenn untergeordnete Details fehlen.
@@ -60,8 +70,7 @@ Regeln zur Einstufung (verdict) – bewerte grosszügig, nicht pedantisch:
 - Bewerte grosszügig nach dem Wesentlichen, nicht nach Vollständigkeit jedes Details, nicht nach Wortwahl, Stil oder fehlenden Gesetzeszitaten. Im Zweifel (Kernaussage stimmt, nur Nebensächliches fehlt) lieber RICHTIG als TEILWEISE vergeben.
 - Halte jedes Feld auf maximal 2 kurze Sätze
 - Deutsch, Schweizer Schreibweise
-- Wenn die Antwort sehr gut ist: fehlt = "Vollständig – nichts Wesentliches fehlt."
-- Wenn der Lernende etwas überspringt oder nur oberflächlich antwortet, weise im fehlt-Feld darauf hin, dass das Verständnis der Begründungen im echten Bankalltag und in der Prüfung entscheidend ist`,
+${hinweis}`,
         },
       ],
     });

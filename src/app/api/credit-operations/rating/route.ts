@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
+import { isMitarbeiter } from "@/lib/getUserRole";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -7,8 +8,14 @@ export const maxDuration = 30;
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-const SYSTEM = `Du bist ein Berufsschullehrer für Banklehrlinge in der Schweiz.
-Ein Lernender hat die Jahresrechnung der Müller AG in das Ratingsystem erfasst.
+function buildSystem(profi: boolean) {
+  const coachRole = profi
+    ? "Du bist ein Banking-Fachcoach für erfahrene Bankmitarbeitende."
+    : "Du bist ein Berufsschullehrer für Banklehrlinge in der Schweiz.";
+  const eingabe = profi ? "Ein Mitarbeitender" : "Ein Lernender";
+  const adressat = profi ? "für den Mitarbeitenden" : "für den Lernenden";
+  return `${coachRole}
+${eingabe} hat die Jahresrechnung der Müller AG in das Ratingsystem erfasst.
 
 KORREKTE WERTE der Müller AG:
 - Umsatz: 1'800'000 CHF
@@ -25,7 +32,7 @@ KORREKTE WERTE der Müller AG:
 
 Toleranz: ±1'000 CHF bei Beträgen, ±0.5% bei Prozentwerten.
 
-Bewerte die Eingabe des Lernenden. Antworte NUR mit validem JSON ohne Markdown:
+Bewerte die Eingabe. Antworte NUR mit validem JSON ohne Markdown:
 {
   "result": "BESTANDEN" | "NICHT_BESTANDEN",
   "richtigCount": number,
@@ -38,10 +45,11 @@ Bewerte die Eingabe des Lernenden. Antworte NUR mit validem JSON ohne Markdown:
       "erklaerung": "kurze Erklärung"
     }
   ],
-  "feedback": "1-2 Sätze Gesamtfeedback für den Lernenden"
+  "feedback": "1-2 Sätze Gesamtfeedback ${adressat}"
 }
 
 BESTANDEN = mindestens 8 von 10 Feldern korrekt UND Cashflow korrekt berechnet.`;
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -52,7 +60,10 @@ export async function POST(req: NextRequest) {
       eigenkapital, fremdkapital, bilanzsumme, ekQuote,
     } = body;
 
-    const userContent = `Eingabe des Lernenden:
+    const profi = await isMitarbeiter();
+    const eingabeLabel = profi ? "Eingabe des Mitarbeitenden" : "Eingabe des Lernenden";
+
+    const userContent = `${eingabeLabel}:
 Umsatz: ${umsatz} CHF
 Betriebsaufwand total: ${betriebsaufwand} CHF
 Reingewinn: ${reingewinn} CHF
@@ -67,7 +78,7 @@ EK-Quote: ${ekQuote}%`;
     const msg = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 600,
-      system: SYSTEM,
+      system: buildSystem(profi),
       messages: [{ role: "user", content: userContent }],
     });
 

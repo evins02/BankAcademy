@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
+import { isMitarbeiter } from "@/lib/getUserRole";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -18,17 +19,22 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  const profi = await isMitarbeiter();
+  const rolle = profi ? "Mitarbeitenden" : "Lernenden";
+  const systemPrompt = profi
+    ? "Du bist Banking-Fachcoach für erfahrene Bankmitarbeitende. Bewerte die Begründung sachlich und direkt. Antworte AUSSCHLIESSLICH mit gültigem JSON, kein Markdown, kein Text ausserhalb des JSON."
+    : "Du bist Berufsschullehrer für Banklehrlinge in der Schweiz. Bewerte die Begründung des Lernenden mit einem klaren Urteil. Antworte AUSSCHLIESSLICH mit gültigem JSON, kein Markdown, kein Text ausserhalb des JSON.";
+
   try {
     const message = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 220,
-      system:
-        "Du bist Berufsschullehrer für Banklehrlinge in der Schweiz. Bewerte die Begründung des Lernenden mit einem klaren Urteil. Antworte AUSSCHLIESSLICH mit gültigem JSON, kein Markdown, kein Text ausserhalb des JSON.",
+      system: systemPrompt,
       messages: [
         {
           role: "user",
           content: `Erklärung aus dem Lernmaterial: "${explanation}"
-Begründung des Lernenden: "${studentText}"
+Begründung des ${rolle}: "${studentText}"
 
 Antworte NUR mit diesem JSON-Objekt:
 {"urteil":"RICHTIG"|"TEILWEISE"|"FALSCH","feedback":"2-3 konkrete Sätze – was war gut, was fehlte","verbesserung":"Was hätte besser sein können (null wenn RICHTIG)"}

@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 import type { OffeneFrageEvalResult } from "@/lib/offene-frage";
+import { isMitarbeiter } from "@/lib/getUserRole";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -20,13 +21,17 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const systemPrompt = `Du bist ein erfahrener ${role} bei einer Schweizer Bank und bewertest Antworten von Banklehrlingen.
+  const profi = await isMitarbeiter();
+  const zielgruppe = profi ? "Bankmitarbeitenden" : "Banklehrlingen";
+  const inputLabel = profi ? "Mitarbeitenden" : "Lernenden";
+
+  const systemPrompt = `Du bist ein erfahrener ${role} bei einer Schweizer Bank und bewertest Antworten von ${zielgruppe}.
 
 Szenario: ${briefing}
 Frage: ${question}
 Korrekte Vorgehensweise: ${expectedApproach}
 
-Bewerte die Antwort des Lernenden in 3 Schritten:
+Bewerte die Antwort des ${inputLabel} in 3 Schritten:
 1. Hat er das Kernproblem und die relevante Regel erkannt?
 2. Ist sein Vorgehen fachlich korrekt und vollständig?
 3. Was fehlt oder ist falsch?
@@ -48,7 +53,7 @@ Sei fair aber präzise. "Teilweise richtig" wenn das Kernproblem erkannt wurde, 
       messages: [
         {
           role: "user",
-          content: `Antwort des Lernenden: "${studentText}"`,
+          content: `Antwort des ${inputLabel}: "${studentText}"`,
         },
       ],
       system: systemPrompt,

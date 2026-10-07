@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import type { HypothekFormData } from "@/components/modules/hypothek-antrag/hypothek-antrag-types";
+import { isMitarbeiter } from "@/lib/getUserRole";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -8,7 +9,10 @@ export const maxDuration = 30;
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-const SYSTEM_PROMPT = `Du bist ein erfahrener Kreditexperte einer Schweizer Kantonalbank.
+function buildSystemPrompt(profi: boolean) {
+  const adressat = profi ? "Mitarbeitenden" : "Lehrlings";
+  const feedbackLabel = profi ? "Fachkolleginnen-Feedback" : "Ausbildner-Feedback";
+  return `Du bist ein erfahrener Kreditexperte einer Schweizer Kantonalbank.
 
 Prüfe diesen Hypothekarantrag der Familie Brandenberger:
 
@@ -45,7 +49,7 @@ AUSWERTUNGSREGEL:
 - Amortisation korrekt: Student muss CHF ~10'000-10'200/Jahr angeben UND Amortisationsplan als "nicht angegeben" markieren
 - Richtige Empfehlung: "Ablehnen" oder "Bewilligen mit Auflagen" (beide akzeptabel, "Bewilligen" falsch)
 
-Prüfe die Eingaben des Lehrlings und antworte NUR als gültiges JSON (kein Markdown):
+Prüfe die Eingaben des ${adressat} und antworte NUR als gültiges JSON (kein Markdown):
 {
   "result": "BESTANDEN" oder "NICHT BESTANDEN",
   "calcResults": [
@@ -62,23 +66,27 @@ Prüfe die Eingaben des Lehrlings und antworte NUR als gültiges JSON (kein Mark
   "riskTotal": 4,
   "criticalErrors": ["Kritische Fehler im Antrag (aus korrekten Berechnungen, nicht aus Lernerfehlern)"],
   "empfehlungKorrekt": true/false,
-  "feedback": "3-4 Sätze praktisches Ausbildner-Feedback auf Deutsch"
+  "feedback": "3-4 Sätze praktisches ${feedbackLabel} auf Deutsch"
 }
 
 BESTANDEN wenn: calcScore >= 3 UND riskScore >= 2 UND empfehlungKorrekt = true`;
+}
 
 export async function POST(req: Request) {
   try {
     const { formData } = (await req.json()) as { formData: HypothekFormData };
 
+    const profi = await isMitarbeiter();
+    const eingabeLabel = profi ? "EINGABEN DES MITARBEITENDEN" : "EINGABEN DES LEHRLINGS";
+
     const response = await anthropic.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 1400,
-      system: SYSTEM_PROMPT,
+      system: buildSystemPrompt(profi),
       messages: [
         {
           role: "user",
-          content: `EINGABEN DES LEHRLINGS:\n${JSON.stringify(formData, null, 2)}`,
+          content: `${eingabeLabel}:\n${JSON.stringify(formData, null, 2)}`,
         },
       ],
     });
