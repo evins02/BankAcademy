@@ -38,7 +38,7 @@ function Field({ label, error, children }: { label: string; error?: string; chil
 }
 
 export function ContactForms({ initialTab }: { initialTab?: Tab } = {}) {
-  const [tab, setTab] = useState<Tab>(initialTab ?? "lernender");
+  const [tab, setTab] = useState<Tab>(initialTab ?? "bank");
 
   useEffect(() => {
     if (initialTab) setTab(initialTab);
@@ -144,7 +144,7 @@ export function ContactForms({ initialTab }: { initialTab?: Tab } = {}) {
                 marginBottom: -2, transition: "all 0.2s",
               }}
             >
-              {t === "lernender" ? "Ich bin Lernende/r" : "Ich bin eine Bank / Institution"}
+              {t === "lernender" ? "Ich bin Lernende/r" : "Pilot anfragen (Bank / Institution)"}
             </button>
           );
         })}
@@ -152,7 +152,7 @@ export function ContactForms({ initialTab }: { initialTab?: Tab } = {}) {
 
       <form onSubmit={handleSubmit} noValidate style={{ display: "flex", flexDirection: "column", gap: 18 }}>
         <h2 style={{ margin: "0 0 4px", fontSize: 20, fontWeight: 800, color: N, letterSpacing: "-0.3px" }}>
-          Kontakt aufnehmen
+          {tab === "bank" ? "Pilot anfragen" : "Kontakt aufnehmen"}
         </h2>
 
         {/* Vorname + Nachname */}
@@ -209,7 +209,7 @@ export function ContactForms({ initialTab }: { initialTab?: Tab } = {}) {
           <textarea
             value={g.nachricht} onChange={e => setG("nachricht", e.target.value)}
             style={{ ...inp(!!errors.nachricht), minHeight: 120, resize: "vertical" }}
-            placeholder="Was möchtest du uns mitteilen?" rows={4}
+            placeholder={tab === "bank" ? "Wir interessieren uns für einen Pilot mit ca. X Lernenden ab…" : "Was möchtest du uns mitteilen?"} rows={4}
           />
         </Field>
 
@@ -229,7 +229,7 @@ export function ContactForms({ initialTab }: { initialTab?: Tab } = {}) {
           onMouseEnter={e => { if (!loading) { e.currentTarget.style.opacity = "0.88"; e.currentTarget.style.transform = "scale(1.01)"; } }}
           onMouseLeave={e => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "scale(1)"; }}
         >
-          {loading ? "Wird gesendet…" : "Kontakt aufnehmen →"}
+          {loading ? "Wird gesendet…" : tab === "bank" ? "Pilot anfragen →" : "Kontakt aufnehmen →"}
         </button>
       </form>
     </div>

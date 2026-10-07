@@ -393,7 +393,7 @@ export default function QvAlignmentPage() {
         <div className="mb-4">
           <h2 className="text-base font-bold text-text-primary">Bankfachliche Kompetenzen</h2>
           <p className="text-xs text-text-secondary">
-            Spezifische Brancheninhalte — direkt abgestimmt auf die Branchenkenntnis-Prüfung von CYP
+            Spezifische Brancheninhalte der Banklehre — direkt auf das Qualifikationsverfahren ausgerichtet
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,7 +1,7 @@
 /**
  * Banking-specific topic areas (Fachkompetenzen Banklehre) for QV alignment.
  * These complement the cross-industry KV21 Handlungskompetenzen and map
- * directly to what CYP tests in the Branchenkenntnis exam.
+ * directly aligned with the Qualifikationsverfahren Banklehre.
  */
 
 export interface BankThema {
