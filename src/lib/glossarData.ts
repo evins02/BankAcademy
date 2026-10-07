@@ -7,7 +7,6 @@ export interface GlossarTerm {
   short: string;
   detail: string;
   related: string[]; // ids of related terms
-  handlungskompetenzen?: string[]; // HK-codes aus handlungskompetenzenData.ts
 }
 
 export const GLOSSAR_TERMS: GlossarTerm[] = [
@@ -20,7 +19,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Verpflichtet Banken zur Identifikation von Kunden, Feststellung wirtschaftlich Berechtigter und Meldung verdächtiger Transaktionen an die MROS.",
     related: ["vsb", "mros", "wibe"],
-    handlungskompetenzen: ["b1"],
   },
   {
     id: "vsb",
@@ -30,7 +28,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Regelt wann und wie Banken Kunden identifizieren müssen. Basis für Formular A und K.",
     related: ["gwg", "formular-a", "formular-k"],
-    handlungskompetenzen: ["b1"],
   },
   {
     id: "formular-a",
@@ -41,7 +38,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Pflicht wenn Vertragspartner nicht identisch mit wirtschaftlich Berechtigtem ist.",
     related: ["formular-k", "wibe", "vsb"],
-    handlungskompetenzen: ["b1"],
   },
   {
     id: "formular-k",
@@ -51,7 +47,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Ersetzt Formular A bei Firmenkunden – enthält Angaben zur Firma und deren zeichnungsberechtigten Personen.",
     related: ["formular-a", "hr-auszug"],
-    handlungskompetenzen: ["b1"],
   },
   {
     id: "wibe",
@@ -61,7 +56,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Muss zwingend identifiziert werden – auch wenn eine andere Person als Vertragspartner auftritt.",
     related: ["formular-a", "gwg"],
-    handlungskompetenzen: ["b1"],
   },
   {
     id: "mros",
@@ -71,7 +65,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Bei Geldwäschereiverdacht müssen Banken zwingend an MROS melden und Vermögenswerte sperren.",
     related: ["gwg", "meldepflicht"],
-    handlungskompetenzen: ["b1"],
   },
   {
     id: "pep",
@@ -81,7 +74,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Erhöhte Sorgfaltspflichten, Genehmigung der Geschäftsleitung nötig, engmaschige Überwachung.",
     related: ["gwg"],
-    handlungskompetenzen: ["b1"],
   },
   {
     id: "meldepflicht",
@@ -91,7 +83,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Ausgelöst bei begründetem Verdacht. Bank muss Konto sperren und darf Kunden nicht informieren.",
     related: ["mros", "gwg"],
-    handlungskompetenzen: ["b1"],
   },
   {
     id: "hr-auszug",
@@ -101,7 +92,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Belegt Firma, Sitz, Zweck und zeichnungsberechtigte Personen. Pflichtdokument bei Firmenkontoöffnung.",
     related: ["formular-k"],
-    handlungskompetenzen: ["b1"],
   },
 
   // ── Kredit ────────────────────────────────────────────────────
@@ -113,7 +103,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Max. 33% heute, 38% im Rentenalter. Berechnung: (Zins + Amortisation + Nebenkosten) / Bruttoeinkommen × 100.",
     related: ["belehnung", "amortisation"],
-    handlungskompetenzen: ["d2", "d3"],
   },
   {
     id: "belehnung",
@@ -123,7 +112,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Max. 80% Belehnung. Über 65% = 2. Hypothek, muss innert 15 Jahren amortisiert werden.",
     related: ["tragbarkeit", "amortisation"],
-    handlungskompetenzen: ["d2", "d3"],
   },
   {
     id: "amortisation",
@@ -133,7 +121,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Direkt = Zahlung an Bank. Indirekt = via Säule 3a (verpfändet). 2. Hypothek muss innert 15 Jahren auf 65% Belehnung reduziert werden.",
     related: ["belehnung", "saeule-3a"],
-    handlungskompetenzen: ["d2", "d3"],
   },
   {
     id: "saron",
@@ -143,7 +130,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Wird täglich neu berechnet. Günstiger als Festhypothek aber kein Schutz bei Zinserhöhungen.",
     related: ["tragbarkeit", "belehnung"],
-    handlungskompetenzen: ["d2", "d3"],
   },
   {
     id: "kreditfaehigkeit",
@@ -153,7 +139,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Gegeben wenn: Total Konsumkredite / 36 ≤ Freibetrag. Basis: KKG (Konsumkreditgesetz).",
     related: ["zek", "kkgruppe"],
-    handlungskompetenzen: ["d2", "d3"],
   },
   {
     id: "zek",
@@ -163,7 +148,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Pflichtauskunft vor jeder Kreditvergabe. Zeigt alle bestehenden Kredite, Leasings und Kreditkarten.",
     related: ["kreditfaehigkeit", "kkgruppe"],
-    handlungskompetenzen: ["d2", "d3"],
   },
   {
     id: "etp",
@@ -173,7 +157,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Braucht klare Begründung, Genehmigung höhere Stelle und kürzere Wiedervorlage.",
     related: ["tragbarkeit", "deckungsgrad"],
-    handlungskompetenzen: ["d5"],
   },
   {
     id: "deckungsgrad",
@@ -183,7 +166,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Min. 1.2 erforderlich. Formel: Ø Cashflow / (Nettoaufwand + 1.5% × langfristige Verbindlichkeiten).",
     related: ["etp"],
-    handlungskompetenzen: ["d2", "d3"],
   },
   {
     id: "kkgruppe",
@@ -193,7 +175,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Schreibt Pflichtprüfung der Kreditfähigkeit vor. Kreditgeber haftet bei Vergabe trotz fehlender Kreditfähigkeit.",
     related: ["kreditfaehigkeit", "zek"],
-    handlungskompetenzen: ["d2", "d3"],
   },
 
   // ── Zahlungsverkehr ─────────────────────────────────────────────────
@@ -205,7 +186,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Schweizer IBAN = 21 Stellen (CH + 2 Prüfziffern + 17 Stellen). Bei SEPA reicht IBAN alleine.",
     related: ["bic", "sepa"],
-    handlungskompetenzen: ["d1", "d2"],
   },
   {
     id: "bic",
@@ -215,7 +195,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Bei SEPA nicht zwingend. Bei SWIFT (ausserhalb EU/EWR) zwingend.",
     related: ["iban", "sepa"],
-    handlungskompetenzen: ["d1", "d2"],
   },
   {
     id: "sepa",
@@ -225,7 +204,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Gilt für EU/EWR Länder + Schweiz. Nur IBAN nötig, kein BIC. Günstigere Gebühren als SWIFT.",
     related: ["iban", "bic"],
-    handlungskompetenzen: ["d1", "d2"],
   },
   {
     id: "ebill",
@@ -235,7 +213,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Rechnungssteller schickt Rechnung elektronisch. Kunde prüft und bestätigt mit einem Klick. Kein Papier mehr.",
     related: ["lsv"],
-    handlungskompetenzen: ["d1", "d2"],
   },
   {
     id: "lsv",
@@ -245,7 +222,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Ideal bei variablen Beträgen (z.B. Krankenkasse). Widerspruchsrecht innert 30 Tagen.",
     related: ["ebill"],
-    handlungskompetenzen: ["d1", "d2"],
   },
 
   // ── Vorsorge ────────────────────────────────────────────────────
@@ -257,7 +233,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Max. CHF 7’258/Jahr (Angestellte). Steuerlich abzugsfähig. Bezug erst 5 Jahre vor Pension oder bei Sonderfällen.",
     related: ["saeule-3b", "bvg", "ahv"],
-    handlungskompetenzen: ["d2", "d3"],
   },
   {
     id: "ahv",
@@ -267,7 +242,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Obligatorisch für alle. Max. Rente Skala 44: CHF 29’400/Jahr. Finanziert durch Lohnbeiträge (AN + AG je 50%).",
     related: ["bvg", "saeule-3a"],
-    handlungskompetenzen: ["d2", "d3"],
   },
   {
     id: "bvg",
@@ -277,7 +251,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Pensionskasse. Obligatorisch ab CHF 22’050 Jahreslohn. AG zahlt mindestens 50%.",
     related: ["ahv", "freizuegigkeit"],
-    handlungskompetenzen: ["d2", "d3"],
   },
   {
     id: "freizuegigkeit",
@@ -287,7 +260,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Wird auf Freizügigkeitskonto übertragen bis neue Stelle mit PK. Vorbezug nur bei Eigenheim, Selbständigkeit oder Auswanderung.",
     related: ["bvg", "saeule-3a"],
-    handlungskompetenzen: ["d2", "d3"],
   },
   {
     id: "verrechnungssteuer",
@@ -297,7 +269,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Rückforderbar über Steuererklärung bei korrekter Deklaration. Schutz gegen Steuerhinterziehung.",
     related: [],
-    handlungskompetenzen: ["d2"],
   },
   {
     id: "saeule-3b",
@@ -307,7 +278,6 @@ export const GLOSSAR_TERMS: GlossarTerm[] = [
     detail:
       "Kein Steuerabzug, aber flexible Einzahlung und Bezug jederzeit möglich. Z.B. Sparkonto, Lebensversicherung.",
     related: ["saeule-3a", "bvg"],
-    handlungskompetenzen: ["d2", "d3"],
   },
 ];
 
