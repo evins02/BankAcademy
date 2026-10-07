@@ -144,7 +144,7 @@ export function ContactForms({ initialTab }: { initialTab?: Tab } = {}) {
                 marginBottom: -2, transition: "all 0.2s",
               }}
             >
-              {t === "lernender" ? "Ich bin Lernende/r" : "Pilot anfragen (Bank / Institution)"}
+              {t === "lernender" ? "Ich bin Mitarbeitende/r" : "Pilot anfragen (Bank / Institution)"}
             </button>
           );
         })}
@@ -176,7 +176,7 @@ export function ContactForms({ initialTab }: { initialTab?: Tab } = {}) {
             </Field>
             <Field label="Funktion / Rolle" error={errors.funktion}>
               <input type="text" value={bf.funktion} onChange={e => setB("funktion", e.target.value)}
-                style={inp(!!errors.funktion)} placeholder="Ausbildungsverantwortliche/r" />
+                style={inp(!!errors.funktion)} placeholder="z.B. HR Manager, Teamleiter" />
             </Field>
           </div>
         )}
@@ -187,9 +187,9 @@ export function ContactForms({ initialTab }: { initialTab?: Tab } = {}) {
             style={inp(!!errors.email)} placeholder="max@beispiel.ch" />
         </Field>
 
-        {/* Bank: Anzahl Lernende */}
+        {/* Bank: Anzahl Mitarbeitende */}
         {tab === "bank" && (
-          <Field label="Anzahl Lernende" error={errors.anzahlLernende}>
+          <Field label="Anzahl Mitarbeitende" error={errors.anzahlLernende}>
             <select
               value={bf.anzahlLernende}
               onChange={e => setB("anzahlLernende", e.target.value)}
@@ -209,7 +209,7 @@ export function ContactForms({ initialTab }: { initialTab?: Tab } = {}) {
           <textarea
             value={g.nachricht} onChange={e => setG("nachricht", e.target.value)}
             style={{ ...inp(!!errors.nachricht), minHeight: 120, resize: "vertical" }}
-            placeholder={tab === "bank" ? "Wir interessieren uns für einen Pilot mit ca. X Lernenden ab…" : "Was möchtest du uns mitteilen?"} rows={4}
+            placeholder={tab === "bank" ? "Wir interessieren uns für einen Pilot mit ca. X Mitarbeitenden ab…" : "Was möchtest du uns mitteilen?"} rows={4}
           />
         </Field>
 
