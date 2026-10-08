@@ -85,7 +85,8 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
               <Menu size={20} />
             </button>
             <Link href="/demo">
-              <BankingLabLogo size="sm" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo-dark.png" alt="BankAcademy" height={28} style={{ display: "block" }} />
             </Link>
           </div>
           {demoVorname && (

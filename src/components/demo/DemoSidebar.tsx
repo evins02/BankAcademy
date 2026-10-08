@@ -93,7 +93,8 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
       {/* Logo */}
       <div className="flex h-16 items-center border-b border-border px-4">
         <Link href="/demo" className="flex-1 min-w-0">
-          <BankingLabLogo size="md" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-dark.png" alt="BankAcademy" height={36} style={{ display: "block" }} />
         </Link>
         <span
           style={{
