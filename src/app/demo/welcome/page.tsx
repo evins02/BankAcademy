@@ -72,7 +72,7 @@ function WelcomeForm() {
       >
         <div style={{ marginBottom: 28 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-dark.png" alt="BankAcademy" height={44} style={{ display: "block", margin: "0 auto" }} />
+          <img src="/logo-dark.webp" alt="BankAcademy" width={140} height={44} style={{ display: "block", margin: "0 auto", objectFit: "contain" }} />
         </div>
 
         <div
@@ -113,9 +113,7 @@ function WelcomeForm() {
             lineHeight: 1.7,
           }}
         >
-          Gib deinen Vornamen ein — fertig.
-          <br />
-          Keine Registrierung, keine E-Mail.
+          Gib deinen Vornamen ein.
         </p>
 
         <form onSubmit={handleStart} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
