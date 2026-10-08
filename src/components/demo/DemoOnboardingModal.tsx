@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 export function DemoOnboardingModal() {
   const [show, setShow] = useState(false);
   const [vorname, setVorname] = useState("");
-  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -17,26 +16,14 @@ export function DemoOnboardingModal() {
 
   async function start() {
     const v = vorname.trim();
-    const e = email.trim();
-
     if (!v) { setError("Bitte gib deinen Vornamen ein."); return; }
-    if (!e || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { setError("Bitte gib eine gültige E-Mail ein."); return; }
 
     setLoading(true);
     setError("");
-    try {
-      await fetch("/api/demo-register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ vorname: v, email: e.toLowerCase(), optIn: false }),
-      });
-    } catch {}
 
     try {
-      localStorage.clear();
       localStorage.setItem("demo-seen", "true");
       localStorage.setItem("demo-vorname", v);
-      localStorage.setItem("demo-email", e.toLowerCase());
     } catch {}
 
     setLoading(false);
@@ -98,24 +85,9 @@ export function DemoOnboardingModal() {
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 16, textAlign: "left" }}>
           <input
             type="text"
-            placeholder="Vorname *"
+            placeholder="Dein Vorname"
             value={vorname}
             onChange={e => { setVorname(e.target.value); setError(""); }}
-            style={{
-              padding: "12px 16px",
-              borderRadius: 10,
-              border: "1.5px solid #e5e7eb",
-              fontSize: 14,
-              color: "#111827",
-              outline: "none",
-              fontFamily: "inherit",
-            }}
-          />
-          <input
-            type="email"
-            placeholder="E-Mail *"
-            value={email}
-            onChange={e => { setEmail(e.target.value); setError(""); }}
             onKeyDown={e => e.key === "Enter" && start()}
             style={{
               padding: "12px 16px",
@@ -153,9 +125,6 @@ export function DemoOnboardingModal() {
           {loading ? "Wird gestartet…" : "Demo starten →"}
         </button>
 
-        <p style={{ margin: "12px 0 0", fontSize: 11, color: "#9ca3af" }}>
-          Deine E-Mail wird nur intern gespeichert und nicht weitergegeben.
-        </p>
       </div>
     </div>
   );
