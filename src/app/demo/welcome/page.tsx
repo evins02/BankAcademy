@@ -2,7 +2,6 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 import { ChevronRight } from "lucide-react";
 
 function WelcomeForm() {
@@ -78,7 +77,8 @@ function WelcomeForm() {
         }}
       >
         <div style={{ marginBottom: 28 }}>
-          <BankingLabLogo size="md" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-dark.png" alt="BankAcademy" height={44} style={{ display: "block", margin: "0 auto" }} />
         </div>
 
         <div
