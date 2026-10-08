@@ -13,12 +13,6 @@ function WelcomeForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    // Already went through welcome → go straight to demo
-    try {
-      if (localStorage.getItem("demo-seen") === "true") router.replace("/demo");
-    } catch {}
-  }, [router]);
 
   async function handleStart(e: React.FormEvent) {
     e.preventDefault();
