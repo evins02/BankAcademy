@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Download, Users, MessageSquare, CheckCircle2, XCircle,
-  Loader2, Lock, Star,
+  Loader2, Lock, Star, QrCode, Copy, Check,
 } from "lucide-react";
+import QRCodeLib from "qrcode";
 
 // ── Types ──────────────────────────────────────────────────────────────────────────────────
 
@@ -48,7 +49,7 @@ interface FeedbackRow {
   contact_consent: boolean;
 }
 
-type Tab = "users" | "feedback" | "export";
+type Tab = "users" | "feedback" | "export" | "demo-qr";
 
 // ── Helpers ─────────────────────────────────────────────────────────────────────────────
 
@@ -160,12 +161,82 @@ function exportCombinedCsv(users: UserRow[], feedback: FeedbackRow[]) {
 
 // ── Component ─────────────────────────────────────────────────────────────────────────────
 
+function QrCard({ code, baseUrl }: { code: string; baseUrl: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [copied, setCopied] = useState(false);
+  const url = `${baseUrl}/demo/welcome?ref=${encodeURIComponent(code)}`;
+
+  useEffect(() => {
+    if (canvasRef.current) {
+      QRCodeLib.toCanvas(canvasRef.current, url, {
+        width: 180,
+        margin: 2,
+        color: { dark: "#0D1B4B", light: "#ffffff" },
+      }).catch(() => {});
+    }
+  }, [url]);
+
+  function copy() {
+    navigator.clipboard.writeText(url).catch(() => {});
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  return (
+    <div
+      style={{
+        background: "#fff",
+        borderRadius: 16,
+        border: "1.5px solid #e5e7eb",
+        padding: "24px 20px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 14,
+        boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+      }}
+    >
+      <canvas ref={canvasRef} style={{ borderRadius: 8 }} />
+      <div style={{ textAlign: "center" }}>
+        <p style={{ margin: "0 0 4px", fontSize: 13, fontWeight: 700, color: "#0D1B4B" }}>
+          {code}
+        </p>
+        <p style={{ margin: 0, fontSize: 11, color: "#9ca3af", wordBreak: "break-all", maxWidth: 200 }}>
+          {url}
+        </p>
+      </div>
+      <button
+        onClick={copy}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          padding: "8px 16px",
+          borderRadius: 100,
+          background: copied ? "#dcfce7" : "#f3f4f6",
+          color: copied ? "#16a34a" : "#374151",
+          fontSize: 12,
+          fontWeight: 600,
+          border: "none",
+          cursor: "pointer",
+          transition: "all 0.15s",
+        }}
+      >
+        {copied ? <Check size={13} /> : <Copy size={13} />}
+        {copied ? "Kopiert!" : "URL kopieren"}
+      </button>
+    </div>
+  );
+}
+
 export default function AdminPage() {
   const [code, setCode] = useState("");
   const [authed, setAuthed] = useState(false);
+  const [adminCode, setAdminCode] = useState("");
   const [stats, setStats] = useState<Stats | null>(null);
   const [users, setUsers] = useState<UserRow[]>([]);
   const [feedback, setFeedback] = useState<FeedbackRow[]>([]);
+  const [demoCodes, setDemoCodes] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [tab, setTab] = useState<Tab>("users");
@@ -189,7 +260,14 @@ export default function AdminPage() {
       setStats(data.stats);
       setUsers(data.users ?? []);
       setFeedback(data.feedback ?? []);
+      setAdminCode(code);
       setAuthed(true);
+
+      // Load demo codes in background
+      fetch("/api/admin/demo-codes", { headers: { "x-admin-code": code } })
+        .then((r) => r.json())
+        .then((d) => { if (d.codes) setDemoCodes(d.codes); })
+        .catch(() => {});
     } catch (err) {
       setError(`Netzwerkfehler: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
@@ -246,10 +324,13 @@ export default function AdminPage() {
   const avgEase = stats?.avg_ease ? parseFloat(stats.avg_ease) : null;
   const avgRelevance = stats?.avg_relevance ? parseFloat(stats.avg_relevance) : null;
 
+  const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+
   const TABS: { key: Tab; label: string }[] = [
     { key: "users", label: `Nutzer (${users.length})` },
     { key: "feedback", label: `Feedback (${feedback.length})` },
     { key: "export", label: "Export" },
+    { key: "demo-qr", label: `Demo QR${demoCodes.length > 0 ? ` (${demoCodes.length})` : ""}` },
   ];
 
   // ── Main UI ────────────────────────────────────────────────────────────────────────────
@@ -438,6 +519,30 @@ export default function AdminPage() {
                       ))}
                     </tbody>
                   </table>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── Tab 4: Demo QR ───────────────────────────────────────────────────────────────────── */}
+        {tab === "demo-qr" && (
+          <div className="space-y-4">
+            <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+              <h2 className="text-sm font-bold text-gray-900 mb-1">QR-Code Demo-Zugänge</h2>
+              <p className="text-xs text-gray-500 mb-4">
+                Jeder QR-Code führt zur Demo-Willkommensseite. Der Besucher gibt nur seinen Vornamen ein — keine E-Mail, keine Registrierung.
+                Die Codes werden via <code className="bg-gray-100 px-1 rounded">DEMO_CODES</code> Umgebungsvariable konfiguriert (kommagetrennt).
+              </p>
+              {demoCodes.length === 0 ? (
+                <div className="py-10 text-center text-sm text-gray-400">
+                  Keine Demo-Codes konfiguriert. Setze <code className="bg-gray-100 px-1 rounded">DEMO_CODES=code1,code2</code> in den Umgebungsvariablen.
+                </div>
+              ) : (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+                  {demoCodes.map((c) => (
+                    <QrCard key={c} code={c} baseUrl={baseUrl} />
+                  ))}
                 </div>
               )}
             </div>

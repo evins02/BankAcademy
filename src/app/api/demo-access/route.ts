@@ -7,6 +7,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Zu viele Anfragen." }, { status: 429 });
   }
 
+  const body = await req.json().catch(() => ({})) as { name?: string; code?: string };
+  const { code } = body;
+
+  // If a code was supplied, validate it
+  if (code !== undefined) {
+    const validCodes = (process.env.DEMO_CODES ?? "")
+      .split(",")
+      .map((c) => c.trim())
+      .filter(Boolean);
+    if (validCodes.length > 0 && !validCodes.includes(code)) {
+      return NextResponse.json({ error: "Ungültiger Zugangscode." }, { status: 401 });
+    }
+  }
+
   const res = NextResponse.json({ success: true });
   res.cookies.set("bankacademy_demo", "1", {
     httpOnly: true,
