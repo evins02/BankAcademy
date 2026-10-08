@@ -26,7 +26,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { NAV_GROUPS } from "@/lib/constants";
-import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "@/types";
 import { useLanguage } from "@/context/LanguageContext";

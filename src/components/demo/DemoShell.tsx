@@ -10,7 +10,6 @@ import { LockedModuleOverlay } from "./LockedModuleOverlay";
 import { DemoOnboardingModal } from "./DemoOnboardingModal";
 import { FeedbackModal } from "./FeedbackModal";
 import { ThemeApplier } from "@/components/shared/ThemeApplier";
-import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 
 export function DemoShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
