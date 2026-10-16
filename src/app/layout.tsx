@@ -17,8 +17,16 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bankacademy.ch"),
-  title: "BankAcademy",
-  description: "Der digitale Praxisausbildner für die Banklehre – realistische Szenarien für Lernende im Schweizer Banking.",
+  title: "BankAcademy – Digitales Praxistraining für Schweizer Banking",
+  description: "BankAcademy macht realitätsnahe Banksituationen digital erlebbar. Interaktive Trainingsszenarien für Lernende, Praktikanten und Bankmitarbeitende in der Schweiz.",
+  openGraph: {
+    title: "BankAcademy – Digitales Praxistraining für Schweizer Banking",
+    description: "BankAcademy macht realitätsnahe Banksituationen digital erlebbar. Interaktive Trainingsszenarien für Lernende und Bankmitarbeitende.",
+    url: "https://bankacademy.ch",
+    siteName: "BankAcademy",
+    locale: "de_CH",
+    type: "website",
+  },
   alternates: {
     canonical: "/",
   },
