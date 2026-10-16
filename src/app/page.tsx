@@ -22,7 +22,7 @@ import type { Lang } from "@/lib/i18n";
 
 /* ─── Feature flags ───────────────────────────────────────────────────────── */
 
-const SHOW_MINI_CHALLENGE = process.env.NEXT_PUBLIC_SHOW_MINI_CHALLENGE === "true";
+const SHOW_MINI_CHALLENGE = true;
 
 /* ─── Design tokens ───────────────────────────────────────────────────────── */
 
