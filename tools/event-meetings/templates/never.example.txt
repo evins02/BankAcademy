@@ -1,0 +1,2 @@
+# One attendee id or full name per line. send.py refuses these.
+# Existing investors, customers, people who said no before, vendors.

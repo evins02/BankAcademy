@@ -1,0 +1,9 @@
+{
+  "_doc": "You write the master (en). A strong model derives the other languages. No pitch, no numbers, no flattery; one personal hook from the dossier. Placeholders: {first_name} {hook} {my_name} {my_company}.",
+  "my_name": "FILL",
+  "my_company": "FILL",
+  "request": {
+    "en": "Hi {first_name}, {hook} I would value 15 minutes with you at the event to hear your view and see whether there is a fit. Looking forward, {my_name}",
+    "de": "Hallo {first_name}, {hook} Ich würde mich über 15 Minuten mit Ihnen am Anlass freuen, um Ihre Sicht zu hören und zu sehen, ob es passt. Beste Grüsse, {my_name}"
+  }
+}

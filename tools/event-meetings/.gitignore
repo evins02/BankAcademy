@@ -1,0 +1,3 @@
+# Per-event data: attendee data, dossiers, auth headers. Never commit.
+events/
+__pycache__/
