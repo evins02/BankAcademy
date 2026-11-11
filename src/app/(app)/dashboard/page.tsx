@@ -26,7 +26,8 @@ import {
   type StreakData,
 } from "@/lib/progressData";
 import { getAllWeakConcepts } from "@/lib/conceptTracker";
-import { getWeakScenarios, type WeakScenario } from "@/lib/error-tracking";
+import { getWeakScenarios, type WeakScenario, MODULE_META } from "@/lib/error-tracking";
+import { getModuleAnalytics } from "@/lib/moduleAnalytics";
 import { BadgeEarnAnimation, useNewlyEarnedBadge } from "@/components/shared/BadgeEarnAnimation";
 
 interface UserProfile {
@@ -273,6 +274,58 @@ function RecommendedLernpfad({
           </div>
         </div>
       </Link>
+    </div>
+  );
+}
+
+function AdaptiveRepetitionWidget() {
+  const [items, setItems] = useState<{ moduleId: string; moduleName: string; accuracy: number; href: string }[]>([]);
+
+  useEffect(() => {
+    const analytics = getModuleAnalytics();
+    const result = Object.values(analytics)
+      .filter((m) => m.casesAttempted >= 3)
+      .map((m) => ({
+        moduleId: m.moduleId,
+        moduleName: m.moduleName,
+        accuracy: m.casesAttempted > 0 ? Math.round((m.casesCorrect / m.casesAttempted) * 100) : 0,
+        href: MODULE_META[m.moduleId]?.href ?? "/dashboard",
+      }))
+      .filter((m) => m.accuracy < 65)
+      .sort((a, b) => a.accuracy - b.accuracy)
+      .slice(0, 3);
+    setItems(result);
+  }, []);
+
+  if (items.length === 0) return null;
+
+  return (
+    <div className="mb-8">
+      <div className="mb-4 flex items-center gap-2">
+        <Sparkles size={15} className="text-primary" />
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-text-secondary">
+          Empfohlene Wiederholung
+        </h2>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((m) => (
+          <Link key={m.moduleId} href={m.href}>
+            <div className="flex items-center gap-4 rounded-xl border border-primary/20 bg-primary-light p-4 transition-colors hover:border-primary/40">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg" style={{ background: "#E8EBF7" }}>
+                <Sparkles size={18} style={{ color: "#0D1B4B" }} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-text-primary">{m.moduleName}</p>
+                <div className="mt-1.5">
+                  <ProgressBar value={m.accuracy} max={100} />
+                  <p className="mt-1 text-xs text-text-secondary">{m.accuracy}% Genauigkeit</p>
+                </div>
+              </div>
+              <span className="shrink-0 text-xs font-semibold text-primary">Wiederholen →</span>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
@@ -585,6 +638,8 @@ export default function DashboardPage() {
         )}
 
         <WeakModulesSection progress={progress} modules={allModules} />
+
+        {loaded && <AdaptiveRepetitionWidget />}
 
         {loaded && <WeakConceptsBanner />}
 

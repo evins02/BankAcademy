@@ -149,11 +149,11 @@ function CaseRow({ group }: { group: CaseGroup }) {
               {correctCount}/{totalAttempts} Versuche korrekt
             </span>
             <Link
-              href={group.moduleHref}
+              href={`${group.moduleHref}?retry=${encodeURIComponent(group.caseId)}`}
               className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-bold text-white transition-colors"
               style={{ background: "#0D1B4B" }}
             >
-              Nochmal üben <ChevronRight size={12} />
+              Nochmal versuchen → <ChevronRight size={12} />
             </Link>
           </div>
         </div>
@@ -202,6 +202,13 @@ export default function FehlerUebersichtPage() {
   const groups = useMemo(() => groupRecords(filtered), [filtered]);
 
   const totalErrors = records.filter((r) => !r.correct).length;
+
+  // Groups with errorCount > 1 and no successful retry (last attempt not correct)
+  const allGroups = useMemo(() => groupRecords(records), [records]);
+  const repetitionNeeded = useMemo(
+    () => allGroups.filter((g) => g.errorCount > 1 && !g.records[g.records.length - 1].correct).length,
+    [allGroups]
+  );
 
   return (
     <>
@@ -253,6 +260,17 @@ export default function FehlerUebersichtPage() {
                 {groups.length} Szenario{groups.length !== 1 ? "s" : ""}
               </span>
             )}
+          </div>
+        )}
+
+        {/* Repetition-needed summary */}
+        {repetitionNeeded > 0 && (
+          <div className="mb-5 flex items-center gap-2.5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+            <AlertCircle size={15} className="shrink-0 text-amber-500" />
+            <p className="text-sm text-amber-800">
+              <span className="font-semibold">{repetitionNeeded} Thema{repetitionNeeded !== 1 ? "en" : ""}</span>
+              {" "}mit Wiederholungsbedarf — noch nicht erfolgreich wiederholt.
+            </p>
           </div>
         )}
 

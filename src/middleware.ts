@@ -25,6 +25,8 @@ const isPublicRoute = createRouteMatcher([
   "/api/contact",
   "/api/kyc-chat",
   "/api/simulation/(.*)",
+  "/berufsbildner(.*)",
+  "/api/berufsbildner/(.*)",
   "/sitemap.xml",
   "/robots.txt",
 ]);
