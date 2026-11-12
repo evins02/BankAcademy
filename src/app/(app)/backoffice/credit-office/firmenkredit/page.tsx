@@ -7,6 +7,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { CreditOfficeRunner } from "@/components/modules/credit-office/CreditOfficeRunner";
 import { FirmenkreditMuellerFormCard } from "@/components/modules/credit-office/FirmenkreditMuellerForm";
 import { DEMO_EVAL_FIRMENKREDIT } from "@/components/modules/credit-office/credit-office-types";
+import { useLanguage } from "@/context/LanguageContext";
 
 const CRITICAL_ERRORS = [
   "Baugewerbe = zyklische Branche mit erhöhtem Konjunkturrisiko",
@@ -23,16 +24,18 @@ const LEARNING = [
 ];
 
 export default function FirmenkreditPage() {
+  const { t } = useLanguage();
+  const co = t.modules.backoffice.creditOffice;
   const [active, setActive] = useState(false);
 
   if (!active) {
     return (
       <>
-        <Header title="Firmenkredit prüfen" subtitle="Credit Office · Müller Bau GmbH · Level 3" />
+        <Header title={co.firmenkreditTitle} subtitle="Credit Office · Müller Bau GmbH · Level 3" />
         <Breadcrumb items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Credit Office", href: "/backoffice/credit-office" },
-          { label: "Firmenkredit prüfen" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: co.pageTitle, href: "/backoffice/credit-office" },
+          { label: co.firmenkreditTitle },
         ]} />
         <div className="flex-1 overflow-y-auto p-6">
           <div className="mx-auto max-w-lg space-y-5">

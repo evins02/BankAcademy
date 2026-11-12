@@ -702,10 +702,18 @@ export const de = {
       creditOps: {
         pageTitle: "Credit Operations",
         pageSubtitle: "Back Office – Kreditauszahlung & Sicherheiten",
+        buergschaft: { pageTitle: "Bürgschaften", pageSubtitle: "Credit Operations · Back Office" },
+        grundpfand: { pageTitle: "Grundpfandverschreibung & Schuldbrief", pageSubtitle: "Credit Operations · Back Office" },
+        rating: { pageTitle: "Rating erfassen", pageSubtitle: "Credit Operations · Back Office" },
+        schuldbrief: { pageTitle: "Schuldbriefverwaltung", pageSubtitle: "Credit Operations · Back Office" },
+        sicherheiten: { pageTitle: "Sicherheitenverwaltung", pageSubtitle: "Credit Operations · Back Office" },
+        vorzeitigeRueckzahlung: { pageTitle: "Vorzeitige Rückzahlung", pageSubtitle: "Credit Operations · Back Office" },
       },
       bankingOps: {
         pageTitle: "Banking Operations",
         pageSubtitle: "Konten, Zahlungen, Mahnwesen und Abwicklung",
+        dokumentPruefenTitle: "Dokument prüfen",
+        dokumentPruefenSubtitle: "Back Office – Auslandüberweisung prüfen",
       },
       kyc: {
         pageTitle: "KYC / Compliance",
@@ -795,7 +803,49 @@ export const de = {
         title: "Konsumkredit",
         subtitle: "Privatkunde – Konsumkreditberatung",
       },
+      kyc: {
+        title: "KYC / Compliance",
+        subtitle: "Kundendaten, Beneficial Owner und Geldwäschereibekämpfung",
+      },
+      blankokredit: {
+        title: "Blankokredit – Kreditfähigkeitsprüfung",
+        subtitle: "Privatkunde – Individual",
+      },
+      simulationKontoeröffnung: {
+        title: "Kundengespräch Simulation",
+        subtitle: "Kontoeröffnung – Thomas Kowalski",
+      },
+      simulationHypothek: {
+        title: "Kundengespräch Simulation",
+        subtitle: "Hypothek – Sarah & Marco Bianchi",
+      },
+      dokumentPruefen: {
+        title: "Dokument prüfen",
+        subtitle: "Privatkunde – Legitimationsprüfung",
+      },
     },
+  },
+  zertifikat: {
+    backToDashboard: "Zurück zum Dashboard",
+    printSave: "Zertifikat drucken / speichern",
+    tagline: "Digitaler Praxisausbildner · Schweiz",
+    title: "Zertifikat",
+    confirmsText: "Hiermit wird bestätigt, dass",
+    moduleText: "das Modul",
+    completedText: "erfolgreich abgeschlossen hat",
+    accuracyLabel: "GENAUIGKEIT",
+    scenariosLabel: "SZENARIEN",
+    dateLabel: "DATUM",
+    sealTagline: "BankAcademy · Digitaler Praxisausbildner",
+    footerText: "Dieses Zertifikat wurde digital ausgestellt durch BankAcademy – Der digitale Praxisausbildner für die Banklehre",
+    dateLocale: "de-CH",
+    moduleNames: {
+      privatkunde: "Privatkunde",
+      firmenkunde: "Firmenkunde",
+      anlagekunde: "Anlagekunde",
+      "banking-operations": "Banking Operations",
+      "credit-operations": "Credit Operations",
+    } as Record<string, string>,
   },
   demo: {
     badge: "Demo Modus · 8 Module freigeschaltet",

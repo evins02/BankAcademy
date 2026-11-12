@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Header } from "@/components/layout/Header";
@@ -6,6 +8,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/comp
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { KONTO_SCENARIOS, type Difficulty } from "@/lib/kontoeröffnungen";
+import { useLanguage } from "@/context/LanguageContext";
 
 const DIFFICULTY_BADGE: Record<Difficulty, { label: string; variant: "green" | "orange" | "red" }> = {
   einfach: { label: "Einfach", variant: "green" },
@@ -14,18 +17,16 @@ const DIFFICULTY_BADGE: Record<Difficulty, { label: string; variant: "green" | "
 };
 
 export default function SparenKontoPage() {
+  const { t } = useLanguage();
+  const m = t.modules.privatkunde.sparenKonto;
   return (
     <>
-      <Header
-        title="Sparen & Konto"
-        subtitle="Kontoeröffnungen – Dossiers prüfen und Dokumente auswählen"
-      />
+      <Header title={m.title} subtitle={m.subtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Privatkunde" },
-          { label: "Basis" },
-          { label: "Sparen & Konto" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.privatkunde.pageTitle, href: "/privatkunde" },
+          { label: m.title },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">
@@ -44,7 +45,7 @@ export default function SparenKontoPage() {
                 <CardFooter className="mt-auto">
                   <Button asChild className="w-full">
                     <Link href={`/privatkunde/basis/konto/${scenario.id}`}>
-                      Starten <ChevronRight size={14} />
+                      Starten <ChevronRight size={14} className="ml-1" />
                     </Link>
                   </Button>
                 </CardFooter>

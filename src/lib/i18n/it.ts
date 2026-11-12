@@ -705,10 +705,18 @@ export const it: typeof de = {
       creditOps: {
         pageTitle: "Credit Operations",
         pageSubtitle: "Back Office – Erogazione crediti & gestione garanzie",
+        buergschaft: { pageTitle: "Fideiussioni", pageSubtitle: "Credit Operations · Back Office" },
+        grundpfand: { pageTitle: "Pegno immobiliare & cartella ipotecaria", pageSubtitle: "Credit Operations · Back Office" },
+        rating: { pageTitle: "Inserire il rating", pageSubtitle: "Credit Operations · Back Office" },
+        schuldbrief: { pageTitle: "Gestione cartelle ipotecarie", pageSubtitle: "Credit Operations · Back Office" },
+        sicherheiten: { pageTitle: "Gestione delle garanzie", pageSubtitle: "Credit Operations · Back Office" },
+        vorzeitigeRueckzahlung: { pageTitle: "Rimborso anticipato", pageSubtitle: "Credit Operations · Back Office" },
       },
       bankingOps: {
         pageTitle: "Banking Operations",
         pageSubtitle: "Conti, pagamenti, solleciti e liquidazione",
+        dokumentPruefenTitle: "Verificare il documento",
+        dokumentPruefenSubtitle: "Back Office – Verifica di un bonifico internazionale",
       },
       kyc: {
         pageTitle: "KYC / Conformità",
@@ -798,7 +806,49 @@ export const it: typeof de = {
         title: "Credito al consumo",
         subtitle: "Clientela privata – Consulenza credito al consumo",
       },
+      kyc: {
+        title: "KYC / Conformità",
+        subtitle: "Dati cliente, titolare effettivo e lotta al riciclaggio",
+      },
+      blankokredit: {
+        title: "Credito in bianco – Analisi della solvibilità",
+        subtitle: "Clientela privata – Individual",
+      },
+      simulationKontoeröffnung: {
+        title: "Simulazione colloquio cliente",
+        subtitle: "Apertura conto – Thomas Kowalski",
+      },
+      simulationHypothek: {
+        title: "Simulazione colloquio cliente",
+        subtitle: "Ipoteca – Sarah & Marco Bianchi",
+      },
+      dokumentPruefen: {
+        title: "Verificare il documento",
+        subtitle: "Clientela privata – Verifica di legittimazione",
+      },
     },
+  },
+  zertifikat: {
+    backToDashboard: "Torna alla dashboard",
+    printSave: "Stampa / salva il certificato",
+    tagline: "Formatore professionale digitale · Svizzera",
+    title: "Certificato",
+    confirmsText: "Il presente certificato attesta che",
+    moduleText: "il modulo",
+    completedText: "è stato completato con successo",
+    accuracyLabel: "PRECISIONE",
+    scenariosLabel: "SCENARI",
+    dateLabel: "DATA",
+    sealTagline: "BankAcademy · Formatore professionale digitale",
+    footerText: "Questo certificato è stato rilasciato digitalmente da BankAcademy – Il formatore professionale digitale per l'apprendistato bancario",
+    dateLocale: "it-CH",
+    moduleNames: {
+      privatkunde: "Clientela privata",
+      firmenkunde: "Clientela aziendale",
+      anlagekunde: "Gestione patrimoniale",
+      "banking-operations": "Banking Operations",
+      "credit-operations": "Credit Operations",
+    } as Record<string, string>,
   },
   demo: {
     badge: "Modalità demo · 8 moduli sbloccati",

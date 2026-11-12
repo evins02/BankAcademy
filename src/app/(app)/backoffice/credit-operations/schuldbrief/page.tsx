@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, AlertTriangle, Lightbulb, BookOpen } from "luci
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
+import { useLanguage } from "@/context/LanguageContext";
 
 const SCENARIOS = [
   {
@@ -69,16 +70,18 @@ const SCENARIOS = [
 ];
 
 export default function SchuldbriefPage() {
+  const { t } = useLanguage();
+  const co = t.modules.backoffice.creditOps;
   const [lernOpen, setLernOpen] = useState(true);
 
   return (
     <>
-      <Header title="Schuldbriefverwaltung" subtitle="Credit Operations · Back Office" />
+      <Header title={co.schuldbrief.pageTitle} subtitle={co.schuldbrief.pageSubtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Credit Operations", href: "/backoffice/credit-operations" },
-          { label: "Schuldbriefverwaltung" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: co.pageTitle, href: "/backoffice/credit-operations" },
+          { label: co.schuldbrief.pageTitle },
         ]}
       />
 

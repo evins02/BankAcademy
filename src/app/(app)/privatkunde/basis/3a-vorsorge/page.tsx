@@ -1,20 +1,21 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { VorsorgeRunner } from "@/components/modules/vorsorge/VorsorgeRunner";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function VorsorgePage3a() {
+  const { t } = useLanguage();
+  const m = t.modules.privatkunde.vorsorge;
   return (
     <>
-      <Header
-        title="3a / Vorsorge"
-        subtitle="Säule 3a und Vorsorgeberatung"
-      />
+      <Header title={m.title} subtitle={m.subtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Privatkunde" },
-          { label: "Basis" },
-          { label: "3a / Vorsorge" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.privatkunde.pageTitle, href: "/privatkunde" },
+          { label: m.title },
         ]}
       />
       <VorsorgeRunner />

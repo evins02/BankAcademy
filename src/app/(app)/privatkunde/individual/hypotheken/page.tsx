@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ArrowLeft, FileText, Calculator, ClipboardCheck, Clock, Star } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { useLanguage } from "@/context/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DocumentChecklist } from "@/components/modules/kreditgeschaefte/DocumentChecklist";
@@ -43,6 +44,7 @@ function BackBar({ onClick }: { onClick: () => void }) {
 }
 
 export default function HypothekenPage() {
+  const { t } = useLanguage();
   const [view, setView] = useState<HubView>("hub");
 
   if (view === "tools") {
@@ -75,15 +77,14 @@ export default function HypothekenPage() {
   return (
     <>
       <Header
-        title="Hypotheken"
-        subtitle="Hypothekarfinanzierung: Unterlagencheck, Tragbarkeit und Antragsbeurteilung"
+        title={t.modules.privatkunde.hypothek.title}
+        subtitle={t.modules.privatkunde.hypothek.subtitle}
       />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Privatkunde" },
-          { label: "Individual" },
-          { label: "Hypotheken" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.privatkunde.pageTitle, href: "/privatkunde" },
+          { label: t.modules.privatkunde.hypothek.title },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">

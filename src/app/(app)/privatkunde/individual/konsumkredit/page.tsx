@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CheckCircle2, XCircle, Scale, BookOpen } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
 
 interface Scenario {
@@ -262,21 +263,19 @@ function ScenarioCard({ scenario }: { scenario: Scenario }) {
 }
 
 export default function KonsumkreditPage() {
-  const [filter, setFilter] = useState<"alle" | 1 | 2>(  "alle");
+  const { t } = useLanguage();
+  const m = t.modules.privatkunde.konsumkredit;
+  const [filter, setFilter] = useState<"alle" | 1 | 2>("alle");
   const filtered = filter === "alle" ? SCENARIOS : SCENARIOS.filter((s) => s.level === filter);
 
   return (
     <>
-      <Header
-        title="Konsumkredit"
-        subtitle="KKG-Prüfung, Kreditfähigkeit und Verbraucherschutz"
-      />
+      <Header title={m.title} subtitle={m.subtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Privatkunde" },
-          { label: "Individual" },
-          { label: "Konsumkredit" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.privatkunde.pageTitle, href: "/privatkunde" },
+          { label: m.title },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">

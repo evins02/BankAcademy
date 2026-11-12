@@ -704,10 +704,18 @@ export const fr: typeof de = {
       creditOps: {
         pageTitle: "Credit Operations",
         pageSubtitle: "Back Office – Déblocage de crédits & gestion des sûretés",
+        buergschaft: { pageTitle: "Cautionnements", pageSubtitle: "Credit Operations · Back Office" },
+        grundpfand: { pageTitle: "Cédule hypothécaire & gage immobilier", pageSubtitle: "Credit Operations · Back Office" },
+        rating: { pageTitle: "Saisir le rating", pageSubtitle: "Credit Operations · Back Office" },
+        schuldbrief: { pageTitle: "Gestion des cédules hypothécaires", pageSubtitle: "Credit Operations · Back Office" },
+        sicherheiten: { pageTitle: "Gestion des sûretés", pageSubtitle: "Credit Operations · Back Office" },
+        vorzeitigeRueckzahlung: { pageTitle: "Remboursement anticipé", pageSubtitle: "Credit Operations · Back Office" },
       },
       bankingOps: {
         pageTitle: "Banking Operations",
         pageSubtitle: "Comptes, paiements, rappels et traitement",
+        dokumentPruefenTitle: "Vérifier le document",
+        dokumentPruefenSubtitle: "Back Office – Vérification d'un virement international",
       },
       kyc: {
         pageTitle: "KYC / Conformité",
@@ -797,7 +805,49 @@ export const fr: typeof de = {
         title: "Crédit à la consommation",
         subtitle: "Clientèle privée – Conseil en crédit à la consommation",
       },
+      kyc: {
+        title: "KYC / Conformité",
+        subtitle: "Données client, ayant droit économique et lutte contre le blanchiment",
+      },
+      blankokredit: {
+        title: "Crédit en blanc – Analyse de solvabilité",
+        subtitle: "Clientèle privée – Individual",
+      },
+      simulationKontoeröffnung: {
+        title: "Simulation entretien client",
+        subtitle: "Ouverture de compte – Thomas Kowalski",
+      },
+      simulationHypothek: {
+        title: "Simulation entretien client",
+        subtitle: "Hypothèque – Sarah & Marco Bianchi",
+      },
+      dokumentPruefen: {
+        title: "Vérifier le document",
+        subtitle: "Clientèle privée – Vérification de légitimation",
+      },
     },
+  },
+  zertifikat: {
+    backToDashboard: "Retour au tableau de bord",
+    printSave: "Imprimer / enregistrer le certificat",
+    tagline: "Formateur professionnel digital · Suisse",
+    title: "Certificat",
+    confirmsText: "Le présent certificat atteste que",
+    moduleText: "le module",
+    completedText: "a été suivi avec succès",
+    accuracyLabel: "PRÉCISION",
+    scenariosLabel: "SCÉNARIOS",
+    dateLabel: "DATE",
+    sealTagline: "BankAcademy · Formateur professionnel digital",
+    footerText: "Ce certificat a été délivré numériquement par BankAcademy – Le formateur professionnel digital pour l'apprentissage bancaire",
+    dateLocale: "fr-CH",
+    moduleNames: {
+      privatkunde: "Clientèle privée",
+      firmenkunde: "Clientèle entreprises",
+      anlagekunde: "Gestion de fortune",
+      "banking-operations": "Banking Operations",
+      "credit-operations": "Credit Operations",
+    } as Record<string, string>,
   },
   demo: {
     badge: "Mode démo · 8 modules débloqués",

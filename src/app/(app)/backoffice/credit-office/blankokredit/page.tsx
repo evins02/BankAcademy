@@ -7,6 +7,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { CreditOfficeRunner } from "@/components/modules/credit-office/CreditOfficeRunner";
 import { BlankokreditMeierFormCard } from "@/components/modules/credit-office/BlankokreditMeierForm";
 import { DEMO_EVAL_BLANKOKREDIT } from "@/components/modules/credit-office/credit-office-types";
+import { useLanguage } from "@/context/LanguageContext";
 
 const CRITICAL_ERRORS = [
   "Laufzeit 48 Monate überschreitet KKG-Maximum von 36 Monaten",
@@ -22,16 +23,18 @@ const LEARNING = [
 ];
 
 export default function BlankokreditPage() {
+  const { t } = useLanguage();
+  const co = t.modules.backoffice.creditOffice;
   const [active, setActive] = useState(false);
 
   if (!active) {
     return (
       <>
-        <Header title="Blankokredit prüfen" subtitle="Credit Office · Kevin Meier · Level 2" />
+        <Header title={co.blankokreditTitle} subtitle="Credit Office · Kevin Meier · Level 2" />
         <Breadcrumb items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Credit Office", href: "/backoffice/credit-office" },
-          { label: "Blankokredit prüfen" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: co.pageTitle, href: "/backoffice/credit-office" },
+          { label: co.blankokreditTitle },
         ]} />
         <div className="flex-1 overflow-y-auto p-6">
           <div className="mx-auto max-w-lg space-y-5">
