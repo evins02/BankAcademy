@@ -23,11 +23,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const { user, isLoaded } = useUser();
   const [lang, setLangState] = useState<Lang>("de");
 
-  // Load from localStorage on mount
+  // Load from localStorage on mount; fall back to browser language for first-time visitors
   useEffect(() => {
     try {
       const saved = localStorage.getItem("ba-lang");
-      if (saved && saved in DICTS) setLangState(saved as Lang);
+      if (saved && saved in DICTS) {
+        setLangState(saved as Lang);
+      } else {
+        const browser = navigator.language.slice(0, 2) as Lang;
+        if (browser in DICTS) setLangState(browser);
+      }
     } catch {}
   }, []);
 
