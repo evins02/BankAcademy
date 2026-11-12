@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
 import { addXP } from "@/lib/xpData";
+import { useLanguage } from "@/context/LanguageContext";
 
 const SCENARIOS = [
   {
@@ -73,6 +74,7 @@ const SCENARIOS = [
 ];
 
 export default function BonitaetPage() {
+  const { t } = useLanguage();
   const [lernOpen, setLernOpen] = useState(true);
   const [correctCount, setCorrectCount] = useState(0);
   const [bonusAwarded, setBonusAwarded] = useState(false);
@@ -85,12 +87,12 @@ export default function BonitaetPage() {
 
   return (
     <>
-      <Header title="Bonitätsprüfung & Firmenkredit" subtitle="Firmenkunde · Front Office" />
+      <Header title={t.modules.firmenkunde.bonitaet.title} subtitle={t.modules.firmenkunde.bonitaet.subtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Firmenkunde", href: "/firmenkunde" },
-          { label: "Bonitätsprüfung" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.firmenkunde.pageTitle, href: "/firmenkunde" },
+          { label: t.modules.firmenkunde.bonitaet.title },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">
