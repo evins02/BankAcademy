@@ -108,6 +108,9 @@ export const de = {
     "Erstfinanzierung": "Erstfinanzierung",
     "3a Beratung": "3a Beratung",
     "Bald verfügbar": "Bald verfügbar",
+    "Kreditgeschäfte": "Kreditgeschäfte",
+    "Dokument prüfen": "Dokument prüfen",
+    "Front-Office": "Front-Office",
   } as Record<string, string>,
   header: {
     menuOpen: "Menü öffnen",
@@ -770,6 +773,10 @@ export const de = {
       tragbarkeit: {
         title: "Tragbarkeit",
         subtitle: "Firmenkunde – Kreditfähigkeit und Tragbarkeitsberechnung",
+        etp: { title: "Belastungsgrenze & ETP", subtitle: "Firmenkunden Tragbarkeit" },
+        gesamtengagement: { title: "Gesamtengagement – Deckungsgrad", subtitle: "Firmenkunden Tragbarkeit" },
+        gewerbe: { title: "Selbstgenutzte Gewerbeliegenschaft", subtitle: "Firmenkunden Tragbarkeit" },
+        renditeobjekt: { title: "Renditeobjekte – Objektebene", subtitle: "Firmenkunden Tragbarkeit" },
       },
     },
     privatkunde: {

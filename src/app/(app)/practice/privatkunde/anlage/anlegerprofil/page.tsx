@@ -1,17 +1,21 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function AnlageProfilPage() {
+  const { t } = useLanguage();
   return (
     <>
-      <Header title="Anlageberatung – Neues Anlegerprofil" subtitle="Bald verfügbar" />
+      <Header title={`${t.navSections["Anlageberatung"]} – ${t.navItems["Neues Anlegerprofil"]}`} subtitle={t.navItems["Bald verfügbar"]} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Practice" },
-          { label: "Privatkundenberater" },
-          { label: "Anlageberatung" },
-          { label: "Neues Anlegerprofil" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navGroups["Practice"] },
+          { label: t.navItems["Privatkundenberater"] },
+          { label: t.navSections["Anlageberatung"] },
+          { label: t.navItems["Neues Anlegerprofil"] },
         ]}
       />
       <div className="flex flex-1 items-center justify-center p-12 text-center">

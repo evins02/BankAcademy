@@ -1,15 +1,19 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function PracticeOperations() {
+  const { t } = useLanguage();
   return (
     <>
-      <Header title="Practice – Operations" subtitle="Bald verfügbar" />
+      <Header title={`${t.navGroups["Practice"]} – ${t.navItems["Operations"]}`} subtitle={t.navItems["Bald verfügbar"]} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Practice" },
-          { label: "Operations" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navGroups["Practice"] },
+          { label: t.navItems["Operations"] },
         ]}
       />
       <div className="flex flex-1 items-center justify-center p-12 text-center">

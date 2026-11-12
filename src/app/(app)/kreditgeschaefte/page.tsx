@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Header } from "@/components/layout/Header";
@@ -6,10 +8,12 @@ import { ScenarioCard } from "@/components/modules/ScenarioCard";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { SAMPLE_SCENARIOS } from "@/lib/constants";
+import { useLanguage } from "@/context/LanguageContext";
 
 const scenarios = SAMPLE_SCENARIOS.filter((s) => s.module === "kreditgeschaefte");
 
 export default function KreditgeschaeftePage() {
+  const { t } = useLanguage();
   return (
     <>
       <Header
@@ -18,8 +22,8 @@ export default function KreditgeschaeftePage() {
       />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Kreditgeschäfte" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navItems["Kreditgeschäfte"] },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">

@@ -1,17 +1,21 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Vorsorge3aPage() {
+  const { t } = useLanguage();
   return (
     <>
-      <Header title="Konten & Vorsorge – 3a Beratung" subtitle="Bald verfügbar" />
+      <Header title={`${t.navSections["Konten & Vorsorge"]} – ${t.navItems["3a Beratung"]}`} subtitle={t.navItems["Bald verfügbar"]} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Practice" },
-          { label: "Privatkundenberater" },
-          { label: "Konten & Vorsorge" },
-          { label: "3a Beratung" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navGroups["Practice"] },
+          { label: t.navItems["Privatkundenberater"] },
+          { label: t.navSections["Konten & Vorsorge"] },
+          { label: t.navItems["3a Beratung"] },
         ]}
       />
       <div className="flex flex-1 items-center justify-center p-12 text-center">

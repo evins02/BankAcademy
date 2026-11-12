@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getBookmarks, removeBookmark, type Bookmark as BookmarkType } from "@/lib/bookmarksData";
+import { useLanguage } from "@/context/LanguageContext";
 
 function relTime(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -23,6 +24,7 @@ const MODULE_HREFS: Record<string, string> = {
 };
 
 export default function LesezeichenPage() {
+  const { t } = useLanguage();
   const [bookmarks, setBookmarks] = useState<BookmarkType[]>([]);
 
   function load() {
@@ -54,8 +56,8 @@ export default function LesezeichenPage() {
       />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Lesezeichen" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navItems["Lesezeichen"] },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">

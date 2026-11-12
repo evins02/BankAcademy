@@ -1,5 +1,8 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { useLanguage } from "@/context/LanguageContext";
 import { PracticeSimulationPage } from "@/components/modules/simulation/PracticeSimulationPage";
 import type { BriefingCustomer, DifficultyOption } from "@/components/modules/simulation/PracticeBriefingScreen";
 import type { Difficulty } from "@/components/modules/simulation/sim-types";
@@ -46,16 +49,17 @@ const OPENINGS: Record<Difficulty, string[]> = {
 };
 
 export default function HypothekAbloesung() {
+  const { t } = useLanguage();
   return (
     <>
-      <Header title="Hypothek – Ablösung Fremdbank" subtitle="Sandra Meyer · Bankwechsel / Offertvergleich" />
+      <Header title={`${t.navItems["Hypotheken"]} – ${t.navItems["Ablösung Fremdbank"]}`} subtitle="Sandra Meyer · Bankwechsel / Offertvergleich" />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Practice" },
-          { label: "Privatkundenberater" },
-          { label: "Hypotheken" },
-          { label: "Ablösung Fremdbank" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navGroups["Practice"] },
+          { label: t.navItems["Privatkundenberater"] },
+          { label: t.navItems["Hypotheken"] },
+          { label: t.navItems["Ablösung Fremdbank"] },
         ]}
       />
       <PracticeSimulationPage

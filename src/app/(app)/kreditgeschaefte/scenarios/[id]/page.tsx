@@ -1,3 +1,6 @@
+"use client";
+
+import { use } from "react";
 import { notFound } from "next/navigation";
 import { Clock, User } from "lucide-react";
 import { Header } from "@/components/layout/Header";
@@ -7,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StatusDot } from "@/components/ui/status-dot";
 import { SAMPLE_SCENARIOS } from "@/lib/constants";
+import { useLanguage } from "@/context/LanguageContext";
 
 const roleMap: Record<string, string> = {
   "relationship-manager": "Relationship Manager",
@@ -18,9 +22,11 @@ const roleMap: Record<string, string> = {
 export default function ScenarioDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const scenario = SAMPLE_SCENARIOS.find((s) => s.id === params.id);
+  const { id } = use(params);
+  const { t } = useLanguage();
+  const scenario = SAMPLE_SCENARIOS.find((s) => s.id === id);
   if (!scenario) notFound();
 
   return (
@@ -28,8 +34,8 @@ export default function ScenarioDetailPage({
       <Header title={scenario.title} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Kreditgeschäfte", href: "/kreditgeschaefte" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navItems["Kreditgeschäfte"], href: "/kreditgeschaefte" },
           { label: scenario.title },
         ]}
       />
@@ -85,11 +91,5 @@ export default function ScenarioDetailPage({
         </div>
       </div>
     </>
-  );
-}
-
-export async function generateStaticParams() {
-  return SAMPLE_SCENARIOS.filter((s) => s.module === "kreditgeschaefte").map(
-    (s) => ({ id: s.id })
   );
 }

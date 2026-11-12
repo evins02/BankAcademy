@@ -1,5 +1,8 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { useLanguage } from "@/context/LanguageContext";
 import { PracticeSimulationPage } from "@/components/modules/simulation/PracticeSimulationPage";
 import type { BriefingCustomer, DifficultyOption } from "@/components/modules/simulation/PracticeBriefingScreen";
 import type { Difficulty } from "@/components/modules/simulation/sim-types";
@@ -47,16 +50,17 @@ const OPENINGS: Record<Difficulty, string[]> = {
 };
 
 export default function JahresgespraechAnlagePage() {
+  const { t } = useLanguage();
   return (
     <>
-      <Header title="Anlageberatung – Jahresgespräch" subtitle="Markus Steiner · Performance-Review" />
+      <Header title={`${t.navSections["Anlageberatung"]} – ${t.navItems["Jahresgespräch"]}`} subtitle="Markus Steiner · Performance-Review" />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Practice" },
-          { label: "Privatkundenberater" },
-          { label: "Anlageberatung" },
-          { label: "Jahresgespräch" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navGroups["Practice"] },
+          { label: t.navItems["Privatkundenberater"] },
+          { label: t.navSections["Anlageberatung"] },
+          { label: t.navItems["Jahresgespräch"] },
         ]}
       />
       <PracticeSimulationPage

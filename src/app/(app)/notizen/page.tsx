@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getNotes, deleteNote, type ScenarioNote } from "@/lib/notesData";
+import { useLanguage } from "@/context/LanguageContext";
 
 function relTime(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -17,6 +18,7 @@ function relTime(iso: string) {
 }
 
 export default function NotizenPage() {
+  const { t } = useLanguage();
   const [notes, setNotes] = useState<ScenarioNote[]>([]);
   const [query, setQuery] = useState("");
 
@@ -54,8 +56,8 @@ export default function NotizenPage() {
       <Header title="Notizen" subtitle={`${notes.length} Notiz${notes.length !== 1 ? "en" : ""} gespeichert`} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Notizen" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navItems["Notizen"] },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">

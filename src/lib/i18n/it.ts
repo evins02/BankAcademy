@@ -110,6 +110,9 @@ export const it: typeof de = {
     "Erstfinanzierung": "Primo finanziamento",
     "3a Beratung": "Consulenza 3a",
     "Bald verfügbar": "Disponibile a breve",
+    "Kreditgeschäfte": "Operazioni creditizie",
+    "Dokument prüfen": "Verificare il documento",
+    "Front-Office": "Front-Office",
   } as Record<string, string>,
   header: {
     menuOpen: "Apri il menu",
@@ -773,6 +776,10 @@ export const it: typeof de = {
       tragbarkeit: {
         title: "Sostenibilità finanziaria",
         subtitle: "Clientela aziendale – Capacità di rimborso e calcolo dell'onere",
+        etp: { title: "Limite d'indebitamento & ETP", subtitle: "Clientela aziendale – Capacità di carico" },
+        gesamtengagement: { title: "Impegno complessivo – Grado di copertura", subtitle: "Clientela aziendale – Capacità di carico" },
+        gewerbe: { title: "Immobile commerciale ad uso proprio", subtitle: "Clientela aziendale – Capacità di carico" },
+        renditeobjekt: { title: "Immobili a reddito – Livello oggetto", subtitle: "Clientela aziendale – Capacità di carico" },
       },
     },
     privatkunde: {

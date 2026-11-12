@@ -110,6 +110,9 @@ export const fr: typeof de = {
     "Erstfinanzierung": "Premier financement",
     "3a Beratung": "Conseil 3a",
     "Bald verfügbar": "Bientôt disponible",
+    "Kreditgeschäfte": "Affaires de crédit",
+    "Dokument prüfen": "Vérifier le document",
+    "Front-Office": "Front-Office",
   } as Record<string, string>,
   header: {
     menuOpen: "Ouvrir le menu",
@@ -772,6 +775,10 @@ export const fr: typeof de = {
       tragbarkeit: {
         title: "Capacité financière",
         subtitle: "Clientèle entreprises – Capacité de remboursement et calcul de charge",
+        etp: { title: "Limite de charge & ETP", subtitle: "Clientèle entreprises – Capacité de charge" },
+        gesamtengagement: { title: "Engagement global – Taux de couverture", subtitle: "Clientèle entreprises – Capacité de charge" },
+        gewerbe: { title: "Immeuble commercial à usage propre", subtitle: "Clientèle entreprises – Capacité de charge" },
+        renditeobjekt: { title: "Immeubles de rendement – Niveau objet", subtitle: "Clientèle entreprises – Capacité de charge" },
       },
     },
     privatkunde: {

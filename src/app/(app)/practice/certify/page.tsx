@@ -1,15 +1,19 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function PracticeCertify() {
+  const { t } = useLanguage();
   return (
     <>
-      <Header title="Certify" subtitle="Bald verfügbar" />
+      <Header title={t.navItems["Certify"]} subtitle={t.navItems["Bald verfügbar"]} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Practice" },
-          { label: "Certify" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navGroups["Practice"] },
+          { label: t.navItems["Certify"] },
         ]}
       />
       <div className="flex flex-1 items-center justify-center p-12 text-center">
