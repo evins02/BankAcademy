@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Header } from "@/components/layout/Header";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface CommunityCase {
   id: string;
@@ -103,7 +104,7 @@ const BEREICH_OPTIONS = [
 
 function formatDate(iso: string): string {
   try {
-    return new Date(iso).toLocaleDateString("de-CH", {
+    return new Date(iso).toLocaleDateString("fr-CH", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -139,6 +140,7 @@ function BereichBadge({ bereich }: { bereich: string }) {
 }
 
 export default function CommunityPage() {
+  const { t } = useLanguage();
   const [cases, setCases] = useState<CommunityCase[]>(SEED_CASES);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
@@ -188,7 +190,6 @@ export default function CommunityPage() {
 
     setCases((prev) => {
       const updated = [...prev, newCase];
-      // Persist only user cases (non-seed)
       const userCases = updated.filter((c) => !c.id.startsWith("seed-"));
       try {
         localStorage.setItem("community-cases", JSON.stringify(userCases));
@@ -239,7 +240,6 @@ export default function CommunityPage() {
       const updated = prev.map((c) =>
         c.id === caseId ? { ...c, comments: [...c.comments, text] } : c
       );
-      // Persist user cases
       const userCases = updated.filter((c) => !c.id.startsWith("seed-"));
       try {
         localStorage.setItem("community-cases", JSON.stringify(userCases));
@@ -256,15 +256,15 @@ export default function CommunityPage() {
   return (
     <>
       <Header
-        title="Praxisfälle"
-        subtitle="Lerne aus realen anonymisierten Banking-Situationen"
+        title={t.communityCases.pageTitle}
+        subtitle={t.communityCases.pageSubtitle}
       />
 
       <div className="flex-1 overflow-y-auto p-6">
         {/* Top bar */}
         <div className="mb-6 flex items-center justify-between">
           <p className="text-sm text-text-secondary">
-            {cases.length} {cases.length === 1 ? "Fall" : "Fälle"}
+            {cases.length} {cases.length === 1 ? t.communityCases.caseSingular : t.communityCases.casePlural}
           </p>
           <button
             onClick={() => {
@@ -273,7 +273,7 @@ export default function CommunityPage() {
             }}
             className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
           >
-            Fall einreichen
+            {t.communityCases.submitBtn}
           </button>
         </div>
 
@@ -281,32 +281,32 @@ export default function CommunityPage() {
         {showForm && (
           <div className="mb-6 rounded-2xl border border-border bg-surface p-5 shadow-sm">
             <h2 className="mb-4 text-base font-semibold text-text-primary">
-              Fall einreichen
+              {t.communityCases.formTitle}
             </h2>
 
             {submitted ? (
               <div className="flex items-center gap-2 rounded-xl bg-accent-light px-4 py-3 text-sm font-semibold text-accent">
-                ✓ Gespeichert! Dein Fall ist jetzt lokal in deinem Browser sichtbar.
+                ✓ {t.communityCases.savedMsg}
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="mb-1 block text-xs font-semibold text-text-secondary">
-                    Titel
+                    {t.communityCases.titleLabel}
                   </label>
                   <input
                     type="text"
                     required
                     value={titel}
                     onChange={(e) => setTitel(e.target.value)}
-                    placeholder="Kurze Beschreibung des Falls"
+                    placeholder={t.communityCases.titlePlaceholder}
                     className={inputClass}
                   />
                 </div>
 
                 <div>
                   <label className="mb-1 block text-xs font-semibold text-text-secondary">
-                    Bereich
+                    {t.communityCases.bereichLabel}
                   </label>
                   <select
                     value={bereich}
@@ -323,42 +323,42 @@ export default function CommunityPage() {
 
                 <div>
                   <label className="mb-1 block text-xs font-semibold text-text-secondary">
-                    Beschreibung
+                    {t.communityCases.beschreibungLabel}
                   </label>
                   <textarea
                     required
                     rows={3}
                     value={beschreibung}
                     onChange={(e) => setBeschreibung(e.target.value)}
-                    placeholder="Beschreibe den Fall anonymisiert..."
+                    placeholder={t.communityCases.beschreibungPlaceholder}
                     className={inputClass}
                   />
                 </div>
 
                 <div>
                   <label className="mb-1 block text-xs font-semibold text-text-secondary">
-                    Herausforderung
+                    {t.communityCases.herausforderungLabel}
                   </label>
                   <textarea
                     required
                     rows={2}
                     value={herausforderung}
                     onChange={(e) => setHerausforderung(e.target.value)}
-                    placeholder="Was war die Herausforderung?"
+                    placeholder={t.communityCases.herausforderungPlaceholder}
                     className={inputClass}
                   />
                 </div>
 
                 <div>
                   <label className="mb-1 block text-xs font-semibold text-text-secondary">
-                    Was hast du gelernt?
+                    {t.communityCases.gelerntLabel}
                   </label>
                   <textarea
                     required
                     rows={2}
                     value={gelernt}
                     onChange={(e) => setGelernt(e.target.value)}
-                    placeholder="Was hast du gelernt?"
+                    placeholder={t.communityCases.gelerntPlaceholder}
                     className={inputClass}
                   />
                 </div>
@@ -368,14 +368,14 @@ export default function CommunityPage() {
                     type="submit"
                     className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
                   >
-                    Fall einreichen →
+                    {t.communityCases.submitForm}
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowForm(false)}
                     className="rounded-xl border border-border px-4 py-2 text-sm font-semibold text-text-secondary transition-colors hover:bg-gray-50"
                   >
-                    Abbrechen
+                    {t.communityCases.cancelBtn}
                   </button>
                 </div>
               </form>
@@ -420,7 +420,7 @@ export default function CommunityPage() {
 
                     <div className="rounded-xl border border-border bg-gray-50 p-4">
                       <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-text-secondary">
-                        ⚡ Herausforderung
+                        ⚡ {t.communityCases.challengeHeader}
                       </p>
                       <p className="text-sm leading-relaxed text-text-primary">
                         {c.herausforderung}
@@ -429,7 +429,7 @@ export default function CommunityPage() {
 
                     <div className="rounded-xl border border-border bg-accent-light p-4">
                       <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-text-secondary">
-                        💡 Was ich gelernt habe
+                        💡 {t.communityCases.learningHeader}
                       </p>
                       <p className="text-sm leading-relaxed text-text-primary">
                         {c.gelernt}
@@ -440,7 +440,7 @@ export default function CommunityPage() {
                     {c.comments.length > 0 && (
                       <div className="space-y-2">
                         <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
-                          Kommentare
+                          {t.communityCases.commentsHeader}
                         </p>
                         {c.comments.map((comment, i) => (
                           <div
@@ -467,14 +467,14 @@ export default function CommunityPage() {
                         onKeyDown={(e) => {
                           if (e.key === "Enter") addComment(c.id);
                         }}
-                        placeholder="Kommentar hinzufügen..."
+                        placeholder={t.communityCases.commentPlaceholder}
                         className="flex-1 rounded-xl border border-border px-3 py-2 text-sm text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
                       />
                       <button
                         onClick={() => addComment(c.id)}
                         className="rounded-xl bg-primary px-3 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
                       >
-                        Senden
+                        {t.communityCases.sendBtn}
                       </button>
                     </div>
                   </div>
@@ -492,7 +492,7 @@ export default function CommunityPage() {
                     }
                     className="text-xs font-semibold text-primary transition-opacity hover:opacity-75"
                   >
-                    {isExpanded ? "Weniger" : "Mehr lesen"}
+                    {isExpanded ? t.communityCases.less : t.communityCases.readMore}
                   </button>
 
                   <button

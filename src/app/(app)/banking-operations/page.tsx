@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
@@ -5,40 +7,44 @@ import { ScenarioCard } from "@/components/modules/ScenarioCard";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Card, CardContent } from "@/components/ui/card";
 import { SAMPLE_SCENARIOS } from "@/lib/constants";
+import { useLanguage } from "@/context/LanguageContext";
 
 const scenarios = SAMPLE_SCENARIOS.filter(
   (s) => s.module === "banking-operations"
 );
 
-const TOPICS = [
-  {
-    title: "Kontoeröffnung",
-    count: 3,
-    icon: "🏦",
-    href: "/banking-operations/kontoeröffnungen",
-  },
-  { title: "Zahlungsverkehr", count: 0, icon: "💸", href: "#" },
-  { title: "Mahnung & Betreibung", count: 0, icon: "📋", href: "#" },
-  { title: "Settlements", count: 0, icon: "🔄", href: "#" },
-];
-
 export default function BankingOperationsPage() {
+  const { t } = useLanguage();
+  const bo = t.modules.bankingOps;
+
+  const TOPICS = [
+    {
+      title: t.modules.backoffice.kontoeröffnungen.pageTitle,
+      count: 3,
+      icon: "🏦",
+      href: "/banking-operations/kontoeröffnungen",
+    },
+    { title: t.modules.backoffice.zahlungsverkehr.pageTitle, count: 0, icon: "💸", href: "#" },
+    { title: t.modules.backoffice.mahnwesen.pageTitle, count: 0, icon: "📋", href: "#" },
+    { title: "Settlements", count: 0, icon: "🔄", href: "#" },
+  ];
+
   return (
     <>
       <Header
-        title="Banking Operations"
-        subtitle="Konten, Zahlungen, Mahnwesen und Abwicklung"
+        title={bo.pageTitle}
+        subtitle={bo.pageSubtitle}
       />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Banking Operations" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: bo.pageTitle },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">
         <section className="mb-8">
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-            Themenbereiche
+            {bo.themenbereiche}
           </h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {TOPICS.map((topic) => (
@@ -54,7 +60,7 @@ export default function BankingOperationsPage() {
                       {topic.title}
                     </p>
                     <p className="text-xs text-text-secondary">
-                      {topic.count > 0 ? `${topic.count} Szenarien` : "Bald verfügbar"}
+                      {topic.count > 0 ? `${topic.count} ${bo.scenariosSuffix}` : bo.comingSoon}
                     </p>
                   </CardContent>
                 </Card>
@@ -65,7 +71,7 @@ export default function BankingOperationsPage() {
 
         <section>
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-            Alle Szenarien
+            {bo.alleScenarios}
           </h2>
           {scenarios.length === 0 ? (
             <EmptyState />

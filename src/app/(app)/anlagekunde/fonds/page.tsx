@@ -1,26 +1,31 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubRunner } from "@/components/modules/anlage-submodule/SubRunner";
 import { AnlageFondsLernblock } from "@/components/modules/anlage-fonds/LernblockCard";
 import { ANLAGE_FONDS_LEVELS } from "@/lib/anlage-fonds";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function AnlageFondsPage() {
+  const { t } = useLanguage();
+  const m = t.modules.anlagekunde.fonds;
   return (
     <>
-      <Header title="Anlagefonds & ETF" subtitle="Anlagekunde – TER, ausschüttend/thesaurierend, aktiv vs. passiv" />
+      <Header title={m.title} subtitle={m.subtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Anlagekunde" },
-          { label: "Anlagefonds & ETF" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.anlagekunde.pageTitle, href: "/anlagekunde" },
+          { label: m.title },
         ]}
       />
       <SubRunner
         levels={ANLAGE_FONDS_LEVELS}
         moduleId="anlagekunde-fonds"
-        moduleName="Anlagefonds & ETF"
-        selectorTitle="Anlagefonds & ETF"
-        selectorDescription="Lerne TER zu vergleichen, ausschüttende von thesaurierenden Fonds zu unterscheiden und aktiv vs. passiv zu bewerten."
+        moduleName={m.title}
+        selectorTitle={m.selectorTitle}
+        selectorDescription={m.selectorDescription}
         LernblockComponent={AnlageFondsLernblock}
       />
     </>

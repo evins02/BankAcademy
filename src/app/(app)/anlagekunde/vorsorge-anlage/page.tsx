@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
 import { addXP } from "@/lib/xpData";
+import { useLanguage } from "@/context/LanguageContext";
 
 const SCENARIOS = [
   {
@@ -59,6 +60,7 @@ const SCENARIOS = [
 ];
 
 export default function VorsorgeAnlagePage() {
+  const { t } = useLanguage();
   const [lernOpen, setLernOpen] = useState(true);
   const [correctCount, setCorrectCount] = useState(0);
   const [bonusAwarded, setBonusAwarded] = useState(false);
@@ -71,12 +73,12 @@ export default function VorsorgeAnlagePage() {
 
   return (
     <>
-      <Header title="Vorsorge & 3a im Anlagekontext" subtitle="Anlagekunde · Front Office" />
+      <Header title={t.modules.anlagekunde.vorsorgeAnlage.title} subtitle={t.modules.anlagekunde.vorsorgeAnlage.subtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Anlagekunde", href: "/anlagekunde" },
-          { label: "Vorsorge & 3a" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.anlagekunde.pageTitle, href: "/anlagekunde" },
+          { label: t.modules.anlagekunde.vorsorgeAnlage.title },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">

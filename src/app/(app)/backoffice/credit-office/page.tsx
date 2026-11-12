@@ -1,71 +1,76 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 import { Home, CreditCard, Building2, RefreshCw, Clock, Star, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-const MODULES = [
-  {
-    href: "/backoffice/credit-office/hypothek",
-    badge: "Level 3",
-    badgeVariant: "red" as const,
-    icon: Home,
-    title: "Privathypothek prüfen",
-    desc: "Familie Rossi – Hypothekarantrag mit kritischen K.O.-Kriterien. Belehnung, Eigenmittel, Tragbarkeit und Rentenalter prüfen.",
-    time: "10 Min",
-    xp: "+200 XP",
-  },
-  {
-    href: "/backoffice/credit-office/blankokredit",
-    badge: "Level 2",
-    badgeVariant: "orange" as const,
-    icon: CreditCard,
-    title: "Blankokredit prüfen",
-    desc: "Kevin Meier – Konsumkredit CHF 25'000. Kreditfähigkeit gemäss KKG prüfen und Laufzeit beurteilen.",
-    time: "7 Min",
-    xp: "+150 XP",
-  },
-  {
-    href: "/backoffice/credit-office/firmenkredit",
-    badge: "Level 3",
-    badgeVariant: "red" as const,
-    icon: Building2,
-    title: "Firmenkredit prüfen",
-    desc: "Müller Bau GmbH – Betriebsmittelkredit CHF 350'000. Deckungsgrad, EK-Quote und qualitative Risiken beurteilen.",
-    time: "10 Min",
-    xp: "+200 XP",
-  },
-  {
-    href: "/backoffice/credit-office/neubewilligung",
-    badge: "Level 2",
-    badgeVariant: "orange" as const,
-    icon: RefreshCw,
-    title: "Periodische Neubewilligung",
-    desc: "Hans Schneider – Bestehende Hypothek periodisch überprüfen. Veränderte Situation, gesunkener Liegenschaftswert.",
-    time: "7 Min",
-    xp: "+150 XP",
-  },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function CreditOfficeHubPage() {
+  const { t } = useLanguage();
+  const co = t.modules.backoffice.creditOffice;
+
+  const MODULES = [
+    {
+      href: "/backoffice/credit-office/hypothek",
+      badge: "Level 3",
+      badgeVariant: "red" as const,
+      icon: Home,
+      title: co.hypothekTitle,
+      desc: co.hypothekDesc,
+      time: "10 Min",
+      xp: "+200 XP",
+    },
+    {
+      href: "/backoffice/credit-office/blankokredit",
+      badge: "Level 2",
+      badgeVariant: "orange" as const,
+      icon: CreditCard,
+      title: co.blankokreditTitle,
+      desc: co.blankokreditDesc,
+      time: "7 Min",
+      xp: "+150 XP",
+    },
+    {
+      href: "/backoffice/credit-office/firmenkredit",
+      badge: "Level 3",
+      badgeVariant: "red" as const,
+      icon: Building2,
+      title: co.firmenkreditTitle,
+      desc: co.firmenkreditDesc,
+      time: "10 Min",
+      xp: "+200 XP",
+    },
+    {
+      href: "/backoffice/credit-office/neubewilligung",
+      badge: "Level 2",
+      badgeVariant: "orange" as const,
+      icon: RefreshCw,
+      title: co.neubewilligungTitle,
+      desc: co.neubewilligungDesc,
+      time: "7 Min",
+      xp: "+150 XP",
+    },
+  ];
+
   return (
     <>
       <Header
-        title="Credit Office"
-        subtitle="Kreditanträge und Dossiers prüfen – als Credit-Office-Analyst"
+        title={co.pageTitle}
+        subtitle={co.pageSubtitle}
       />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Back Office" },
-          { label: "Credit Office" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.backoffice.pageTitle, href: "/backoffice" },
+          { label: co.pageTitle },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">
         <div className="mx-auto max-w-2xl space-y-6">
           <p className="text-sm text-text-secondary">
-            Du spielst die Rolle des Credit Office Analysten. Dossiers kommen vom Kundenberater –
-            du analysierst, erkennst Risiken und fällst den Entscheid.
+            {co.roleDesc}
           </p>
 
           <Link
@@ -76,13 +81,13 @@ export default function CreditOfficeHubPage() {
             <span className="shrink-0 text-2xl">📋</span>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <p className="text-sm font-semibold text-gray-900">Kreditprüfungsformular prüfen</p>
+                <p className="text-sm font-semibold text-gray-900">{co.dokumentPruefenTitle}</p>
                 <span className="rounded-full px-2 py-0.5 text-[10px] font-bold" style={{ background: "#d1faf0", color: "#0a8a64" }}>
-                  Neu
+                  {co.newBadge}
                 </span>
               </div>
               <p className="mt-0.5 text-xs text-gray-500">
-                Marco Bianchi – 3 versteckte Fehler im Kreditdossier aufspüren
+                {co.dokumentPruefenDesc}
               </p>
             </div>
             <ChevronRight size={14} className="shrink-0 text-gray-400" />
@@ -111,7 +116,7 @@ export default function CreditOfficeHubPage() {
                     className="w-full rounded-DEFAULT py-2 px-4 text-sm font-semibold text-center transition-colors"
                     style={{ background: "var(--primary, #0D1B4B)", color: "#fff" }}
                   >
-                    Starten
+                    {co.startBtn}
                   </Link>
                 </div>
               );
@@ -122,14 +127,13 @@ export default function CreditOfficeHubPage() {
             className="rounded-DEFAULT p-4 text-sm text-text-secondary"
             style={{ background: "rgba(13,27,75,0.04)", border: "1px solid rgba(13,27,75,0.08)" }}
           >
-            <p className="font-semibold text-text-primary mb-1">Credit Office – Rolle und Aufgaben</p>
+            <p className="font-semibold text-text-primary mb-1">{co.roleInfoTitle}</p>
             <p>
-              Der Credit Officer prüft Kreditanträge unabhängig vom Kundenberater. Er beurteilt
-              Bonität, Tragbarkeit, Sicherheiten und Branchenrisiken. Entscheide:{" "}
-              <span className="font-semibold text-text-primary">Bewilligen</span> →{" "}
-              <span className="font-semibold text-text-primary">Bewilligen mit Auflagen</span> →{" "}
-              <span className="font-semibold text-text-primary">Rückfrage</span> →{" "}
-              <span className="font-semibold text-text-primary">Ablehnen</span>.
+              {co.roleInfoText}{" "}
+              <span className="font-semibold text-text-primary">{co.decisionApprove}</span> →{" "}
+              <span className="font-semibold text-text-primary">{co.decisionApproveConditions}</span> →{" "}
+              <span className="font-semibold text-text-primary">{co.decisionQuery}</span> →{" "}
+              <span className="font-semibold text-text-primary">{co.decisionReject}</span>.
             </p>
           </div>
         </div>

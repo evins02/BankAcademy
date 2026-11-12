@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
 import { addXP } from "@/lib/xpData";
+import { useLanguage } from "@/context/LanguageContext";
 
 const SCENARIOS = [
   {
@@ -68,6 +69,7 @@ Rendite in CHF: +3.75% statt +15%`,
 ];
 
 export default function WaehrungsrisikenPage() {
+  const { t } = useLanguage();
   const [lernOpen, setLernOpen] = useState(true);
   const [correctCount, setCorrectCount] = useState(0);
   const [bonusAwarded, setBonusAwarded] = useState(false);
@@ -80,12 +82,12 @@ export default function WaehrungsrisikenPage() {
 
   return (
     <>
-      <Header title="Währungsrisiken" subtitle="Anlagekunde · Front Office" />
+      <Header title={t.modules.anlagekunde.waehrungsrisiken.title} subtitle={t.modules.anlagekunde.waehrungsrisiken.subtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Anlagekunde", href: "/anlagekunde" },
-          { label: "Währungsrisiken" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.anlagekunde.pageTitle, href: "/anlagekunde" },
+          { label: t.modules.anlagekunde.waehrungsrisiken.title },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">
