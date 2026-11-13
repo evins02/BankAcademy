@@ -1,8 +1,11 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { DocumentChecklist } from "@/components/modules/kreditgeschaefte/DocumentChecklist";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ChecklistItem } from "@/components/modules/kreditgeschaefte/DocumentChecklist";
+import { useLanguage } from "@/context/LanguageContext";
 
 const CHECKLIST_ITEMS: ChecklistItem[] = [
   {
@@ -119,6 +122,7 @@ const RATING_CRITERIA = [
 ];
 
 export default function FrontOfficeFirmenkundePage() {
+  const { t } = useLanguage();
   return (
     <>
       <Header
@@ -127,10 +131,10 @@ export default function FrontOfficeFirmenkundePage() {
       />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Kreditgeschäfte", href: "/kreditgeschaefte" },
-          { label: "Firmenkunde" },
-          { label: "Front-Office" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navItems["Kreditgeschäfte"], href: "/kreditgeschaefte" },
+          { label: t.navItems["Firmenkunde"] },
+          { label: t.navItems["Front-Office"] },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">

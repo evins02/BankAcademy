@@ -1,15 +1,19 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { ModuleOverview } from "@/components/modules/ModuleOverviewPage";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function FirmenkundePage() {
+  const { t } = useLanguage();
   return (
     <>
-      <Header title="Firmenkunde" subtitle="Firmenkonten, Tragbarkeit und Kreditengagements" />
+      <Header title={t.modules.firmenkunde.pageTitle} subtitle={t.modules.firmenkunde.pageSubtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Firmenkunde" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.firmenkunde.pageTitle },
         ]}
       />
       <ModuleOverview configId="firmenkunde" />

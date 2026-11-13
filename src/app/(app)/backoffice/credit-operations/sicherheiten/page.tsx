@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, AlertTriangle, Lightbulb, BookOpen } from "luci
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
+import { useLanguage } from "@/context/LanguageContext";
 
 const SCENARIOS = [
   {
@@ -64,19 +65,21 @@ const SCENARIOS = [
 ];
 
 export default function SicherheitenPage() {
+  const { t } = useLanguage();
+  const co = t.modules.backoffice.creditOps;
   const [lernOpen, setLernOpen] = useState(true);
 
   return (
     <>
       <Header
-        title="Sicherheitenverwaltung"
-        subtitle="Credit Operations · Back Office"
+        title={co.sicherheiten.pageTitle}
+        subtitle={co.sicherheiten.pageSubtitle}
       />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Credit Operations", href: "/backoffice/credit-operations" },
-          { label: "Sicherheitenverwaltung" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: co.pageTitle, href: "/backoffice/credit-operations" },
+          { label: co.sicherheiten.pageTitle },
         ]}
       />
 

@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
 import { addXP } from "@/lib/xpData";
+import { useLanguage } from "@/context/LanguageContext";
 
 type ScenarioItem = {
   num: number;
@@ -212,6 +213,7 @@ David beantragt CHF 130'000 Lombardkredit zur Finanzierung einer Renovation.`,
 ];
 
 export default function LombardkreditPage() {
+  const { t } = useLanguage();
   const [variantIdx] = useState(() => Math.floor(Math.random() * 3));
   const SCENARIOS = SCENARIO_POOLS.map((pool) => pool[variantIdx]);
   const [lernOpen, setLernOpen] = useState(true);
@@ -227,12 +229,12 @@ export default function LombardkreditPage() {
 
   return (
     <>
-      <Header title="Lombardkredit" subtitle="Anlagekunde · Front Office" />
+      <Header title={t.modules.anlagekunde.lombardkredit.title} subtitle={t.modules.anlagekunde.lombardkredit.subtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Anlagekunde", href: "/anlagekunde" },
-          { label: "Lombardkredit" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.anlagekunde.pageTitle, href: "/anlagekunde" },
+          { label: t.modules.anlagekunde.lombardkredit.title },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">

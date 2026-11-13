@@ -1,17 +1,21 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function HypothekErstfinanzierungPage() {
+  const { t } = useLanguage();
   return (
     <>
-      <Header title="Hypothek – Erstfinanzierung" subtitle="Bald verfügbar" />
+      <Header title={`${t.navItems["Hypotheken"]} – ${t.navItems["Erstfinanzierung"]}`} subtitle={t.navItems["Bald verfügbar"]} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Practice" },
-          { label: "Privatkundenberater" },
-          { label: "Hypotheken" },
-          { label: "Erstfinanzierung" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navGroups["Practice"] },
+          { label: t.navItems["Privatkundenberater"] },
+          { label: t.navItems["Hypotheken"] },
+          { label: t.navItems["Erstfinanzierung"] },
         ]}
       />
       <div className="flex flex-1 items-center justify-center p-12 text-center">

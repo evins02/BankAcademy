@@ -1,20 +1,21 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { ZvPrivatRunner } from "@/components/modules/zahlungsverkehr-privat/ZvPrivatRunner";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function ZahlungsverkehrPage() {
+  const { t } = useLanguage();
+  const m = t.modules.privatkunde.zahlungsverkehr;
   return (
     <>
-      <Header
-        title="Zahlungsverkehr"
-        subtitle="Produkte kennen – Kunden richtig beraten"
-      />
+      <Header title={m.title} subtitle={m.subtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Privatkunde" },
-          { label: "Basis" },
-          { label: "Zahlungsverkehr" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.privatkunde.pageTitle, href: "/privatkunde" },
+          { label: m.title },
         ]}
       />
       <ZvPrivatRunner />

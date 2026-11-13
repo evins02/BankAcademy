@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
 import { addXP } from "@/lib/xpData";
+import { useLanguage } from "@/context/LanguageContext";
 
 /* ─── Types ────────────────────────────────────────────────────────── */
 interface RatingForm {
@@ -125,6 +126,8 @@ function FieldInput({
 }
 
 export default function RatingPage() {
+  const { t } = useLanguage();
+  const co = t.modules.backoffice.creditOps;
   const [lernOpen, setLernOpen] = useState(true);
   const [form, setForm] = useState<RatingForm>(EMPTY);
   const [loading, setLoading] = useState(false);
@@ -178,12 +181,12 @@ export default function RatingPage() {
 
   return (
     <>
-      <Header title="Rating erfassen" subtitle="Credit Operations · Back Office" />
+      <Header title={co.rating.pageTitle} subtitle={co.rating.pageSubtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Credit Operations", href: "/backoffice/credit-operations" },
-          { label: "Rating erfassen" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: co.pageTitle, href: "/backoffice/credit-operations" },
+          { label: co.rating.pageTitle },
         ]}
       />
 

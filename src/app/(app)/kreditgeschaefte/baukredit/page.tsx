@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
 import { addXP } from "@/lib/xpData";
+import { useLanguage } from "@/context/LanguageContext";
 
 const SCENARIOS = [
   {
@@ -79,6 +80,7 @@ Marco kommt zur Bank und bittet um sofortige Auszahlung der zusätzlichen CHF 80
 ];
 
 export default function BaukreditPage() {
+  const { t } = useLanguage();
   const [lernOpen, setLernOpen] = useState(true);
   const [correctCount, setCorrectCount] = useState(0);
   const [bonusAwarded, setBonusAwarded] = useState(false);
@@ -95,9 +97,9 @@ export default function BaukreditPage() {
       <Header title="Baukredit" subtitle="Kreditgeschäfte · Eigenheimfinanzierung" />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Kreditgeschäfte", href: "/kreditgeschaefte" },
-          { label: "Baukredit" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navItems["Kreditgeschäfte"], href: "/kreditgeschaefte" },
+          { label: t.navItems["Baukredit"] },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">

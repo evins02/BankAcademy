@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getAttemptRecords, MODULE_META, type AttemptRecord } from "@/lib/error-tracking";
+import { useLanguage } from "@/context/LanguageContext";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -22,15 +23,15 @@ interface CaseGroup {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function relativeTime(ts: number) {
+function relativeTime(ts: number, t: ReturnType<typeof useLanguage>["t"]) {
   const diff = Date.now() - ts;
   const m = Math.floor(diff / 60000);
-  if (m < 2) return "gerade eben";
-  if (m < 60) return `vor ${m} Min.`;
+  if (m < 2) return t.fehlerUebersicht.justNow;
+  if (m < 60) return `${m} ${t.fehlerUebersicht.minutesAgo}`;
   const h = Math.floor(m / 60);
-  if (h < 24) return `vor ${h} Std.`;
+  if (h < 24) return `${h} ${t.fehlerUebersicht.hoursAgo}`;
   const d = Math.floor(h / 24);
-  return `vor ${d} Tag${d > 1 ? "en" : ""}`;
+  return `${d} ${d > 1 ? t.fehlerUebersicht.daysAgo : t.fehlerUebersicht.dayAgo}`;
 }
 
 function groupRecords(records: AttemptRecord[]): CaseGroup[] {
@@ -60,7 +61,7 @@ function groupRecords(records: AttemptRecord[]): CaseGroup[] {
 
 // ─── Case row ─────────────────────────────────────────────────────────────────
 
-function CaseRow({ group }: { group: CaseGroup }) {
+function CaseRow({ group, t }: { group: CaseGroup; t: ReturnType<typeof useLanguage>["t"] }) {
   const [open, setOpen] = useState(false);
   const totalAttempts = group.records.length;
   const correctCount = group.records.filter((r) => r.correct).length;
@@ -78,17 +79,17 @@ function CaseRow({ group }: { group: CaseGroup }) {
         <div className="flex-1 min-w-0">
           <p className="truncate text-sm font-semibold text-text-primary">{group.caseTitle}</p>
           <p className="text-xs text-text-secondary">
-            {group.moduleLabel} · {relativeTime(group.lastAt)}
+            {group.moduleLabel} · {relativeTime(group.lastAt, t)}
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {lastRetryOk && (
             <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-bold text-green-700">
-              2. Versuch ✓
+              {t.fehlerUebersicht.secondAttemptOk}
             </span>
           )}
           <span className="rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-600">
-            {group.errorCount}/{totalAttempts} falsch
+            {group.errorCount}/{totalAttempts} {t.fehlerUebersicht.wrongLabel}
           </span>
           <ChevronRight
             size={15}
@@ -113,13 +114,13 @@ function CaseRow({ group }: { group: CaseGroup }) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-xs font-semibold text-text-primary">
-                      Versuch {r.attempt ?? i + 1}
+                      {t.fehlerUebersicht.attemptLabel} {r.attempt ?? i + 1}
                     </span>
-                    <span className="text-[11px] text-text-secondary">{relativeTime(r.timestamp)}</span>
+                    <span className="text-[11px] text-text-secondary">{relativeTime(r.timestamp, t)}</span>
                     {r.correct ? (
-                      <span className="text-[10px] font-bold text-green-600">Richtig</span>
+                      <span className="text-[10px] font-bold text-green-600">{t.fehlerUebersicht.correctLabel}</span>
                     ) : (
-                      <span className="text-[10px] font-bold text-red-500">Falsch</span>
+                      <span className="text-[10px] font-bold text-red-500">{t.fehlerUebersicht.wrongAnswer}</span>
                     )}
                   </div>
                   {!r.correct && r.errors.length > 0 && (
@@ -131,7 +132,7 @@ function CaseRow({ group }: { group: CaseGroup }) {
                               ? "bg-red-100 text-red-600"
                               : "bg-amber-100 text-amber-700"
                           }`}>
-                            {e.type === "wrong" ? "FALSCH GEWÄHLT" : "VERGESSEN"}
+                            {e.type === "wrong" ? t.fehlerUebersicht.wrongChosen : t.fehlerUebersicht.forgotten}
                           </span>
                           <span className="text-xs text-text-secondary">{e.documentLabel}</span>
                         </div>
@@ -146,14 +147,14 @@ function CaseRow({ group }: { group: CaseGroup }) {
           {/* Retry link */}
           <div className="flex items-center justify-between border-t border-border px-4 py-2.5">
             <span className="text-xs text-text-secondary">
-              {correctCount}/{totalAttempts} Versuche korrekt
+              {correctCount}/{totalAttempts} {t.fehlerUebersicht.attemptsCorrect}
             </span>
             <Link
               href={group.moduleHref}
               className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-bold text-white transition-colors"
               style={{ background: "#0D1B4B" }}
             >
-              Nochmal üben <ChevronRight size={12} />
+              {t.fehlerUebersicht.retryLink} <ChevronRight size={12} />
             </Link>
           </div>
         </div>
@@ -171,6 +172,7 @@ type FilterDate = "all" | "week" | "month";
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function FehlerUebersichtPage() {
+  const { t } = useLanguage();
   const [records, setRecords] = useState<AttemptRecord[]>([]);
   const [filterModule, setFilterModule] = useState<FilterModule>("all");
   const [filterType, setFilterType] = useState<FilterType>("errors");
@@ -206,8 +208,8 @@ export default function FehlerUebersichtPage() {
   return (
     <>
       <Header
-        title="Fehler Übersicht"
-        subtitle={totalErrors > 0 ? `${totalErrors} Fehler aufgezeichnet` : "Noch keine Fehler"}
+        title={t.navItems["Fehler Übersicht"]}
+        subtitle={totalErrors > 0 ? `${totalErrors} ${t.fehlerUebersicht.titleSubtitleErrors}` : t.fehlerUebersicht.titleSubtitleNone}
       />
       <div className="flex-1 overflow-y-auto p-6">
 
@@ -221,7 +223,7 @@ export default function FehlerUebersichtPage() {
               onChange={(e) => setFilterModule(e.target.value)}
               className="rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs text-text-primary outline-none focus:border-primary"
             >
-              <option value="all">Alle Module</option>
+              <option value="all">{t.fehlerUebersicht.allModules}</option>
               {allModuleIds.map((id) => (
                 <option key={id} value={id}>
                   {MODULE_META[id]?.label ?? id}
@@ -234,8 +236,8 @@ export default function FehlerUebersichtPage() {
               onChange={(e) => setFilterType(e.target.value as FilterType)}
               className="rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs text-text-primary outline-none focus:border-primary"
             >
-              <option value="errors">Nur Fehler</option>
-              <option value="all">Alle Versuche</option>
+              <option value="errors">{t.fehlerUebersicht.errorsOnly}</option>
+              <option value="all">{t.fehlerUebersicht.allAttempts}</option>
             </select>
 
             <select
@@ -243,14 +245,14 @@ export default function FehlerUebersichtPage() {
               onChange={(e) => setFilterDate(e.target.value as FilterDate)}
               className="rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs text-text-primary outline-none focus:border-primary"
             >
-              <option value="all">Jederzeit</option>
-              <option value="week">Diese Woche</option>
-              <option value="month">Dieser Monat</option>
+              <option value="all">{t.fehlerUebersicht.anytime}</option>
+              <option value="week">{t.fehlerUebersicht.thisWeek}</option>
+              <option value="month">{t.fehlerUebersicht.thisMonth}</option>
             </select>
 
             {groups.length > 0 && (
               <span className="ml-auto text-xs text-text-secondary">
-                {groups.length} Szenario{groups.length !== 1 ? "s" : ""}
+                {groups.length} {groups.length !== 1 ? t.fehlerUebersicht.scenarioPlural : t.fehlerUebersicht.scenarioSingular}
               </span>
             )}
           </div>
@@ -260,19 +262,19 @@ export default function FehlerUebersichtPage() {
         {records.length === 0 ? (
           <EmptyState
             variant="no-errors"
-            title="Noch keine Versuche aufgezeichnet"
-            subtitle="Deine Fehler und Versuche werden automatisch gespeichert. Starte ein Szenario!"
+            title={t.fehlerUebersicht.noAttempts}
+            subtitle={t.fehlerUebersicht.noAttemptsSubtitle}
           />
         ) : groups.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <CheckCircle2 size={40} className="mb-3 text-green-400" />
-            <p className="text-sm font-semibold text-text-primary">Keine Fehler in diesem Zeitraum</p>
-            <p className="mt-1 text-xs text-text-secondary">Probiere einen anderen Filter oder starte neue Szenarien.</p>
+            <p className="text-sm font-semibold text-text-primary">{t.fehlerUebersicht.noErrorsInPeriod}</p>
+            <p className="mt-1 text-xs text-text-secondary">{t.fehlerUebersicht.noErrorsHint}</p>
           </div>
         ) : (
           <div className="space-y-3">
             {groups.map((g) => (
-              <CaseRow key={`${g.moduleId}:${g.caseId}`} group={g} />
+              <CaseRow key={`${g.moduleId}:${g.caseId}`} group={g} t={t} />
             ))}
           </div>
         )}

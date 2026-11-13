@@ -1,17 +1,21 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function AnlageEsgPage() {
+  const { t } = useLanguage();
   return (
     <>
-      <Header title="Anlageberatung – ESG / Nachhaltige Anlagen" subtitle="Bald verfügbar" />
+      <Header title={`${t.navSections["Anlageberatung"]} – ${t.navItems["Nachhaltige Anlagen ESG"]}`} subtitle={t.navItems["Bald verfügbar"]} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Practice" },
-          { label: "Privatkundenberater" },
-          { label: "Anlageberatung" },
-          { label: "ESG-Anfrage" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navGroups["Practice"] },
+          { label: t.navItems["Privatkundenberater"] },
+          { label: t.navSections["Anlageberatung"] },
+          { label: t.navItems["ESG-Anfrage"] },
         ]}
       />
       <div className="flex flex-1 items-center justify-center p-12 text-center">

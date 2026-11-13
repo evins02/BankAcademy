@@ -7,6 +7,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { CreditOfficeRunner } from "@/components/modules/credit-office/CreditOfficeRunner";
 import { NeubewilligungSchneiderFormCard } from "@/components/modules/credit-office/NeubewilligungSchneiderForm";
 import { DEMO_EVAL_NEUBEWILLIGUNG } from "@/components/modules/credit-office/credit-office-types";
+import { useLanguage } from "@/context/LanguageContext";
 
 const CRITICAL_ERRORS = [
   "Aktuelle Belehnung 82.9% über Maximum 80% – Liegenschaftswert gesunken",
@@ -24,16 +25,18 @@ const LEARNING = [
 ];
 
 export default function NeubewilligungPage() {
+  const { t } = useLanguage();
+  const co = t.modules.backoffice.creditOffice;
   const [active, setActive] = useState(false);
 
   if (!active) {
     return (
       <>
-        <Header title="Periodische Neubewilligung" subtitle="Credit Office · Hans Schneider · Level 2" />
+        <Header title={co.neubewilligungTitle} subtitle="Credit Office · Hans Schneider · Level 2" />
         <Breadcrumb items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Credit Office", href: "/backoffice/credit-office" },
-          { label: "Periodische Neubewilligung" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: co.pageTitle, href: "/backoffice/credit-office" },
+          { label: co.neubewilligungTitle },
         ]} />
         <div className="flex-1 overflow-y-auto p-6">
           <div className="mx-auto max-w-lg space-y-5">

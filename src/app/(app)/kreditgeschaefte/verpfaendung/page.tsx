@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
 import { addXP } from "@/lib/xpData";
+import { useLanguage } from "@/context/LanguageContext";
 
 const SCENARIOS = [
   {
@@ -105,6 +106,7 @@ Zinssatz Hypothek: 2.5% p.a.`,
 ];
 
 export default function VerpfaendungPage() {
+  const { t } = useLanguage();
   const [lernOpen, setLernOpen] = useState(true);
   const [correctCount, setCorrectCount] = useState(0);
   const [bonusAwarded, setBonusAwarded] = useState(false);
@@ -121,9 +123,9 @@ export default function VerpfaendungPage() {
       <Header title="Verpfändung PK / 3a" subtitle="Kreditgeschäfte · Eigenheimfinanzierung" />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Kreditgeschäfte", href: "/kreditgeschaefte" },
-          { label: "Verpfändung PK / 3a" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.navItems["Kreditgeschäfte"], href: "/kreditgeschaefte" },
+          { label: t.navItems["Verpfändung PK / 3a"] },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">

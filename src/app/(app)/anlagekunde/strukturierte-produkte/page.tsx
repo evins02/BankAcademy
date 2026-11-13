@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
 import { addXP } from "@/lib/xpData";
+import { useLanguage } from "@/context/LanguageContext";
 
 const SCENARIOS = [
   {
@@ -73,6 +74,7 @@ const SCENARIOS = [
 ];
 
 export default function StrukturierteProduktePage() {
+  const { t } = useLanguage();
   const [lernOpen, setLernOpen] = useState(true);
   const [correctCount, setCorrectCount] = useState(0);
   const [bonusAwarded, setBonusAwarded] = useState(false);
@@ -85,12 +87,12 @@ export default function StrukturierteProduktePage() {
 
   return (
     <>
-      <Header title="Strukturierte Produkte" subtitle="Anlagekunde · Front Office" />
+      <Header title={t.modules.anlagekunde.strukturierteProdukte.title} subtitle={t.modules.anlagekunde.strukturierteProdukte.subtitle} />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Anlagekunde", href: "/anlagekunde" },
-          { label: "Strukturierte Produkte" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.anlagekunde.pageTitle, href: "/anlagekunde" },
+          { label: t.modules.anlagekunde.strukturierteProdukte.title },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">

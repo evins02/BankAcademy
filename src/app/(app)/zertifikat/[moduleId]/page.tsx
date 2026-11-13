@@ -5,25 +5,12 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Printer } from "lucide-react";
 import { getProgress, type ModuleProgress } from "@/lib/progressData";
-
-const MODULE_NAMES: Record<string, string> = {
-  privatkunde: "Privatkunde",
-  firmenkunde: "Firmenkunde",
-  anlagekunde: "Anlagekunde",
-  "banking-operations": "Banking Operations",
-  "credit-operations": "Credit Operations",
-};
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("de-CH", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-}
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function ZertifikatPage() {
   const { moduleId } = useParams<{ moduleId: string }>();
+  const { t } = useLanguage();
+  const z = t.zertifikat;
   const [progress, setProgress] = useState<ModuleProgress | null>(null);
   const [name, setName] = useState("Lernender");
   const [loaded, setLoaded] = useState(false);
@@ -41,8 +28,10 @@ export default function ZertifikatPage() {
     setLoaded(true);
   }, [moduleId]);
 
-  const moduleName = MODULE_NAMES[moduleId] ?? moduleId;
-  const date = progress?.lastAttempt ? formatDate(progress.lastAttempt) : formatDate(new Date().toISOString());
+  const moduleName = z.moduleNames[moduleId] ?? moduleId;
+  const date = progress?.lastAttempt
+    ? new Date(progress.lastAttempt).toLocaleDateString(z.dateLocale, { day: "2-digit", month: "long", year: "numeric" })
+    : new Date().toLocaleDateString(z.dateLocale, { day: "2-digit", month: "long", year: "numeric" });
   const accuracy = progress?.accuracy ?? 0;
   const completed = progress?.completed ?? 0;
   const total = progress?.total ?? 0;
@@ -56,7 +45,7 @@ export default function ZertifikatPage() {
           className="flex items-center gap-2 text-sm text-text-secondary hover:text-text-primary"
         >
           <ArrowLeft size={16} />
-          Zurück zum Dashboard
+          {z.backToDashboard}
         </Link>
         <button
           onClick={() => window.print()}
@@ -64,7 +53,7 @@ export default function ZertifikatPage() {
           style={{ background: "#0D1B4B" }}
         >
           <Printer size={15} />
-          Zertifikat drucken / speichern
+          {z.printSave}
         </button>
       </div>
 
@@ -111,7 +100,7 @@ export default function ZertifikatPage() {
                 Bank<span style={{ color: "#00C9B1" }}>Academy</span>
               </p>
               <p style={{ margin: "4px 0 0", fontSize: 10, color: "#9ca3af", fontFamily: "system-ui, sans-serif", letterSpacing: "0.05em" }}>
-                Digitaler Praxisausbildner · Schweiz
+                {z.tagline}
               </p>
             </div>
 
@@ -126,11 +115,11 @@ export default function ZertifikatPage() {
           {/* Title */}
           <div style={{ textAlign: "center", marginBottom: 24 }}>
             <p style={{ margin: "0 0 8px", fontSize: 11, fontFamily: "system-ui, sans-serif", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.25em", color: "#C9A227" }}>
-              Zertifikat
+              {z.title}
             </p>
             <div style={{ width: 80, height: 2, background: "linear-gradient(90deg, transparent, #C9A227, transparent)", margin: "0 auto 20px" }} />
             <p style={{ margin: 0, fontSize: 14, color: "#6b7280", fontFamily: "system-ui, sans-serif" }}>
-              Hiermit wird bestätigt, dass
+              {z.confirmsText}
             </p>
           </div>
 
@@ -144,13 +133,13 @@ export default function ZertifikatPage() {
           {/* Achievement text */}
           <div style={{ textAlign: "center", marginBottom: 28 }}>
             <p style={{ margin: "0 0 6px", fontSize: 14, color: "#374151", fontFamily: "system-ui, sans-serif", lineHeight: 1.6 }}>
-              das Modul
+              {z.moduleText}
             </p>
             <p style={{ margin: "0 0 6px", fontSize: 22, fontWeight: 700, color: "#0D1B4B", fontFamily: "system-ui, sans-serif" }}>
               {moduleName}
             </p>
             <p style={{ margin: "0 0 6px", fontSize: 14, color: "#374151", fontFamily: "system-ui, sans-serif" }}>
-              erfolgreich abgeschlossen hat
+              {z.completedText}
             </p>
           </div>
 
@@ -161,7 +150,7 @@ export default function ZertifikatPage() {
                 {accuracy}%
               </p>
               <p style={{ margin: "2px 0 0", fontSize: 11, color: "#9ca3af", fontFamily: "system-ui, sans-serif", letterSpacing: "0.05em" }}>
-                GENAUIGKEIT
+                {z.accuracyLabel}
               </p>
             </div>
             <div style={{ width: 1, background: "#e5e7eb" }} />
@@ -170,7 +159,7 @@ export default function ZertifikatPage() {
                 {completed}/{total}
               </p>
               <p style={{ margin: "2px 0 0", fontSize: 11, color: "#9ca3af", fontFamily: "system-ui, sans-serif", letterSpacing: "0.05em" }}>
-                SZENARIEN
+                {z.scenariosLabel}
               </p>
             </div>
             <div style={{ width: 1, background: "#e5e7eb" }} />
@@ -179,7 +168,7 @@ export default function ZertifikatPage() {
                 {date}
               </p>
               <p style={{ margin: "2px 0 0", fontSize: 11, color: "#9ca3af", fontFamily: "system-ui, sans-serif", letterSpacing: "0.05em" }}>
-                DATUM
+                {z.dateLabel}
               </p>
             </div>
           </div>
@@ -202,14 +191,14 @@ export default function ZertifikatPage() {
               <span style={{ fontSize: 28 }}>🏅</span>
             </div>
             <p style={{ margin: "10px 0 0", fontSize: 10, color: "#9ca3af", fontFamily: "system-ui, sans-serif", letterSpacing: "0.06em", textTransform: "uppercase" }}>
-              BankAcademy · Digitaler Praxisausbildner
+              {z.sealTagline}
             </p>
           </div>
 
           {/* Divider */}
           <div style={{ borderTop: "1px solid #e5e7eb", paddingTop: 12, textAlign: "center" }}>
             <p style={{ margin: 0, fontSize: 10, color: "#9ca3af", fontFamily: "system-ui, sans-serif" }}>
-              Dieses Zertifikat wurde digital ausgestellt durch BankAcademy – Der digitale Praxisausbildner für die Banklehre
+              {z.footerText}
             </p>
           </div>
         </div>

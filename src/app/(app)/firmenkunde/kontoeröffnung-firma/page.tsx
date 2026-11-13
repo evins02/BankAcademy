@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Header } from "@/components/layout/Header";
@@ -6,6 +8,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/comp
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FIRMENKUNDE_KONTO_SCENARIOS, type Difficulty } from "@/lib/kontoeröffnungen";
+import { useLanguage } from "@/context/LanguageContext";
 
 const DIFFICULTY_BADGE: Record<Difficulty, { label: string; variant: "green" | "orange" | "red" }> = {
   einfach: { label: "Einfach", variant: "green" },
@@ -14,17 +17,18 @@ const DIFFICULTY_BADGE: Record<Difficulty, { label: string; variant: "green" | "
 };
 
 export default function KontoeröffnungFirmaPage() {
+  const { t } = useLanguage();
   return (
     <>
       <Header
-        title="Kontoeröffnung Firma"
-        subtitle="Dossiers prüfen und Dokumente auswählen"
+        title={t.modules.firmenkunde.kontoeröffnung.title}
+        subtitle={t.modules.firmenkunde.kontoeröffnung.subtitle}
       />
       <Breadcrumb
         items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Firmenkunde" },
-          { label: "Kontoeröffnung Firma" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: t.modules.firmenkunde.pageTitle, href: "/firmenkunde" },
+          { label: t.modules.firmenkunde.kontoeröffnung.title },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">
@@ -40,10 +44,10 @@ export default function KontoeröffnungFirmaPage() {
                   <CardTitle>{scenario.title}</CardTitle>
                   <CardDescription>{scenario.description}</CardDescription>
                 </CardHeader>
-                <CardFooter className="mt-auto">
+                <CardFooter className="mt-auto pt-0">
                   <Button asChild className="w-full">
                     <Link href={`/firmenkunde/kontoeröffnung-firma/${scenario.id}`}>
-                      Starten <ChevronRight size={14} />
+                      Starten <ChevronRight size={14} className="ml-1" />
                     </Link>
                   </Button>
                 </CardFooter>

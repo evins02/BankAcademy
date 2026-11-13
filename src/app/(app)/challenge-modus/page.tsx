@@ -28,6 +28,7 @@ import { BKO_KYC_LEVELS, type MCScenario as BkoMCScenario } from "@/lib/backoffi
 import { KONTO_PRIVAT_LEVELS, type McqCase as KontoMcqCase } from "@/lib/kontoeröffnung-privat";
 import { addXP } from "@/lib/xpData";
 import { ShareCard } from "@/components/shared/ShareCard";
+import { useLanguage } from "@/context/LanguageContext";
 
 /* ─── Types ───────────────────────────────────────────────────────────────── */
 
@@ -78,22 +79,7 @@ const SOURCE_CATEGORY: Record<SourceKey, Category> = {
   kyc: "compliance", "bko-kyc": "compliance", mahnwesen: "compliance",
 };
 
-const SOURCE_LABEL: Record<SourceKey, string> = {
-  fonds: "Anlagefonds", zv: "Zahlungsverkehr", anlagekunde: "Anlageberatung",
-  kyc: "KYC / Compliance", mahnwesen: "Mahnwesen", blankokredit: "Blankokredit",
-  "credit-ops": "Credit Operations", "zv-privat": "ZV Privatkunde",
-  "anlage-fonds": "Anlagefonds & ETF", aktien: "Aktien & Kennzahlen",
-  obligationen: "Obligationen", investmentbanking: "Investmentbanking",
-  "sparen-konto": "Sparen & Konto", vorsorge: "Vorsorge & 3a",
-  "bko-kyc": "KYC Backoffice", kontoeröffnung: "Kontoeröffnung",
-};
-
-const CATEGORY_LABEL: Record<Category, string> = {
-  anlage: "Anlage & Wertschriften",
-  kredit: "Kredit & Finanzierung",
-  operations: "Banking Operations",
-  compliance: "Compliance & Recht",
-};
+// SOURCE_LABEL and CATEGORY_LABEL are now built inside the component from t.*
 
 const CATEGORY_COLOR: Record<Category, string> = {
   anlage: "text-blue-700 bg-blue-50 border-blue-200",
@@ -109,23 +95,11 @@ const CATEGORY_BAR: Record<Category, string> = {
   compliance: "bg-violet-500",
 };
 
-const MODULE_CHIPS = [
-  { label: "Anlagefonds & ETF", source: "anlage-fonds" as SourceKey },
-  { label: "Aktien & Kennzahlen", source: "aktien" as SourceKey },
-  { label: "Obligationen", source: "obligationen" as SourceKey },
-  { label: "Anlageberatung", source: "anlagekunde" as SourceKey },
-  { label: "Investmentbanking", source: "investmentbanking" as SourceKey },
-  { label: "Blankokredit", source: "blankokredit" as SourceKey },
-  { label: "Credit Operations", source: "credit-ops" as SourceKey },
-  { label: "Zahlungsverkehr", source: "zv" as SourceKey },
-  { label: "ZV Privatkunde", source: "zv-privat" as SourceKey },
-  { label: "Sparen & Konto", source: "sparen-konto" as SourceKey },
-  { label: "Vorsorge & 3a", source: "vorsorge" as SourceKey },
-  { label: "Kontoeröffnung", source: "kontoeröffnung" as SourceKey },
-  { label: "KYC / Compliance", source: "kyc" as SourceKey },
-  { label: "KYC Backoffice", source: "bko-kyc" as SourceKey },
-  { label: "Mahnwesen", source: "mahnwesen" as SourceKey },
-  { label: "Anlagefonds Legacy", source: "fonds" as SourceKey },
+// MODULE_CHIPS is now built inside the component from t.*
+const MODULE_CHIPS_SOURCES: SourceKey[] = [
+  "anlage-fonds", "aktien", "obligationen", "anlagekunde", "investmentbanking",
+  "blankokredit", "credit-ops", "zv", "zv-privat", "sparen-konto",
+  "vorsorge", "kontoeröffnung", "kyc", "bko-kyc", "mahnwesen", "fonds",
 ];
 
 /* ─── Helpers ─────────────────────────────────────────────────────────────── */
@@ -257,7 +231,39 @@ function formatTime(ms: number): string {
 
 export default function QvSimulationPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const pool = useMemo(() => buildPool(), []);
+
+  const SOURCE_LABEL: Record<SourceKey, string> = {
+    fonds: t.challengeModus.srcFonds,
+    zv: t.challengeModus.srcZv,
+    anlagekunde: t.challengeModus.srcAnlagekunde,
+    kyc: t.challengeModus.srcKyc,
+    mahnwesen: t.challengeModus.srcMahnwesen,
+    blankokredit: t.challengeModus.srcBlankokredit,
+    "credit-ops": t.challengeModus.srcCreditOps,
+    "zv-privat": t.challengeModus.srcZvPrivat,
+    "anlage-fonds": t.challengeModus.srcAnlageFonds,
+    aktien: t.challengeModus.srcAktien,
+    obligationen: t.challengeModus.srcObligationen,
+    investmentbanking: t.challengeModus.srcIb,
+    "sparen-konto": t.challengeModus.srcSparenKonto,
+    vorsorge: t.challengeModus.srcVorsorge,
+    "bko-kyc": t.challengeModus.srcBkoKyc,
+    "kontoeröffnung": t.challengeModus.srcKontoeröffnung,
+  };
+
+  const CATEGORY_LABEL: Record<Category, string> = {
+    anlage: t.challengeModus.categoryAnlage,
+    kredit: t.challengeModus.categoryKredit,
+    operations: t.challengeModus.categoryOps,
+    compliance: t.challengeModus.categoryCompliance,
+  };
+
+  const MODULE_CHIPS = MODULE_CHIPS_SOURCES.map((source) => ({
+    source,
+    label: SOURCE_LABEL[source],
+  }));
 
   const [view, setView] = useState<View>("intro");
   const [cases, setCases] = useState<QvCase[]>([]);
@@ -348,25 +354,25 @@ export default function QvSimulationPage() {
   if (view === "intro") {
     return (
       <>
-        <Header title="QV-Simulation" subtitle="Vollständige Prüfungssimulation" />
+        <Header title={t.challengeModus.title} subtitle={t.challengeModus.subtitleStart} />
         <div className="flex-1 overflow-y-auto p-6">
           <div className="mx-auto max-w-xl space-y-5">
 
             <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 text-center">
               <div className="mb-3 text-5xl">🎓</div>
-              <h1 className="mb-1 text-2xl font-bold text-text-primary">QV-Simulation</h1>
+              <h1 className="mb-1 text-2xl font-bold text-text-primary">{t.challengeModus.title}</h1>
               <p className="text-sm text-text-secondary">
-                {SESSION_SIZE} Prüfungsfragen aus allen {MODULE_CHIPS.length} Modulen — Level 2 & 3.
-                Du hast <strong>{EXAM_MINUTES} Minuten</strong>.
-                Bestehensgrenze: <strong>{PASSING_PCT}%</strong>.
+                {SESSION_SIZE} {t.challengeModus.questionsLabel} · {MODULE_CHIPS.length} {t.challengeModus.modulesLabel} — Level 2 & 3.
+                <strong> {EXAM_MINUTES} min.</strong>&nbsp;
+                {t.challengeModus.passThresholdLabel}: <strong>{PASSING_PCT}%</strong>.
               </p>
             </div>
 
             <div className="grid grid-cols-3 gap-3">
               {[
-                { label: "Fragen", value: SESSION_SIZE },
-                { label: "Bestehensgrenze", value: `${PASSING_PCT}%` },
-                { label: "Module", value: MODULE_CHIPS.length },
+                { label: t.challengeModus.questionsLabel, value: SESSION_SIZE },
+                { label: t.challengeModus.passThresholdLabel, value: `${PASSING_PCT}%` },
+                { label: t.challengeModus.modulesLabel, value: MODULE_CHIPS.length },
               ].map((s) => (
                 <div key={s.label} className="rounded-xl border border-border bg-surface p-4 text-center">
                   <p className="text-2xl font-bold text-text-primary">{s.value}</p>
@@ -377,7 +383,7 @@ export default function QvSimulationPage() {
 
             <div className="rounded-xl border border-border bg-surface p-4">
               <p className="mb-3 text-xs font-bold uppercase tracking-wider text-text-secondary">
-                Enthaltene Themenbereiche
+                {t.challengeModus.categoryAnlage.split("&")[0].trim()} &amp; {t.challengeModus.categoryCompliance.split("&")[0].trim()}…
               </p>
               <div className="grid grid-cols-2 gap-2">
                 {(["anlage", "kredit", "operations", "compliance"] as Category[]).map((cat) => (
@@ -397,14 +403,14 @@ export default function QvSimulationPage() {
 
             <div className="space-y-2">
               <Button onClick={handleStart} className="w-full gap-2 py-3 text-base">
-                Simulation starten
+                {t.challengeModus.subtitleStart}
                 <ArrowRight size={16} />
               </Button>
               <button
                 onClick={() => router.push("/dashboard")}
                 className="w-full text-center text-xs text-text-secondary hover:text-text-primary"
               >
-                Zurück zum Dashboard
+                {t.navItems["Dashboard"]}
               </button>
             </div>
           </div>
@@ -429,7 +435,7 @@ export default function QvSimulationPage() {
 
     return (
       <>
-        <Header title="QV-Simulation" subtitle="Ergebnis" />
+        <Header title={t.challengeModus.title} subtitle={t.challengeModus.subtitleResult} />
         <div className="flex-1 overflow-y-auto p-6">
           <div className="mx-auto max-w-2xl space-y-5">
 
@@ -437,18 +443,18 @@ export default function QvSimulationPage() {
             <div className={`rounded-2xl border p-8 text-center ${bestanden ? "border-green-200 bg-green-50" : "border-amber-200 bg-amber-50"}`}>
               <div className="mb-3 text-5xl">{bestanden ? "🏆" : "📚"}</div>
               <h2 className="mb-1 text-2xl font-bold text-text-primary">
-                {bestanden ? "Bestanden!" : "Noch nicht bestanden"}
+                {bestanden ? t.challengeModus.passed : t.challengeModus.notPassed}
               </h2>
               <p className="mb-4 text-sm text-text-secondary">
-                {bestanden
-                  ? "Du hast die QV-Bestehensgrenze erreicht. Sehr gute Leistung!"
-                  : `Bestehensgrenze: ${PASSING_PCT}%. Übe die schwachen Bereiche und versuche es erneut.`}
+                {bestanden ? t.challengeModus.passedMsg : t.challengeModus.failedMsg}
               </p>
               <div className="text-5xl font-extrabold text-text-primary">{pct}%</div>
-              <p className="mt-1 text-sm text-text-secondary">{correctCount} von {results.length} Fragen richtig</p>
+              <p className="mt-1 text-sm text-text-secondary">
+                {correctCount} {t.challengeModus.ofLabel} {results.length} {t.challengeModus.questionsLabel}
+              </p>
               <div className="mt-4 flex items-center justify-center gap-1.5 text-xs text-text-secondary">
                 <Clock size={12} />
-                <span>Zeit: {elapsedMin}:{elapsedSec.toString().padStart(2, "0")} / {EXAM_MINUTES}:00</span>
+                <span>{t.challengeModus.timerLabel}: {elapsedMin}:{elapsedSec.toString().padStart(2, "0")} / {EXAM_MINUTES}:00</span>
               </div>
             </div>
 
@@ -461,13 +467,13 @@ export default function QvSimulationPage() {
             </div>
             <div className="flex justify-between text-xs text-text-secondary px-1">
               <span>0%</span>
-              <span className="font-semibold text-primary">{PASSING_PCT}% Bestehensgrenze</span>
+              <span className="font-semibold text-primary">{PASSING_PCT}% {t.challengeModus.passThresholdLabel}</span>
               <span>100%</span>
             </div>
 
             {/* Category breakdown */}
             <div>
-              <p className="mb-3 text-xs font-bold uppercase tracking-wider text-text-secondary">Ergebnis nach Bereich</p>
+              <p className="mb-3 text-xs font-bold uppercase tracking-wider text-text-secondary">{t.challengeModus.resultsByArea}</p>
               <div className="grid gap-3 sm:grid-cols-2">
                 {catResults.map(({ cat, total, correct }) => {
                   if (total === 0) return null;
@@ -481,7 +487,7 @@ export default function QvSimulationPage() {
                       <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/10">
                         <div className={`h-full rounded-full ${CATEGORY_BAR[cat]}`} style={{ width: `${catPct}%` }} />
                       </div>
-                      <p className="mt-1.5 text-xs opacity-70">{correct}/{total} richtig</p>
+                      <p className="mt-1.5 text-xs opacity-70">{correct}/{total}</p>
                     </div>
                   );
                 })}
@@ -490,7 +496,7 @@ export default function QvSimulationPage() {
 
             {/* Per-question review */}
             <div>
-              <p className="mb-3 text-xs font-bold uppercase tracking-wider text-text-secondary">Alle Fragen anzeigen</p>
+              <p className="mb-3 text-xs font-bold uppercase tracking-wider text-text-secondary">{t.challengeModus.showAllQuestions}</p>
               <div className="space-y-2">
                 {results.map((r, idx) => (
                   <div key={r.caseId} className={`rounded-xl border ${r.correct ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}>
@@ -517,10 +523,10 @@ export default function QvSimulationPage() {
                         <p className="text-xs text-text-secondary leading-relaxed">{r.context}</p>
                         <p className="text-xs font-semibold text-text-primary">{r.question}</p>
                         {r.selected && !r.correct && (
-                          <p className="text-xs text-red-700">Deine Antwort: <strong>{r.selected}</strong></p>
+                          <p className="text-xs text-red-700">{t.challengeModus.yourAnswer}: <strong>{r.selected}</strong></p>
                         )}
                         <p className={`text-xs font-semibold ${r.correct ? "text-green-700" : "text-emerald-700"}`}>
-                          Richtige Antwort: <strong>{r.correctOption}</strong>
+                          <strong>{r.correctOption}</strong>
                         </p>
                         <p className="text-xs text-text-secondary leading-relaxed border-t border-black/5 pt-2">{r.feedback}</p>
                       </div>
@@ -534,17 +540,17 @@ export default function QvSimulationPage() {
             <div className="space-y-2 pt-2">
               <Button onClick={handleStart} className="w-full gap-2">
                 <RotateCcw size={14} />
-                Neue Simulation
+                {t.challengeModus.subtitleStart}
               </Button>
               <Button variant="secondary" onClick={() => setShowShare(true)} className="w-full gap-2">
                 <Trophy size={14} />
-                Ergebnis teilen
+                {t.challengeModus.subtitleResult}
               </Button>
               <button
                 onClick={() => router.push("/dashboard")}
                 className="w-full text-center text-xs text-text-secondary hover:text-text-primary"
               >
-                Zurück zum Dashboard
+                {t.navItems["Dashboard"]}
               </button>
             </div>
           </div>
@@ -553,10 +559,10 @@ export default function QvSimulationPage() {
         <ShareCard
           open={showShare}
           onClose={() => setShowShare(false)}
-          title="QV-Simulation"
+          title={t.challengeModus.title}
           score={correctCount}
           total={results.length}
-          moduleName="QV-Simulation"
+          moduleName={t.challengeModus.title}
           xpEarned={bestanden ? 600 : 150}
         />
       </>
@@ -570,7 +576,7 @@ export default function QvSimulationPage() {
 
   return (
     <>
-      <Header title="QV-Simulation" subtitle={`Frage ${caseIndex + 1} von ${SESSION_SIZE}`} />
+      <Header title={t.challengeModus.title} subtitle={`${t.challengeModus.questionLabel} ${caseIndex + 1} ${t.challengeModus.ofLabel} ${SESSION_SIZE}`} />
       <div className="flex-1 overflow-y-auto p-6">
         <div className="mx-auto max-w-2xl">
 
@@ -644,7 +650,7 @@ export default function QvSimulationPage() {
           {/* Feedback */}
           {submitted && (
             <div className={`mb-5 rounded-xl border p-4 text-sm ${isCorrect ? "border-green-200 bg-green-50 text-green-900" : "border-red-200 bg-red-50 text-red-900"}`}>
-              <p className="mb-1 font-semibold">{isCorrect ? "✅ Richtig!" : "❌ Leider falsch"}</p>
+              <p className="mb-1 font-semibold">{isCorrect ? "✅" : "❌"}</p>
               <p className="leading-relaxed">{currentCase.feedback}</p>
             </div>
           )}
@@ -652,11 +658,11 @@ export default function QvSimulationPage() {
           {/* Actions */}
           {!submitted ? (
             <Button onClick={handleSubmit} disabled={!selected} className="w-full">
-              Antwort bestätigen
+              {t.challengeModus.yourAnswer}
             </Button>
           ) : (
             <Button onClick={handleNext} className="w-full gap-2">
-              {caseIndex < SESSION_SIZE - 1 ? "Nächste Frage" : "Ergebnis anzeigen"}
+              {caseIndex < SESSION_SIZE - 1 ? t.challengeModus.nextQuestion : t.challengeModus.showResult}
               <ArrowRight size={14} />
             </Button>
           )}

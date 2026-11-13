@@ -5,11 +5,12 @@ import { Header } from "@/components/layout/Header";
 import { computeBadges, type Badge } from "@/lib/progressData";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useLanguage } from "@/context/LanguageContext";
 
-function BadgeCard({ badge }: { badge: Badge }) {
+function BadgeCard({ badge, earnedOnLabel, notEarnedLabel }: { badge: Badge; earnedOnLabel: string; notEarnedLabel: string }) {
   const earned = !!badge.earnedAt;
   const dateStr = badge.earnedAt
-    ? new Date(badge.earnedAt).toLocaleDateString("de-CH", {
+    ? new Date(badge.earnedAt).toLocaleDateString("fr-CH", {
         day: "2-digit",
         month: "long",
         year: "numeric",
@@ -35,10 +36,10 @@ function BadgeCard({ badge }: { badge: Badge }) {
         <p className="text-sm font-semibold text-text-primary">{badge.title}</p>
         <p className="mt-0.5 text-xs text-text-secondary">{badge.description}</p>
         {earned && dateStr && (
-          <p className="mt-2 text-[11px] font-medium text-primary">Verdient am {dateStr}</p>
+          <p className="mt-2 text-[11px] font-medium text-primary">{earnedOnLabel} {dateStr}</p>
         )}
         {!earned && (
-          <p className="mt-2 text-[11px] text-text-secondary">Noch nicht verdient</p>
+          <p className="mt-2 text-[11px] text-text-secondary">{notEarnedLabel}</p>
         )}
       </div>
       {earned && (
@@ -63,6 +64,7 @@ function BadgeSkeleton() {
 }
 
 export default function BadgesPage() {
+  const { t } = useLanguage();
   const [badges, setBadges] = useState<Badge[]>([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -77,7 +79,7 @@ export default function BadgesPage() {
   if (!loaded) {
     return (
       <>
-        <Header title="Badges" subtitle="Lade Badges…" />
+        <Header title="Badges" subtitle={t.badges.loadingSubtitle} />
         <div className="flex-1 overflow-y-auto p-6">
           <Skeleton className="mb-4 h-4 w-24" />
           <div className="mb-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -90,17 +92,17 @@ export default function BadgesPage() {
 
   return (
     <>
-      <Header title="Badges" subtitle={`${earned.length} von ${badges.length} verdient`} />
+      <Header title="Badges" subtitle={`${earned.length} ${t.badges.earnedVon} ${badges.length} ${t.badges.verdient}`} />
       <div className="flex-1 overflow-y-auto p-6">
 
         {earned.length > 0 && (
           <>
             <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-              Verdient ({earned.length})
+              {t.badges.earnedSection} ({earned.length})
             </h2>
             <div className="mb-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {earned.map((b) => (
-                <BadgeCard key={b.id} badge={b} />
+                <BadgeCard key={b.id} badge={b} earnedOnLabel={t.badges.earnedOn} notEarnedLabel={t.badges.notEarned} />
               ))}
             </div>
           </>
@@ -109,11 +111,11 @@ export default function BadgesPage() {
         {locked.length > 0 && (
           <>
             <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-              Noch zu erreichen ({locked.length})
+              {t.badges.lockedSection} ({locked.length})
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {locked.map((b) => (
-                <BadgeCard key={b.id} badge={b} />
+                <BadgeCard key={b.id} badge={b} earnedOnLabel={t.badges.earnedOn} notEarnedLabel={t.badges.notEarned} />
               ))}
             </div>
           </>

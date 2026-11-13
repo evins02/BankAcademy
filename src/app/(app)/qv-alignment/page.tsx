@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { BANK_THEMEN, BT_TOTAL_SCENARIOS, type BankThema } from "@/lib/bankThemen";
 import { MODULES_WITH_HK } from "@/lib/hkModuleMapping";
+import { useLanguage } from "@/context/LanguageContext";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   CreditCard,
@@ -27,7 +28,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   MessageSquare,
 };
 
-function ThemaCard({ thema }: { thema: BankThema }) {
+function ThemaCard({ thema, moduleCountSuffix, scenarioCountSuffix }: { thema: BankThema; moduleCountSuffix: string; scenarioCountSuffix: string }) {
   const Icon = ICON_MAP[thema.icon] ?? BookOpen;
   const moduleCount = MODULES_WITH_HK.filter(
     (m) => m.bankThemaId === thema.id
@@ -44,7 +45,7 @@ function ThemaCard({ thema }: { thema: BankThema }) {
         </div>
         <div className="min-w-0">
           <h3 className="text-sm font-bold text-text-primary">{thema.titel}</h3>
-          <p className="mt-0.5 text-xs text-text-secondary">{moduleCount} Module · {thema.totalScenarios} Szenarien</p>
+          <p className="mt-0.5 text-xs text-text-secondary">{moduleCount} {moduleCountSuffix} · {thema.totalScenarios} {scenarioCountSuffix}</p>
         </div>
       </div>
       <ul className="space-y-1">
@@ -60,11 +61,13 @@ function ThemaCard({ thema }: { thema: BankThema }) {
 }
 
 export default function FachthemenPage() {
+  const { t } = useLanguage();
+
   const abteilungen = [
-    { label: "Privatkunde", bereich: "Privatkunde" },
-    { label: "Anlage", bereich: "Anlage" },
-    { label: "Firmenkunde", bereich: "Firmenkunde" },
-    { label: "Back Office", bereich: "Back Office" },
+    { label: t.qvAlignment.deptPrivatkunde, bereich: "Privatkunde" },
+    { label: t.qvAlignment.deptAnlage, bereich: "Anlage" },
+    { label: t.qvAlignment.deptFirmenkunde, bereich: "Firmenkunde" },
+    { label: t.qvAlignment.deptBackOffice, bereich: "Back Office" },
   ];
 
   return (
@@ -72,19 +75,19 @@ export default function FachthemenPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-extrabold tracking-tight text-text-primary">
-          Bankfachliche Themen
+          {t.qvAlignment.title}
         </h1>
         <p className="mt-1 max-w-xl text-sm text-text-secondary">
-          Übersicht der Fachthemen und Inhalte die BankAcademy abdeckt — geordnet nach Abteilung.
+          {t.qvAlignment.subtitle}
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         {[
-          { label: "Szenarien total", value: BT_TOTAL_SCENARIOS + "+", color: "text-primary" },
-          { label: "Fachthemen", value: String(BANK_THEMEN.length), color: "text-amber-600" },
-          { label: "Module", value: String(MODULES_WITH_HK.length), color: "text-violet-600" },
+          { label: t.qvAlignment.scenariosTotal, value: BT_TOTAL_SCENARIOS + "+", color: "text-primary" },
+          { label: t.qvAlignment.bankThemenLabel, value: String(BANK_THEMEN.length), color: "text-amber-600" },
+          { label: t.qvAlignment.modulesLabel, value: String(MODULES_WITH_HK.length), color: "text-violet-600" },
         ].map((s) => (
           <div key={s.label} className="rounded-xl border border-border bg-surface p-4 text-center">
             <p className={`text-2xl font-extrabold tabular-nums ${s.color}`}>{s.value}</p>
@@ -105,7 +108,12 @@ export default function FachthemenPage() {
             <h2 className="mb-3 text-base font-bold text-text-primary">{label}</h2>
             <div className="grid gap-4 sm:grid-cols-2">
               {themen.map((thema) => (
-                <ThemaCard key={thema.id} thema={thema} />
+                <ThemaCard
+                  key={thema.id}
+                  thema={thema}
+                  moduleCountSuffix={t.qvAlignment.moduleCountSuffix}
+                  scenarioCountSuffix={t.qvAlignment.scenarioCountSuffix}
+                />
               ))}
             </div>
           </section>

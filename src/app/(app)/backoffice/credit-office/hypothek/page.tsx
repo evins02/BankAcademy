@@ -7,6 +7,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { CreditOfficeRunner } from "@/components/modules/credit-office/CreditOfficeRunner";
 import { HypothekRossiFormCard } from "@/components/modules/credit-office/HypothekRossiForm";
 import { DEMO_EVAL_HYPOTHEK } from "@/components/modules/credit-office/credit-office-types";
+import { useLanguage } from "@/context/LanguageContext";
 
 const CRITICAL_ERRORS = [
   "Echte Eigenmittel 8.3% (CHF 100'000) unter Minimum 10% – K.O.-Kriterium!",
@@ -24,16 +25,18 @@ const LEARNING = [
 ];
 
 export default function HypothekPage() {
+  const { t } = useLanguage();
+  const co = t.modules.backoffice.creditOffice;
   const [active, setActive] = useState(false);
 
   if (!active) {
     return (
       <>
-        <Header title="Privathypothek prüfen" subtitle="Credit Office · Familie Rossi · Level 3" />
+        <Header title={co.hypothekTitle} subtitle="Credit Office · Familie Rossi · Level 3" />
         <Breadcrumb items={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Credit Office", href: "/backoffice/credit-office" },
-          { label: "Privathypothek prüfen" },
+          { label: t.navItems["Dashboard"], href: "/dashboard" },
+          { label: co.pageTitle, href: "/backoffice/credit-office" },
+          { label: co.hypothekTitle },
         ]} />
         <div className="flex-1 overflow-y-auto p-6">
           <div className="mx-auto max-w-lg space-y-5">
