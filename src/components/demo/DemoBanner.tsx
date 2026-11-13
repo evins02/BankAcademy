@@ -1,10 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface Props {
   onFeedback?: () => void;
+  langPicker?: React.ReactNode;
 }
 
-export function DemoBanner({ onFeedback }: Props) {
+export function DemoBanner({ onFeedback, langPicker }: Props) {
+  const { t } = useLanguage();
+  const d = t.demo;
+
   return (
     <div
       style={{
@@ -34,16 +41,16 @@ export function DemoBanner({ onFeedback }: Props) {
           flexShrink: 0,
         }}
       >
-        DEMO
+        {d.bannerLabel}
       </span>
 
-      <span style={{ color: "#92400e" }}>Eingeschränkte Version –</span>
+      <span style={{ color: "#92400e" }}>{d.bannerText}</span>
 
       <Link
         href="/kontakt"
         style={{ fontWeight: 700, color: "#78350f", textDecoration: "underline", whiteSpace: "nowrap" }}
       >
-        Vollzugang anfragen →
+        {d.bannerLink}
       </Link>
 
       {onFeedback && (
@@ -61,8 +68,14 @@ export function DemoBanner({ onFeedback }: Props) {
             whiteSpace: "nowrap",
           }}
         >
-          Feedback →
+          {d.feedbackBtn}
         </button>
+      )}
+
+      {langPicker && (
+        <div style={{ marginLeft: "auto" }}>
+          {langPicker}
+        </div>
       )}
     </div>
   );

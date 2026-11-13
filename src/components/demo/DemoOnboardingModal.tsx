@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function DemoOnboardingModal() {
+  const { t } = useLanguage();
+  const d = t.demo;
+
   const [show, setShow] = useState(false);
   const [vorname, setVorname] = useState("");
   const [error, setError] = useState("");
@@ -16,7 +20,7 @@ export function DemoOnboardingModal() {
 
   async function start() {
     const v = vorname.trim();
-    if (!v) { setError("Bitte gib deinen Vornamen ein."); return; }
+    if (!v) { setError(d.omErrEmpty); return; }
 
     setLoading(true);
     setError("");
@@ -67,7 +71,7 @@ export function DemoOnboardingModal() {
             letterSpacing: "-0.3px",
           }}
         >
-          Willkommen zur BankAcademy Demo!
+          {d.omTitle}
         </h2>
         <p
           style={{
@@ -77,15 +81,15 @@ export function DemoOnboardingModal() {
             lineHeight: 1.7,
           }}
         >
-          Du hast Zugang zu 8 Modulen aus Front Office und Back Office.
+          {d.omDesc1}
           <br />
-          Erlebe wie BankAcademy funktioniert.
+          {d.omDesc2}
         </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 16, textAlign: "left" }}>
           <input
             type="text"
-            placeholder="Dein Vorname"
+            placeholder={d.omPlaceholder}
             value={vorname}
             onChange={e => { setVorname(e.target.value); setError(""); }}
             onKeyDown={e => e.key === "Enter" && start()}
@@ -122,7 +126,7 @@ export function DemoOnboardingModal() {
           onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.opacity = "0.88"; }}
           onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = "1"; }}
         >
-          {loading ? "Wird gestartet…" : "Demo starten →"}
+          {loading ? d.omLoading : d.omStart}
         </button>
 
       </div>

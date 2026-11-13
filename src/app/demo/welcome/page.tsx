@@ -1,13 +1,16 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronRight } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 function WelcomeForm() {
   const router = useRouter();
   const params = useSearchParams();
   const code = params.get("ref") ?? "";
+  const { t } = useLanguage();
+  const d = t.demo;
 
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -17,7 +20,7 @@ function WelcomeForm() {
   async function handleStart(e: React.FormEvent) {
     e.preventDefault();
     const v = name.trim();
-    if (!v) { setError("Bitte gib deinen Vornamen ein."); return; }
+    if (!v) { setError(d.wErrEmpty); return; }
 
     setLoading(true);
     setError("");
@@ -31,7 +34,7 @@ function WelcomeForm() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        setError((data as { error?: string }).error ?? "Ungültiger Code.");
+        setError((data as { error?: string }).error ?? d.wErrInvalid);
         setLoading(false);
         return;
       }
@@ -43,7 +46,7 @@ function WelcomeForm() {
 
       router.push("/demo");
     } catch {
-      setError("Verbindungsfehler – bitte nochmal versuchen.");
+      setError(d.wErrNetwork);
       setLoading(false);
     }
   }
@@ -91,7 +94,7 @@ function WelcomeForm() {
             marginBottom: 20,
           }}
         >
-          Demo-Zugang
+          {d.wBadge}
         </div>
 
         <h1
@@ -103,7 +106,7 @@ function WelcomeForm() {
             letterSpacing: "-0.3px",
           }}
         >
-          Wie heisst du?
+          {d.wH1}
         </h1>
         <p
           style={{
@@ -113,14 +116,14 @@ function WelcomeForm() {
             lineHeight: 1.7,
           }}
         >
-          Gib deinen Vornamen ein.
+          {d.wDesc}
         </p>
 
         <form onSubmit={handleStart} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <input
             type="text"
             autoFocus
-            placeholder="Dein Vorname"
+            placeholder={d.wPlaceholder}
             value={name}
             onChange={(e) => { setName(e.target.value); setError(""); }}
             style={{
@@ -160,7 +163,7 @@ function WelcomeForm() {
             onMouseEnter={(e) => { if (!loading) (e.currentTarget as HTMLButtonElement).style.opacity = "0.88"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.opacity = "1"; }}
           >
-            {loading ? "Wird gestartet…" : <>Demo starten <ChevronRight size={15} /></>}
+            {loading ? d.wLoading : <>{d.wStart} <ChevronRight size={15} /></>}
           </button>
         </form>
       </div>

@@ -10,9 +10,41 @@ import { LockedModuleOverlay } from "./LockedModuleOverlay";
 import { DemoOnboardingModal } from "./DemoOnboardingModal";
 import { FeedbackModal } from "./FeedbackModal";
 import { ThemeApplier } from "@/components/shared/ThemeApplier";
+import { useLanguage } from "@/context/LanguageContext";
+import type { Lang } from "@/lib/i18n";
+
+function LangPicker() {
+  const { lang, setLang } = useLanguage();
+  return (
+    <div style={{ display: "flex", gap: 2 }}>
+      {(["de", "fr", "it"] as const).map((l: Lang) => (
+        <button
+          key={l}
+          onClick={() => setLang(l)}
+          style={{
+            padding: "2px 7px",
+            borderRadius: 4,
+            border: "none",
+            cursor: "pointer",
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.04em",
+            background: lang === l ? "#0A1628" : "transparent",
+            color: lang === l ? "#fff" : "#92400e",
+            transition: "background 0.15s",
+            textTransform: "uppercase",
+          }}
+        >
+          {l}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export function DemoShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const { t } = useLanguage();
 
   // Ensure the demo access cookie is set so AI endpoints (kyc-chat, simulation/chat) work
   useEffect(() => {
@@ -79,7 +111,7 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
             <button
               onClick={() => setMobileOpen((v) => !v)}
               className="rounded-lg p-1.5 text-text-secondary hover:bg-gray-100 transition-colors"
-              aria-label="Menü öffnen"
+              aria-label={t.demo.menuOpen}
             >
               <Menu size={20} />
             </button>
@@ -88,30 +120,34 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
               <img src="/logo-dark.png" alt="BankAcademy" height={28} style={{ display: "block" }} />
             </Link>
           </div>
-          {demoVorname && (
-            <button
-              onClick={handleLogout}
-              title="Abmelden"
-              style={{
-                width: 34,
-                height: 34,
-                borderRadius: "50%",
-                background: "#0D1B4B",
-                color: "#fff",
-                border: "none",
-                cursor: "pointer",
-                fontSize: 12,
-                fontWeight: 800,
-                userSelect: "none",
-              }}
-            >
-              {demoVorname[0].toUpperCase()}
-            </button>
-          )}
+          <div className="flex items-center gap-2">
+            <LangPicker />
+            {demoVorname && (
+              <button
+                onClick={handleLogout}
+                title={t.demo.logoutTitle}
+                style={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: "50%",
+                  background: "#0D1B4B",
+                  color: "#fff",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: 12,
+                  fontWeight: 800,
+                  userSelect: "none",
+                }}
+              >
+                {demoVorname[0].toUpperCase()}
+              </button>
+            )}
+          </div>
         </div>
 
         <DemoBanner
           onFeedback={() => setFeedbackOpen(true)}
+          langPicker={<LangPicker />}
         />
         <div style={{ display: "flex", flex: 1, overflow: "hidden", position: "relative" }}>
           {/* Mobile backdrop */}
@@ -167,7 +203,7 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
           onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.opacity = "0.88"; }}
           onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = "1"; }}
         >
-          💬 Feedback geben
+          💬 {t.demo.feedbackBtn}
         </button>
       )}
     </>
