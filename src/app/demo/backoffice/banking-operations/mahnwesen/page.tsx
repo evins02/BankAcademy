@@ -1,17 +1,23 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { MahnwesenRunner } from "@/components/modules/mahnwesen/MahnwesenRunner";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function DemoBkoMahnwesenPage() {
+  const { t } = useLanguage();
+  const d = t.demo;
+
   return (
     <>
-      <Header title="Mahnwesen" subtitle="Back Office – Banking Operations" />
+      <Header title={d.mahnwesenTitle} subtitle={d.mahnwesenSubtitle} />
       <Breadcrumb
         items={[
           { label: "Demo", href: "/demo" },
-          { label: "Back Office" },
-          { label: "Banking Operations" },
-          { label: "Mahnwesen" },
+          { label: t.navGroups["Back Office"] },
+          { label: t.navItems["Banking Operations"] },
+          { label: d.mahnwesenTitle },
         ]}
       />
       <MahnwesenRunner />

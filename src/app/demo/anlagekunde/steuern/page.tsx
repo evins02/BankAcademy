@@ -5,67 +5,68 @@ import { ChevronDown, ChevronUp, AlertTriangle, Lightbulb, BookOpen } from "luci
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SubModuleMCQ } from "@/components/modules/credit-operations/SubModuleMCQ";
-
-const SCENARIOS = [
-  {
-    num: 1,
-    level: "Level 1 – Einsteiger",
-    situation: "Kunde erhält CHF 1'000 Dividende von Nestlé. Auf seinem Konto kommen nur CHF 650 an. Er fragt warum.",
-    question: "Was ist die Erklärung?",
-    options: [
-      { key: "A", text: "Bankgebühren von 35%" },
-      { key: "B", text: "Verrechnungssteuer 35%: CHF 1'000 × 35% = CHF 350 abgezogen" },
-      { key: "C", text: "Depotgebühren für die Verwahrung" },
-      { key: "D", text: "Stempelabgabe auf Dividendenzahlungen" },
-    ],
-    correct: "B",
-    feedback:
-      "Verrechnungssteuer 35% wird bei Schweizer Dividenden und Zinsen automatisch abgezogen. CHF 350 kann der Kunde via Steuererklärung zurückfordern – wenn er die Erträge korrekt deklariert.",
-  },
-  {
-    num: 2,
-    level: "Level 2 – Fortgeschritten",
-    situation: "Kunde verkauft Aktien mit CHF 15'000 Gewinn. Er fragt, ob er das in der Steuererklärung angeben muss.",
-    question: "Was ist die korrekte Antwort?",
-    options: [
-      { key: "A", text: "Ja – Kapitalgewinne sind steuerpflichtig wie Arbeitseinkommen" },
-      { key: "B", text: "Nein – Kapitalgewinne auf Privatvermögen sind in der Schweiz für Privatpersonen steuerfrei" },
-      { key: "C", text: "Nur die Hälfte des Gewinns muss versteuert werden" },
-      { key: "D", text: "Kommt auf den Betrag an – unter CHF 10'000 steuerfrei" },
-    ],
-    correct: "B",
-    feedback:
-      "Kapitalgewinne auf Privatvermögen sind in der Schweiz steuerfrei – ein grosser Vorteil des Schweizer Steuersystems. Nur Dividenden und Zinsen sind steuerpflichtig. Ausnahme: professionelle Wertschriftenhändler (selten).",
-  },
-  {
-    num: 3,
-    level: "Level 3 – Experte",
-    situation: "Kunde kauft Nestlé Aktien für CHF 50'000 an der Schweizer Börse.",
-    question: "Welche Steuern entstehen beim Kauf?",
-    options: [
-      { key: "A", text: "Keine – Kauf ist steuerneutral" },
-      { key: "B", text: "Stempelabgabe 0.075% = CHF 37.50" },
-      { key: "C", text: "Verrechnungssteuer 35% = CHF 17'500" },
-      { key: "D", text: "Kapitalgewinnsteuer auf den erwarteten Gewinn" },
-    ],
-    correct: "B",
-    feedback:
-      "Beim Kauf von Schweizer Wertschriften fällt die Stempelabgabe an: 0.075% × CHF 50'000 = CHF 37.50. Diese wird automatisch von der Bank verrechnet. Verrechnungssteuer kommt erst bei Dividendenzahlung – nicht beim Kauf.",
-  },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function DemoSteuernPage() {
+  const { t } = useLanguage();
+  const d = t.demo;
+
+  const SCENARIOS = [
+    {
+      num: 1,
+      level: d.steuernS1Level,
+      situation: d.steuernS1Sit,
+      question: d.steuernS1Q,
+      options: [
+        { key: "A", text: d.steuernS1A },
+        { key: "B", text: d.steuernS1B },
+        { key: "C", text: d.steuernS1C },
+        { key: "D", text: d.steuernS1D },
+      ],
+      correct: "B",
+      feedback: d.steuernS1Fb,
+    },
+    {
+      num: 2,
+      level: d.steuernS2Level,
+      situation: d.steuernS2Sit,
+      question: d.steuernS2Q,
+      options: [
+        { key: "A", text: d.steuernS2A },
+        { key: "B", text: d.steuernS2B },
+        { key: "C", text: d.steuernS2C },
+        { key: "D", text: d.steuernS2D },
+      ],
+      correct: "B",
+      feedback: d.steuernS2Fb,
+    },
+    {
+      num: 3,
+      level: d.steuernS3Level,
+      situation: d.steuernS3Sit,
+      question: d.steuernS3Q,
+      options: [
+        { key: "A", text: d.steuernS3A },
+        { key: "B", text: d.steuernS3B },
+        { key: "C", text: d.steuernS3C },
+        { key: "D", text: d.steuernS3D },
+      ],
+      correct: "B",
+      feedback: d.steuernS3Fb,
+    },
+  ];
+
   const [lernOpen, setLernOpen] = useState(true);
   const [correctCount, setCorrectCount] = useState(0);
 
   return (
     <>
-      <Header title="Steuerliche Aspekte" subtitle="Anlagekunde – Verrechnungssteuer, Stempelabgabe & Kapitalgewinne" />
+      <Header title={d.steuernTitle} subtitle={d.steuernSubtitle} />
       <Breadcrumb
         items={[
           { label: "Demo", href: "/demo" },
-          { label: "Anlagekunde" },
-          { label: "Steuerliche Aspekte" },
+          { label: t.navItems["Anlagekunde"] },
+          { label: d.steuernTitle },
         ]}
       />
       <div className="flex-1 overflow-y-auto p-6">
@@ -77,48 +78,35 @@ export default function DemoSteuernPage() {
             >
               <div className="flex items-center gap-2">
                 <BookOpen size={16} className="text-primary" />
-                <span className="text-sm font-bold text-text-primary">Lernblock – Steuerliche Aspekte</span>
+                <span className="text-sm font-bold text-text-primary">{d.steuernLernblock}</span>
               </div>
               {lernOpen ? <ChevronUp size={15} className="text-text-secondary" /> : <ChevronDown size={15} className="text-text-secondary" />}
             </button>
             {lernOpen && (
               <div className="border-t border-border px-5 pb-5 pt-4 space-y-4 text-sm text-text-secondary leading-relaxed">
-                <p>Drei wichtige Steuern bei Wertschriftenanlagen in der Schweiz – jede mit anderen Auslösern und Sätzen.</p>
+                <p>{d.steuernIntro}</p>
                 <div className="space-y-3">
                   {[
                     {
-                      title: "Verrechnungssteuer 35%",
-                      items: [
-                        "Auf Zinsen und Dividenden Schweizer Wertschriften",
-                        "Bank zieht automatisch 35% ab",
-                        "Rückforderbar via Steuererklärung bei korrekter Deklaration",
-                        "Schutzmechanismus gegen Steuerhinterziehung",
-                      ],
+                      title: d.steuernVs35Title,
+                      items: [d.steuernVs35_1, d.steuernVs35_2, d.steuernVs35_3, d.steuernVs35_4],
                     },
                     {
-                      title: "Stempelabgabe",
-                      items: [
-                        "Beim Kauf und Verkauf: CH-Wertschriften 0.075%",
-                        "Ausländische Wertschriften: 0.15%",
-                        "Wird von Bank automatisch verrechnet",
-                      ],
+                      title: d.steuernStempelTitle,
+                      items: [d.steuernStempel_1, d.steuernStempel_2, d.steuernStempel_3],
                     },
                     {
-                      title: "Kapitalgewinne",
-                      items: [
-                        "In der Schweiz für Privatpersonen STEUERFREI",
-                        "Ausnahme: professioneller Wertschriftenhändler (selten)",
-                        "Dividenden und Zinsen = steuerpflichtig",
-                      ],
+                      title: d.steuernKapTitle,
+                      items: [d.steuernKap_1, d.steuernKap_2, d.steuernKap_3],
                     },
                   ].map((b) => (
                     <div key={b.title} className="rounded-DEFAULT border border-border p-4 space-y-2">
                       <p className="font-bold text-text-primary text-xs uppercase tracking-wider">{b.title}</p>
                       <ul className="space-y-1">
-                        {b.items.map((i) => (
-                          <li key={i} className="flex gap-2">
+                        {b.items.map((item) => (
+                          <li key={item} className="flex gap-2">
                             <span className="shrink-0 text-primary">→</span>
-                            <span>{i}</span>
+                            <span>{item}</span>
                           </li>
                         ))}
                       </ul>
@@ -126,8 +114,8 @@ export default function DemoSteuernPage() {
                   ))}
                 </div>
                 <div className="rounded-DEFAULT bg-primary/5 border border-primary/15 px-4 py-3">
-                  <p className="font-semibold text-text-primary text-xs uppercase tracking-wider mb-1">Merksatz</p>
-                  <p>Kapitalgewinne steuerfrei · Zinsen/Dividenden steuerpflichtig · Kauf = Stempelabgabe</p>
+                  <p className="font-semibold text-text-primary text-xs uppercase tracking-wider mb-1">{d.steuernMerksatzLabel}</p>
+                  <p>{d.steuernMerksatz}</p>
                 </div>
               </div>
             )}
@@ -136,17 +124,13 @@ export default function DemoSteuernPage() {
           <div className="rounded-DEFAULT bg-surface shadow-card px-5 py-4">
             <div className="flex items-center gap-2 mb-3">
               <Lightbulb size={15} className="text-amber-500" />
-              <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">Praxistipps</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">{d.steuernTippsLabel}</span>
             </div>
             <ul className="space-y-2 text-sm text-text-secondary">
-              {[
-                "Verrechnungssteuer immer erklären wenn Kunde Dividenden erhält",
-                "Kunde muss Wertschriften in der Steuererklärung deklarieren",
-                "Kapitalgewinne steuerfrei = grosser Vorteil des Schweizer Steuersystems",
-              ].map((t) => (
-                <li key={t} className="flex gap-2">
+              {[d.steuernTipp_1, d.steuernTipp_2, d.steuernTipp_3].map((tip) => (
+                <li key={tip} className="flex gap-2">
                   <span className="shrink-0 text-amber-500">💡</span>
-                  <span>{t}</span>
+                  <span>{tip}</span>
                 </li>
               ))}
             </ul>
@@ -155,15 +139,10 @@ export default function DemoSteuernPage() {
           <div className="rounded-DEFAULT bg-surface shadow-card px-5 py-4">
             <div className="flex items-center gap-2 mb-3">
               <AlertTriangle size={15} className="text-text-secondary" />
-              <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">Typische Fehler</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">{d.steuernFehlerLabel}</span>
             </div>
             <ul className="space-y-2 text-sm text-text-secondary">
-              {[
-                "Verrechnungssteuer nicht erklärt",
-                "Kapitalgewinne als steuerpflichtig bezeichnet",
-                "Rückforderungsmöglichkeit nicht erwähnt",
-                "Stempelabgabe vergessen",
-              ].map((f) => (
+              {[d.steuernFehler_1, d.steuernFehler_2, d.steuernFehler_3, d.steuernFehler_4].map((f) => (
                 <li key={f} className="flex gap-2">
                   <span className="shrink-0">❌</span>
                   <span>{f}</span>
@@ -173,7 +152,7 @@ export default function DemoSteuernPage() {
           </div>
 
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold uppercase tracking-widest text-text-secondary pt-1">Szenarien</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-text-secondary pt-1">{d.steuernSzLabel}</p>
             <div className="flex items-center gap-1.5 pt-1">
               {SCENARIOS.map((_, i) => (
                 <div
@@ -203,9 +182,9 @@ export default function DemoSteuernPage() {
             <div className="rounded-DEFAULT bg-green-50 border border-green-200 p-5 flex items-start gap-3">
               <span className="text-xl shrink-0">🏆</span>
               <div>
-                <p className="font-bold text-green-800 text-sm">Modul abgeschlossen!</p>
+                <p className="font-bold text-green-800 text-sm">{d.steuernDone}</p>
                 <p className="text-sm text-green-700 mt-0.5">
-                  Du hast alle {SCENARIOS.length} Szenarien korrekt beantwortet.
+                  {d.steuernDoneText.replace("{n}", String(SCENARIOS.length))}
                 </p>
               </div>
             </div>
