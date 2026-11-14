@@ -13,6 +13,8 @@ const SYNC_KEYS = [
   "comeback-earned",
   "mock-seeded",
   "module-analytics",
+  "tutorial-seen",
+  "kb-hint-seen",
 ] as const;
 
 // These keys are stored directly in localStorage (not ba-sid prefixed)
