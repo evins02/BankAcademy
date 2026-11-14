@@ -30,7 +30,7 @@ export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) 
         alt="BankAcademy"
         width={inner}
         height={inner}
-        style={{ display: "block", marginLeft: -leftOffset }}
+        style={{ display: "block", marginLeft: -leftOffset, maxWidth: "none" }}
       />
     </div>
   );
