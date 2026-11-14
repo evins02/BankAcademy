@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 import { isMitarbeiter } from "@/lib/getUserRole";
+import { requireAuth } from "@/lib/requireAuth";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -33,6 +34,8 @@ function jsonNoStore(body: unknown) {
 }
 
 export async function POST(req: NextRequest) {
+  const unauth = await requireAuth(req);
+  if (unauth) return unauth;
   const { feedback, studentText } = await req.json();
 
   if (!studentText?.trim()) {

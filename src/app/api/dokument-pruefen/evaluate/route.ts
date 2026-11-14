@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { DOKUMENT_REGISTRY } from "@/lib/dokument-pruefen/registry";
 import { isMitarbeiter } from "@/lib/getUserRole";
+import { requireAuth } from "@/lib/requireAuth";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -15,6 +16,8 @@ interface FeedbackResult {
 }
 
 export async function POST(req: Request) {
+  const unauth = await requireAuth(req);
+  if (unauth) return unauth;
   try {
     const body = (await req.json()) as { documentId: string; fieldId: string; correction: string };
     const { documentId, fieldId, correction } = body;

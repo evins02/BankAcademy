@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { KYC_PFLICHTFRAGEN } from "@/lib/kyc-conversation";
+import { requireAuth } from "@/lib/requireAuth";
 
 type Message = { role: string; content: string };
 
@@ -21,6 +22,8 @@ function jsonNoStore(body: unknown) {
 const FALLBACK = { covered: [] as string[] };
 
 export async function POST(req: Request) {
+  const unauth = await requireAuth(req);
+  if (unauth) return unauth;
   const { messages } = (await req.json()) as { messages: Message[] };
 
   if (!messages?.length) {

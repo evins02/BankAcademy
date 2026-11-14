@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import type { KycFormData } from "@/components/modules/kyc-form/kyc-form-types";
 import { KYC_PFLICHTFRAGEN } from "@/lib/kyc-conversation";
+import { requireAuth } from "@/lib/requireAuth";
 
 type Message = { role: string; content: string };
 
@@ -66,6 +67,8 @@ BESTANDEN nur wenn conversationScore = ${KYC_PFLICHTFRAGEN.length} UND formScore
 }
 
 export async function POST(req: Request) {
+  const unauth = await requireAuth(req);
+  if (unauth) return unauth;
   try {
     const { messages, formData } = (await req.json()) as {
       messages: Message[];

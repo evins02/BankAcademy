@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
+import { requireAuth } from "@/lib/requireAuth";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -13,6 +14,8 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 // Total: 5425+10800=16225
 
 export async function POST(req: NextRequest) {
+  const unauth = await requireAuth(req);
+  if (unauth) return unauth;
   const body = await req.json();
   const { pos1Marktwert, pos1PerfCHF, pos1PerfPct, pos2Marktwert, pos2PerfCHF, pos2PerfPct, totalDepot } = body;
 

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
+import { requireAuth } from "@/lib/requireAuth";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -48,6 +49,8 @@ Antworte NUR als JSON:
 BESTANDEN: calcScore>=1 UND riskScore>=2 UND entscheidKorrekt=true (Massnahmen: amortisation/gespraech/ueberwachung)`;
 
 export async function POST(req: Request) {
+  const unauth = await requireAuth(req);
+  if (unauth) return unauth;
   try {
     const { formData } = await req.json();
     const resp = await anthropic.messages.create({

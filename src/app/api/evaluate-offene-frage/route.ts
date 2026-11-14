@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 import type { OffeneFrageEvalResult } from "@/lib/offene-frage";
 import { isMitarbeiter } from "@/lib/getUserRole";
+import { requireAuth } from "@/lib/requireAuth";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -10,6 +11,8 @@ export const maxDuration = 30;
 const client = new Anthropic();
 
 export async function POST(req: NextRequest) {
+  const unauth = await requireAuth(req);
+  if (unauth) return unauth;
   const { briefing, question, role, expectedApproach, studentText } = await req.json();
 
   if (!studentText?.trim() || studentText.trim().length < 15) {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import type { HypothekFormData } from "@/components/modules/hypothek-antrag/hypothek-antrag-types";
 import { isMitarbeiter } from "@/lib/getUserRole";
+import { requireAuth } from "@/lib/requireAuth";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -73,6 +74,8 @@ BESTANDEN wenn: calcScore >= 3 UND riskScore >= 2 UND empfehlungKorrekt = true`;
 }
 
 export async function POST(req: Request) {
+  const unauth = await requireAuth(req);
+  if (unauth) return unauth;
   try {
     const { formData } = (await req.json()) as { formData: HypothekFormData };
 

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
+import { requireAuth } from "@/lib/requireAuth";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -60,6 +61,8 @@ BESTANDEN nur wenn alle 8 Punkte erfüllt UND keine Fehler.`;
 }
 
 export async function POST(req: Request) {
+  const unauth = await requireAuth(req);
+  if (unauth) return unauth;
   try {
     const { formData } = (await req.json()) as { formData: Record<string, unknown> };
 
