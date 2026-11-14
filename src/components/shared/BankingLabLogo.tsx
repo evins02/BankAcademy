@@ -11,17 +11,27 @@ interface BankingLabLogoProps {
   className?: string;
 }
 
+// The logo file is a square containing the icon mark (top ~62%) + "BankAcademy"
+// text (bottom ~38%). We crop to show only the icon mark by rendering the image
+// slightly larger than the container and clipping via overflow:hidden.
 export function BankingLabLogo({ size = "md", className }: BankingLabLogoProps) {
-  const px = SIZE_MAP[size];
+  const display = SIZE_MAP[size];
+  const inner = Math.round(display / 0.62);
+  const leftOffset = Math.round((inner - display) / 2);
+
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src="/logo-light.png"
-      alt="BankAcademy"
-      width={px}
-      height={px}
-      style={{ display: "block" }}
+    <div
+      style={{ width: display, height: display, overflow: "hidden", flexShrink: 0 }}
       className={cn(className)}
-    />
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/logo-light.webp"
+        alt="BankAcademy"
+        width={inner}
+        height={inner}
+        style={{ display: "block", marginLeft: -leftOffset }}
+      />
+    </div>
   );
 }
