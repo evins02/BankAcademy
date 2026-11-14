@@ -29,6 +29,7 @@ import { NAV_GROUPS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "@/types";
 import { useLanguage } from "@/context/LanguageContext";
+import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 
 const ICONS: Record<string, LucideIcon> = {
   User, Building2, TrendingUp, Settings2, Landmark, Scale,
@@ -90,14 +91,13 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
       style={{ width: 240 }}
     >
       {/* Logo */}
-      <div className="flex h-16 items-center border-b border-border px-4">
-        <Link href="/demo" className="flex-1 min-w-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-dark.png" alt="BankAcademy" height={36} style={{ display: "block" }} />
+      <div className="flex h-16 items-center border-b border-border px-4 gap-2">
+        <Link href="/demo" className="flex items-center gap-2 flex-1 min-w-0">
+          <BankingLabLogo size="sm" />
+          <span className="text-sm font-bold text-text-primary truncate">BankAcademy</span>
         </Link>
         <span
           style={{
-            marginLeft: 8,
             fontSize: 9,
             fontWeight: 700,
             letterSpacing: "0.08em",
