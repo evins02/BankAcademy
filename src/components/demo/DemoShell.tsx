@@ -10,6 +10,7 @@ import { LockedModuleOverlay } from "./LockedModuleOverlay";
 import { DemoOnboardingModal } from "./DemoOnboardingModal";
 import { FeedbackModal } from "./FeedbackModal";
 import { ThemeApplier } from "@/components/shared/ThemeApplier";
+import { BankingLabLogo } from "@/components/shared/BankingLabLogo";
 import { useLanguage } from "@/context/LanguageContext";
 import type { Lang } from "@/lib/i18n";
 
@@ -115,9 +116,9 @@ export function DemoShell({ children }: { children: React.ReactNode }) {
             >
               <Menu size={20} />
             </button>
-            <Link href="/demo">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo-dark.png" alt="BankAcademy" height={28} style={{ display: "block" }} />
+            <Link href="/demo" className="flex items-center gap-2">
+              <BankingLabLogo size="sm" />
+              <span className="text-sm font-bold text-text-primary">BankAcademy</span>
             </Link>
           </div>
           <div className="flex items-center gap-2">
