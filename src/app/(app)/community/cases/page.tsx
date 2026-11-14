@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/layout/Header";
 import { useLanguage } from "@/context/LanguageContext";
+import { scheduleSync } from "@/lib/progressSync";
 
 interface CommunityCase {
   id: string;
@@ -155,23 +156,54 @@ export default function CommunityPage() {
   const [herausforderung, setHerausforderung] = useState("");
   const [gelernt, setGelernt] = useState("");
 
-  // Load persisted data on mount
+  // Load cases from DB on mount; fall back to localStorage if offline
   useEffect(() => {
-    try {
-      const rawCases = localStorage.getItem("community-cases");
-      const userCases: CommunityCase[] = rawCases ? JSON.parse(rawCases) : [];
-      setCases([...SEED_CASES, ...userCases]);
-    } catch {
-      setCases(SEED_CASES);
-    }
-
+    // Liked IDs come from localStorage (synced to/from DB via progressSync)
     try {
       const rawLiked = localStorage.getItem("community-liked-ids");
-      const likedArr: string[] = rawLiked ? JSON.parse(rawLiked) : [];
-      setLikedIds(new Set(likedArr));
+      setLikedIds(new Set(rawLiked ? JSON.parse(rawLiked) : []));
     } catch {
       setLikedIds(new Set());
     }
+
+    async function loadCases() {
+      try {
+        const res = await fetch("/api/community-cases");
+        if (!res.ok) throw new Error("api_error");
+        const { cases: dbCases } = (await res.json()) as { cases: CommunityCase[] };
+
+        // Migrate any localStorage cases not yet in DB
+        const lsRaw = localStorage.getItem("community-cases");
+        const lsCases: CommunityCase[] = lsRaw ? JSON.parse(lsRaw) : [];
+        const dbIds = new Set(dbCases.map((c) => c.id));
+        const toMigrate = lsCases.filter((c) => !dbIds.has(c.id));
+
+        if (toMigrate.length > 0) {
+          await Promise.all(
+            toMigrate.map((c) =>
+              fetch("/api/community-cases", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(c),
+              }).catch(() => {})
+            )
+          );
+          localStorage.removeItem("community-cases");
+          setCases([...SEED_CASES, ...dbCases, ...toMigrate]);
+        } else {
+          setCases([...SEED_CASES, ...dbCases]);
+        }
+      } catch {
+        // Offline fallback: show localStorage cases
+        try {
+          const rawCases = localStorage.getItem("community-cases");
+          setCases([...SEED_CASES, ...(rawCases ? JSON.parse(rawCases) : [])]);
+        } catch {
+          setCases(SEED_CASES);
+        }
+      }
+    }
+    loadCases();
   }, []);
 
   function handleSubmit(e: React.FormEvent) {
@@ -188,14 +220,15 @@ export default function CommunityPage() {
       comments: [],
     };
 
-    setCases((prev) => {
-      const updated = [...prev, newCase];
-      const userCases = updated.filter((c) => !c.id.startsWith("seed-"));
-      try {
-        localStorage.setItem("community-cases", JSON.stringify(userCases));
-      } catch {}
-      return updated;
-    });
+    // Optimistic UI update
+    setCases((prev) => [...prev, newCase]);
+
+    // Persist to DB (fire-and-forget)
+    fetch("/api/community-cases", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newCase),
+    }).catch(() => {});
 
     setSubmitted(true);
     setTimeout(() => {
@@ -210,25 +243,32 @@ export default function CommunityPage() {
   }
 
   function toggleLike(id: string) {
+    const isCurrentlyLiked = likedIds.has(id);
+
     setLikedIds((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       try {
         localStorage.setItem("community-liked-ids", JSON.stringify([...next]));
       } catch {}
+      scheduleSync();
       return next;
     });
 
     setCases((prev) =>
-      prev.map((c) =>
-        c.id === id
-          ? { ...c, likes: likedIds.has(id) ? c.likes - 1 : c.likes + 1 }
-          : c
-      )
+      prev.map((c) => {
+        if (c.id !== id) return c;
+        const newLikes = isCurrentlyLiked ? c.likes - 1 : c.likes + 1;
+        if (!c.id.startsWith("seed-")) {
+          fetch("/api/community-cases", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, likes: newLikes }),
+          }).catch(() => {});
+        }
+        return { ...c, likes: newLikes };
+      })
     );
   }
 
@@ -236,16 +276,20 @@ export default function CommunityPage() {
     const text = (newComment[caseId] ?? "").trim();
     if (!text) return;
 
-    setCases((prev) => {
-      const updated = prev.map((c) =>
-        c.id === caseId ? { ...c, comments: [...c.comments, text] } : c
-      );
-      const userCases = updated.filter((c) => !c.id.startsWith("seed-"));
-      try {
-        localStorage.setItem("community-cases", JSON.stringify(userCases));
-      } catch {}
-      return updated;
-    });
+    setCases((prev) =>
+      prev.map((c) => {
+        if (c.id !== caseId) return c;
+        const updatedComments = [...c.comments, text];
+        if (!c.id.startsWith("seed-")) {
+          fetch("/api/community-cases", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: caseId, comments: updatedComments }),
+          }).catch(() => {});
+        }
+        return { ...c, comments: updatedComments };
+      })
+    );
 
     setNewComment((prev) => ({ ...prev, [caseId]: "" }));
   }
