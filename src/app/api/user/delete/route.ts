@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { clerkClient } from "@clerk/nextjs/server";
 import { sql } from "@/lib/db";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: NextRequest) {
-  const access = req.cookies.get("bankacademy_access");
-  const demo = req.cookies.get("bankacademy_demo");
-  if (access?.value !== "1" && demo?.value !== "1") {
+  // Require an active Clerk session — demo / access cookies are not sufficient
+  const { userId } = await auth();
+  if (!userId) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
@@ -18,20 +19,26 @@ export async function POST(req: NextRequest) {
   const cleanEmail = email.trim().toLowerCase();
 
   try {
-    // 1. Look up Clerk user first to get clerk_user_id for user_progress deletion
-    let clerkUserId: string | null = null;
-    try {
-      const client = await clerkClient();
-      const result = await client.users.getUserList({ emailAddress: [cleanEmail], limit: 1 });
-      if (result.data.length > 0) {
-        clerkUserId = result.data[0].id;
-        await client.users.deleteUser(clerkUserId);
-      }
-    } catch {
-      // Non-fatal: Clerk deletion failed (e.g. user already deleted)
+    // 1. Verify the requested email belongs to the authenticated user
+    const client = await clerkClient();
+    const requestingUser = await client.users.getUser(userId);
+    const ownsEmail = requestingUser.emailAddresses.some(
+      (e) => e.emailAddress.toLowerCase() === cleanEmail
+    );
+    if (!ownsEmail) {
+      return NextResponse.json({ error: "forbidden" }, { status: 403 });
     }
 
-    // 2. Delete all SQL data — user_progress keyed by clerk_user_id, rest by email
+    // 2. Delete Clerk account (we already have the userId)
+    let clerkUserId: string | null = userId;
+    try {
+      await client.users.deleteUser(userId);
+    } catch {
+      // Non-fatal: Clerk deletion failed (e.g. user already deleted)
+      clerkUserId = null;
+    }
+
+    // 3. Delete all SQL data — user_progress keyed by clerk_user_id, rest by email
     await Promise.all([
       clerkUserId
         ? sql`DELETE FROM user_progress WHERE clerk_user_id = ${clerkUserId}`.catch(() => {})
