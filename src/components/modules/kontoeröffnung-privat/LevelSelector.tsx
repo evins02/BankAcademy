@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { KONTO_PRIVAT_LEVELS, type LevelNum } from "@/lib/kontoeröffnung-privat";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface LevelSelectorProps {
   completedLevels: Set<LevelNum>;
@@ -13,6 +14,7 @@ interface LevelSelectorProps {
 }
 
 export function LevelSelector({ completedLevels, levelScores, onSelectLevel }: LevelSelectorProps) {
+  const { t } = useLanguage();
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div className="grid gap-4 sm:grid-cols-3">
@@ -39,7 +41,7 @@ export function LevelSelector({ completedLevels, levelScores, onSelectLevel }: L
 
               <div className="flex-1">
                 <p className="text-sm text-text-secondary">{description}</p>
-                <p className="mt-1 text-xs text-text-secondary">{cases.length} Fälle</p>
+                <p className="mt-1 text-xs text-text-secondary">{cases.length} {t.shared.moduleScenarios}</p>
                 {score !== undefined && (
                   <p
                     className={cn(
@@ -62,7 +64,7 @@ export function LevelSelector({ completedLevels, levelScores, onSelectLevel }: L
                 variant={isCompleted ? "secondary" : "primary"}
                 className="w-full"
               >
-                {isCompleted ? "Wiederholen" : isLocked ? "Gesperrt" : "Starten"}
+                {isCompleted ? t.shared.ctaRepeat : isLocked ? t.shared.levelLocked : t.shared.ctaStart}
               </Button>
             </div>
           );

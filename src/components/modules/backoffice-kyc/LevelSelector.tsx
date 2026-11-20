@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { BKO_KYC_LEVELS, type LevelNum } from "@/lib/backoffice-kyc";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface LevelSelectorProps {
   completedLevels: Set<LevelNum>;
@@ -13,6 +14,7 @@ interface LevelSelectorProps {
 }
 
 export function LevelSelector({ completedLevels, levelScores, onSelectLevel }: LevelSelectorProps) {
+  const { t } = useLanguage();
   return (
     <div className="grid gap-4 sm:grid-cols-3">
       {BKO_KYC_LEVELS.map(({ level, label, badgeVariant, scenarios }) => {
@@ -37,15 +39,15 @@ export function LevelSelector({ completedLevels, levelScores, onSelectLevel }: L
             </div>
 
             <div className="flex-1">
-              <p className="text-sm text-text-secondary">{scenarios.length} Fälle</p>
+              <p className="text-sm text-text-secondary">{scenarios.length} {t.shared.moduleScenarios}</p>
               {isCompleted && score !== undefined && (
                 <p className="mt-1 text-sm font-medium text-text-primary">
-                  {score}/{scenarios.length} richtig
+                  {score}/{scenarios.length} {t.shared.levelCorrect}
                 </p>
               )}
               {isLocked && (
                 <p className="mt-1 text-xs text-text-secondary">
-                  Schliesse Level {level - 1} ab, um dieses Level freizuschalten.
+                  {t.shared.levelUnlockHint.replace("{prev}", String(level - 1))}
                 </p>
               )}
             </div>
@@ -56,7 +58,7 @@ export function LevelSelector({ completedLevels, levelScores, onSelectLevel }: L
               onClick={() => onSelectLevel(level)}
               className="w-full"
             >
-              {isCompleted ? "Wiederholen" : isLocked ? "Gesperrt" : "Starten"}
+              {isCompleted ? t.shared.ctaRepeat : isLocked ? t.shared.levelLocked : t.shared.ctaStart}
             </Button>
           </div>
         );
