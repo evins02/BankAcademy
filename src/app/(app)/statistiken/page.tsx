@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Award, AlertCircle, CheckCircle2, Flame, Clock, TrendingUp, BookOpen } from "lucide-react";
+import { Award, AlertCircle, CheckCircle2, Flame, Clock, TrendingUp, BookOpen, Trophy } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProgressBar } from "@/components/ui/progress-bar";
@@ -10,6 +10,7 @@ import { SkeletonStatCard } from "@/components/ui/skeleton";
 import { getProgress, getStreak, computeBadges, type ModuleProgress } from "@/lib/progressData";
 import { getXP } from "@/lib/xpData";
 import { ls } from "@/lib/storage";
+import { useLanguage } from "@/context/LanguageContext";
 
 const MODULE_META: Record<string, { name: string; total: number }> = {
   privatkunde: { name: "Privatkunde", total: 10 },
@@ -25,7 +26,13 @@ function scoreBg(accuracy: number): string {
   return "bg-red-50 text-red-600";
 }
 
-function Heatmap({ activityDates }: { activityDates: Set<string> }) {
+type TStatistiken = {
+  heatmapTooltipActive: string;
+  heatmapNoTraining: string;
+  heatmapActive: string;
+};
+
+function Heatmap({ activityDates, t }: { activityDates: Set<string>; t: TStatistiken }) {
   const weeks = 12;
   const days: { date: string; active: boolean; dayOfWeek: number }[] = [];
   const today = new Date();
@@ -50,10 +57,10 @@ function Heatmap({ activityDates }: { activityDates: Set<string> }) {
             {col.map((day) => (
               <div
                 key={day.date}
-                title={`${day.date}${day.active ? " – Aktiv" : ""}`}
+                title={`${day.date}${day.active ? " " + t.heatmapTooltipActive : ""}`}
                 className="h-3 w-3 rounded-sm transition-colors"
                 style={{
-                  background: day.active ? "#0D1B4B" : "#e5e7eb",
+                  background: day.active ? "#00C9B1" : "#e5e7eb",
                   opacity: day.active ? 1 : 0.5,
                 }}
               />
@@ -63,15 +70,16 @@ function Heatmap({ activityDates }: { activityDates: Set<string> }) {
       </div>
       <div className="mt-2 flex items-center gap-2 text-[10px] text-text-secondary">
         <div className="h-3 w-3 rounded-sm" style={{ background: "#e5e7eb", opacity: 0.5 }} />
-        <span>Kein Training</span>
-        <div className="h-3 w-3 rounded-sm ml-2" style={{ background: "#0D1B4B" }} />
-        <span>Aktiv</span>
+        <span>{t.heatmapNoTraining}</span>
+        <div className="h-3 w-3 rounded-sm ml-2" style={{ background: "#00C9B1" }} />
+        <span>{t.heatmapActive}</span>
       </div>
     </div>
   );
 }
 
 export default function StatistikenPage() {
+  const { t } = useLanguage();
   const [progress, setProgress] = useState<Record<string, ModuleProgress>>({});
   const [streak, setStreak] = useState({ current: 0, longest: 0, lastActivity: "" });
   const [earnedBadges, setEarnedBadges] = useState(0);
@@ -88,17 +96,14 @@ export default function StatistikenPage() {
     setEarnedBadges(badges.filter((b) => b.earnedAt).length);
     setXp(getXP());
 
-    // Build activity date set from streak + lastAttempt dates
     const dates = new Set<string>();
     try {
       const stored = JSON.parse(ls("activity-dates") ?? "[]") as string[];
       stored.forEach((d) => dates.add(d));
     } catch {}
-    // Also add lastAttempt dates from modules
     Object.values(prog).forEach((m) => {
       if (m.lastAttempt) dates.add(m.lastAttempt.slice(0, 10));
     });
-    // Backfill streak days
     if (str.current > 0) {
       for (let i = 0; i < Math.min(str.current, 30); i++) {
         const d = new Date();
@@ -133,7 +138,7 @@ export default function StatistikenPage() {
 
   return (
     <>
-      <Header title="Statistiken" subtitle="Dein Lernfortschritt auf einen Blick" />
+      <Header title={t.statistiken.pageTitle} subtitle={t.statistiken.pageSubtitle} />
       <div className="flex-1 overflow-y-auto p-6">
 
         {/* Overview cards */}
@@ -149,40 +154,40 @@ export default function StatistikenPage() {
             <>
               <Card>
                 <CardContent className="pt-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl mb-2" style={{ background: "#E8EBF7" }}>
-                    <Clock size={18} style={{ color: "#0D1B4B" }} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl mb-2" style={{ background: "#E6FAF8" }}>
+                    <Clock size={18} className="text-primary" />
                   </div>
                   <p className="text-2xl font-bold text-text-primary">
                     {studyMinutes < 60 ? `${studyMinutes}m` : `${Math.floor(studyMinutes / 60)}h ${studyMinutes % 60}m`}
                   </p>
-                  <p className="text-xs text-text-secondary">Lernzeit (geschätzt)</p>
+                  <p className="text-xs text-text-secondary">{t.statistiken.studyTime}</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="pt-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl mb-2" style={{ background: "#E8EBF7" }}>
-                    <Flame size={18} style={{ color: "#0D1B4B" }} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl mb-2" style={{ background: "#E6FAF8" }}>
+                    <Flame size={18} className="text-primary" />
                   </div>
                   <p className="text-2xl font-bold text-text-primary">{streak.longest}</p>
-                  <p className="text-xs text-text-secondary">Bester Streak (Tage)</p>
+                  <p className="text-xs text-text-secondary">{t.statistiken.bestStreak}</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="pt-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl mb-2" style={{ background: "#E8EBF7" }}>
-                    <TrendingUp size={18} style={{ color: "#0D1B4B" }} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl mb-2" style={{ background: "#E6FAF8" }}>
+                    <TrendingUp size={18} className="text-primary" />
                   </div>
-                  <p className="text-2xl font-bold text-text-primary">⚡ {xp}</p>
-                  <p className="text-xs text-text-secondary">XP verdient</p>
+                  <p className="text-2xl font-bold text-text-primary">{xp}</p>
+                  <p className="text-xs text-text-secondary">{t.statistiken.xpEarned}</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="pt-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl mb-2" style={{ background: "#E8EBF7" }}>
-                    <BookOpen size={18} style={{ color: "#0D1B4B" }} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl mb-2" style={{ background: "#E6FAF8" }}>
+                    <BookOpen size={18} className="text-primary" />
                   </div>
                   <p className="text-2xl font-bold text-text-primary">{completedModules}/{totalModules}</p>
-                  <p className="text-xs text-text-secondary">Module abgeschlossen</p>
+                  <p className="text-xs text-text-secondary">{t.statistiken.modulesCompleted}</p>
                 </CardContent>
               </Card>
             </>
@@ -192,7 +197,7 @@ export default function StatistikenPage() {
         {/* Activity heatmap */}
         <div className="mb-8 rounded-2xl border border-border bg-surface p-5">
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-            Aktivität – letzte 12 Wochen
+            {t.statistiken.activityTitle}
           </h2>
           {!loaded ? (
             <div className="flex gap-1">
@@ -205,7 +210,7 @@ export default function StatistikenPage() {
               ))}
             </div>
           ) : (
-            <Heatmap activityDates={activityDates} />
+            <Heatmap activityDates={activityDates} t={t.statistiken} />
           )}
         </div>
 
@@ -213,17 +218,17 @@ export default function StatistikenPage() {
         {loaded && modules.some((m) => m.completed > 0) && (
           <div className="mb-8">
             <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-text-secondary">
-              Detaillierter Überblick
+              {t.statistiken.detailTitle}
             </h2>
             <div className="overflow-hidden rounded-2xl border border-border">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-gray-50">
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-text-secondary">Modul</th>
-                    <th className="px-4 py-3 text-center text-xs font-semibold text-text-secondary">Szenarien</th>
-                    <th className="px-4 py-3 text-center text-xs font-semibold text-text-secondary">Score</th>
-                    <th className="px-4 py-3 text-center text-xs font-semibold text-text-secondary hidden sm:table-cell">Status</th>
-                    <th className="px-4 py-3 text-center text-xs font-semibold text-text-secondary hidden md:table-cell">Zuletzt</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-text-secondary">{t.statistiken.colModule}</th>
+                    <th className="px-4 py-3 text-center text-xs font-semibold text-text-secondary">{t.statistiken.colScenarios}</th>
+                    <th className="px-4 py-3 text-center text-xs font-semibold text-text-secondary">{t.statistiken.colScore}</th>
+                    <th className="px-4 py-3 text-center text-xs font-semibold text-text-secondary hidden sm:table-cell">{t.statistiken.colStatus}</th>
+                    <th className="px-4 py-3 text-center text-xs font-semibold text-text-secondary hidden md:table-cell">{t.statistiken.colLast}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -244,15 +249,15 @@ export default function StatistikenPage() {
                       </td>
                       <td className="px-4 py-3 text-center hidden sm:table-cell">
                         {m.completed === 0 ? (
-                          <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-text-secondary">Nicht gestartet</span>
+                          <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-text-secondary">{t.statistiken.statusNotStarted}</span>
                         ) : m.completed >= m.total ? (
-                          <span className="rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-semibold text-green-700">✅ Abgeschlossen</span>
+                          <span className="rounded-full bg-primary-light px-2.5 py-0.5 text-xs font-semibold text-primary">{t.statistiken.statusDone}</span>
                         ) : (
-                          <span className="rounded-full bg-accent-light px-2.5 py-0.5 text-xs font-semibold text-accent">In Bearbeitung</span>
+                          <span className="rounded-full bg-accent-light px-2.5 py-0.5 text-xs font-semibold text-accent">{t.statistiken.statusActive}</span>
                         )}
                       </td>
                       <td className="px-4 py-3 text-center text-xs text-text-secondary hidden md:table-cell">
-                        {m.lastAttempt ? new Date(m.lastAttempt).toLocaleDateString("de-CH", { day: "2-digit", month: "2-digit" }) : "–"}
+                        {m.lastAttempt ? new Date(m.lastAttempt).toLocaleDateString(t.statistiken.dateLocale, { day: "2-digit", month: "2-digit" }) : "–"}
                       </td>
                     </tr>
                   ))}
@@ -267,7 +272,7 @@ export default function StatistikenPage() {
           <div className="mb-8">
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-text-secondary flex items-center gap-2">
               <AlertCircle size={14} className="text-accent" />
-              Diese Bereiche brauchen Aufmerksamkeit
+              {t.statistiken.weakTitle}
             </h2>
             <div className="space-y-3">
               {weakModules.map((m) => (
@@ -277,14 +282,18 @@ export default function StatistikenPage() {
                     <div className="mt-1.5">
                       <ProgressBar value={m.completed} max={m.total} />
                     </div>
-                    <p className="mt-1 text-xs text-text-secondary">{m.accuracy}% Genauigkeit · {m.completed}/{m.total} Szenarien</p>
+                    <p className="mt-1 text-xs text-text-secondary">
+                      {t.statistiken.accuracyDetail
+                        .replace("{pct}", String(m.accuracy))
+                        .replace("{done}", String(m.completed))
+                        .replace("{total}", String(m.total))}
+                    </p>
                   </div>
                   <Link
                     href={`/${m.id === "banking-operations" ? "backoffice" : m.id === "credit-operations" ? "backoffice/credit-operations" : m.id}`}
-                    className="shrink-0 rounded-full px-4 py-2 text-xs font-bold text-white transition-opacity hover:opacity-85"
-                    style={{ background: "#0D1B4B" }}
+                    className="shrink-0 rounded-full bg-primary px-4 py-2 text-xs font-bold text-white transition-opacity hover:opacity-85"
                   >
-                    Jetzt üben →
+                    {t.statistiken.practiceNow} →
                   </Link>
                 </div>
               ))}
@@ -297,16 +306,18 @@ export default function StatistikenPage() {
           <div className="mb-8">
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-text-secondary flex items-center gap-2">
               <CheckCircle2 size={14} className="text-green-600" />
-              Deine Stärken
+              {t.statistiken.strongTitle}
             </h2>
             <div className="space-y-3">
               {strongModules.map((m) => (
                 <div key={m.id} className="flex items-center gap-4 rounded-xl border border-green-200 bg-green-50 p-4">
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-text-primary text-sm">{m.name}</p>
-                    <p className="mt-0.5 text-xs text-green-700">{m.accuracy}% Genauigkeit – hervorragend!</p>
+                    <p className="mt-0.5 text-xs text-green-700">
+                      {t.statistiken.excellentAccuracy.replace("{pct}", String(m.accuracy))}
+                    </p>
                   </div>
-                  <span className="shrink-0 text-lg">🏆</span>
+                  <Trophy size={20} className="shrink-0 text-green-600" />
                 </div>
               ))}
             </div>
@@ -320,7 +331,9 @@ export default function StatistikenPage() {
               <Award size={28} className="text-primary" />
               <div>
                 <p className="font-semibold text-text-primary">Badges</p>
-                <p className="text-sm text-text-secondary">{earnedBadges} verdient</p>
+                <p className="text-sm text-text-secondary">
+                  {t.statistiken.badgesEarned.replace("{n}", String(earnedBadges))}
+                </p>
               </div>
             </div>
           </Link>
@@ -329,7 +342,9 @@ export default function StatistikenPage() {
               <AlertCircle size={28} className="text-accent" />
               <div>
                 <p className="font-semibold text-text-primary">Fehler Übersicht</p>
-                <p className="text-sm text-text-secondary">{totalErrors} Fehler aufgezeichnet</p>
+                <p className="text-sm text-text-secondary">
+                  {t.statistiken.errorsRecorded.replace("{n}", String(totalErrors))}
+                </p>
               </div>
             </div>
           </Link>
