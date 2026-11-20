@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Award, RefreshCw, ArrowLeft, ChevronRight, Share2 } from "lucide-react";
+import { Award, RefreshCw, ArrowLeft, ChevronRight, Share2, User, TrendingUp, Building2, Landmark, Settings2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CertificateModal } from "./CertificateModal";
 import { ShareCard } from "./ShareCard";
 import { Confetti } from "./Confetti";
 import { getProgress } from "@/lib/progressData";
 import { addXP } from "@/lib/xpData";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ModuleCompleteProps {
   moduleName: string;
@@ -18,11 +19,11 @@ interface ModuleCompleteProps {
 }
 
 const NEXT_MODULES = [
-  { id: "privatkunde", label: "Privatkunde", emoji: "👤", href: "/privatkunde", reason: "Einstieg ins Retail Banking" },
-  { id: "anlagekunde", label: "Anlagekunde", emoji: "📈", href: "/anlagekunde/anlegerprofil", reason: "Vertiefung: Anlageberatung" },
-  { id: "firmenkunde", label: "Firmenkunde", emoji: "🏢", href: "/firmenkunde", reason: "Firmenkundenlösungen" },
-  { id: "banking-operations", label: "Banking Operations", emoji: "🏦", href: "/backoffice", reason: "Back Office Operationen" },
-  { id: "credit-operations", label: "Credit Operations", emoji: "⚙️", href: "/backoffice/credit-operations", reason: "Kreditbearbeitung" },
+  { id: "privatkunde", label: "Privatkunde", Icon: User, href: "/privatkunde" },
+  { id: "anlagekunde", label: "Anlagekunde", Icon: TrendingUp, href: "/anlagekunde/anlegerprofil" },
+  { id: "firmenkunde", label: "Firmenkunde", Icon: Building2, href: "/firmenkunde" },
+  { id: "banking-operations", label: "Banking Operations", Icon: Landmark, href: "/backoffice" },
+  { id: "credit-operations", label: "Credit Operations", Icon: Settings2, href: "/backoffice/credit-operations" },
 ];
 
 function getRecommendations(skipModuleIds: string[]) {
@@ -41,10 +42,11 @@ function getRecommendations(skipModuleIds: string[]) {
 }
 
 export function ModuleComplete({ moduleName, accuracy, onRestart, onBack }: ModuleCompleteProps) {
+  const { t } = useLanguage();
   const [showCert, setShowCert] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [confetti, setConfetti] = useState(true);
-  const [userName, setUserName] = useState("Lernender");
+  const [userName, setUserName] = useState("");
   const [recommendations, setRecommendations] = useState<typeof NEXT_MODULES>([]);
 
   useEffect(() => {
@@ -60,9 +62,11 @@ export function ModuleComplete({ moduleName, accuracy, onRestart, onBack }: Modu
 
     setRecommendations(getRecommendations([]));
 
-    const t = setTimeout(() => setConfetti(false), 5000);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setConfetti(false), 5000);
+    return () => clearTimeout(timer);
   }, []);
+
+  const displayName = userName || t.moduleComplete.learnerFallback;
 
   return (
     <>
@@ -73,36 +77,40 @@ export function ModuleComplete({ moduleName, accuracy, onRestart, onBack }: Modu
 
           {/* Completion card */}
           <div className="rounded-2xl border border-border bg-surface p-6 shadow-xl text-center">
-            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-yellow-100 text-5xl">
-              🎓
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-primary-light">
+              <Award size={40} className="text-primary" />
             </div>
 
-            <h2 className="text-2xl font-bold text-text-primary">Modul abgeschlossen!</h2>
+            <h2 className="text-2xl font-bold text-text-primary">{t.moduleComplete.title}</h2>
             <p className="mt-1.5 text-sm text-text-secondary">{moduleName}</p>
 
             <div className="my-6 rounded-xl border border-primary/20 bg-primary-light p-4">
               <p className="text-base font-semibold text-primary">
-                Herzlichen Glückwunsch, {userName}!
+                {t.moduleComplete.congrats.replace("{name}", displayName)}
               </p>
               <p className="mt-1 text-sm text-text-secondary">
-                Du hast alle Level erfolgreich abgeschlossen.{" "}
-                <span className="font-semibold text-primary">+500 XP</span>
+                {t.moduleComplete.xpDesc}{" "}
+                <span className="font-semibold text-primary">
+                  {t.moduleComplete.xpEarned.replace("{xp}", "500")}
+                </span>
               </p>
             </div>
 
             {accuracy !== undefined && accuracy < 70 && (
               <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-left">
                 <p className="text-sm font-semibold text-amber-900">
-                  📚 Du hast Mühe mit {moduleName}
+                  {t.moduleComplete.lowAccuracyTitle.replace("{module}", moduleName)}
                 </p>
                 <p className="mt-1 text-xs text-amber-700">
-                  Deine Genauigkeit war {accuracy}%. Wir empfehlen eine Wiederholung.
+                  {t.moduleComplete.lowAccuracyDesc
+                    .replace("{module}", moduleName)
+                    .replace("{pct}", String(accuracy))}
                 </p>
                 <button
                   onClick={onRestart}
                   className="mt-2 text-xs font-semibold text-amber-800 hover:underline"
                 >
-                  Nochmals üben →
+                  {t.moduleComplete.practiceAgain}
                 </button>
               </div>
             )}
@@ -110,22 +118,22 @@ export function ModuleComplete({ moduleName, accuracy, onRestart, onBack }: Modu
             <div className="space-y-2">
               <Button onClick={() => setShowCert(true)} className="w-full gap-2">
                 <Award size={16} />
-                Zertifikat anzeigen
+                {t.moduleComplete.showCert}
               </Button>
               <Button variant="secondary" onClick={() => setShowShare(true)} className="w-full gap-2">
                 <Share2 size={14} />
-                Ergebnis teilen
+                {t.moduleComplete.shareResult}
               </Button>
               <Button variant="secondary" onClick={onRestart} className="w-full">
                 <RefreshCw size={14} />
-                Nochmals absolvieren
+                {t.moduleComplete.restartBtn}
               </Button>
               <button
                 onClick={onBack}
                 className="flex w-full items-center justify-center gap-1.5 text-xs text-text-secondary transition-colors hover:text-text-primary"
               >
                 <ArrowLeft size={12} />
-                Zurück zur Übersicht
+                {t.moduleComplete.backBtn}
               </button>
             </div>
           </div>
@@ -134,7 +142,7 @@ export function ModuleComplete({ moduleName, accuracy, onRestart, onBack }: Modu
           {recommendations.length > 0 && (
             <div className="rounded-2xl border border-border bg-surface p-4 shadow-sm">
               <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                Empfohlene nächste Schritte
+                {t.moduleComplete.recommendations}
               </p>
               <div className="space-y-2">
                 {recommendations.map((m) => (
@@ -143,10 +151,14 @@ export function ModuleComplete({ moduleName, accuracy, onRestart, onBack }: Modu
                     href={m.href}
                     className="flex items-center gap-3 rounded-xl border border-border p-3 transition-colors hover:bg-gray-50"
                   >
-                    <span className="shrink-0 text-2xl">{m.emoji}</span>
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-light">
+                      <m.Icon size={18} className="text-primary" />
+                    </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-text-primary">{m.label}</p>
-                      <p className="text-xs text-text-secondary">{m.reason}</p>
+                      <p className="text-xs text-text-secondary">
+                        {t.moduleComplete.nextModuleReasons[m.id] ?? ""}
+                      </p>
                     </div>
                     <ChevronRight size={14} className="shrink-0 text-text-secondary" />
                   </Link>

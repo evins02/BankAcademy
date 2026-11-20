@@ -5,8 +5,10 @@
 :root {
   --background: #F5F5F5;
   --surface: #FFFFFF;
-  --primary: #16A34A;
-  --primary-light: #DCFCE7;
+  --primary: #00C9B1;
+  --primary-light: #E6FAF8;
+  --color-success: #16A34A;
+  --color-success-light: #DCFCE7;
   --accent: #F97316;
   --accent-light: #FFEDD5;
   --text-primary: #0A0A0A;
@@ -83,7 +85,7 @@ body {
   --text-primary: #F9FAFB;
   --text-secondary: #9CA3AF;
   --border: #374151;
-  --primary-light: #052e16;
+  --primary-light: #0A3A36;
   --accent-light: #431407;
 }
 

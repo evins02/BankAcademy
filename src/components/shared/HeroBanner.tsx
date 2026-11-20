@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getProgress, getStreak } from "@/lib/progressData";
+import { useLanguage } from "@/context/LanguageContext";
 
 const ALL_MODULES = [
   { id: "privatkunde", label: "Privatkunde", total: 10 },
@@ -18,6 +19,7 @@ interface HeroBannerProps {
 }
 
 export function HeroBanner({ name }: HeroBannerProps) {
+  const { t } = useLanguage();
   const [heading, setHeading] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [done, setDone] = useState(0);
@@ -26,9 +28,9 @@ export function HeroBanner({ name }: HeroBannerProps) {
   useEffect(() => {
     const h = new Date().getHours();
     const n = name ? `, ${name}` : "";
-    if (h >= 6 && h < 12) setHeading(`Guten Morgen${n}! 🌅`);
-    else if (h < 18) setHeading(`Guten Tag${n}! ☀️`);
-    else setHeading(`Guten Abend${n}! 🌙`);
+    if (h >= 6 && h < 12) setHeading(`${t.shared.greetMorning}${n}!`);
+    else if (h < 18) setHeading(`${t.shared.greetDay}${n}!`);
+    else setHeading(`${t.shared.greetEvening}${n}!`);
 
     const prog = getProgress();
     const streak = getStreak();
@@ -37,7 +39,7 @@ export function HeroBanner({ name }: HeroBannerProps) {
     setDone(totalDone);
 
     if (streak.current >= 7) {
-      setSubtitle(`🔥 ${streak.current} Tage Streak – unaufhaltbar!`);
+      setSubtitle(t.shared.streakMsg.replace("{n}", String(streak.current)));
     } else {
       const near = ALL_MODULES.map((m) => {
         const p = prog[m.id];
@@ -49,21 +51,24 @@ export function HeroBanner({ name }: HeroBannerProps) {
         .sort((a, b) => a!.rem - b!.rem)[0];
 
       if (near) {
+        const unit = near.rem > 1 ? t.shared.moduleScenarios : t.shared.scenarioSingular;
         setSubtitle(
-          `Noch ${near.rem} Szenario${near.rem > 1 ? "s" : ""} bis zum Abschluss von ${near.label}!`
+          t.shared.nearModuleLeft
+            .replace("{count}", `${near.rem} ${unit}`)
+            .replace("{module}", near.label)
         );
       } else {
         const todayDone = Object.values(prog)
           .filter((p) => p.lastAttempt?.slice(0, 10) === today)
           .reduce((s, p) => s + p.completed, 0);
-        if (todayDone === 0) setSubtitle("Du hast heute noch nicht gelernt – starte jetzt! 🎯");
-        else if (todayDone <= 3) setSubtitle("Guter Start! Mach weiter so 💪");
-        else setSubtitle("Starker Tag! Du bist auf Kurs 🔥");
+        if (todayDone === 0) setSubtitle(t.shared.noLearningToday);
+        else if (todayDone <= 3) setSubtitle(t.shared.goodStart);
+        else setSubtitle(t.shared.strongDay);
       }
     }
 
     setVisible(true);
-  }, [name]);
+  }, [name, t]);
 
   const pct = Math.round((done / TOTAL) * 100);
   const r = 26;
@@ -75,14 +80,16 @@ export function HeroBanner({ name }: HeroBannerProps) {
       className={`relative mb-6 overflow-hidden rounded-2xl p-6 transition-all duration-700 ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
       }`}
-      style={{ background: "linear-gradient(135deg, #0D1B4B 0%, #00C9B1 100%)" }}
+      style={{ background: "linear-gradient(135deg, #00897B 0%, #00C9B1 100%)" }}
     >
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <h1 className="text-xl font-bold text-white">{heading || "Willkommen! 👋"}</h1>
+          <h1 className="text-xl font-bold text-white">{heading || `${t.shared.greetDay}!`}</h1>
           <p className="mt-1.5 text-sm text-white/80">{subtitle}</p>
           <p className="mt-3 text-xs text-white/60">
-            {done} von {TOTAL} Szenarien abgeschlossen
+            {t.shared.scenariosCount
+              .replace("{done}", String(done))
+              .replace("{total}", String(TOTAL))}
           </p>
         </div>
         <div className="relative shrink-0">

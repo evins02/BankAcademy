@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Heart } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { useLanguage } from "@/context/LanguageContext";
 import { scheduleSync } from "@/lib/progressSync";
@@ -543,12 +544,14 @@ export default function CommunityPage() {
                     onClick={() => toggleLike(c.id)}
                     className="flex items-center gap-1.5 text-sm transition-opacity hover:opacity-75"
                   >
-                    <span style={{ color: isLiked ? "#00C9B1" : undefined }}>
-                      {isLiked ? "❤️" : "🤍"}
-                    </span>
+                    <Heart
+                      size={16}
+                      className={isLiked ? "text-primary" : "text-text-secondary"}
+                      fill={isLiked ? "currentColor" : "none"}
+                    />
                     <span
                       className={`text-xs font-semibold ${
-                        isLiked ? "text-accent" : "text-text-secondary"
+                        isLiked ? "text-primary" : "text-text-secondary"
                       }`}
                     >
                       {c.likes}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { ChevronRight, X } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useScenarioKeyboard } from "@/hooks/useScenarioKeyboard";
@@ -21,12 +22,14 @@ export function WeiterButton({
   onNext,
   onRetry,
   onBack,
-  label = "Weiter",
+  label,
   autoAdvance = true,
   countdownFrom = 5,
   className,
   showHints = true,
 }: WeiterButtonProps) {
+  const { t } = useLanguage();
+  const resolvedLabel = label ?? t.shared.weiterKeyboard;
   const [count, setCount] = useState(countdownFrom);
   const [cancelled, setCancelled] = useState(false);
 
@@ -39,7 +42,7 @@ export function WeiterButton({
   useEffect(() => {
     setCount(countdownFrom);
     setCancelled(false);
-  }, [label, countdownFrom]);
+  }, [resolvedLabel, countdownFrom]);
 
   useEffect(() => {
     if (!autoAdvance || cancelled) return;
@@ -57,7 +60,7 @@ export function WeiterButton({
     <div className="space-y-2">
       <div className="flex items-center gap-1.5">
         <Button onClick={advance} className={cn("flex-1", className)}>
-          {label}
+          {resolvedLabel}
           {autoAdvance && !cancelled && (
             <span className="ml-1 text-xs opacity-60">({count})</span>
           )}
@@ -69,7 +72,7 @@ export function WeiterButton({
               e.stopPropagation();
               setCancelled(true);
             }}
-            title="Automatisches Weiterblättern abbrechen"
+            title={t.shared.weiterCancel}
             className="rounded-lg p-2 text-text-secondary transition-colors hover:bg-gray-100 hover:text-text-primary"
           >
             <X size={13} />
@@ -80,19 +83,19 @@ export function WeiterButton({
       {showHints && (
         <p className="text-center text-[11px] text-text-secondary">
           <kbd className="rounded bg-gray-100 px-1 py-0.5 font-mono text-[10px]">Enter</kbd>
-          {" "}Weiter
+          {" "}{t.shared.weiterKeyboard}
           {onRetry && (
             <>
               {" · "}
               <kbd className="rounded bg-gray-100 px-1 py-0.5 font-mono text-[10px]">R</kbd>
-              {" "}Nochmals
+              {" "}{t.shared.retryKeyboard}
             </>
           )}
           {onBack && (
             <>
               {" · "}
               <kbd className="rounded bg-gray-100 px-1 py-0.5 font-mono text-[10px]">Esc</kbd>
-              {" "}Zurück
+              {" "}{t.shared.backKeyboard}
             </>
           )}
         </p>
