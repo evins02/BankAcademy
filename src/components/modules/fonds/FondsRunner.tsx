@@ -7,6 +7,9 @@ import { CaseCard } from "./CaseCard";
 import { FeedbackCard } from "./FeedbackCard";
 import { type CaseResult } from "./LevelComplete";
 import { FONDS_LEVELS, type LevelNum } from "@/lib/fonds";
+import { localizeCaseLevels } from "@/lib/translations/utils";
+import { FONDS_TRANSLATIONS } from "@/lib/translations/fonds";
+import { useLanguage } from "@/context/LanguageContext";
 import { LevelCelebration } from "@/components/shared/LevelCelebration";
 import { ModuleComplete } from "@/components/shared/ModuleComplete";
 import { FirstTimeTutorial } from "@/components/shared/FirstTimeTutorial";
@@ -17,10 +20,6 @@ import { addAttemptRecord } from "@/lib/error-tracking";
 import { useGlossar } from "@/context/GlossarContext";
 import { getSettings } from "@/lib/settingsData";
 import { useModuleTracking, trackCaseResult, trackModuleComplete } from "@/lib/moduleAnalytics";
-import { useLanguage } from "@/context/LanguageContext";
-import { localizeCaseLevels } from "@/lib/translations/utils";
-import { FONDS_TRANSLATIONS } from "@/lib/translations/fonds";
-
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
 
 const MAX_LEVEL = 3 as LevelNum;

@@ -6,9 +6,11 @@ import { SubRunner } from "@/components/modules/anlage-submodule/SubRunner";
 import { AktienLernblock } from "@/components/modules/aktien/LernblockCard";
 import { AKTIEN_LEVELS } from "@/lib/aktien";
 import { useLanguage } from "@/context/LanguageContext";
+import { localizeCaseLevels } from "@/lib/translations/utils";
+import { AKTIEN_TRANSLATIONS } from "@/lib/translations/aktien";
 
 export default function DemoAktienPage() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const d = t.demo;
 
   return (
@@ -25,7 +27,7 @@ export default function DemoAktienPage() {
         ]}
       />
       <SubRunner
-        levels={AKTIEN_LEVELS}
+        levels={localizeCaseLevels(AKTIEN_LEVELS, lang, AKTIEN_TRANSLATIONS)}
         moduleId="demo-anlagekunde-aktien"
         moduleName={d.aktienTitle}
         selectorTitle={d.aktienSelectorTitle}

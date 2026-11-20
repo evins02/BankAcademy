@@ -7,7 +7,7 @@ import { AktienLernblock } from "@/components/modules/aktien/LernblockCard";
 import { AKTIEN_LEVELS } from "@/lib/aktien";
 import { useLanguage } from "@/context/LanguageContext";
 import { localizeCaseLevels } from "@/lib/translations/utils";
-import { TRANSLATIONS as AKTIEN_TRANSLATIONS } from "@/lib/translations/aktien";
+import { AKTIEN_TRANSLATIONS } from "@/lib/translations/aktien";
 
 export default function AktienPage() {
   const { t, lang } = useLanguage();

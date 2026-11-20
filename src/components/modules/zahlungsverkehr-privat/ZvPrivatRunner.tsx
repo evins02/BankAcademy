@@ -7,6 +7,9 @@ import { CaseCard } from "./CaseCard";
 import { FeedbackCard } from "./FeedbackCard";
 import { LevelComplete, type CaseResult } from "./LevelComplete";
 import { ZV_FO_LEVELS, type LevelNum } from "@/lib/zahlungsverkehr-privat";
+import { useLanguage } from "@/context/LanguageContext";
+import { localizeCaseLevels } from "@/lib/translations/utils";
+import { TRANSLATIONS as ZV_PRIVAT_TRANSLATIONS } from "@/lib/translations/zahlungsverkehr-privat";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { addAttemptRecord } from "@/lib/error-tracking";
@@ -17,6 +20,8 @@ type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete"
 export function ZvPrivatRunner() {
   useModuleTracking("privatkunde-zahlungsverkehr", "Zahlungsverkehr");
 
+  const { lang } = useLanguage();
+  const localizedLevels = localizeCaseLevels(ZV_FO_LEVELS, lang, ZV_PRIVAT_TRANSLATIONS);
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
 
@@ -26,7 +31,7 @@ export function ZvPrivatRunner() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [sessionResults, setSessionResults] = useState<CaseResult[]>([]);
 
-  const levelConfig = ZV_FO_LEVELS.find((l) => l.level === activeLevel)!;
+  const levelConfig = localizedLevels.find((l) => l.level === activeLevel)!;
   const activeCases = useMemo(
     () => resolveSessionCases("privatkunde-zahlungsverkehr", activeLevel, levelConfig.cases),
     // eslint-disable-next-line react-hooks/exhaustive-deps
