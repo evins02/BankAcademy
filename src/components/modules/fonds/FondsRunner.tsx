@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { LevelSelector } from "./LevelSelector";
 import { LernblockCards } from "./LernblockCards";
 import { CaseCard } from "./CaseCard";
@@ -17,6 +17,9 @@ import { addAttemptRecord } from "@/lib/error-tracking";
 import { useGlossar } from "@/context/GlossarContext";
 import { getSettings } from "@/lib/settingsData";
 import { useModuleTracking, trackCaseResult, trackModuleComplete } from "@/lib/moduleAnalytics";
+import { useLanguage } from "@/context/LanguageContext";
+import { localizeCaseLevels } from "@/lib/translations/utils";
+import { FONDS_TRANSLATIONS } from "@/lib/translations/fonds";
 
 type View = "selector" | "lernblock" | "playing" | "feedback" | "level-complete" | "module-complete";
 
@@ -24,6 +27,7 @@ const MAX_LEVEL = 3 as LevelNum;
 
 export function FondsRunner() {
   useModuleTracking("privatkunde-fonds", "Fonds");
+  const { lang } = useLanguage();
 
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
@@ -43,7 +47,11 @@ export function FondsRunner() {
 
   const { open: openGlossar } = useGlossar();
 
-  const levelConfig = FONDS_LEVELS.find((l) => l.level === activeLevel)!;
+  const localizedFondsLevels = useMemo(
+    () => localizeCaseLevels(FONDS_LEVELS, lang, FONDS_TRANSLATIONS),
+    [lang],
+  );
+  const levelConfig = localizedFondsLevels.find((l) => l.level === activeLevel)!;
   const currentCase = levelConfig.cases[caseIndex];
   const total = levelConfig.cases.length;
   const isLastCase = caseIndex === total - 1;
@@ -110,8 +118,8 @@ export function FondsRunner() {
       setLevelScores((prev) => ({ ...prev, [activeLevel]: score }));
 
       // Persist progress
-      const lvlConfig = FONDS_LEVELS.find((l) => l.level === activeLevel)!;
-      const totalFondsCases = FONDS_LEVELS.reduce((s, l) => s + l.cases.length, 0);
+      const lvlConfig = localizedFondsLevels.find((l) => l.level === activeLevel)!;
+      const totalFondsCases = localizedFondsLevels.reduce((s, l) => s + l.cases.length, 0);
       const prog = getProgress();
       const prev = prog["privatkunde-fonds"];
       const prevCompleted = prev?.completed ?? 0;
@@ -161,7 +169,7 @@ export function FondsRunner() {
       // Compute overall accuracy for module
       const allScores = { ...levelScores };
       const totalCorrect = Object.values(allScores).reduce((s, sc) => s + (sc ?? 0), 0);
-      const totalCases = FONDS_LEVELS.reduce((s, l) => s + l.cases.length, 0);
+      const totalCases = localizedFondsLevels.reduce((s, l) => s + l.cases.length, 0);
       setModuleAccuracy(Math.round((totalCorrect / totalCases) * 100));
       trackModuleComplete("privatkunde-fonds");
       setView("module-complete");

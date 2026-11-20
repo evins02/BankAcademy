@@ -7,6 +7,9 @@ import { CaseCard } from "./CaseCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LevelComplete, type ScenarioResult } from "./LevelComplete";
 import { CO_LEVELS, type LevelNum, type OptionKey } from "@/lib/credit-operations";
+import { CO_TRANSLATIONS } from "@/lib/translations/credit-operations";
+import { localizeLevels } from "@/lib/translations/utils";
+import { useLanguage } from "@/context/LanguageContext";
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
@@ -22,6 +25,7 @@ import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete";
 
 export function CreditOperationsRunner() {
+  const { lang } = useLanguage();
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
   const [noteOpen, setNoteOpen] = useState(false);
@@ -36,7 +40,11 @@ export function CreditOperationsRunner() {
   const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
   const [isMcqSecondAttempt, setIsMcqSecondAttempt] = useState(false);
 
-  const levelConfig = CO_LEVELS.find((l) => l.level === activeLevel)!;
+  const localizedLevels = useMemo(
+    () => localizeLevels(CO_LEVELS, lang, CO_TRANSLATIONS),
+    [lang],
+  );
+  const levelConfig = localizedLevels.find((l) => l.level === activeLevel)!;
   const activeScenarios = useMemo(
     () => resolveSessionCases("backoffice-credit-operations", activeLevel, levelConfig.scenarios),
     // eslint-disable-next-line react-hooks/exhaustive-deps

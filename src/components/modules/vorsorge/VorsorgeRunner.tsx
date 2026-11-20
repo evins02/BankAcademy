@@ -1,12 +1,15 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { LevelSelector } from "./LevelSelector";
 import { LernblockCards } from "./LernblockCards";
 import { CaseCard } from "./CaseCard";
 import { FeedbackCard } from "./FeedbackCard";
 import { LevelComplete, type CaseResult } from "./LevelComplete";
 import { VORSORGE_LEVELS, type LevelNum } from "@/lib/vorsorge";
+import { VORSORGE_TRANSLATIONS } from "@/lib/translations/vorsorge";
+import { localizeCaseLevels } from "@/lib/translations/utils";
+import { useLanguage } from "@/context/LanguageContext";
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
@@ -15,6 +18,7 @@ import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete";
 
 export function VorsorgeRunner() {
+  const { lang } = useLanguage();
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
 
@@ -26,7 +30,11 @@ export function VorsorgeRunner() {
   const [lückentextAnswer, setLückentextAnswer] = useState("");
   const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
 
-  const levelConfig = VORSORGE_LEVELS.find((l) => l.level === activeLevel)!;
+  const localizedLevels = useMemo(
+    () => localizeCaseLevels(VORSORGE_LEVELS, lang, VORSORGE_TRANSLATIONS),
+    [lang],
+  );
+  const levelConfig = localizedLevels.find((l) => l.level === activeLevel)!;
   const currentCase = levelConfig.cases[caseIndex];
   const total = levelConfig.cases.length;
   const isLastCase = caseIndex === total - 1;

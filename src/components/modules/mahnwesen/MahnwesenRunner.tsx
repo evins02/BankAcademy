@@ -8,6 +8,9 @@ import { CaseCard } from "./CaseCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LevelComplete, type CaseResult } from "./LevelComplete";
 import { MW_LEVELS, type LevelNum, type OptionKey } from "@/lib/mahnwesen";
+import { MW_TRANSLATIONS } from "@/lib/translations/mahnwesen";
+import { localizeCaseLevels } from "@/lib/translations/utils";
+import { useLanguage } from "@/context/LanguageContext";
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
@@ -23,6 +26,7 @@ import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete";
 
 export function MahnwesenRunner() {
+  const { lang } = useLanguage();
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
 
@@ -37,7 +41,11 @@ export function MahnwesenRunner() {
   const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
   const [isMcqSecondAttempt, setIsMcqSecondAttempt] = useState(false);
 
-  const levelConfig = MW_LEVELS.find((l) => l.level === activeLevel)!;
+  const localizedLevels = useMemo(
+    () => localizeCaseLevels(MW_LEVELS, lang, MW_TRANSLATIONS),
+    [lang],
+  );
+  const levelConfig = localizedLevels.find((l) => l.level === activeLevel)!;
   const activeCases = useMemo(
     () => resolveSessionCases("banking-operations-mahnwesen", activeLevel, levelConfig.cases),
     // eslint-disable-next-line react-hooks/exhaustive-deps

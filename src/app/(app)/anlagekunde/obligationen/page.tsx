@@ -7,14 +7,14 @@ import { SubRunner } from "@/components/modules/anlage-submodule/SubRunner";
 import { ObligationenLernblock } from "@/components/modules/obligationen/LernblockCard";
 import { OBLIGATIONEN_LEVELS } from "@/lib/obligationen";
 import { useLanguage } from "@/context/LanguageContext";
-import { localizeLevels } from "@/lib/translations/utils";
+import { localizeCaseLevels } from "@/lib/translations/utils";
 import { OBLIGATIONEN_TRANSLATIONS } from "@/lib/translations/obligationen";
 
 export default function ObligationenPage() {
   const { t, lang } = useLanguage();
   const m = t.modules.anlagekunde.obligationen;
   const localizedLevels = useMemo(
-    () => localizeLevels(OBLIGATIONEN_LEVELS, lang, OBLIGATIONEN_TRANSLATIONS),
+    () => localizeCaseLevels(OBLIGATIONEN_LEVELS, lang, OBLIGATIONEN_TRANSLATIONS),
     [lang],
   );
   return (
