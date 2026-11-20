@@ -118,7 +118,7 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
         {NAV_GROUPS.map((group) => (
           <div key={group.label} className="mb-4">
             <p className="mb-1 px-2 text-[10px] font-bold uppercase tracking-widest text-text-secondary">
-              {group.label}
+              {t.navGroups[group.label] ?? group.label}
             </p>
             <ul className="flex flex-col gap-0.5">
               {group.items.map((item) => {
@@ -139,7 +139,7 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
                         className="flex w-full items-center gap-3 rounded-pill px-2 py-2 text-sm font-semibold transition-colors text-text-primary hover:bg-gray-100"
                       >
                         {Icon && <Icon size={18} className="shrink-0" />}
-                        <span className="flex-1 text-left">{item.label}</span>
+                        <span className="flex-1 text-left">{t.navItems[item.label] ?? item.label}</span>
                         {isOpen ? (
                           <ChevronDown size={13} className="shrink-0 opacity-70" />
                         ) : (
@@ -156,7 +156,7 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
                             <div key={section.label || "_"} className="mb-1 mt-1">
                               {section.label && (
                                 <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
-                                  {section.label}
+                                  {t.navSections[section.label] ?? section.label}
                                 </p>
                               )}
                               {section.items.map((sub) => {
@@ -177,7 +177,7 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
                                         : "text-text-secondary hover:bg-gray-50 hover:text-text-primary"
                                     )}
                                   >
-                                    {sub.label}
+                                    {t.navItems[sub.label] ?? sub.label}
                                   </Link>
                                 );
                               })}
@@ -212,7 +212,7 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
                       )}
                     >
                       {Icon && <Icon size={18} className="shrink-0" />}
-                      <span className="flex-1">{item.label}</span>
+                      <span className="flex-1">{t.navItems[item.label] ?? item.label}</span>
                     </Link>
                   </li>
                 );
@@ -230,7 +230,7 @@ export function DemoSidebar({ onLock, onClose }: { onLock: () => void; onClose?:
             display: "block",
             padding: "10px 14px",
             borderRadius: 10,
-            background: "#0D1B4B",
+            background: "#00C9B1",
             color: "#fff",
             fontSize: 12,
             fontWeight: 700,
