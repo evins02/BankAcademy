@@ -9,7 +9,7 @@ import { LevelComplete, type CaseResult } from "./LevelComplete";
 import { ZV_FO_LEVELS, type LevelNum } from "@/lib/zahlungsverkehr-privat";
 import { useLanguage } from "@/context/LanguageContext";
 import { localizeCaseLevels } from "@/lib/translations/utils";
-import { TRANSLATIONS as ZV_PRIVAT_TRANSLATIONS } from "@/lib/translations/zahlungsverkehr-privat";
+import { ZV_PRIVAT_TRANSLATIONS } from "@/lib/translations/zahlungsverkehr-privat";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { addAttemptRecord } from "@/lib/error-tracking";

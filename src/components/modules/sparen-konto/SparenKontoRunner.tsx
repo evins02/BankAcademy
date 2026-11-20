@@ -9,7 +9,7 @@ import { LevelComplete, type ScenarioResult } from "./LevelComplete";
 import { SK_LEVELS, type LevelNum, type OptionKey } from "@/lib/sparen-konto";
 import { useLanguage } from "@/context/LanguageContext";
 import { localizeLevels } from "@/lib/translations/utils";
-import { TRANSLATIONS as SK_TRANSLATIONS } from "@/lib/translations/sparen-konto";
+import { SPAREN_KONTO_TRANSLATIONS as SK_TRANSLATIONS } from "@/lib/translations/sparen-konto";
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";

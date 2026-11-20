@@ -6,6 +6,9 @@ import { ScenarioCard } from "./ScenarioCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LevelComplete, type ScenarioResult } from "./LevelComplete";
 import { KYC_LEVELS, type LevelNum, type OptionKey } from "@/lib/kyc";
+import { localizeLevels } from "@/lib/translations/utils";
+import { KYC_TRANSLATIONS } from "@/lib/translations/kyc";
+import { useLanguage } from "@/context/LanguageContext";
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
@@ -21,6 +24,7 @@ import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 type View = "selector" | "playing" | "soft-feedback" | "feedback" | "level-complete";
 
 export function KycRunner() {
+  const { lang } = useLanguage();
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
 
@@ -35,11 +39,15 @@ export function KycRunner() {
   const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
   const [isMcqSecondAttempt, setIsMcqSecondAttempt] = useState(false);
 
-  const levelConfig = KYC_LEVELS.find((l) => l.level === activeLevel)!;
+  const localizedLevels = useMemo(
+    () => localizeLevels(KYC_LEVELS, lang, KYC_TRANSLATIONS),
+    [lang],
+  );
+  const levelConfig = localizedLevels.find((l) => l.level === activeLevel)!;
   const activeScenarios = useMemo(
     () => resolveSessionCases("banking-operations-kyc", activeLevel, levelConfig.scenarios),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeLevel],
+    [activeLevel, lang],
   );
   const currentScenario = activeScenarios[scenarioIndex];
   const total = activeScenarios.length;
