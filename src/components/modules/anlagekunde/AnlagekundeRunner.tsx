@@ -12,10 +12,14 @@ import { recordConceptError } from "@/lib/conceptTracker";
 import { addAttemptRecord } from "@/lib/error-tracking";
 import { NoteModal } from "@/components/shared/NoteModal";
 import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
+import { useLanguage } from "@/context/LanguageContext";
+import { localizeLevels } from "@/lib/translations/utils";
+import { ANLAGEKUNDE_TRANSLATIONS } from "@/lib/translations/anlagekunde";
 
 type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete";
 
 export function AnlagekundeRunner() {
+  const { lang } = useLanguage();
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
   const [noteOpen, setNoteOpen] = useState(false);
@@ -28,11 +32,15 @@ export function AnlagekundeRunner() {
   const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
   const [isMcqSecondAttempt, setIsMcqSecondAttempt] = useState(false);
 
-  const levelConfig = AL_LEVELS.find((l) => l.level === activeLevel)!;
+  const localizedLevels = useMemo(
+    () => localizeLevels(AL_LEVELS, lang, ANLAGEKUNDE_TRANSLATIONS),
+    [lang],
+  );
+  const levelConfig = localizedLevels.find((l) => l.level === activeLevel)!;
   const activeScenarios = useMemo(
     () => resolveSessionCases("banking-operations-anlagekunde", activeLevel, levelConfig.scenarios),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeLevel],
+    [activeLevel, lang],
   );
   const currentScenario = activeScenarios[scenarioIndex];
   const total = activeScenarios.length;

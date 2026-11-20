@@ -7,6 +7,9 @@ import { ScenarioCard } from "./ScenarioCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LevelComplete, type ScenarioResult } from "./LevelComplete";
 import { SK_LEVELS, type LevelNum, type OptionKey } from "@/lib/sparen-konto";
+import { useLanguage } from "@/context/LanguageContext";
+import { localizeLevels } from "@/lib/translations/utils";
+import { TRANSLATIONS as SK_TRANSLATIONS } from "@/lib/translations/sparen-konto";
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
@@ -17,6 +20,7 @@ type View = "selector" | "playing" | "feedback" | "level-complete";
 export function SparenKontoRunner() {
   useModuleTracking("privatkunde-sparen-konto", "Sparen & Konto");
 
+  const { lang } = useLanguage();
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
 
@@ -28,7 +32,8 @@ export function SparenKontoRunner() {
   const [lückentextAnswer, setLückentextAnswer] = useState("");
   const [noteOpen, setNoteOpen] = useState(false);
 
-  const levelConfig = SK_LEVELS.find((l) => l.level === activeLevel)!;
+  const localizedLevels = localizeLevels(SK_LEVELS, lang, SK_TRANSLATIONS);
+  const levelConfig = localizedLevels.find((l) => l.level === activeLevel)!;
   const currentScenario = levelConfig.scenarios[scenarioIndex];
   const total = levelConfig.scenarios.length;
   const isLastScenario = scenarioIndex === total - 1;
