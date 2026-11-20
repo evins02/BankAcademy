@@ -1,6 +1,6 @@
 import type { LangTranslations } from "./utils";
 
-export const TRANSLATIONS: LangTranslations = {
+export const FONDS_TRANSLATIONS: LangTranslations = {
   fr: {
     "1.1": {
       title: "Recommander la bonne stratégie",
