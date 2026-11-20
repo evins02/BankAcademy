@@ -9,20 +9,18 @@ import { FONDS_LEVELS, type FondsCase } from "@/lib/fonds";
 import { ScenarioTimer } from "@/components/shared/ScenarioTimer";
 import { getNotes } from "@/lib/notesData";
 import { toggleBookmark, isBookmarked } from "@/lib/bookmarksData";
+import { useLanguage } from "@/context/LanguageContext";
 
 const STRATEGY_MINI = [
-  { emoji: "🔥", label: "Aggressiv", stocks: "~100% Aktien" },
-  { emoji: "🚀", label: "Wachstum", stocks: "~75%" },
-  { emoji: "⚖️", label: "Ausgewogen", stocks: "~50%" },
-  { emoji: "📈", label: "Ertrag", stocks: "20–25%" },
-  { emoji: "💰", label: "Sparkonto", stocks: "0%" },
+  { label: "Aggressiv", stocks: "~100% Aktien" },
+  { label: "Wachstum", stocks: "~75%" },
+  { label: "Ausgewogen", stocks: "~50%" },
+  { label: "Ertrag", stocks: "20–25%" },
+  { label: "Sparkonto", stocks: "0%" },
 ];
 
-const DIFFICULTY = {
-  1: { emoji: "🟢", label: "Einsteiger", xp: 100, time: "~2 min" },
-  2: { emoji: "🟡", label: "Fortgeschritten", xp: 100, time: "~3 min" },
-  3: { emoji: "🔴", label: "Challenge-Niveau", xp: 100, time: "~4 min" },
-} as const;
+const DIFFICULTY_XP = { 1: 100, 2: 100, 3: 100 } as const;
+const DIFFICULTY_TIME = { 1: "~2 min", 2: "~3 min", 3: "~4 min" } as const;
 
 interface CaseCardProps {
   fondsCase: FondsCase;
@@ -45,8 +43,11 @@ export function CaseCard({
   onOpenNote,
   levelStartTime,
 }: CaseCardProps) {
+  const { t } = useLanguage();
   const levelConfig = FONDS_LEVELS.find((l) => l.level === fondsCase.level)!;
-  const difficulty = DIFFICULTY[fondsCase.level as 1 | 2 | 3];
+  const diffXp = DIFFICULTY_XP[fondsCase.level as 1 | 2 | 3];
+  const diffTime = DIFFICULTY_TIME[fondsCase.level as 1 | 2 | 3];
+  const diffLabel = fondsCase.level === 1 ? t.scenarioChrome.levelBeginner : fondsCase.level === 2 ? t.scenarioChrome.levelIntermediate : t.scenarioChrome.levelAdvanced;
   const [showHint, setShowHint] = useState(false);
   const [hasNote, setHasNote] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
@@ -127,30 +128,30 @@ export function CaseCard({
                   ? "border-amber-300 bg-amber-50 text-amber-700"
                   : "border-border text-text-secondary hover:border-primary/40 hover:text-primary"
               )}
-              title="Notiz zu diesem Fall"
+              title="Notiz"
               aria-label="Notiz öffnen"
             >
               <StickyNote size={11} />
-              {hasNote ? "Notiz" : "📝"}
+              {hasNote ? t.scenarioChrome.noteLabel : null}
             </button>
             <span className="text-xs text-text-secondary">
-              Fall {caseIndex + 1} von {total}
+              {t.scenarioChrome.fallCounter.replace("{n}", String(caseIndex + 1)).replace("{total}", String(total))}
             </span>
           </div>
         </div>
 
         {/* Difficulty meta */}
         <div className="mb-5 flex items-center gap-3 text-xs text-text-secondary">
-          <span>{difficulty.emoji} {difficulty.label}</span>
+          <span>{diffLabel}</span>
           <span>·</span>
-          <span>⏱ {difficulty.time}</span>
+          <span>{diffTime}</span>
           <span>·</span>
-          <span className="font-semibold text-primary">+{difficulty.xp} XP</span>
+          <span className="font-semibold text-primary">+{diffXp} XP</span>
         </div>
 
         <div className="mb-5 rounded-DEFAULT bg-background p-4">
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
-            Situation
+            {t.scenarioChrome.situationLabel}
           </p>
           <p className="text-sm leading-relaxed text-text-primary">{fondsCase.situation}</p>
         </div>
@@ -205,7 +206,7 @@ export function CaseCard({
         )}
 
         <Button onClick={onSubmit} disabled={selectedOption === null} className="w-full">
-          Antwort bestätigen
+          {t.scenarioChrome.confirmBtn}
         </Button>
       </div>
     </div>

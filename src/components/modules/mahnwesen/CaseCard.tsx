@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { StickyNote } from "lucide-react";
 import { MW_LEVELS, type MwCase, type OptionKey } from "@/lib/mahnwesen";
 import { getNotes } from "@/lib/notesData";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface CaseCardProps {
   mwCase: MwCase;
@@ -27,6 +28,7 @@ export function CaseCard({
   onSubmit,
   onOpenNote,
 }: CaseCardProps) {
+  const { t } = useLanguage();
   const [hasNote, setHasNote] = useState(false);
   const levelConfig = MW_LEVELS.find((l) => l.level === mwCase.level)!;
 
@@ -50,20 +52,20 @@ export function CaseCard({
                 ? "border-amber-300 bg-amber-50 text-amber-700"
                 : "border-border text-text-secondary hover:border-primary/40 hover:text-primary"
             )}
-            title="Notiz zu diesem Fall"
+            title="Notiz"
             aria-label="Notiz öffnen"
           >
             <StickyNote size={11} />
-            {hasNote ? "Notiz" : "📝"}
+            {hasNote ? t.scenarioChrome.noteLabel : null}
           </button>
           <span className="text-xs text-text-secondary">
-            Fall {caseIndex + 1} von {total}
+            {t.scenarioChrome.fallCounter.replace("{n}", String(caseIndex + 1)).replace("{total}", String(total))}
           </span>
         </div>
 
         <div className="mb-5 rounded-DEFAULT bg-background p-4">
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
-            Situation
+            {t.scenarioChrome.situationLabel}
           </p>
           <p className="text-sm leading-relaxed text-text-primary">{mwCase.briefing}</p>
         </div>
@@ -98,7 +100,7 @@ export function CaseCard({
         </div>
 
         <Button onClick={onSubmit} disabled={selectedOption === null} className="w-full">
-          Antwort bestätigen
+          {t.scenarioChrome.confirmBtn}
         </Button>
       </div>
     </div>

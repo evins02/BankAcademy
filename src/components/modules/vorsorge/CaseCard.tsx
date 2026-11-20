@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { VORSORGE_LEVELS, type VorsorgeCase } from "@/lib/vorsorge";
 import { SteuervorteilPanel } from "./SteuervorteilPanel";
 import { TragbarkeitPanel } from "./TragbarkeitPanel";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface CaseCardProps {
   vorsorgeCase: VorsorgeCase;
@@ -24,6 +25,7 @@ export function CaseCard({
   onSelect,
   onSubmit,
 }: CaseCardProps) {
+  const { t } = useLanguage();
   const levelConfig = VORSORGE_LEVELS.find((l) => l.level === vorsorgeCase.level)!;
 
   return (
@@ -34,13 +36,13 @@ export function CaseCard({
             Level {vorsorgeCase.level} – {levelConfig.label}
           </Badge>
           <span className="text-xs text-text-secondary">
-            Fall {caseIndex + 1} von {total}
+            {t.scenarioChrome.fallCounter.replace("{n}", String(caseIndex + 1)).replace("{total}", String(total))}
           </span>
         </div>
 
         <div className="mb-5 rounded-DEFAULT bg-background p-4">
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
-            Situation
+            {t.scenarioChrome.situationLabel}
           </p>
           <p className="text-sm leading-relaxed text-text-primary">{vorsorgeCase.situation}</p>
         </div>
@@ -83,7 +85,7 @@ export function CaseCard({
         </div>
 
         <Button onClick={onSubmit} disabled={selectedOption === null} className="w-full">
-          Antwort bestätigen
+          {t.scenarioChrome.confirmBtn}
         </Button>
       </div>
     </div>

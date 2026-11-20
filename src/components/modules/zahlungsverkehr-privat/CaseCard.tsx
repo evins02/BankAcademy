@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ZV_FO_LEVELS, type ZvFoCase } from "@/lib/zahlungsverkehr-privat";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface CaseCardProps {
   zvCase: ZvFoCase;
@@ -22,6 +23,7 @@ export function CaseCard({
   onSelect,
   onSubmit,
 }: CaseCardProps) {
+  const { t } = useLanguage();
   const levelConfig = ZV_FO_LEVELS.find((l) => l.level === zvCase.level)!;
 
   return (
@@ -32,13 +34,13 @@ export function CaseCard({
             Level {zvCase.level} – {levelConfig.label}
           </Badge>
           <span className="text-xs text-text-secondary">
-            Fall {caseIndex + 1} von {total}
+            {t.scenarioChrome.fallCounter.replace("{n}", String(caseIndex + 1)).replace("{total}", String(total))}
           </span>
         </div>
 
         <div className="mb-5 rounded-DEFAULT bg-background p-4">
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
-            Situation
+            {t.scenarioChrome.situationLabel}
           </p>
           <p className="text-sm leading-relaxed text-text-primary">{zvCase.situation}</p>
         </div>
@@ -73,7 +75,7 @@ export function CaseCard({
         </div>
 
         <Button onClick={onSubmit} disabled={selectedOption === null} className="w-full">
-          Antwort bestätigen
+          {t.scenarioChrome.confirmBtn}
         </Button>
       </div>
     </div>

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Clock, ChevronRight } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
@@ -5,11 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StatusDot } from "@/components/ui/status-dot";
 import type { Scenario } from "@/types";
+import { useLanguage } from "@/context/LanguageContext";
 
-const difficultyMap = {
-  beginner: { label: "Einsteiger", variant: "green" as const },
-  intermediate: { label: "Fortgeschritten", variant: "orange" as const },
-  advanced: { label: "Experte", variant: "neutral" as const },
+const difficultyVariants = {
+  beginner: "green" as const,
+  intermediate: "orange" as const,
+  advanced: "neutral" as const,
 };
 
 const roleMap: Record<string, string> = {
@@ -24,7 +27,13 @@ interface ScenarioCardProps {
 }
 
 export function ScenarioCard({ scenario }: ScenarioCardProps) {
-  const diff = difficultyMap[scenario.difficulty];
+  const { t } = useLanguage();
+  const diffLabels = {
+    beginner: t.scenarioChrome.levelBeginner,
+    intermediate: t.scenarioChrome.levelIntermediate,
+    advanced: t.scenarioChrome.levelAdvanced,
+  };
+  const diff = { label: diffLabels[scenario.difficulty], variant: difficultyVariants[scenario.difficulty] };
   const href = `/${scenario.module}/scenarios/${scenario.id}`;
 
   return (
@@ -57,7 +66,7 @@ export function ScenarioCard({ scenario }: ScenarioCardProps) {
         </div>
         <Button variant="secondary" size="sm" asChild>
           <Link href={href}>
-            Starten <ChevronRight size={14} />
+            {t.scenarioChrome.startBtn} <ChevronRight size={14} />
           </Link>
         </Button>
       </CardFooter>

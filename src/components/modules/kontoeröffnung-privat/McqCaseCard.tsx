@@ -1,9 +1,12 @@
 "use client";
 
+"use client";
+
 import { Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { McqCase } from "@/lib/kontoeröffnung-privat";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface McqCaseCardProps {
   c: McqCase;
@@ -22,15 +25,16 @@ export function McqCaseCard({
   onSelect,
   onSubmit,
 }: McqCaseCardProps) {
+  const { t } = useLanguage();
   return (
     <div className="mx-auto max-w-2xl space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between">
         <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
-          Fall {caseNum} / {total}
+          {t.scenarioChrome.fallCounter.replace("{n}", String(caseNum)).replace("{total}", String(total))}
         </p>
         <span className="rounded-full bg-primary-light px-2.5 py-1 text-xs font-semibold text-primary">
-          Einzelauswahl
+          {t.scenarioChrome.singleChoiceLabel}
         </span>
       </div>
 
@@ -40,7 +44,7 @@ export function McqCaseCard({
         {c.today && (
           <div className="mb-3 flex items-center gap-1.5 text-xs text-amber-700">
             <Calendar size={12} />
-            <span>Heute: {c.today}</span>
+            <span>{t.scenarioChrome.todayLabel}: {c.today}</span>
           </div>
         )}
         <p className="text-sm leading-relaxed text-text-primary">{c.briefing}</p>
@@ -78,7 +82,7 @@ export function McqCaseCard({
       </div>
 
       <Button onClick={onSubmit} disabled={!selected} className="w-full">
-        Antwort bestätigen
+        {t.scenarioChrome.confirmBtn}
       </Button>
     </div>
   );

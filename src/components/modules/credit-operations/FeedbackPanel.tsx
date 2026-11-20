@@ -10,6 +10,7 @@ import { Confetti } from "@/components/shared/Confetti";
 import { addXP } from "@/lib/xpData";
 import { ActiveRecallPrompt } from "@/components/shared/ActiveRecallPrompt";
 import { BegründungsPrompt } from "@/components/shared/BegründungsPrompt";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface FeedbackPanelProps {
   scenario: CreditOpsScenario;
@@ -30,6 +31,7 @@ export function FeedbackPanel({
   onNext,
   onSkip,
 }: FeedbackPanelProps) {
+  const { t } = useLanguage();
   const isCorrect = selectedOption === scenario.correct;
   const levelConfig = CO_LEVELS.find((l) => l.level === scenario.level)!;
   const xp = isCorrect ? 100 : 10;
@@ -39,8 +41,8 @@ export function FeedbackPanel({
   useEffect(() => {
     addXP(xp);
     if (!isCorrect) return;
-    const t = setTimeout(() => setShowConfetti(false), 1500);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setShowConfetti(false), 1500);
+    return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -55,11 +57,11 @@ export function FeedbackPanel({
             </Badge>
             <div className="flex items-center gap-3">
               <span className="text-xs text-text-secondary">
-                Szenario {scenarioIndex + 1} von {total}
+                {t.scenarioChrome.scenarioCounter.replace("{n}", String(scenarioIndex + 1)).replace("{total}", String(total))}
               </span>
               {onSkip && !isLastScenario && (
                 <button onClick={onSkip} className="text-xs text-text-secondary underline underline-offset-2 hover:text-text-primary">
-                  Überspringen →
+                  {t.scenarioChrome.skipBtn} →
                 </button>
               )}
             </div>
@@ -71,9 +73,9 @@ export function FeedbackPanel({
               isCorrect ? "bg-primary-light" : "bg-red-50"
             )}
           >
-            <span className="text-4xl">{isCorrect ? "✅" : "❌"}</span>
+            <span className="text-4xl">{isCorrect ? "✓" : "✗"}</span>
             <p className={cn("text-xl font-bold", isCorrect ? "text-primary" : "text-red-700")}>
-              {isCorrect ? "Richtig!" : "Leider falsch"}
+              {isCorrect ? t.scenarioChrome.correctFull : t.scenarioChrome.wrongFull}
             </p>
             {isCorrect && (
               <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white">
@@ -132,7 +134,7 @@ export function FeedbackPanel({
 
               <div className="mb-6 rounded-DEFAULT border border-border bg-background p-4">
                 <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
-                  Erklärung
+                  {t.scenarioChrome.explanationLabel}
                 </p>
                 <p className="text-sm leading-relaxed text-text-primary">{scenario.feedback}</p>
               </div>
@@ -140,7 +142,7 @@ export function FeedbackPanel({
               <BegründungsPrompt explanation={scenario.feedback} />
 
               <Button onClick={onNext} className="w-full">
-                {isLastScenario ? "Level abschliessen" : "Nächstes Szenario"}
+                {isLastScenario ? t.scenarioChrome.levelCompleteBtn : t.scenarioChrome.nextScenarioBtn}
                 <ChevronRight size={14} />
               </Button>
             </>

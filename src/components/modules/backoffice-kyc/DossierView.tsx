@@ -10,6 +10,7 @@ import {
   type BkoKycScenario,
   type SubmissionResult,
 } from "@/lib/backoffice-kyc";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface DossierViewProps {
   scenario: BkoKycScenario;
@@ -19,6 +20,7 @@ interface DossierViewProps {
 }
 
 export function DossierView({ scenario, scenarioIndex, total, onSubmit }: DossierViewProps) {
+  const { t } = useLanguage();
   const [selectedIssues, setSelectedIssues] = useState<Set<string>>(new Set());
   const [phase, setPhase] = useState<"selecting" | "commenting">("selecting");
   const [comment, setComment] = useState("");
@@ -83,14 +85,14 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
           Level {scenario.level} – {levelConfig.label}
         </Badge>
         <span className="text-xs text-text-secondary">
-          Fall {scenarioIndex + 1} von {total}
+          {t.scenarioChrome.fallCounter.replace("{n}", String(scenarioIndex + 1)).replace("{total}", String(total))}
         </span>
       </div>
 
       {/* Briefing */}
       <div className="rounded-DEFAULT border border-border bg-gray-50 p-4">
         <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
-          Auftrag
+          {t.scenarioChrome.taskLabel}
         </p>
         <p className="text-sm text-text-primary">{scenario.briefing}</p>
       </div>
@@ -111,7 +113,7 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
               </div>
               <div className="flex items-center gap-1.5 rounded border border-border px-2 py-1">
                 <Shield size={10} className="text-text-secondary" />
-                <span className="text-[10px] font-medium text-text-secondary">Vertraulich</span>
+                <span className="text-[10px] font-medium text-text-secondary">{t.scenarioChrome.confidential}</span>
               </div>
             </div>
           </div>
@@ -139,9 +141,9 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
           {scenario.type === "checklist" ? (
             <>
               <div className="border-b border-border bg-gray-50 px-4 py-3">
-                <p className="text-sm font-semibold text-text-primary">Prüfpunkte</p>
+                <p className="text-sm font-semibold text-text-primary">{t.scenarioChrome.checklistTitle}</p>
                 <p className="text-xs text-text-secondary">
-                  Wähle alle Mängel, die du feststellst
+                  {t.scenarioChrome.checklistSub}
                 </p>
               </div>
               <div className="divide-y divide-border">
@@ -177,7 +179,7 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
           ) : (
             <>
               <div className="border-b border-border bg-gray-50 px-4 py-3">
-                <p className="text-sm font-semibold text-text-primary">Dein Entscheid</p>
+                <p className="text-sm font-semibold text-text-primary">{t.scenarioChrome.decisionTitle}</p>
                 <p className="text-xs text-text-secondary">{scenario.question}</p>
               </div>
               <div className="divide-y divide-border">
@@ -228,13 +230,13 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
                 onClick={handleFreigeben}
                 className="flex flex-1 items-center justify-center gap-2 rounded-DEFAULT border border-border bg-surface py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-gray-50"
               >
-                Dossier freigeben
+                {t.scenarioChrome.dossierApproveBtn}
               </button>
               <button
                 onClick={handleZurueckweisen}
                 className="flex flex-1 items-center justify-center gap-2 rounded-DEFAULT border border-border bg-text-primary py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-90"
               >
-                Zurückweisen
+                {t.scenarioChrome.dossierRejectBtn}
               </button>
             </div>
           )}
@@ -242,10 +244,10 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
             <div className="space-y-3 rounded-DEFAULT border border-border bg-surface p-4 shadow-card">
               <div>
                 <p className="text-sm font-semibold text-text-primary">
-                  Kommentar an Kundenberater
+                  {t.scenarioChrome.dossierCommentTitle}
                 </p>
                 <p className="mt-0.5 text-xs text-text-secondary">
-                  Was muss korrigiert oder ergänzt werden?
+                  {t.scenarioChrome.dossierCommentSub}
                 </p>
               </div>
               <textarea
@@ -260,14 +262,14 @@ export function DossierView({ scenario, scenarioIndex, total, onSubmit }: Dossie
                 disabled={comment.trim().length === 0}
                 className="w-full"
               >
-                Absenden
+                {t.scenarioChrome.dossierSendBtn}
               </Button>
             </div>
           )}
         </div>
       ) : (
         <Button onClick={handleMCSubmit} disabled={selectedKey === null} className="w-full">
-          Antwort bestätigen
+          {t.scenarioChrome.confirmBtn}
         </Button>
       )}
     </div>
