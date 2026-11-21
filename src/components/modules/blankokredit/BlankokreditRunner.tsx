@@ -7,7 +7,7 @@ import { CaseCard } from "./CaseCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LevelComplete, type CaseResult } from "./LevelComplete";
 import { BK_LEVELS, type LevelNum, type OptionKey } from "@/lib/blankokredit";
-import { localizeLevels } from "@/lib/translations/utils";
+import { localizeCaseLevels } from "@/lib/translations/utils";
 import { BLANKOKREDIT_TRANSLATIONS } from "@/lib/translations/blankokredit";
 import { useLanguage } from "@/context/LanguageContext";
 import { LückentextCard } from "@/components/shared/LückentextCard";
@@ -26,7 +26,7 @@ type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" 
 
 export function BlankokreditRunner() {
   const { lang } = useLanguage();
-  const localizedLevels = localizeLevels(BK_LEVELS, lang, BLANKOKREDIT_TRANSLATIONS);
+  const localizedLevels = localizeCaseLevels(BK_LEVELS, lang, BLANKOKREDIT_TRANSLATIONS);
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
 

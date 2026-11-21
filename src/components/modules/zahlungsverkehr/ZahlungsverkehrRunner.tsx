@@ -7,7 +7,7 @@ import { CaseCard } from "./CaseCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { type CaseResult } from "./LevelComplete";
 import { ZV_LEVELS, type LevelNum, type OptionKey } from "@/lib/zahlungsverkehr";
-import { localizeLevels } from "@/lib/translations/utils";
+import { localizeCaseLevels } from "@/lib/translations/utils";
 import { ZV_TRANSLATIONS } from "@/lib/translations/zahlungsverkehr";
 import { useLanguage } from "@/context/LanguageContext";
 import { LückentextCard } from "@/components/shared/LückentextCard";
@@ -56,7 +56,7 @@ export function ZahlungsverkehrRunner() {
 
   const { open: openGlossar } = useGlossar();
 
-  const localizedLevels = localizeLevels(ZV_LEVELS, lang, ZV_TRANSLATIONS);
+  const localizedLevels = localizeCaseLevels(ZV_LEVELS, lang, ZV_TRANSLATIONS);
   const levelConfig = localizedLevels.find((l) => l.level === activeLevel)!
   const activeCases = useMemo(
     () => resolveSessionCases("banking-operations-zahlungsverkehr", activeLevel, levelConfig.cases),
