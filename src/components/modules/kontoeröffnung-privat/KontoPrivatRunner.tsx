@@ -16,6 +16,9 @@ import {
   type McqCase,
 } from "@/lib/kontoeröffnung-privat";
 import { addAttemptRecord, type TrackingError } from "@/lib/error-tracking";
+import { localizeCaseLevels } from "@/lib/translations/utils";
+import { KOE_PRIVAT_TRANSLATIONS } from "@/lib/translations/kontoeröffnung-privat";
+import { useLanguage } from "@/context/LanguageContext";
 
 type View = "selector" | "case" | "soft-feedback" | "result" | "level-complete";
 
@@ -51,6 +54,8 @@ function docSoftMessage(errors: TrackingError[]): string {
 // ─── runner ─────────────────────────────────────────────────────────────────
 
 export function KontoPrivatRunner() {
+  const { lang } = useLanguage();
+  const localizedLevels = localizeCaseLevels(KONTO_PRIVAT_LEVELS, lang, KOE_PRIVAT_TRANSLATIONS);
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
 
@@ -70,7 +75,7 @@ export function KontoPrivatRunner() {
   // Soft-feedback message (set when transitioning to "soft-feedback" view)
   const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
 
-  const levelConfig = KONTO_PRIVAT_LEVELS.find((l) => l.level === activeLevel)!;
+  const levelConfig = localizedLevels.find((l) => l.level === activeLevel)!;
   const currentCase = levelConfig.cases[caseIndex];
   const total = levelConfig.cases.length;
   const isLastCase = caseIndex === total - 1;
