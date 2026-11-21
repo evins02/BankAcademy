@@ -16,6 +16,12 @@ export type ScenarioTranslation = {
   warum?: string;
   inDerPraxis?: string;
   merksatz?: string;
+  // kontoeröffnung-privat document cases
+  today?: string;
+  generalFeedback?: string;
+  recallMusterlösung?: string;
+  documents?: Array<{ id: string; label?: string; feedbackSelected?: string; feedbackNotSelected?: string }>;
+  feedbackPerOption?: Record<string, string>;
 };
 
 export type TranslationMap = Record<string, ScenarioTranslation>;
