@@ -33,7 +33,18 @@ export function localizeScenario<T extends { id: string }>(
 ): T {
   const tr = map[scenario.id];
   if (!tr) return scenario;
-  return { ...scenario, ...tr };
+  const { documents: trDocs, ...restTr } = tr;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const base = scenario as any;
+  let merged: T = { ...base, ...restTr };
+  if (trDocs && Array.isArray(base.documents)) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    merged = { ...merged, documents: (base.documents as any[]).map((doc: { id: string }) => {
+      const trDoc = trDocs.find((d) => d.id === doc.id);
+      return trDoc ? { ...doc, ...trDoc } : doc;
+    })};
+  }
+  return merged;
 }
 
 export function localizeLevels<
