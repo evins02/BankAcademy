@@ -7,6 +7,9 @@ import { CaseCard } from "./CaseCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LevelComplete, type CaseResult } from "./LevelComplete";
 import { BK_LEVELS, type LevelNum, type OptionKey } from "@/lib/blankokredit";
+import { localizeLevels } from "@/lib/translations/utils";
+import { BLANKOKREDIT_TRANSLATIONS } from "@/lib/translations/blankokredit";
+import { useLanguage } from "@/context/LanguageContext";
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
@@ -22,6 +25,8 @@ import { SoftFeedbackBanner } from "@/components/shared/SoftFeedbackBanner";
 type View = "selector" | "lernblock" | "playing" | "soft-feedback" | "feedback" | "level-complete";
 
 export function BlankokreditRunner() {
+  const { lang } = useLanguage();
+  const localizedLevels = localizeLevels(BK_LEVELS, lang, BLANKOKREDIT_TRANSLATIONS);
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
 
@@ -36,7 +41,7 @@ export function BlankokreditRunner() {
   const [softFeedbackMessage, setSoftFeedbackMessage] = useState("");
   const [isMcqSecondAttempt, setIsMcqSecondAttempt] = useState(false);
 
-  const levelConfig = BK_LEVELS.find((l) => l.level === activeLevel)!;
+  const levelConfig = localizedLevels.find((l) => l.level === activeLevel)!;
   const activeCases = useMemo(
     () => resolveSessionCases("banking-operations-blankokredit", activeLevel, levelConfig.cases),
     // eslint-disable-next-line react-hooks/exhaustive-deps

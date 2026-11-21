@@ -6,6 +6,9 @@ import { DossierView } from "./DossierView";
 import { FeedbackCard } from "./FeedbackCard";
 import { LevelComplete, type LevelResult } from "./LevelComplete";
 import { BKO_KYC_LEVELS, type LevelNum, type SubmissionResult } from "@/lib/backoffice-kyc";
+import { localizeLevels } from "@/lib/translations/utils";
+import { BKO_KYC_TRANSLATIONS } from "@/lib/translations/backoffice-kyc";
+import { useLanguage } from "@/context/LanguageContext";
 import { resolveSessionCases } from "@/lib/sessionScenarios";
 import { recordConceptError } from "@/lib/conceptTracker";
 import { useModuleTracking } from "@/lib/moduleAnalytics";
@@ -14,6 +17,7 @@ type View = "selector" | "playing" | "feedback" | "level-complete";
 
 export function BkoKycRunner() {
   useModuleTracking("backoffice-kyc", "KYC / Compliance");
+  const { lang } = useLanguage();
 
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
@@ -24,7 +28,8 @@ export function BkoKycRunner() {
   const [sessionResults, setSessionResults] = useState<LevelResult[]>([]);
   const [lastSubmission, setLastSubmission] = useState<SubmissionResult | null>(null);
 
-  const levelConfig = BKO_KYC_LEVELS.find((l) => l.level === activeLevel)!;
+  const localizedLevels = localizeLevels(BKO_KYC_LEVELS, lang, BKO_KYC_TRANSLATIONS);
+  const levelConfig = localizedLevels.find((l) => l.level === activeLevel)!;
   const activeScenarios = useMemo(
     () => resolveSessionCases("backoffice-kyc", activeLevel, levelConfig.scenarios),
     // eslint-disable-next-line react-hooks/exhaustive-deps

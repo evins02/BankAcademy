@@ -7,6 +7,9 @@ import { CaseCard } from "./CaseCard";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { type CaseResult } from "./LevelComplete";
 import { ZV_LEVELS, type LevelNum, type OptionKey } from "@/lib/zahlungsverkehr";
+import { localizeLevels } from "@/lib/translations/utils";
+import { ZV_TRANSLATIONS } from "@/lib/translations/zahlungsverkehr";
+import { useLanguage } from "@/context/LanguageContext";
 import { LückentextCard } from "@/components/shared/LückentextCard";
 import { LückentextResultCard } from "@/components/shared/LückentextResultCard";
 import { type LückentextCase, checkLückentextAnswer } from "@/lib/lückentext";
@@ -31,6 +34,7 @@ const MAX_LEVEL = 3 as LevelNum;
 
 export function ZahlungsverkehrRunner() {
   useModuleTracking("banking-operations-zahlungsverkehr", "Zahlungsverkehr Back Office");
+  const { lang } = useLanguage();
 
   const [completedLevels, setCompletedLevels] = useState<Set<LevelNum>>(new Set());
   const [levelScores, setLevelScores] = useState<Partial<Record<LevelNum, number>>>({});
@@ -52,7 +56,8 @@ export function ZahlungsverkehrRunner() {
 
   const { open: openGlossar } = useGlossar();
 
-  const levelConfig = ZV_LEVELS.find((l) => l.level === activeLevel)!;
+  const localizedLevels = localizeLevels(ZV_LEVELS, lang, ZV_TRANSLATIONS);
+  const levelConfig = localizedLevels.find((l) => l.level === activeLevel)!
   const activeCases = useMemo(
     () => resolveSessionCases("banking-operations-zahlungsverkehr", activeLevel, levelConfig.cases),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -128,8 +133,8 @@ export function ZahlungsverkehrRunner() {
       setLevelScores((prev) => ({ ...prev, [activeLevel]: score }));
 
       // Persist progress
-      const lvlConfig = ZV_LEVELS.find((l) => l.level === activeLevel)!;
-      const totalZvCases = ZV_LEVELS.reduce((s, l) => s + l.cases.length, 0);
+      const lvlConfig = localizedLevels.find((l) => l.level === activeLevel)!;
+      const totalZvCases = localizedLevels.reduce((s, l) => s + l.cases.length, 0);
       const prog = getProgress();
       const prev = prog["banking-operations-zahlungsverkehr"];
       const prevCompleted = prev?.completed ?? 0;
