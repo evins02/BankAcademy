@@ -16,7 +16,12 @@ export type DocumentId =
   | "beglaubigte-ausweiskopie-2"
   | "pep-erklaerung"
   | "konzernstruktur"
-  | "vereinsstatuten";
+  | "vereinsstatuten"
+  | "gruendungsurkunde"
+  | "auslaendischer-hr-auszug"
+  | "herkunftsnachweis"
+  | "vollmachtswiderruf"
+  | "gv-protokoll";
 
 export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   basisvertrag: "Basisvertrag",
@@ -37,6 +42,11 @@ export const DOCUMENT_LABELS: Record<DocumentId, string> = {
   "pep-erklaerung": "PEP-Erklärung / EDD-Formular",
   konzernstruktur: "Konzernstrukturdiagramm / UBO-Nachweis",
   vereinsstatuten: "Vereinsstatuten / Vorstandsbeschluss",
+  gruendungsurkunde: "Gründungsurkunde (öffentliche Beurkundung)",
+  "auslaendischer-hr-auszug": "Ausländischer Registerauszug (legalisiert / apostilliert)",
+  herkunftsnachweis: "Herkunftsnachweis der Vermögenswerte",
+  vollmachtswiderruf: "Widerruf der bisherigen Zeichnungsberechtigung",
+  "gv-protokoll": "Protokoll der Generalversammlung (Vorstandswahl)",
 };
 
 export const ALL_DOCUMENT_IDS = Object.keys(DOCUMENT_LABELS) as DocumentId[];
@@ -794,6 +804,374 @@ export const KONTO_SCENARIOS: KontoScenario[] = [
       ],
     },
   },
+
+  // ─── GmbH in Gründung ──────────────────────────────────────────────────────
+  {
+    id: "gmbh-neugruendung",
+    title: "GmbH in Gründung – Kapitaleinzahlungskonto",
+    customerType: "Firmenkunde (GmbH in Gründung)",
+    difficulty: "einfach",
+    description:
+      "Peter Notz möchte für die «Notz Consulting GmbH» (in Gründung) ein Konto eröffnen, um das Stammkapital von CHF 20'000 einzuzahlen, bevor die Eintragung im Handelsregister erfolgt. Er legt einen HR-Auszug vor, den er «schon vorbereitet» habe.",
+    checklistDocuments: [
+      // correct (5)
+      "basisvertrag",
+      "gruendungsurkunde",
+      "formular-k",
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
+      // distractors (4)
+      "hr-auszug",             // trap: existiert bei einer Gesellschaft in Gründung noch nicht
+      "aktienbuch",            // trap: gehört zur AG, nicht zur GmbH
+      "formular-a",            // trap: nur für Sitzgesellschaft
+      "gesellschaftervertrag", // trap: plausibel, aber nicht erforderlich für Kapitaleinzahlung
+    ],
+    requiredDocuments: [
+      "basisvertrag",
+      "gruendungsurkunde",
+      "formular-k",
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
+    ],
+    dossierDocuments: [
+      "basisvertrag",
+      "hr-auszug",     // wrong – existiert noch nicht
+      "formular-k",
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
+      // missing: gruendungsurkunde
+    ],
+    issues: [
+      {
+        type: "wrong",
+        documentId: "hr-auszug",
+        explanation:
+          "Eine GmbH entsteht rechtlich erst mit der Eintragung ins Handelsregister (OR Art. 779). Vor der Eintragung existiert kein HR-Auszug – ein vorgelegtes Dokument mit diesem Titel kann zu diesem Zeitpunkt nicht echt sein und darf nicht akzeptiert werden.",
+      },
+      {
+        type: "missing",
+        documentId: "gruendungsurkunde",
+        explanation:
+          "Die öffentlich beurkundete Gründungsurkunde fehlt. Sie ist vor der HR-Eintragung das massgebliche Dokument, um Gründer, Stammkapital und Statuten nachzuweisen und das Kapitaleinzahlungskonto zu eröffnen.",
+      },
+    ],
+    possiblyMissingOptions: [
+      "gruendungsurkunde",     // correct – ersetzt den (noch nicht existierenden) HR-Auszug
+      "jahresrechnung",        // distractor
+      "gesellschaftervertrag", // distractor
+      "vollmacht",             // distractor
+      "konzernstruktur",       // distractor
+    ],
+    lernblock: {
+      title: "GmbH in Gründung: Kapitaleinzahlungskonto statt Geschäftskonto",
+      items: [
+        {
+          heading: "Vor der HR-Eintragung: kein HR-Auszug möglich",
+          body: "Eine GmbH erlangt ihre Rechtspersönlichkeit erst mit dem Eintrag ins Handelsregister (OR Art. 779). Bis dahin dient die öffentlich beurkundete Gründungsurkunde als Nachweis von Gründern, Stammkapital und Statuten.",
+        },
+        {
+          heading: "Sperrkonto zur Kapitaleinzahlung",
+          body: "Das Konto wird zunächst als Kapitaleinzahlungskonto (Sperrkonto) geführt, auf das die Gründer das Stammkapital einzahlen. Erst nach erfolgter HR-Eintragung wird es zum ordentlichen Geschäftskonto freigegeben – der definitive HR-Auszug ist dann nachzureichen.",
+        },
+      ],
+    },
+  },
+
+  // ─── Freelancer ohne HR-Pflicht ────────────────────────────────────────────
+  {
+    id: "einzelunternehmen-freelancer",
+    title: "Freelancerin ohne HR-Eintrag – Privat- oder Geschäftskonto?",
+    customerType: "Selbständigerwerbende (nicht HR-pflichtig)",
+    difficulty: "mittel",
+    description:
+      "Laura Frei (29), Grafikdesignerin, arbeitet seit einem Jahr als Freelancerin (Jahresumsatz ca. CHF 45'000, nicht im Handelsregister eingetragen). Sie möchte ein separates Konto für ihre Design-Einnahmen. Der Kollege am Schalter hat direkt ein Dossier mit HR-Auszug-Anforderung vorbereitet.",
+    checklistDocuments: [
+      // correct (5)
+      "basisvertrag",
+      "ausweis",
+      "wohnsitznachweis",
+      "eigenerklaerung-nat",
+      "formular-a",
+      // distractors / traps (4)
+      "hr-auszug",                 // trap: nicht eintragungspflichtig unter CHF 100'000 Umsatz
+      "eigenerklaerung-jur-fatca", // trap: Freelancerin ist natürliche Person
+      "beglaubigte-ausweiskopie",  // trap: nur bei juristischen Personen nötig
+      "formular-k",                // trap: nur für operative juristische Personen
+    ],
+    requiredDocuments: [
+      "basisvertrag",
+      "ausweis",
+      "wohnsitznachweis",
+      "eigenerklaerung-nat",
+      "formular-a",
+    ],
+    dossierDocuments: [
+      "basisvertrag",
+      "hr-auszug",   // wrong – kann bei fehlendem Eintrag nicht vorliegen
+      "ausweis",
+      "wohnsitznachweis",
+      "eigenerklaerung-nat",
+      // missing: formular-a
+    ],
+    issues: [
+      {
+        type: "wrong",
+        documentId: "hr-auszug",
+        explanation:
+          "Einzelunternehmen sind gemäss OR Art. 931a erst ab einem Jahresumsatz von CHF 100'000 zur Eintragung ins Handelsregister verpflichtet. Bei CHF 45'000 Umsatz besteht kein Eintrag – ein HR-Auszug kann nicht verlangt werden, weil er nicht existiert.",
+      },
+      {
+        type: "missing",
+        documentId: "formular-a",
+        explanation:
+          "Formular A fehlt. Es ist gemäss VSB 20 bei jeder Kontoeröffnung zwingend auszufüllen – unabhängig von der HR-Pflicht. Laura Frei ist als Inhaberin selbst als wirtschaftlich Berechtigte einzutragen.",
+      },
+    ],
+    possiblyMissingOptions: [
+      "formular-a",                // correct – genuinely missing
+      "beglaubigte-ausweiskopie",  // distractor – nur für juristische Personen
+      "gesellschaftervertrag",     // distractor – für GmbH
+      "aktienbuch",                // distractor – für AG
+      "eigenerklaerung-jur-fatca", // distractor – falsche Personenart
+    ],
+    lernblock: {
+      title: "Einzelunternehmen: HR-Pflicht erst ab CHF 100'000 Umsatz",
+      items: [
+        {
+          heading: "OR Art. 931a – Eintragungspflicht erst ab Umsatzschwelle",
+          body: "Einzelunternehmen müssen sich erst ab einem Jahresumsatz von CHF 100'000 ins Handelsregister eintragen lassen (darunter freiwillig möglich). Ohne Eintrag existiert kein HR-Auszug, der verlangt werden könnte.",
+        },
+        {
+          heading: "Formular A bleibt trotzdem zwingend",
+          body: "Unabhängig von der HR-Pflicht ist Formular A gemäss VSB 20 bei jeder Kontoeröffnung Pflicht. Bei nicht eingetragenen Einzelunternehmern wird die Inhaberin selbst als wirtschaftlich Berechtigte eingetragen.",
+        },
+      ],
+    },
+  },
+
+  // ─── Verein: Vorstandswechsel bei bestehendem Konto ───────────────────────
+  {
+    id: "verein-vorstandswechsel",
+    title: "Vereinsvorstand neu gewählt – alte Zeichnungsberechtigung nicht widerrufen",
+    customerType: "Eingetragener Verein / Mutation Zeichnungsberechtigung",
+    difficulty: "mittel",
+    description:
+      "Der Kulturverein Klangwerk hat an der Generalversammlung einen neuen Vorstand gewählt: Neue Präsidentin Melanie Vogt löst den bisherigen Präsidenten ab, Kassier Urs Bär bleibt im Amt. Die Bank erhält den Auftrag, Vogt neu als zeichnungsberechtigt zu erfassen. Der Berater hat lediglich eine neue Vollmacht für Vogt hinzugefügt.",
+    checklistDocuments: [
+      // correct (4)
+      "gv-protokoll",
+      "formular-a",
+      "beglaubigte-ausweiskopie",
+      "vollmachtswiderruf",
+      // distractors / traps (4)
+      "basisvertrag",              // trap: Konto besteht bereits, kein neuer Basisvertrag nötig
+      "hr-auszug",                 // trap: Verein ist nicht im HR eingetragen
+      "vereinsstatuten",           // trap: Statuten ändern sich durch Vorstandswahl nicht
+      "eigenerklaerung-jur-fatca", // trap: FATCA-Abklärung liegt bereits vor, keine Neueröffnung
+    ],
+    requiredDocuments: [
+      "gv-protokoll",
+      "formular-a",
+      "beglaubigte-ausweiskopie",
+      "vollmachtswiderruf",
+    ],
+    dossierDocuments: [
+      "gv-protokoll",
+      "formular-a",
+      "beglaubigte-ausweiskopie",   // Vogt neu identifiziert
+      // missing: vollmachtswiderruf
+    ],
+    issues: [
+      {
+        type: "missing",
+        documentId: "vollmachtswiderruf",
+        explanation:
+          "Die Zeichnungsberechtigung des abgewählten Präsidenten wurde nicht widerrufen. Eine neue Vollmacht für Vogt ersetzt die alte Berechtigung nicht automatisch – ohne ausdrücklichen Widerruf könnte die abgewählte Person weiterhin über das Konto verfügen.",
+      },
+    ],
+    possiblyMissingOptions: [
+      "vollmachtswiderruf", // correct – genuinely missing
+      "basisvertrag",       // distractor
+      "hr-auszug",          // distractor
+      "vereinsstatuten",    // distractor
+      "jahresrechnung",     // distractor
+    ],
+    lernblock: {
+      title: "Vorstandswechsel: Alte Zeichnungsberechtigung ausdrücklich widerrufen",
+      items: [
+        {
+          heading: "Eine neue Vollmacht ersetzt die alte nicht automatisch",
+          body: "Wird ein neues Vorstandsmitglied zeichnungsberechtigt, bleibt die Berechtigung der abgewählten Person bankintern bestehen, bis sie ausdrücklich widerrufen wird. Das blosse Hinzufügen einer neuen Vollmacht genügt nicht.",
+        },
+        {
+          heading: "GV-Protokoll als Nachweis der neuen Vertretungsregelung",
+          body: "Das Protokoll der Generalversammlung mit dem Vorstandswahlbeschluss ist der massgebliche Nachweis für die neue Vertretungsregelung – analog zum HR-Auszug bei Handelsgesellschaften.",
+        },
+      ],
+    },
+  },
+
+  // ─── Ausländische Offshore-Gesellschaft (schwer / EDD) ────────────────────
+  {
+    id: "auslaendische-offshore-gesellschaft",
+    title: "Offshore-Gesellschaft (BVI) eröffnet Konto – erhöhte Sorgfaltspflicht",
+    customerType: "Ausländische Gesellschaft (British Virgin Islands)",
+    difficulty: "schwer",
+    description:
+      "Die «Meridian Trading Ltd.» (British Virgin Islands) möchte über ihren Direktor Marco Rinaldi ein Geschäftskonto eröffnen. Die Gesellschaft hat keine operative Tätigkeit in der Schweiz. Rinaldi legt einen englischsprachigen «Certificate of Incorporation» vor, kann aber keine Angaben zur Herkunft der geplanten Einlage (CHF 800'000) machen.",
+    checklistDocuments: [
+      // correct (6)
+      "basisvertrag",
+      "auslaendischer-hr-auszug",
+      "formular-a",
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
+      "herkunftsnachweis",
+      // distractors (4)
+      "hr-auszug",              // trap: Schweizer HR-Auszug nicht anwendbar
+      "formular-k",             // trap: Sitzgesellschaft ohne operative Tätigkeit → Formular A
+      "aktienbuch",             // trap: nicht das Schweizer Pendant
+      "gesellschaftervertrag",  // trap: nicht einschlägig für ausländische Gesellschaft
+    ],
+    requiredDocuments: [
+      "basisvertrag",
+      "auslaendischer-hr-auszug",
+      "formular-a",
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
+      "herkunftsnachweis",
+    ],
+    dossierDocuments: [
+      "basisvertrag",
+      "hr-auszug",   // wrong – falsches Dokument für ausländische Gesellschaft
+      "formular-k",  // wrong – sollte formular-a sein
+      "eigenerklaerung-jur-fatca",
+      "beglaubigte-ausweiskopie",
+      // missing: herkunftsnachweis
+    ],
+    issues: [
+      {
+        type: "wrong",
+        documentId: "hr-auszug",
+        explanation:
+          "Ein Schweizer HR-Auszug existiert für eine BVI-Gesellschaft nicht. Erforderlich ist ein legalisierter bzw. mit Apostille versehener ausländischer Registerauszug (Certificate of Incorporation / Incumbency).",
+      },
+      {
+        type: "wrong",
+        documentId: "formular-k",
+        explanation:
+          "Formular K gilt für operativ tätige Gesellschaften. Die Meridian Trading Ltd. hat keine operative Tätigkeit in der Schweiz und gilt damit als Sitzgesellschaft – hier ist Formular A erforderlich, das alle im Register eingetragenen Personen erfasst.",
+      },
+      {
+        type: "missing",
+        documentId: "herkunftsnachweis",
+        explanation:
+          "Die British Virgin Islands gelten als Offshore-Jurisdiktion mit erhöhtem Geldwäschereirisiko. Zusammen mit der fehlenden Erklärung zur Herkunft der geplanten Einlage von CHF 800'000 liegt ein klares Risikomerkmal vor, das eine erweiterte Sorgfaltspflicht (EDD) inkl. Herkunftsnachweis der Vermögenswerte auslöst.",
+      },
+    ],
+    possiblyMissingOptions: [
+      "auslaendischer-hr-auszug", // correct – ersetzt den falschen hr-auszug
+      "formular-a",               // correct – ersetzt das falsche formular-k
+      "herkunftsnachweis",        // correct – genuinely missing (EDD)
+      "jahresrechnung",           // distractor
+      "vollmacht",                // distractor
+      "aktienbuch",               // distractor
+    ],
+    lernblock: {
+      title: "Offshore-Gesellschaften: Erhöhte Sorgfaltspflicht (EDD)",
+      items: [
+        {
+          heading: "Hochrisikojurisdiktionen erfordern EDD",
+          body: "Gesellschaften aus Offshore-Zentren mit tiefer Transparenz (z.B. BVI, Cayman Islands, Panama) gelten als erhöhtes Risiko. Fehlende Angaben zur Herkunft der Vermögenswerte verstärken diesen Verdacht – ein Herkunftsnachweis ist vor Kontoeröffnung zwingend einzuholen.",
+        },
+        {
+          heading: "Ausländischer Registerauszug muss legalisiert sein",
+          body: "Für ausländische Gesellschaften ersetzt ein legalisierter bzw. mit Apostille versehener Registerauszug den Schweizer HR-Auszug. Eine einfache, nicht beglaubigte Kopie genügt nicht.",
+        },
+        {
+          heading: "Formular A statt K bei Sitzgesellschaften ohne operative Tätigkeit",
+          body: "Wie bei inländischen Sitzgesellschaften gilt auch bei ausländischen Gesellschaften ohne eigene Geschäftstätigkeit Formular A – nicht Formular K.",
+        },
+      ],
+    },
+  },
+
+  // ─── Vollmachtsänderung bei bestehender Firma ─────────────────────────────
+  {
+    id: "vollmachtsaenderung-neuer-gf",
+    title: "Neue Geschäftsführerin – Vollmacht des Vorgängers erloschen",
+    customerType: "Firmenkunde (GmbH) / Mutation Geschäftsführung",
+    difficulty: "mittel",
+    description:
+      "Bei der Bergmann Logistik GmbH hat der bisherige Geschäftsführer Urs Bergmann sein Amt niedergelegt; neue Geschäftsführerin ist seine Tochter Nina Bergmann. Die Bank erhält lediglich eine E-Mail mit der Bitte, «Nina neu auch aufs Konto zu lassen» – Urs bleibe laut Kundenwunsch weiterhin zeichnungsberechtigt, da er «noch mithelfen» wolle. Der alte HR-Auszug ist noch im Dossier.",
+    checklistDocuments: [
+      // correct (4)
+      "hr-auszug",
+      "beglaubigte-ausweiskopie",
+      "formular-k",
+      "vollmacht",
+      // distractors (4)
+      "basisvertrag",              // trap: Konto besteht bereits
+      "eigenerklaerung-jur-fatca", // trap: FATCA-Abklärung liegt bereits vor
+      "gesellschaftervertrag",     // trap: nicht einschlägig bei reinem GF-Wechsel
+      "pep-erklaerung",            // trap: kein PEP-Hinweis vorliegend
+    ],
+    requiredDocuments: [
+      "hr-auszug",
+      "beglaubigte-ausweiskopie",
+      "formular-k",
+      "vollmacht",
+    ],
+    dossierDocuments: [
+      "hr-auszug",   // wrong – veraltet, zeigt noch Urs als GF
+      "formular-k",
+      // missing: beglaubigte-ausweiskopie (Nina), vollmacht (für Urs)
+    ],
+    issues: [
+      {
+        type: "wrong",
+        documentId: "hr-auszug",
+        explanation:
+          "Der vorhandene HR-Auszug ist veraltet und zeigt noch Urs Bergmann als Geschäftsführer. Es muss ein aktueller HR-Auszug eingeholt werden, der Nina Bergmann als neue Geschäftsführerin ausweist – die organschaftliche Zeichnungsberechtigung von Urs Bergmann erlischt automatisch mit der Löschung im Handelsregister.",
+      },
+      {
+        type: "missing",
+        documentId: "beglaubigte-ausweiskopie",
+        explanation:
+          "Nina Bergmann muss als neue Geschäftsführerin und Zeichnungsberechtigte mit einer beglaubigten Ausweiskopie identifiziert werden – eine formlose E-Mail-Anfrage genügt nicht.",
+      },
+      {
+        type: "missing",
+        documentId: "vollmacht",
+        explanation:
+          "Möchte Urs Bergmann trotz Rücktritt als Geschäftsführer weiterhin zeichnungsberechtigt bleiben, ist dafür eine neue, ausdrückliche Vollmacht der aktuellen Geschäftsführung erforderlich. Seine bisherige organschaftliche Zeichnungsberechtigung ist mit dem HR-Austrag erloschen und lebt nicht automatisch als Vollmacht weiter.",
+      },
+    ],
+    possiblyMissingOptions: [
+      "beglaubigte-ausweiskopie", // correct – Nina nicht identifiziert
+      "vollmacht",                // correct – Urs' Vollmacht fehlt
+      "gesellschaftervertrag",    // distractor
+      "pep-erklaerung",           // distractor
+      "jahresrechnung",           // distractor
+    ],
+    lernblock: {
+      title: "Organwechsel: Zeichnungsberechtigung erlischt mit HR-Löschung",
+      items: [
+        {
+          heading: "Zeichnungsberechtigung als Organ erlischt automatisch",
+          body: "Scheidet ein Geschäftsführer aus dem Amt aus, erlischt seine organschaftliche Zeichnungsberechtigung mit der Löschung im Handelsregister – unabhängig vom Kundenwunsch. Eine formlose Anfrage per E-Mail ändert daran nichts.",
+        },
+        {
+          heading: "Neue Vollmacht nötig, falls die Person weiterhin zeichnen soll",
+          body: "Soll eine ausgeschiedene Person weiterhin zeichnungsberechtigt bleiben, muss die aktuelle Geschäftsführung eine neue, ausdrückliche Vollmacht ausstellen. Diese ist rechtlich unabhängig von der früheren organschaftlichen Vertretung.",
+        },
+        {
+          heading: "Neue Geschäftsführerin muss identifiziert werden",
+          body: "Die neue Geschäftsführerin ist wie bei einer Neueröffnung mit beglaubigter Ausweiskopie zu identifizieren, bevor ihr Zeichnungsrecht eingeräumt wird.",
+        },
+      ],
+    },
+  },
 ];
 
 export const PRIVATKUNDE_KONTO_SCENARIOS = KONTO_SCENARIOS.filter(
@@ -811,5 +1189,10 @@ export const FIRMENKUNDE_KONTO_SCENARIOS = KONTO_SCENARIOS.filter((s) =>
     "gmbh-pep-gesellschafter",
     "holding-tochter-trick",
     "verein-geschaeftskonto",
+    "gmbh-neugruendung",
+    "einzelunternehmen-freelancer",
+    "verein-vorstandswechsel",
+    "auslaendische-offshore-gesellschaft",
+    "vollmachtsaenderung-neuer-gf",
   ].includes(s.id)
 );
