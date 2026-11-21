@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { ChevronDown, ChevronUp, AlertTriangle, Lightbulb, BookOpen, CheckCircle, XCircle } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
@@ -73,10 +73,10 @@ function DepotFormScenario() {
   } | null>(null);
   const [xpAdded, setXpAdded] = useState(false);
 
-  const set = (k: keyof DepotFields) => (e: React.ChangeEvent<HTMLInputElement>) =>
+  const set = (k: keyof DepotFields) => (e: ChangeEvent<HTMLInputElement>) =>
     setFields((f) => ({ ...f, [k]: e.target.value }));
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
     try {
